@@ -147,9 +147,9 @@ function alshaya_white_label_preprocess_html(&$variables) {
   // Add class for page PLP.
   if ($current_route->getRouteName() == 'entity.taxonomy_term.canonical') {
     $term = $current_route->getParameter('taxonomy_term');
-    if ($term->bundle() == 'acq_product_category') {
+    if ($term->bundle() == 'acq_product_category' || $term->bundle() == 'rcs_category') {
       $variables['attributes']['class'][] = 'plp-page-only';
-      if (!empty($term->get('field_plp_layout')->value)) {
+      if ($term->hasField('field_plp_layout') && !empty($term->get('field_plp_layout')->value)) {
         $variables['attributes']['class'][] = $term->get('field_plp_layout')->value . '-plp-layout';
       }
       // Add class to hide the sidebar for PLP pages.
@@ -344,6 +344,10 @@ function alshaya_white_label_preprocess_page(&$variables) {
         $variables['category_term_name'] = $term->getName();
         $variables['category_term_description'] = $description;
       }
+    }
+
+    if ($term->bundle() == 'acq_product_category' || $term->bundle() == 'rcs_category') {
+
       // Enable/Disable the sidebar on PLP pages.
       if (!$show_sidebar->get('show_plp_sidebar')) {
         unset($variables['page']['sidebar_first']);
