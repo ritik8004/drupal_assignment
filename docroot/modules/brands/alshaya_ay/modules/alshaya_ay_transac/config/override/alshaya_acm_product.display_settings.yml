@@ -11,4 +11,3 @@ color_attribute_config:
   configurable_color_label_attribute: 'attr_color'
   configurable_color_code_attribute: 'attr_rgb_color'
 swatch_plp_limit: 5
-swatch_plp_limit_mobile_view: 4
