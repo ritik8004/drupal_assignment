@@ -1,5 +1,11 @@
 alshaya_algolia_react.algolia_react_config_setting:
   route_name: alshaya_algolia_react.algolia_react_config_setting
   title: 'Alshaya React Algolia Configuration'
-  description: 'Configure the settings for React Algoria.'
+  description: 'Configure the settings for React Algolia.'
+  parent: alshaya_master.alshaya_admin
+
+alshaya_algolia_react.color_swatches:
+  route_name: alshaya_algolia_react.color_swatches
+  title: 'Color Swatches Configuration for Listing Pages'
+  description: 'Configure the settings for Color Swatches Algolia.'
   parent: alshaya_master.alshaya_admin
