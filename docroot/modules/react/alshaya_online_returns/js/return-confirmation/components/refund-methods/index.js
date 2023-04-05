@@ -17,7 +17,7 @@ const RefundMethods = ({
   const cardList = {};
   // Variable to check whether the new eGift option needs
   // to be given to the user or not in the refund form.
-  let egiftCardType = false;
+  let showNewEgiftCardOption = false;
   // Checking whether the eGift refund feature is enabled or not and the user is authenticated.
   if (isUserAuthenticated() && isEgiftRefundEnabled() && !hasValue(paymentInfo.aura)) {
     // Call to get customer linked eGift card details.
@@ -34,7 +34,7 @@ const RefundMethods = ({
             if (!hasValue(unlinkresponse.data.card_list)
               || (hasValue(paymentInfo.cashondelivery.payment_type)
                 && paymentInfo.cashondelivery.payment_type === 'cashondelivery')) {
-              egiftCardType = true;
+              showNewEgiftCardOption = true;
             }
           });
         }
@@ -53,13 +53,13 @@ const RefundMethods = ({
     delete paymentData.egift;
   }
   // Components for eGift card single payment method.
-  const SinglePaymentMethod = () => ((cardList || egiftCardType)
+  const SinglePaymentMethod = () => ((cardList || showNewEgiftCardOption)
     ? (
       <>
         <EgiftCardDetails
           cardList={cardList}
           selectedOption={null}
-          egiftCardType={egiftCardType}
+          egiftCardType={showNewEgiftCardOption}
           paymentDetails={paymentData}
         />
       </>
@@ -69,13 +69,14 @@ const RefundMethods = ({
     ));
 
   // Components for eGift card hybrid payment method.
-  const HybridPaymentMethods = () => ((cardList || egiftCardType) && !hasValue(paymentInfo.aura)
+  const HybridPaymentMethods = () => ((cardList || showNewEgiftCardOption)
+  && !hasValue(paymentInfo.aura)
     ? (
       <>
         <EgiftCardDetails
           cardList={cardList}
           selectedOption={null}
-          egiftCardType={egiftCardType}
+          egiftCardType={showNewEgiftCardOption}
           paymentDetails={paymentData}
         />
         <CardDetails paymentDetails={paymentData} showCardIcon />
