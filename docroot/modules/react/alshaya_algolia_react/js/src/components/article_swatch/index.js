@@ -12,14 +12,28 @@ const ArticleSwatches = ({
     return null;
   }
   // Get plp color swatch limit for desktop/mobile view.
-  const limit = (isMobile()) ? drupalSettings.reactTeaserView.swatches.swatchPlpLimitMobileView
+  let limit = (isMobile()) ? drupalSettings.reactTeaserView.swatches.swatchPlpLimitMobileView
     : drupalSettings.reactTeaserView.swatches.swatchPlpLimit;
 
+  const { showColorSwatchSlider } = drupalSettings.reactTeaserView.swatches;
   const totalNoOfSwatches = articleSwatches.length;
   const diff = totalNoOfSwatches - limit;
   let swatchMoreText = null;
+  let swatchesSliderClass = '';
+  let swatchTypeClass = '';
 
-  if (diff > 0) {
+  // Show all color swatches with slider when total number of swatches
+  // is greater than max number swatches to display.
+  if (hasValue(showColorSwatchSlider) && diff > 0) {
+    swatchesSliderClass = 'swatch-slider';
+    limit = totalNoOfSwatches;
+  }
+
+  if (hasValue(showColorSwatchSlider)) {
+    swatchTypeClass = `swatch-${drupalSettings.reactTeaserView.swatches.articleSwatchType}`;
+  }
+
+  if (diff > 0 && !showColorSwatchSlider) {
     swatchMoreText = (
       <a className="more-color-swatch" href={url}>
         {' '}
@@ -60,8 +74,8 @@ const ArticleSwatches = ({
   };
 
   return (
-    <div className="article-swatch-wrapper">
-      <div className="swatches">
+    <div className={`article-swatch-wrapper ${swatchesSliderClass}`}>
+      <div className={`swatches ${swatchTypeClass}`}>
         {articleSwatches.slice(0, limit).map(
           (swatch) => (
             <ArticleSwatch
