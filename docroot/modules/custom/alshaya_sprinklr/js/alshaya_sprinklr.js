@@ -26,4 +26,17 @@
       sprChatData.userContext = drupalSettings.sprinklr.userContext;
     }
   });
+
+  // For re-positioning Back to top button when sprinklr is enable.
+  // SetTimeout is used because the Sprinklr iframe is loading at last.
+  // So to get Sprinklr iframe ID setTimeout is used here.
+  setTimeout(() => {
+    const sprChatId = document.getElementById('spr-live-chat-frame');
+    const winWidth = window.innerWidth;
+    if(sprChatId !== null && winWidth < 768) {
+      const backToTop = document.getElementById('backtotop')
+      backToTop.classList.add('sprinklr-enabled');
+    }
+  }, 2000);
+
 })(drupalSettings);
