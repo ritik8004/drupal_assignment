@@ -1,3 +1,4 @@
+/* eslint-disable */
 /**
  * @file
  * PLP All Filters Panel & Facets JS file.
