@@ -13,7 +13,10 @@ const RefundMethods = ({
     return null;
   }
 
+  // Egift card details linked with the user.
   const cardList = {};
+  // Variable to check whether the new eGift option needs
+  // to be given to the user or not in the refund form.
   let egiftCardType = false;
   // Checking whether the eGift refund feature is enabled or not and the user is authenticated.
   if (isUserAuthenticated() && isEgiftRefundEnabled() && !hasValue(paymentInfo.aura)) {
@@ -88,6 +91,8 @@ const RefundMethods = ({
         <div className="refund-method-title light">
           { Drupal.t('Refund Method', {}, { context: 'online_returns' }) }
         </div>
+        {/* If the order is made through multiple payments or hybrid, we are rendering the
+          HybridPaymentMethods component else the SinglePaymentMethod component. */}
         {isHybrid
           ? (
             <HybridPaymentMethods />

@@ -47,6 +47,8 @@ const ReturnRefundMethod = ({
                 isHybridPayment={isHybrid}
                 setSelectedOption={setSelectedOption}
               />
+              {/* For the payments made through COD, eGift and if there is multiple payment methods
+              used i.e. hybrid we will not render the CardDetails component with radio button. */}
               {!hasValue(paymentDetails.cashondelivery)
                 && !hasValue(paymentDetails.egift)
                 && !isHybrid
