@@ -610,7 +610,6 @@ class AlshayaSpcController extends ControllerBase {
         'library' => [
           'alshaya_acm_checkout/ab_testing',
           'alshaya_spc/googlemapapi',
-          'alshaya_spc/commerce_backend.cart',
           'alshaya_spc/commerce_backend.checkout',
           'alshaya_spc/checkout',
           'alshaya_white_label/spc-checkout',
