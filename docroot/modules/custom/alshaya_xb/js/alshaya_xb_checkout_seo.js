@@ -7,8 +7,8 @@
 
   // Site name for datalayer.
   var geSiteName = Drupal.hasValue(drupalSettings.dataLayerContent.siteName)
-  ? drupalSettings.dataLayerContent.siteName
-  : '';
+    ? drupalSettings.dataLayerContent.siteName
+    : '';
 
   /**
    * Checks if all mandatory address fields are filled.
