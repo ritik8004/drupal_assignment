@@ -5,6 +5,10 @@
     .path--cart & {
       bottom: 3.25rem;
     }
+
+    &.sprinklr-enabled {
+      bottom: rem(82);
+    }
   }
 
   @include icon(arrowup, after) {
