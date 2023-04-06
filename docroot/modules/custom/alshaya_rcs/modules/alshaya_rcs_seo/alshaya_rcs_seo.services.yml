@@ -38,3 +38,8 @@ services:
 
   alshaya_rcs_seo.metatag_helper:
     class: Drupal\alshaya_rcs_seo\Services\AlshayaRcsMetatagHelper
+    arguments:
+      - '@alshaya_rcs_product.helper'
+      - '@alshaya_rcs_listing.helper'
+      - '@alshaya_rcs_promotion.helper'
+      - '@alshaya_rcs.api_helper'
