@@ -42,4 +42,4 @@ services:
       - '@alshaya_rcs_product.helper'
       - '@alshaya_rcs_listing.helper'
       - '@alshaya_rcs_promotion.helper'
-      - '@alshaya_rcs.api_helper'
+      - '@alshaya_api.graphql_helper'
