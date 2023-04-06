@@ -8,6 +8,7 @@
 
     &.sprinklr-enabled {
       bottom: rem(82);
+      #{$right}: rem(-7);
     }
   }
 
