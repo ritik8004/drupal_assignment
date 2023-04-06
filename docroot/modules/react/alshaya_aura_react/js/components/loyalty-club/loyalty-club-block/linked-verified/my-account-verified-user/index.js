@@ -6,6 +6,7 @@ import PointsExpiryMessage from '../../../../../../../alshaya_spc/js/aura-loyalt
 import ToolTip from '../../../../../../../alshaya_spc/js/utilities/tooltip';
 import { isDesktop, isMobile } from '../../../../../../../js/utilities/display';
 import TrimUserName from '../../trim-user-name';
+import { hasValue } from '../../../../../../../js/utilities/conditionsUtility';
 
 const MyAccountVerifiedUser = (props) => {
   const {
@@ -26,6 +27,10 @@ const MyAccountVerifiedUser = (props) => {
   // Current User tier class so we can change gradient for progress bar.
   const currentTierLevel = tier;
   const tierClass = currentTierLevel || 'no-tier';
+
+  if (!hasValue(profileInfo.profileName) && !hasValue(auraUsernameCharacterLimit)) {
+    return null;
+  }
 
   return (
     <div className="aura-my-account-verified-wrapper">

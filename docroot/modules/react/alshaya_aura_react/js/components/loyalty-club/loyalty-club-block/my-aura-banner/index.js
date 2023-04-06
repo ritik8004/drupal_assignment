@@ -7,6 +7,7 @@ import { getTooltipPointsOnHoldMsg } from '../../../../utilities/aura_utils';
 import ToolTip from '../../../../../../alshaya_spc/js/utilities/tooltip';
 import AuraAppDownload from '../../../aura-app-download';
 import TrimUserName from '../trim-user-name';
+import { hasValue } from '../../../../../../js/utilities/conditionsUtility';
 
 const MyAuraBanner = (props) => {
   const {
@@ -28,6 +29,10 @@ const MyAuraBanner = (props) => {
   const tierClass = currentTierLevel || 'no-tier';
   const allAuraStatus = getAllAuraStatus();
   const auraUserClass = loyaltyStatusInt === allAuraStatus.APC_LINKED_NOT_VERIFIED ? 'aura-not-verified' : 'aura-verified';
+
+  if (!hasValue(profileInfo.profileName) && !hasValue(auraUsernameCharacterLimit)) {
+    return null;
+  }
 
   return (
     <div className={`aura-card-linked-verified-wrapper fadeInUp aura-level-${tierClass} ${auraUserClass}`}>
