@@ -51,6 +51,7 @@ const EgiftCardDetails = ({
             ? (
               <input
                 type="radio"
+                id="egift"
                 value={egiftRefundName}
                 name={egiftRefundName}
                 checked={selected === egiftRefundName}
