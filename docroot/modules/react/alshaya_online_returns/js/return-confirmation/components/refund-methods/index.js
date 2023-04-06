@@ -28,7 +28,8 @@ const RefundMethods = ({
           const cardData = response.data ? response.data : null;
           Object.assign(cardList, cardData);
         } else {
-          // Call to get un-linked eGift card details associated with the user email.
+          // If user has no linked eGift card, we call api to get all
+          // eGift cards having same email address as of the current user.
           const unlinkedResult = callEgiftApi('unlinkedEiftCardList', 'GET', {});
           unlinkedResult.then((unlinkresponse) => {
             if (!hasValue(unlinkresponse.data.card_list)
