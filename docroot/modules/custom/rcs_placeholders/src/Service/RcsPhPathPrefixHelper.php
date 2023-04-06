@@ -3,7 +3,6 @@
 namespace Drupal\rcs_placeholders\Service;
 
 use Drupal\Core\Config\ConfigFactoryInterface;
-use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\RequestStack;
 
 /**
@@ -19,11 +18,11 @@ class RcsPhPathPrefixHelper {
   protected $configFactory;
 
   /**
-   * Request object.
+   * The request stack.
    *
-   * @var null|\Symfony\Component\HttpFoundation\Request
+   * @var \Symfony\Component\HttpFoundation\RequestStack
    */
-  protected $requestStack;
+  protected $currentRequest;
 
   /**
    * Constructs a new RcsPhPathPrefixHelper instance.
@@ -35,7 +34,7 @@ class RcsPhPathPrefixHelper {
    */
   public function __construct(ConfigFactoryInterface $config_factory, RequestStack $request_stack) {
     $this->configFactory = $config_factory;
-    $this->requestStack = $request_stack;
+    $this->currentRequest = $request_stack->getCurrentRequest();
   }
 
   /**
@@ -64,7 +63,7 @@ class RcsPhPathPrefixHelper {
    */
   public function getRcsPathPageType(): string {
     $page_type = '';
-    $request_uri = $this->requestStack->getRequestUri();
+    $request_uri = $this->currentRequest->getRequestUri();
     $rcs_config = $this->configFactory->get('rcs_placeholders.settings');
     $settings = $rcs_config->getRawData();
     foreach ($settings as $type => $value) {
