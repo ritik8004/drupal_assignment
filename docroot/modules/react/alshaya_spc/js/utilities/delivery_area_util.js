@@ -119,14 +119,16 @@ export const getDeliveryAreaValue = (areaId) => window.commerceBackend.getDelive
 export const getDeliveryAreaStorage = () => Drupal.getItemFromLocalStorage('deliveryinfo-areadata');
 
 export const getAreaFieldKey = () => {
-  if (drupalSettings.address_fields) {
+  if (hasValue(drupalSettings.address_fields)
+    && hasValue(drupalSettings.address_fields.administrative_area)) {
     return drupalSettings.address_fields.administrative_area.key;
   }
   return null;
 };
 
 export const getAreaParentFieldKey = () => {
-  if (drupalSettings.address_fields) {
+  if (hasValue(drupalSettings.address_fields)
+    && hasValue(drupalSettings.address_fields.area_parent)) {
     return drupalSettings.address_fields.area_parent.key;
   }
   return null;

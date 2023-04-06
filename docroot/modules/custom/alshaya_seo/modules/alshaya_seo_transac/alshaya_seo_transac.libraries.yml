@@ -156,3 +156,11 @@ gtm_dy:
   dependencies:
     - alshaya_seo_transac/gtm
     - core/drupal.debounce
+
+# Library for PDP modal view.
+gtm_pdp_modal:
+  version: 1.0.0
+  js:
+    js/alshaya_seo.gtm.pdp_modal.js: {}
+  dependencies:
+    - alshaya_seo_transac/gtm
