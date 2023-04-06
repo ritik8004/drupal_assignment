@@ -1,18 +1,24 @@
 import React from 'react';
 import PriceElement from './PriceElement';
 import calculateDiscount from '../price-helper';
+import { getDataAttributePrices } from '../../../../js/utilities/price';
 
-const PriceBlock = ({ children, amount }) => (
+const PriceBlock = ({ children, amount, fixedPrice = '' }) => (
   <div className="price-block">
     {
         (typeof children !== 'undefined' && children.length > 0)
           ? children
-          : <PriceElement amount={amount} />
+          : <PriceElement amount={amount} fixedPrice={fixedPrice} />
       }
   </div>
 );
 
-const SpecialPrice = ({ price, finalPrice, freeItem }) => {
+const SpecialPrice = ({
+  price,
+  finalPrice,
+  freeItem,
+  fixedPrice = '',
+}) => {
   // If freeItem is true, we just want to display text "Free".
   if (freeItem) return Drupal.t('Free');
 
@@ -43,20 +49,20 @@ const SpecialPrice = ({ price, finalPrice, freeItem }) => {
     return (
       <PriceBlock>
         <div className="has--special--price">
-          <PriceElement amount={priceVal} />
+          <PriceElement amount={priceVal} fixedPrice={getDataAttributePrices(fixedPrice, 'price')} />
         </div>
         <div className="special--price">
-          <PriceElement amount={finalPriceVal} />
+          <PriceElement amount={finalPriceVal} fixedPrice={getDataAttributePrices(fixedPrice, 'special_price')} />
         </div>
         {discountTxt}
       </PriceBlock>
     );
   }
   if (finalPriceVal) {
-    return <PriceBlock amount={finalPriceVal} />;
+    return <PriceBlock amount={finalPriceVal} fixedPrice={getDataAttributePrices(fixedPrice, 'price')} />;
   }
 
-  return <PriceBlock amount={priceVal} />;
+  return <PriceBlock amount={priceVal} fixedPrice={getDataAttributePrices(fixedPrice, 'price')} />;
 };
 
 export default SpecialPrice;

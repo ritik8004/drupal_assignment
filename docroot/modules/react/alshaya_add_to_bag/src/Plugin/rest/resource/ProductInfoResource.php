@@ -323,6 +323,8 @@ class ProductInfoResource extends ResourceBase {
           // Set prices.
           $child_data['original_price'] = $this->skuInfoHelper->formatPriceDisplay((float) $prices['price']);
           $child_data['final_price'] = $this->skuInfoHelper->formatPriceDisplay((float) $prices['final_price']);
+          // Fixed price is used by Cross Border sites.
+          $child_data['fixed_price'] = $prices['fixed_price'] ?? '';
           $child_data['discount_percentage'] = $this->skuManager->getDiscountedPercent((float) $prices['price'], (float) $prices['final_price']);
 
           // Index max sale quantity. Whether max sale quantity is enabled/

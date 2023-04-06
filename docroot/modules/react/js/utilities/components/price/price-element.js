@@ -1,6 +1,11 @@
 import React from 'react';
 
-const PriceElement = ({ amount, currencyClass = 'price-currency', amountClass = 'price-amount' }) => {
+const PriceElement = ({
+  amount,
+  currencyClass = 'price-currency',
+  amountClass = 'price-amount',
+  fixedPrice = '',
+}) => {
   if (typeof amount === 'undefined') {
     return (null);
   }
@@ -14,11 +19,11 @@ const PriceElement = ({ amount, currencyClass = 'price-currency', amountClass = 
   ];
 
   return (
-    <span className="price-wrapper">
-      <div className="price">
+    <div className="price" data-fp={fixedPrice}>
+      <span className="price-wrapper">
         {drupalSettings.reactTeaserView.price.currencyPosition === 'before' ? priceParts : priceParts.reverse()}
-      </div>
-    </span>
+      </span>
+    </div>
   );
 };
 
