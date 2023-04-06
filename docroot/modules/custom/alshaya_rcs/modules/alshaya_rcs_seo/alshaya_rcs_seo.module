@@ -203,11 +203,11 @@ function alshaya_rcs_seo_rcs_placeholders_graphql_query_alter(&$query_fields) {
 function alshaya_rcs_seo_metatags_attachments_alter(array &$attachments) {
 
   // Do not process for Authenticated user.
-  if (Drupal::currentUser()->isAuthenticated()) {
+  if (\Drupal::currentUser()->isAuthenticated()) {
     return;
   }
   // Get page type from request i.e. product, category or promotion.
-  $page_type = Drupal::service('rcs_placeholders.path_prefix_helper')->getRcsPathPageType();
+  $page_type = \Drupal::service('rcs_placeholders.path_prefix_helper')->getRcsPathPageType();
   if (empty($page_type)) {
     return;
   }
@@ -216,7 +216,7 @@ function alshaya_rcs_seo_metatags_attachments_alter(array &$attachments) {
   if (!isset($rcs_metatags)) {
     // Get metatag details using graphQL call to magento for page type.
     /** @var \Drupal\alshaya_rcs_seo\Services\AlshayaRcsMetatagHelper $rcs_metatag_helper */
-    $rcs_metatag_helper = Drupal::service('alshaya_rcs_seo.metatag_helper');
+    $rcs_metatag_helper = \Drupal::service('alshaya_rcs_seo.metatag_helper');
     $rcs_metatags = $rcs_metatag_helper->getRcsMetatagFromMagento($page_type);
 
     // Process meta details w.r.t page type.
@@ -229,7 +229,7 @@ function alshaya_rcs_seo_metatags_attachments_alter(array &$attachments) {
   }
 
   // Replace the rcs placeholders in metatags with actual data.
-  foreach ($attachments["#attached"]["html_head"] as &$attachment) {
+  foreach ($attachments['#attached']['html_head'] as &$attachment) {
     if (strpos($attachment[0]['#attributes']['content'], 'rcs') > -1) {
       $value = str_replace('#', '', $attachment[0]['#attributes']['content']);
       $meta_key = explode("rcs.$page_type", $value);

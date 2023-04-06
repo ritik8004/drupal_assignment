@@ -32,7 +32,8 @@ class RcsPhPathPrefixHelper {
    * @param \Symfony\Component\HttpFoundation\RequestStack $request_stack
    *   Request stock service object.
    */
-  public function __construct(ConfigFactoryInterface $config_factory, RequestStack $request_stack) {
+  public function __construct(ConfigFactoryInterface $config_factory,
+                              RequestStack $request_stack) {
     $this->configFactory = $config_factory;
     $this->currentRequest = $request_stack->getCurrentRequest();
   }
@@ -56,10 +57,10 @@ class RcsPhPathPrefixHelper {
   }
 
   /**
-   * Returns requested path prefixes type.
+   * Returns requested path page type.
    *
    * @return string
-   *   Prefix type which is configured from URL.
+   *   page type which is configured from URL. eg. product, category, promotion.
    */
   public function getRcsPathPageType(): string {
     $page_type = '';
