@@ -31,20 +31,20 @@ const InlineRating = ({
       <div className="empty-stars">
         <a onClick={(e) => clickHandler(e, childClickHandler)} href="#">
           <DisplayStar
-            starPercentage={reviewsData.ReviewStatistics.AverageOverallRating}
+            starPercentage={reviewsData.FilteredReviewStatistics.AverageOverallRating}
           />
         </a>
         <ConditionalView condition={window.innerWidth >= 1024}>
           <div className="histogram-data">
             <div className="histogram-title">
-              {reviewsData.ReviewStatistics.TotalReviewCount}
+              {reviewsData.FilteredReviewStatistics.TotalReviewCount}
               {' '}
-              {reviewsData.ReviewStatistics.TotalReviewCount > 1
+              {reviewsData.FilteredReviewStatistics.TotalReviewCount > 1
                 ? getStringMessage('reviews')
                 : getStringMessage('review')}
             </div>
             <RatingSummary
-              histogramData={reviewsData.ReviewStatistics.RatingDistribution}
+              histogramData={reviewsData.FilteredReviewStatistics.RatingDistribution}
               totalReviewCount={reviewsData.TotalReviewCount}
             />
           </div>
