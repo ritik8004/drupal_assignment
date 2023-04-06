@@ -49,11 +49,6 @@ export const algoliaSearchClient = {
       Drupal.addItemInLocalStorage('referrerData', referrerData);
     }
 
-    // Added Extra condition for facet.length to avoid duplicate requests.
-    if (searchRequest[0].params.query.length > 0 && searchRequest[0].params.facets.length === 0) {
-      return null;
-    }
-
     if (window.algoliaSearchActivityStarted || searchRequest[0].params.query.length > 0) {
       searchRequest[0].params.analyticsTags = drupalSettings.user.isCustomer
         ? ['customer']
