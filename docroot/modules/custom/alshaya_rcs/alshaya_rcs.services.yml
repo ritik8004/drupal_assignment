@@ -3,10 +3,3 @@ services:
     class: Drupal\alshaya_rcs\AlgoliaRcsSearchIndexConfigOverrider
     tags:
       - { name: config.factory.override, priority: -1 }
-  alshaya_rcs.api_helper:
-    class: Drupal\alshaya_rcs\AlshayaRcsApiWrapper
-    arguments:
-      - '@logger.factory'
-      - '@http_client'
-      - '@config.factory'
-      - '@language_manager'

@@ -15,3 +15,10 @@ services:
 
   alshaya_api.mdc_helper:
     class: Drupal\alshaya_api\Helper\MagentoApiHelper
+  alshaya_api.graphql_helper:
+    class: Drupal\alshaya_api\AlshayGraphqlApiWrapper
+    arguments:
+      - '@logger.factory'
+      - '@http_client'
+      - '@config.factory'
+      - '@language_manager'

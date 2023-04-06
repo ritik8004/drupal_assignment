@@ -1,18 +1,17 @@
 <?php
 
-namespace Drupal\alshaya_rcs;
+namespace Drupal\alshaya_api;
 
 use Drupal\Core\Language\LanguageManagerInterface;
-use Drupal\rcs_placeholders\Graphql\ArrayGraphQL;
 use GuzzleHttp\TransferStats;
 use GuzzleHttp\Client;
 use Drupal\Core\Logger\LoggerChannelFactoryInterface;
 use Drupal\Core\Config\ConfigFactoryInterface;
 
 /**
- * Provides service for AlshayaRcsApiWrapper.
+ * Provides service for AlshayGraphqlApiWrapper.
  */
-class AlshayaRcsApiWrapper {
+class AlshayGraphqlApiWrapper {
 
   /**
    * The logger.
@@ -43,7 +42,7 @@ class AlshayaRcsApiWrapper {
   private $languageManager;
 
   /**
-   * AlshayaRcsApiWrapper constructor.
+   * AlshayGraphqlApiWrapper constructor.
    *
    * @param \Drupal\Core\Logger\LoggerChannelFactoryInterface $logger_factory
    *   Logger factory.
@@ -58,7 +57,7 @@ class AlshayaRcsApiWrapper {
                               Client $http_client,
                               ConfigFactoryInterface $config_factory,
                               LanguageManagerInterface $language_manager) {
-    $this->logger = $logger_factory->get('alshaya_rcs');
+    $this->logger = $logger_factory->get('alshaya_api');
     $this->httpClient = $http_client;
     $this->configFactory = $config_factory;
     $this->languageManager = $language_manager;
@@ -104,7 +103,7 @@ class AlshayaRcsApiWrapper {
     ];
 
     // Add query to body in request.
-    $request_options['body'] = ArrayGraphQL::convert($fields);
+    $request_options['body'] = json_encode($fields);
 
     // Magento URL to get the product option attributes.
     $request_url = $alshaya_api_config->get('magento_host') . '/graphql';
