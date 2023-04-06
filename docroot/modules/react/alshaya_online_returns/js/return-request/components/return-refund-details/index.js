@@ -130,6 +130,13 @@ class ReturnRefundDetails extends React.Component {
       return;
     }
 
+    // Checking whether eGift card is selected or not in the refund form options.
+    const isEgiftSelected = document.querySelector('#egift').checked;
+    // Adding the refund form selection value to local storage to get the same
+    // in return conformation page. True will be stored if eGift card is selected
+    // in the refund form options else false will get stored.
+    Drupal.addItemInLocalStorage('is_egift_selected', isEgiftSelected);
+
     if (hasValue(returnRequest.data) && hasValue(returnRequest.data.increment_id)) {
       const returnId = returnRequest.data.entity_id;
       Drupal.addItemInLocalStorage('online_return_id', returnId);

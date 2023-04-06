@@ -42,6 +42,9 @@ const RefundMethods = ({
     }
   }
 
+  // Fetching the value from local storage to know whether
+  // eGift card was selected or not in refund form.
+  const isEgiftCardSelected = Drupal.getItemFromLocalStorage('is_egift_selected');
   // Variable to check whether the payment made through multiple methods i.e. hybrid or not.
   const isHybrid = isHybridPayment(paymentInfo);
   // Assigning payment data to a different variable to make the change on that conditionally,
@@ -53,7 +56,7 @@ const RefundMethods = ({
     delete paymentData.egift;
   }
   // Components for eGift card single payment method.
-  const SinglePaymentMethod = () => ((cardList || showNewEgiftCardOption)
+  const SinglePaymentMethod = () => (isEgiftCardSelected && (cardList || showNewEgiftCardOption)
     ? (
       <>
         <EgiftCardDetails
