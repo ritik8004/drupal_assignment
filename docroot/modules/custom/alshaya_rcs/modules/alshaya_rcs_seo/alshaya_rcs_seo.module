@@ -196,3 +196,41 @@ function alshaya_rcs_seo_rcs_placeholders_graphql_query_alter(&$query_fields) {
     $query_fields['single_product_by_color_sku']['query']['query($sku: String)']['products(filter: {sku: {eq: $sku}})']['items'] = $items;
   }
 }
+
+/**
+ * Implements hook_metatags_attachments_alter().
+ */
+function alshaya_rcs_seo_metatags_attachments_alter(array &$attachments) {
+
+  // Do not process for Authenticated user.
+  if (Drupal::currentUser()->isAuthenticated()) {
+    return;
+  }
+  // Get page type from request i.e. product, category or promotion.
+  $page_type = Drupal::service('rcs_placeholders.path_prefix_helper')->getRcsPathPageType();
+  if (empty($page_type)) {
+    return;
+  }
+
+  // Get metatag details using graphQL call to magento for page type.
+  /** @var \Drupal\alshaya_rcs_seo\Services\AlshayaRcsMetatagHelper $rcs_metatag_helper */
+  $rcs_metatag_helper = Drupal::service('alshaya_rcs_seo.metatag_helper');
+  $rcs_metatags = $rcs_metatag_helper->getRcsMetatagFromMagento($page_type);
+
+  // We will not process if data is not available.
+  if (empty($rcs_metatags)) {
+    return;
+  }
+
+  // Process meta details w.r.t page type.
+  $rcs_metatag_helper->processMetaForPageType($page_type, $rcs_metatags);
+  foreach ($attachments["#attached"]["html_head"] as &$attachment) {
+    if (strpos($attachment[0]['#attributes']['content'], 'rcs') > -1) {
+      $value = str_replace('#', '', $attachment[0]['#attributes']['content']);
+      $meta_key = explode("rcs.$page_type", $value);
+      if (array_key_exists($meta_key[1], $rcs_metatags)) {
+        $attachment[0]['#attributes']['content'] = $rcs_metatags[$meta_key[1]];
+      }
+    }
+  }
+}
