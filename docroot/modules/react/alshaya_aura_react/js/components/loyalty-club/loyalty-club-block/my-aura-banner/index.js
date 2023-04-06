@@ -30,7 +30,9 @@ const MyAuraBanner = (props) => {
   const allAuraStatus = getAllAuraStatus();
   const auraUserClass = loyaltyStatusInt === allAuraStatus.APC_LINKED_NOT_VERIFIED ? 'aura-not-verified' : 'aura-verified';
 
-  if (!hasValue(profileInfo.profileName) && !hasValue(auraUsernameCharacterLimit)) {
+  if (!(hasValue(profileInfo) && hasValue(profileInfo.profileName))
+      || !hasValue(auraUsernameCharacterLimit)
+  ) {
     return null;
   }
 

@@ -9,7 +9,7 @@ const TrimUserName = (props) => {
     characterLimit,
   } = props;
 
-  if (!hasValue(userName) && !hasValue(characterLimit)) {
+  if (!hasValue(userName) || !hasValue(characterLimit)) {
     return null;
   }
 

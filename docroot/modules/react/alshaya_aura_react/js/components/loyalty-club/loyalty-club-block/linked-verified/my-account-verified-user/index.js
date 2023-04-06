@@ -28,7 +28,9 @@ const MyAccountVerifiedUser = (props) => {
   const currentTierLevel = tier;
   const tierClass = currentTierLevel || 'no-tier';
 
-  if (!hasValue(profileInfo.profileName) && !hasValue(auraUsernameCharacterLimit)) {
+  if (!(hasValue(profileInfo) && hasValue(profileInfo.profileName))
+      || !hasValue(auraUsernameCharacterLimit)
+  ) {
     return null;
   }
 
