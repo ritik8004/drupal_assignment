@@ -57,7 +57,7 @@ const HeaderLoggedIn = (props) => {
       if (document.querySelector('.aura-enabled #block-alshayamyaccountlinks-2 > .my-account-title')) {
         document.querySelector('.aura-enabled #block-alshayamyaccountlinks-2 > .my-account-title').remove();
       }
-      return <UserNamePoints points={points} tier={tier} />;
+      return <UserNamePoints points={points} tier={tier} firstName={firstName} />;
     }
 
     return (
@@ -67,6 +67,7 @@ const HeaderLoggedIn = (props) => {
           isHeaderModalOpen={isHeaderModalOpen}
           points={points}
           tier={tier}
+          firstName={firstName}
         />
       </>
     );
