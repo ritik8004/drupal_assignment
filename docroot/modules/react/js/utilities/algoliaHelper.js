@@ -1,4 +1,4 @@
-import algoliasearch from 'algoliasearch/lite';
+import algoliasearch from 'algoliasearch';
 
 // Adding _useRequestCache parameter to avoid duplicate requests on Facet filters and sort orders.
 export const searchClient = algoliasearch(
@@ -22,4 +22,44 @@ export const algoliaSearchClient = {
     });
     return searchClient.search(searchRequest);
   },
+};
+
+/**
+ * Get algolia index settings.
+ *
+ * @param {string} pageType
+ *   Page type eg: search, listing.
+ *
+ * @returns {Promise}
+ *   Settings object.
+ */
+export const getIndexSettings = (pageType) => {
+  const { indexName } = drupalSettings.algoliaSearch[pageType];
+  const index = searchClient.initIndex(indexName);
+  return index.getSettings().then((response) => response);
+};
+
+/**
+ * Facets from index settings.
+ *
+ * @param {string} pageType
+ *   Page type eg: search, listing.
+ *
+ * @returns {Promise<Object|string>}
+ *   Promise or array for facets from settings.
+ */
+export const getFacetListFromAlgolia = async (pageType) => {
+  let facets = Drupal.getItemFromLocalStorage(`${pageType}-facets`);
+  if (facets !== null) {
+    return facets;
+  }
+  facets = [];
+
+  const indexSettings = await getIndexSettings(pageType);
+  const { attributesForFaceting } = indexSettings;
+  if (Drupal.hasValue(attributesForFaceting)) {
+    Drupal.addItemInLocalStorage(`${pageType}-facets`, attributesForFaceting, 86400);
+    facets = attributesForFaceting;
+  }
+  return facets;
 };
