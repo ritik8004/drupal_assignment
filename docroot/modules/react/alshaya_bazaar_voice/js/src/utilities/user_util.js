@@ -1,4 +1,4 @@
-import { doRequest, getUserDetails } from './api/request';
+import { doRequest, getUserDetails, fetchAPIData } from './api/request';
 import { setStorageInfo, getStorageInfo, removeStorageInfo } from './storage';
 import { convertHex2aString } from './write_review_util';
 
@@ -21,18 +21,25 @@ export const getUasToken = (productId) => {
   return null;
 };
 
-export const getProductReviewStats = (productId) => {
-  const requestUrl = Drupal.url(`get-product-review-stats/${productId}`);
-  const request = doRequest(requestUrl);
-  if (request instanceof Promise) {
-    return request
+export const getReviewStats = (bazaarVoiceSettings) => {
+  // Get review data from BazaarVoice based on available parameters.
+  const apiUri = '/data/reviews.json';
+  const params = `&filter=productid:${bazaarVoiceSettings.productid}&filter=contentlocale:${bazaarVoiceSettings.reviews.bazaar_voice.content_locale}&Include=Products,Comments&Stats=${bazaarVoiceSettings.reviews.bazaar_voice.stats}&FilteredStats=${bazaarVoiceSettings.reviews.bazaar_voice.stats}`;
+  const apiData = fetchAPIData(apiUri, params);
+  if (apiData instanceof Promise) {
+    return apiData
       .then((result) => {
-        if (result.status === 200) {
+        if (!Drupal.hasValue(result.error) && Drupal.hasValue(result.data)) {
           return result.data;
         }
+
+        Drupal.logJavascriptError('review-stats-summary', result.error);
         return null;
       })
-      .catch((error) => error);
+      .catch((error) => {
+        Drupal.logJavascriptError('review-stats-summary', error);
+        return error;
+      });
   }
   return null;
 };
@@ -131,6 +138,6 @@ export default {
   getUasToken,
   isOpenWriteReviewForm,
   createUserStorage,
-  getProductReviewStats,
+  getReviewStats,
   getEmailFromTokenParams,
 };
