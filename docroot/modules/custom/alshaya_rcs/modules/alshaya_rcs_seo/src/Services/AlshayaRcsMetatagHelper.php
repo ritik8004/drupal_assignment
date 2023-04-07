@@ -97,28 +97,25 @@ class AlshayaRcsMetatagHelper {
           'products(filter: { url_key: { eq: $url } })' => [
             'total_count',
             'items' => [
-              'total_count',
-              'items' => [
-                'sku',
-                'id',
-                'type_id',
-                'name',
-                'url_key',
-                'meta_title',
-                'meta_description',
-                'meta_keyword',
-                'og_meta_title',
-                'og_meta_description',
-                '... on ConfigurableProduct' => [
-                  'variants' => [
-                    'product' => [
-                      'id',
-                      'sku',
-                      'media_gallery' => [
+              'sku',
+              'id',
+              'type_id',
+              'name',
+              'url_key',
+              'meta_title',
+              'meta_description',
+              'meta_keyword',
+              'og_meta_title',
+              'og_meta_description',
+              '... on ConfigurableProduct' => [
+                'variants' => [
+                  'product' => [
+                    'id',
+                    'sku',
+                    'media_gallery' => [
+                      'url',
+                      '... on ProductImage' => [
                         'url',
-                        '... on ProductImage' => [
-                          'url',
-                        ],
                       ],
                     ],
                   ],
@@ -127,20 +124,20 @@ class AlshayaRcsMetatagHelper {
             ],
           ],
         ],
-        'variables' => [
-          'url' => $url_key,
-        ],
+      ],
+      'variables' => [
+        'url' => $url_key,
       ],
     ];
   }
 
   /**
-   * Get category metatags graphQL query in rcs.
+   * Get listing page metatags graphQL query in rcs.
    *
    * @return array
    *   GraphQL query params
    */
-  public function getCategoryMetatagFields(): array {
+  public function getListingMetatagFields(): array {
     $url_key = $this->rcsListingHelper->getListingUrlKey();
     return [
       'query' => [
@@ -201,25 +198,29 @@ class AlshayaRcsMetatagHelper {
    *   Response with meta details array.
    */
   public function getRcsMetatagFromMagento(string $page_type): mixed {
+    $item_key = NULL;
     $fields = $response = [];
     // Get query fields based on page type.
     switch ($page_type) {
       case 'product':
         $fields = $this->getProductMetatagFields();
+        $item_key = 'products';
         break;
 
       case 'category':
-        $fields = $this->getCategoryMetatagFields();
+        $fields = $this->getListingMetatagFields();
+        $item_key = 'categories';
         break;
 
       case 'promotion':
         $fields = $this->getPromotionMetatagFields();
+        $item_key = 'promotionUrlResolver';
         break;
     }
 
-    if (!empty($fields)) {
-      $response = $this->graphqlApiWrapper->doGraphqlRequest('POST', $fields);
-      $response = !empty($response[$page_type]) ? $response[$page_type]['items'][0] : [];
+    if (!empty($fields) && $item_key) {
+      $response = $this->graphqlApiWrapper->doGraphqlRequest('GET', $fields);
+      $response = !empty($response[$item_key]['items']) ? $response[$item_key]['items'][0] : $response[$item_key];
     }
     return $response;
   }
@@ -236,8 +237,8 @@ class AlshayaRcsMetatagHelper {
     // Get query fields based on page type.
     switch ($page_type) {
       case 'product':
-        $data['_self|first_image'] = '';
-        $data['_self|name'] = '';
+        $data['_self|first_image'] = $data['variants'][0]['product']['media_gallery'][0]['url'];
+        $data['_self|name'] = $data['name'];
         break;
 
       case 'promotion':
@@ -245,6 +246,27 @@ class AlshayaRcsMetatagHelper {
         break;
 
     }
+  }
+
+  /**
+   * Get metatag type for attribute.
+   *
+   * @param array $attachment
+   *   An array of metatag objects to be attached to the current page.
+   *
+   * @return string
+   *   Return attribute type supported for SEO.
+   */
+  public function getRcsSeoMetatagAttribute(array $attachment): string {
+    $attribute_type = '';
+    if (array_key_exists('content', $attachment[0]['#attributes'])) {
+      $attribute_type = 'content';
+    }
+    elseif (array_key_exists('href', $attachment[0]['#attributes'])) {
+      $attribute_type = 'href';
+    }
+
+    return $attribute_type;
   }
 
 }
