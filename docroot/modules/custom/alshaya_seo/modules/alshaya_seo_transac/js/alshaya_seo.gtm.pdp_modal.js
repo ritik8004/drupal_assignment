@@ -6,6 +6,13 @@
 (function ($, Drupal, drupalSettings) {
   Drupal.behaviors.alshayaSeoGtmPdpModalBehavior = {
     attach: function (context, settings) {
+      // Get the product opened in popup.
+      var node = $('.entity--type-node[data-vmode="modal"]').not('[data-sku *= "#"]');
+      if (node.length > 0) {
+        // Trigger productDetailView event.
+        Drupal.alshayaSeoGtmPushProductDetailView(node);
+      }
+
       // Push product size click event to GTM.
       // For default and magazine pdp layouts.
       $(document).once('product-modal-size-click').on('click', '.configurable-select .select2Option ul a', function () {

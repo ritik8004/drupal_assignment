@@ -161,6 +161,7 @@
                       postData: post_data,
                       productData: productData,
                       cartData: response,
+                      viewMode: viewMode,
                     }
                   });
                   $(form).trigger(cartNotification);
