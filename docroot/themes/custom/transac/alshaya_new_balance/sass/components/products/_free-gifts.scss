@@ -1,0 +1,35 @@
+.nodetype--acq_product {
+  .free-gift-promotions {
+    margin-#{$left}: 0;
+  }
+}
+
+.free-gift-detail-modal.ui-dialog-content {
+  .configurable-select {
+    select.form-select {
+      @include select-style(100%);
+
+      @include breakpoint($only-mobile) {
+        font-size: rem(14);
+        height: rem(53);
+      }
+    }
+  }
+
+  .size-guide-form-and-link-wrapper {
+    .group-wrapper {
+      .group {
+        @include breakpoint($only-mobile) {
+          @include select-wrapper(100%);
+
+          padding-top: rem(4);
+
+          &::after {
+            top: 50%;
+            transform: translateY(-50%);
+          }
+        }
+      }
+    }
+  }
+}
