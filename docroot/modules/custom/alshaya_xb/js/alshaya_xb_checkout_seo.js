@@ -5,6 +5,11 @@
 
 (function (Drupal, dataLayer) {
 
+  // Site name for datalayer.
+  var geSiteName = Drupal.hasValue(drupalSettings.dataLayerContent.siteName)
+    ? drupalSettings.dataLayerContent.siteName
+    : '';
+
   /**
    * Checks if all mandatory address fields are filled.
    *
@@ -117,7 +122,7 @@
           "name" : product.ProductName,
           "id" : product.ProductGroupCode,
           "price" : product.ProductPrices.MerchantTransaction.DiscountedPrice.toString(),
-          "brand" : product.Brand,
+          "brand" : Drupal.hasValue(product.Brand) ? product.Brand : geSiteName,
           "category" : Drupal.getProductMetadata(product, 'category'),
           "variant" : product.SKU,
           "dimension2" : Drupal.getProductMetadata(product, 'dimension2'),
@@ -203,7 +208,7 @@
           "name": product.ProductName,
           "id": product.ProductGroupCode,
           "price": product.ProductPrices.CustomerTransactionInMerchantCurrency.CustomerDiscountedPriceInMerchantCurrency.toString(),
-          "brand": product.Brand,
+          "brand": Drupal.hasValue(product.Brand) ? product.Brand : geSiteName,
           "category": Drupal.getProductMetadata(product, 'category'),
           "variant": product.SKU,
           "dimension2" : Drupal.getProductMetadata(product, 'dimension2'),
