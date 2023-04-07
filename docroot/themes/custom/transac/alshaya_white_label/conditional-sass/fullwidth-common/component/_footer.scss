@@ -13,3 +13,62 @@
     }
   }
 }
+
+@include breakpoint($desktop) {
+  .c-footer > .c-footer-primary,
+  .c-footer-secondary {
+    @include fullWidthSideSpaces(
+      $is_desktop: true,
+    );
+  }
+
+  .c-footer {
+    .c-footer-primary {
+      .l-container {
+        max-width: none;
+        min-width: unset;
+      }
+
+      .footer--menu {
+        padding: 0;
+      }
+
+      &__region {
+        max-width: none;
+      }
+    }
+  }
+
+  .c-footer-secondary {
+    .l-container {
+      max-width: none;
+    }
+  }
+}
+
+@include breakpoint($desktop-wide-1680) {
+  .c-footer > .c-footer-primary,
+  .c-footer-secondary {
+    padding: 0 rem(140);
+  }
+}
+
+.alias--cart-login,
+.alias--checkout,
+.alias--checkout-confirmation {
+  .c-footer-secondary,
+  .block-customer-service-block {
+    @include fullWidthSideSpaces(
+      $is_desktop: true,
+      $is_desktop_wide: true
+    );
+  }
+
+  @include breakpoint($desktop) {
+    .c-post-content {
+      .l-container {
+        max-width: unset;
+      }
+    }
+  }
+}

@@ -99,6 +99,11 @@
     for (let i = 0; i < categoryArray.length; i++) {
       data.ecommerce.items[`item_category${i+2}`] = categoryArray[i];
     }
+
+    // Add product_view_type outside ecommerce.
+    if (enable_quickview) {
+      data.product_view_type = enable_quickview;
+    }
     dataLayer.push(data);
   };
 

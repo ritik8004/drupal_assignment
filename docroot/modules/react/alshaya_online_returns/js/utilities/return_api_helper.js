@@ -57,7 +57,7 @@ const prepareReturnRequestData = async (data) => {
   return processedData;
 };
 
-const createReturnRequest = async (itemsSelected, egiftCardType) => {
+const createReturnRequest = async (itemsSelected, egiftCardType, cardNumber) => {
   const data = await prepareReturnRequestData(itemsSelected);
 
   if (hasValue(data.error)) {
@@ -81,10 +81,18 @@ const createReturnRequest = async (itemsSelected, egiftCardType) => {
   }
 
   if (egiftCardType) {
+    // For users for whom new eGift card needs to be generated.
     data.rmaDataObject.extension_attributes = {
       refund_mode: 'hps_payment',
       egift_card_type: 'new',
       link_egift_card: 1,
+    };
+  } else if (!egiftCardType && hasValue(cardNumber)) {
+    // For users having linked eGift card.
+    data.rmaDataObject.extension_attributes = {
+      refund_mode: 'hps_payment',
+      egift_card_type: 'linked',
+      egift_card_number: cardNumber,
     };
   }
 
