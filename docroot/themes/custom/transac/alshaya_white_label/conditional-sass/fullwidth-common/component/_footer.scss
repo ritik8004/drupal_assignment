@@ -52,3 +52,23 @@
     padding: 0 rem(140);
   }
 }
+
+.alias--cart-login,
+.alias--checkout,
+.alias--checkout-confirmation {
+  .c-footer-secondary,
+  .block-customer-service-block {
+    @include fullWidthSideSpaces(
+      $is_desktop: true,
+      $is_desktop_wide: true
+    );
+  }
+
+  @include breakpoint($desktop) {
+    .c-post-content {
+      .l-container {
+        max-width: unset;
+      }
+    }
+  }
+}
