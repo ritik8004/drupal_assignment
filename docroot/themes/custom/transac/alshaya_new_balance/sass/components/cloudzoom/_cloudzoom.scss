@@ -58,7 +58,7 @@
 
 #lightSlider {
   @include breakpoint($desktop) {
-    height: rem(676);
+    height: auto;
     list-style: none;
   }
 
