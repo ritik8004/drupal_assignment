@@ -196,3 +196,58 @@ function alshaya_rcs_seo_rcs_placeholders_graphql_query_alter(&$query_fields) {
     $query_fields['single_product_by_color_sku']['query']['query($sku: String)']['products(filter: {sku: {eq: $sku}})']['items'] = $items;
   }
 }
+
+/**
+ * Implements hook_metatags_attachments_alter().
+ */
+function alshaya_rcs_seo_metatags_attachments_alter(array &$attachments) {
+
+  // Do not process for Authenticated user.
+  if (\Drupal::currentUser()->isAuthenticated()) {
+    return;
+  }
+
+  // Check if the SSR is enabled for metatag.
+  if (!\Drupal::config('alshaya_rcs_seo.settings')->get('enable_ssr_metatag')) {
+    return;
+  }
+
+  // Get page type from request i.e. product, category or promotion.
+  $page_type = \Drupal::service('rcs_placeholders.path_prefix_helper')->getRcsPathPageType();
+  if (empty($page_type)) {
+    return;
+  }
+
+  /** @var \Drupal\alshaya_rcs_seo\Services\AlshayaRcsMetatagHelper $rcs_metatag_helper */
+  $rcs_metatag_helper = \Drupal::service('alshaya_rcs_seo.metatag_helper');
+  $rcs_metatags = &drupal_static(__FUNCTION__);
+  // Get metatag details using graphQL call to magento for page type.
+  if (!isset($rcs_metatags)) {
+    $rcs_metatags = $rcs_metatag_helper->getRcsMetatagFromMagento($page_type);
+    // Process meta details w.r.t page type.
+    $rcs_metatag_helper->processMetaForPageType($page_type, $rcs_metatags);
+  }
+
+  // We will not process if data is not available.
+  if (empty($rcs_metatags)) {
+    return;
+  }
+
+  // Replace the rcs placeholders in metatags with actual data.
+  foreach ($attachments['#attached']['html_head'] as &$attachment) {
+    $attribute_type = $rcs_metatag_helper->getRcsSeoMetatagAttribute($attachment);
+    if (empty($attribute_type)) {
+      continue;
+    }
+
+    // Do the replacement based on RCS data.
+    $attribute_data = &$attachment[0]['#attributes'][$attribute_type];
+    if (strpos($attribute_data, "#rcs.$page_type") > -1) {
+      $rcs_key = explode('#', $attribute_data)[1];
+      $rcs_metatag = str_replace("rcs.$page_type.", '', $rcs_key);
+      if (array_key_exists($rcs_metatag, $rcs_metatags)) {
+        $attribute_data = str_replace("#$rcs_key#", $rcs_metatags[$rcs_metatag], $attribute_data);
+      }
+    }
+  }
+}
