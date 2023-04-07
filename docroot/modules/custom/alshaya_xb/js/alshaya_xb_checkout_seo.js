@@ -190,12 +190,12 @@
    *   The purchase success data object.
    */
   Drupal.mapGlobalePurchaseSuccessData = function (geData) {
-    var productGtm = [];
-    var cartItemsCount = 0;
-    var productSku = [];
-    var productStyleCode = [];
-    var discountAmount = 0;
-    var firstTimeTransaction = null;
+    let productGtm = [];
+    let cartItemsCount = 0;
+    let productSku = [];
+    let productStyleCode = [];
+    let discountAmount = 0;
+    let firstTimeTransaction = null;
     if (geData.details.ProductInformation) {
       Object.entries(geData.details.ProductInformation).forEach(function (productItem) {
         var product = productItem[1];

@@ -1,4 +1,5 @@
 import { hasValue } from './conditionsUtility';
+import logger from './logger';
 
 /**
  * Calculates discount value from original and final price.
@@ -75,6 +76,7 @@ const getDataAttributePricesObj = (data, field) => {
     fixedPriceAttributeData = JSON.parse(data);
   } catch (e) {
     // Return empty object if json parse has error.
+    logger.error('Error while trying to parse the price data.', e);
     return {};
   }
 
