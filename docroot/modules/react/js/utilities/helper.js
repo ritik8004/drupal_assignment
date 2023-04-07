@@ -1,4 +1,7 @@
+import React from 'react';
+import EllipsisText from 'react-ellipsis-text';
 import { hasValue } from './conditionsUtility';
+import { isDesktop } from './display';
 
 /**
  * Helper function to check if AURA is enabled.
@@ -52,3 +55,26 @@ export const checkBazaarVoiceAvailableForPdp = () => {
  */
 export const isCheckoutTracker = () => hasValue(drupalSettings.checkoutTracker)
   && hasValue(drupalSettings.checkoutTracker.enabled);
+
+
+export const TrimString = (props) => {
+  const {
+    stringToTrim,
+    characterLimit,
+  } = props;
+
+  if (!hasValue(stringToTrim)) {
+    return null;
+  }
+
+  return (
+    <div title={stringToTrim}>
+      {hasValue(characterLimit) && isDesktop() ? (
+        <EllipsisText
+          text={stringToTrim}
+          length={parseInt(characterLimit, 10)}
+        />
+      ) : (<>{stringToTrim}</>)}
+    </div>
+  );
+};

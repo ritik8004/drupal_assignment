@@ -6,7 +6,7 @@ import {
 import { getTooltipPointsOnHoldMsg } from '../../../../utilities/aura_utils';
 import ToolTip from '../../../../../../alshaya_spc/js/utilities/tooltip';
 import AuraAppDownload from '../../../aura-app-download';
-import TrimUserName from '../trim-user-name';
+import { TrimString } from '../../../../../../js/utilities/helper';
 import { hasValue } from '../../../../../../js/utilities/conditionsUtility';
 
 const MyAuraBanner = (props) => {
@@ -30,8 +30,7 @@ const MyAuraBanner = (props) => {
   const allAuraStatus = getAllAuraStatus();
   const auraUserClass = loyaltyStatusInt === allAuraStatus.APC_LINKED_NOT_VERIFIED ? 'aura-not-verified' : 'aura-verified';
 
-  if (!(hasValue(profileInfo) && hasValue(profileInfo.profileName))
-    || !hasValue(auraUsernameCharacterLimit)) {
+  if (!(hasValue(profileInfo) && hasValue(profileInfo.profileName))) {
     return null;
   }
 
@@ -41,8 +40,8 @@ const MyAuraBanner = (props) => {
         <div className="aura-logo">
           <div className="aura-user-avatar">{profileInfo.avatar}</div>
           <div className="aura-user-name">
-            <TrimUserName
-              userName={profileInfo.profileName}
+            <TrimString
+              stringToTrim={profileInfo.profileName}
               characterLimit={auraUsernameCharacterLimit}
             />
             <div className="aura-card-number">
