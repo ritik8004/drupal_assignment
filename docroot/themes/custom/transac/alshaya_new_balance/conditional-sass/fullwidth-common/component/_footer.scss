@@ -1,0 +1,8 @@
+@include breakpoint($desktop) {
+  .c-footer-primary,
+  .c-footer-secondary {
+    .l-container {
+      padding: 0;
+    }
+  }
+}
