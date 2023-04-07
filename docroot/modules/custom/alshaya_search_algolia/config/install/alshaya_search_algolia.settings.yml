@@ -1,3 +1,4 @@
 show_terms_in_lhn: 'L1'
 index_from_drupal: true
 index_prefix: ''
+index_sku_as_object_id: false

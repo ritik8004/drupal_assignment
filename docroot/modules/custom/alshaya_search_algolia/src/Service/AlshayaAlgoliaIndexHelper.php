@@ -46,6 +46,11 @@ class AlshayaAlgoliaIndexHelper {
   /**
    * Index name for product list on PLP, promo, brand listing.
    */
+  public const SEARCH_INDEX = 'alshaya_algolia_index';
+
+  /**
+   * Index name for product list on PLP, promo, brand listing.
+   */
   public const PRODUCT_LIST_INDEX = 'alshaya_algolia_product_list_index';
 
   /**
@@ -1260,6 +1265,20 @@ class AlshayaAlgoliaIndexHelper {
    */
   public function getAlgoliaIndexPrefix() {
     return $this->configFactory->get('alshaya_search_algolia.settings')->get('index_prefix');
+  }
+
+  /**
+   * Get index_sku_as_object_id value from config.
+   *
+   * @return bool
+   *   Returns true if the flag is set to true otherwise false.
+   */
+  public function indexSkuAsObjectId() {
+    $flag = $this->configFactory->get('alshaya_search_algolia.settings')->get('index_sku_as_object_id');
+    if ($flag) {
+      return TRUE;
+    }
+    return FALSE;
   }
 
 }
