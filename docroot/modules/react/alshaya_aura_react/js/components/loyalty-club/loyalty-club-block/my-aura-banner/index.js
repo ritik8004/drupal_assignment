@@ -6,7 +6,7 @@ import {
 import { getTooltipPointsOnHoldMsg } from '../../../../utilities/aura_utils';
 import ToolTip from '../../../../../../alshaya_spc/js/utilities/tooltip';
 import AuraAppDownload from '../../../aura-app-download';
-import { TrimString } from '../../../../../../js/utilities/helper';
+import TrimUserName from '../trim-user-name';
 import { hasValue } from '../../../../../../js/utilities/conditionsUtility';
 
 const MyAuraBanner = (props) => {
@@ -40,8 +40,8 @@ const MyAuraBanner = (props) => {
         <div className="aura-logo">
           <div className="aura-user-avatar">{profileInfo.avatar}</div>
           <div className="aura-user-name">
-            <TrimString
-              stringToTrim={profileInfo.profileName}
+            <TrimUserName
+              userName={profileInfo.profileName}
               characterLimit={auraUsernameCharacterLimit}
             />
             <div className="aura-card-number">

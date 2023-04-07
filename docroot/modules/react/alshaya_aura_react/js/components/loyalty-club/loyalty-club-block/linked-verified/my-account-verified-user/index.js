@@ -5,7 +5,7 @@ import { getTooltipPointsOnHoldMsg } from '../../../../../utilities/aura_utils';
 import PointsExpiryMessage from '../../../../../../../alshaya_spc/js/aura-loyalty/components/utilities/points-expiry-message';
 import ToolTip from '../../../../../../../alshaya_spc/js/utilities/tooltip';
 import { isDesktop, isMobile } from '../../../../../../../js/utilities/display';
-import { TrimString } from '../../../../../../../js/utilities/helper';
+import TrimUserName from '../../trim-user-name';
 import { hasValue } from '../../../../../../../js/utilities/conditionsUtility';
 
 const MyAccountVerifiedUser = (props) => {
@@ -38,8 +38,8 @@ const MyAccountVerifiedUser = (props) => {
         <div className="aura-card-linked-verified-wrapper-content">
           <div className="aura-logo">
             <div className="aura-user-name">
-              <TrimString
-                stringToTrim={profileInfo.profileName}
+              <TrimUserName
+                userName={profileInfo.profileName}
                 characterLimit={auraUsernameCharacterLimit}
               />
               <div className="aura-card-number">

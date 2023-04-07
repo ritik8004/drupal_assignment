@@ -1,7 +1,4 @@
-import React from 'react';
-import EllipsisText from 'react-ellipsis-text';
 import { hasValue } from './conditionsUtility';
-import { isDesktop } from './display';
 
 /**
  * Helper function to check if AURA is enabled.
@@ -56,25 +53,19 @@ export const checkBazaarVoiceAvailableForPdp = () => {
 export const isCheckoutTracker = () => hasValue(drupalSettings.checkoutTracker)
   && hasValue(drupalSettings.checkoutTracker.enabled);
 
+/**
+ *
+ * @param {*} stringToTrim
+ *  The string to trim.
+ * @param {*} characterLimit
+ *  Character limit for triming the above string.
+ * @returns {string}
+ */
 
-export const TrimString = (props) => {
-  const {
-    stringToTrim,
-    characterLimit,
-  } = props;
-
-  if (!hasValue(stringToTrim)) {
-    return null;
-  }
-
-  return (
-    <div title={stringToTrim}>
-      {hasValue(characterLimit) && isDesktop() ? (
-        <EllipsisText
-          text={stringToTrim}
-          length={parseInt(characterLimit, 10)}
-        />
-      ) : (<>{stringToTrim}</>)}
-    </div>
-  );
-};
+export const truncate = (stringToTrim, characterLimit) => (
+  stringToTrim.length > characterLimit
+    // Here we reduce characterLimit by 3.
+    // So that the total length of the string match the characterLimit supplied from config.
+    ? `${stringToTrim.substring(0, (characterLimit - 3))}...`
+    : stringToTrim
+);
