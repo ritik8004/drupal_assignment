@@ -43,3 +43,4 @@ services:
       - '@alshaya_rcs_listing.helper'
       - '@alshaya_rcs_promotion.helper'
       - '@alshaya_api.graphql_helper'
+      - '@request_stack'

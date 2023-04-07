@@ -6,6 +6,7 @@ use Drupal\alshaya_api\AlshayGraphqlApiWrapper;
 use Drupal\alshaya_rcs_listing\Services\AlshayaRcsListingHelper;
 use Drupal\alshaya_rcs_product\Services\AlshayaRcsProductHelper;
 use Drupal\alshaya_rcs_promotion\Services\AlshayaRcsPromotionHelper;
+use Symfony\Component\HttpFoundation\RequestStack;
 
 /**
  * Class Alshaya RCS Metatag Manager.
@@ -41,6 +42,13 @@ class AlshayaRcsMetatagHelper {
   protected $graphqlApiWrapper;
 
   /**
+   * The request stack service.
+   *
+   * @var \Symfony\Component\HttpFoundation\RequestStack
+   */
+  protected $requestStack;
+
+  /**
    * Constructs RCS Metatag Helper service.
    *
    * @param \Drupal\alshaya_rcs_product\Services\AlshayaRcsProductHelper $rcs_product_helper
@@ -51,17 +59,21 @@ class AlshayaRcsMetatagHelper {
    *   RCS Promotion Helper.
    * @param \Drupal\alshaya_api\AlshayGraphqlApiWrapper $graphql_api_wrapper
    *   Alshaya GraphQL api wrapper.
+   * @param \Symfony\Component\HttpFoundation\RequestStack $requestStack
+   *   Request stack service.
    */
   public function __construct(
     AlshayaRcsProductHelper $rcs_product_helper,
     AlshayaRcsListingHelper $rcs_listing_helper,
     AlshayaRcsPromotionHelper $rcs_promotion_helper,
-    AlshayGraphqlApiWrapper $graphql_api_wrapper
+    AlshayGraphqlApiWrapper $graphql_api_wrapper,
+    RequestStack $requestStack,
   ) {
     $this->rcsProductHelper = $rcs_product_helper;
     $this->rcsListingHelper = $rcs_listing_helper;
     $this->rcsPromotiontHelper = $rcs_promotion_helper;
     $this->graphqlApiWrapper = $graphql_api_wrapper;
+    $this->requestStack = $requestStack;
   }
 
   /**
@@ -237,12 +249,15 @@ class AlshayaRcsMetatagHelper {
     // Get query fields based on page type.
     switch ($page_type) {
       case 'product':
-        $data['_self|first_image'] = $data['variants'][0]['product']['media_gallery'][0]['url'];
+        if (!empty($data['variants']) && !empty($data['variants'][0]['product']['media_gallery'])) {
+          $data['_self|first_image'] = $data['variants'][0]['product']['media_gallery'][0]['url'];
+        }
         $data['_self|name'] = $data['name'];
         break;
 
       case 'promotion':
-        $data['url_path'] = '';
+        $data['url_path'] = $this->requestStack->getCurrentRequest()->getUri();
+        $data['name'] = $data['title'];
         break;
 
     }
