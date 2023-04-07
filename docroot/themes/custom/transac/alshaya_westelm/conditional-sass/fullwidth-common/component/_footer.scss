@@ -1,1 +1,10 @@
 @include fullwidth-footer-style-1;
+
+@include breakpoint($desktop) {
+  html[lang="en"],
+  html[lang="ar"] {
+    .c-footer-menu--about {
+      margin: 0;
+    }
+  }
+}
