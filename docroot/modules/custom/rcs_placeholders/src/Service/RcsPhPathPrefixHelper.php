@@ -68,7 +68,7 @@ class RcsPhPathPrefixHelper {
     $rcs_config = $this->configFactory->get('rcs_placeholders.settings');
     $settings = $rcs_config->getRawData();
     foreach ($settings as $type => $value) {
-      if (!empty($value['path_prefix']) && strpos(strtolower($request_uri), (string) $type) > -1) {
+      if (!empty($value['path_prefix']) && strpos(strtolower($request_uri), (string) $value['path_prefix']) > -1) {
         $page_type = $type;
         break;
       }

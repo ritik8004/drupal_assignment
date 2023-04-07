@@ -5,3 +5,6 @@ alshaya_rcs_seo.settings:
     sitemap_domain_to_use:
       type: string
       label: 'Config to determine the sitemap domain.'
+    enable_ssr_metatag:
+      type: boolean
+      label: 'Config to determine the SSR to be enabled for metatag rendering for PDP, PLP and Promotion page.'
