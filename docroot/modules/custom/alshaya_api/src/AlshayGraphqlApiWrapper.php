@@ -69,7 +69,7 @@ class AlshayGraphqlApiWrapper {
    * @param string $method
    *   Request method.
    * @param array $fields
-   *   Request URL.
+   *   Request fields in query params i.e. query and variables.
    *
    * @return mixed
    *   Response data.
@@ -77,6 +77,10 @@ class AlshayGraphqlApiWrapper {
    * @throws \Exception
    */
   public function doGraphqlRequest(string $method, array $fields = []) {
+    // Check if the field have query.
+    if (empty($fields['query'])) {
+      return NULL;
+    }
     $result = NULL;
     $request_options = [];
     $alshaya_api_config = $this->configFactory->get('alshaya_api.settings');
@@ -102,8 +106,11 @@ class AlshayGraphqlApiWrapper {
       'store' => $alshaya_api_config->get('magento_lang_prefix')[$current_language],
     ];
 
-    // Add query to body in request.
-    $request_options['body'] = json_encode($fields);
+    // Convert array to graphql.
+    $request_options['query']['query'] = $this->processGraphqlQuery($fields['query']);
+    if (!empty($fields['variables'])) {
+      $request_options['query']['variables'] = json_encode($fields['variables']);
+    }
 
     // Magento URL to get the product option attributes.
     $request_url = $alshaya_api_config->get('magento_host') . '/graphql';
@@ -135,6 +142,43 @@ class AlshayGraphqlApiWrapper {
     }
 
     return $result;
+  }
+
+  /**
+   * Perform character replacement and converts array to graphql query string.
+   *
+   * @param array $query
+   *   Array to perform the character replacement on.
+   *
+   * @return string
+   *   The string with the replaced characters.
+   */
+  private static function processGraphqlQuery(array $query): string {
+    // Convert array to json.
+    $query = json_encode($query, JSON_PRETTY_PRINT);
+
+    // Remove array indexes.
+    $query = preg_replace('~"\d+":\s~', '', $query);
+
+    // Remove colons except inside `()`, i.e. filters, variables etc.
+    $query = preg_replace('/:(?!.*?\\))/', '', $query);
+
+    // Remove [ except inside `()`, i.e. filters, variables etc.
+    $query = preg_replace('/\[(?!.*?\\))/', '{', $query);
+
+    // Remove ] except inside `()`, i.e. filters, variables etc.
+    $query = preg_replace('/\](?!.*?\\))/', '}', $query);
+
+    // Remove quotes and commas (Original code doesn't remove commas).
+    $query = str_replace(['"', ','], '', $query);
+
+    // Compress (Original code doesn't include this).
+    $query = preg_replace("/(\r?\n?\s+)/", ' ', $query);
+
+    // Remove the first and last character.
+    $query = substr($query, 1, -1);
+
+    return $query;
   }
 
 }
