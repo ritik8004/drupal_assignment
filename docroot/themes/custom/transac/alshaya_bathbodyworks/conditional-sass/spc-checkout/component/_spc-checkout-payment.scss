@@ -1,0 +1,15 @@
+.spc-checkout-payment-options {
+  @include breakpoint($only-mobile) {
+    .spc-checkout-section-title {
+      // Vertically aligning the text to the banner.
+      html[lang="en"] & {
+        padding-top: rem(4);
+
+        &::before {
+          position: relative;
+          bottom: rem(2);
+        }
+      }
+    }
+  }
+}
