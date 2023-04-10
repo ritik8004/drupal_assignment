@@ -165,7 +165,12 @@ class Autocomplete extends React.Component {
     const inputTag = this.autosuggest.current.input;
     this.clearAllFilters();
     this.timerId = setTimeout(() => {
-      refine(newValue);
+      // Trending searches only appear on Web desktop when the input is focused.
+      // We do not need to request the query-index on desktop web when value is changed.
+      // Change should request query-index only for web on mobile.
+      if (window.innerWidth < 768) {
+        refine(newValue);
+      }
       onChange(newValue, inputTag);
     }, 100);
 
