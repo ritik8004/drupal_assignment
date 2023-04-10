@@ -110,7 +110,7 @@ class ReturnRefundDetails extends React.Component {
    */
   createReturnRequest = async () => {
     const { itemsSelected, handleErrorMessage, orderDetails } = this.props;
-    const { egiftCardType } = this.state;
+    const { cardList, egiftCardType } = this.state;
 
     showFullScreenLoader();
 
