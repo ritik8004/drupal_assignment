@@ -95,7 +95,7 @@ foreach ($indexes as $type => $index_name) {
   // Verify skus do not exist in Drupal.
   $query = \Drupal::database()->select('node__field_skus', 'nfs');
 
-  if ($type === 'product_list') {
+  if ($type === 'product_list' || $index_sku_as_object_id) {
     $query->condition('field_skus_value', $data_in_algolia, 'IN');
     $query->addField('nfs', 'field_skus_value', 'sku');
   }
