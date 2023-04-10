@@ -52,20 +52,3 @@ export const checkBazaarVoiceAvailableForPdp = () => {
  */
 export const isCheckoutTracker = () => hasValue(drupalSettings.checkoutTracker)
   && hasValue(drupalSettings.checkoutTracker.enabled);
-
-/**
- *
- * @param {*} stringToTrim
- *  The string to trim.
- * @param {*} characterLimit
- *  Character limit for triming the above string.
- * @returns {string}
- */
-
-export const truncate = (stringToTrim, characterLimit) => (
-  stringToTrim.length > characterLimit
-    // Here we reduce characterLimit by 3.
-    // So that the total length of the string match the characterLimit supplied from config.
-    ? `${stringToTrim.substring(0, (characterLimit - 3))}...`
-    : stringToTrim
-);
