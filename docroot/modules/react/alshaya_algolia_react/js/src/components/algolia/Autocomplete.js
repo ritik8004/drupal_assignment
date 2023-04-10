@@ -165,7 +165,10 @@ class Autocomplete extends React.Component {
     const inputTag = this.autosuggest.current.input;
     this.clearAllFilters();
     this.timerId = setTimeout(() => {
-      refine(newValue);
+      // Avoid extra requests to query index for desktop web.
+      if (window.innerWidth < 768) {
+        refine(newValue);
+      }
       onChange(newValue, inputTag);
     }, 100);
 
