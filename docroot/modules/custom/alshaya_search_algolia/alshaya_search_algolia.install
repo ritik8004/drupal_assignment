@@ -14,7 +14,7 @@ use Drupal\alshaya_config\AlshayaConfigManager;
  * Added new key index_sku_as_object_id in the config.
  * To flag if we should add SKU for objectID for alshaya_algolia_index.
  */
-function alshaya_search_algolia_update_8014() {
+function alshaya_search_algolia_update_9401() {
   $manager = \Drupal::service('alshaya_config.manager');
   // Adding fields in search_api index.
   $manager->updateConfigs(

@@ -1,5 +1,5 @@
 diff --git a/src/SearchApiAlgoliaHelper.php b/src/SearchApiAlgoliaHelper.php
-index ec51ce2..580528f 100644
+index ec51ce2..1c273d9 100644
 --- a/src/SearchApiAlgoliaHelper.php
 +++ b/src/SearchApiAlgoliaHelper.php
 @@ -81,12 +81,20 @@ class SearchApiAlgoliaHelper {
@@ -24,11 +24,13 @@ index ec51ce2..580528f 100644
          }
        }
      }
-@@ -112,7 +120,7 @@ class SearchApiAlgoliaHelper {
+@@ -112,7 +120,9 @@ class SearchApiAlgoliaHelper {
        $indexId = $index->getOption('algolia_index_name');
        if ($index->getOption('algolia_index_apply_suffix') && !empty($language)) {
          $objectIdParsed = explode(':', $objectid);
 -        if (end($objectIdParsed) !== $language) {
++        // If object_id_field have value we do not use the default pattern for objectID.
++        // Need to make sure that we do not skip the item if object_id_field have value.
 +        if (end($objectIdParsed) !== $language && empty($index->getOption('object_id_field'))) {
            // Skip the object ids in other language.
            continue;

@@ -76,6 +76,7 @@ foreach ($indexes as $type => $index_name) {
 
   $data_in_algolia = [];
   foreach ($results as $row) {
+    // If index_sku_as_object_id is enabled use SKU for search index.
     $data_in_algolia[$row['objectID']] = $type === 'product_list' || $index_sku_as_object_id
       ? $row['sku']
       : $row['nid'];
