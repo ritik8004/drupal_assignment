@@ -5,7 +5,7 @@ import ProductDrawer from '../product-drawer';
 import ConfigurableForm from '../configurable-form';
 import Price from '../../../../js/utilities/components/price';
 import Promotions from '../promotions';
-import { getVatText } from '../../../../js/utilities/price';
+import { getDataAttributePricesObj, getVatText } from '../../../../js/utilities/price';
 import ConditionalView from '../../../../js/utilities/components/conditional-view';
 import Lozenges
   from '../../../../alshaya_algolia_react/js/common/components/lozenges';
@@ -100,9 +100,28 @@ class ConfigurableProductDrawer extends React.Component {
 
     // Gallery images.
     const { images } = selectedVariantData.media;
-    const { original_price: originalPrice, final_price: finalPrice } = selectedVariantData;
+    const {
+      original_price: originalPrice,
+      final_price: finalPrice,
+      fixed_price: fixedPrice,
+      sku: variantSku,
+    } = selectedVariantData;
+
     const vatText = getVatText();
     const parentSku = productData.catalogRestructured ? selectedVariantData.parent_sku : sku;
+
+    const specialPrice = getDataAttributePricesObj(fixedPrice, 'special_price');
+    // If a product is having fixedPrice (Which contains the special price of
+    // the product), then change the finalPrice of the product to 0.01 to apply
+    // discount. This case is only applicable for XB sites as of now.
+    let endPrice = finalPrice;
+    if (hasValue(drupalSettings.xb)
+      && hasValue(drupalSettings.xb.country_code)
+      && hasValue(specialPrice)
+      && hasValue(specialPrice[drupalSettings.xb.country_code])) {
+      // @see Drupal\alshaya_xb\Service\SkuPriceHelperXbDecorator::buildPriceBlockSimple().
+      endPrice = (hasValue(finalPrice) && (originalPrice > finalPrice)) ? finalPrice : '0.01';
+    }
 
     return (
       <ProductDrawer
@@ -138,7 +157,12 @@ class ConfigurableProductDrawer extends React.Component {
           </div>
           <div className="product-details-wrapper">
             <div className="product-title">{productData.title}</div>
-            <Price price={originalPrice} finalPrice={finalPrice} />
+            <Price
+              sku={variantSku}
+              price={originalPrice}
+              finalPrice={endPrice}
+              fixedPrice={fixedPrice}
+            />
             <ConditionalView condition={vatText !== ''}>
               <div className="vat-text">{vatText}</div>
             </ConditionalView>
