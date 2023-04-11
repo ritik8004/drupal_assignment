@@ -1,0 +1,10 @@
+alshaya_shoeai.settings:
+  type: config_object
+  label: 'Shoe AI settings'
+  mapping:
+    enable_shoeai:
+      type: integer
+      label: 'Shoe AI status'
+    shop_id:
+      type: text
+      label: 'Shoe AI shop ID'

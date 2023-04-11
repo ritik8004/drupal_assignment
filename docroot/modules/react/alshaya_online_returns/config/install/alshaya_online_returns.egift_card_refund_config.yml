@@ -1,0 +1,7 @@
+egift_card_refund_enabled: false # Config to enable/disable egift refund feature.
+egift_refund_text: '' # Config to shows the message under the eGift card refund option.
+egift_card_icon: '' # Config to upload the eGift card icon in refund option.
+not_supported_refund_payment_methods:
+  tabby: tabby
+  postpay: postpay
+  tamara: tamara

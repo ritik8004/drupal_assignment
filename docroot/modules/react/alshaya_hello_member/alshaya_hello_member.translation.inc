@@ -502,6 +502,72 @@ function _alshaya_hello_member_react_translations() {
         'context' => 'hello_member',
       ],
     ],
+    'v6' => [
+      '<p classname="hello-membership-terms">Please <a href="/membership-info">Click here</a> to read more about Hello Member programme.</p>' => [
+        'ar' => '<p classname="hello-membership-terms"><a href="/ar/membership-info">اضغط هنا</a> لمعرفة المزيد عن برنامج هالو ميمبر</p>',
+        'context' => 'hello_member',
+      ],
+      '<p classname="hello-membership-terms">Read the updated <a href="/terms-and-conditions-sale">Terms and Conditions</a> and <a href="/privacy-policy">Privacy Policy</a></p>' => [
+        'ar' => '<p classname="hello-membership-terms">.اقرأ <a href="/ar/terms-and-conditions-sale">الشروط والأحكام</a> <a href="/ar/privacy-policy">وسياسية الخصوصية</a> المحدثة</p>',
+        'context' => 'hello_member',
+      ],
+      '<p classname="hello-membership-terms">If you do not want to be part of the programme, <a href="/contact">contact us.</a></p>' => [
+        'ar' => '<p classname="hello-membership-terms">.في حال لم ترغب في الاستمرار في البرنامج، <a href="/ar/contact">فقم بالتواصل معنا</a></p>',
+        'context' => 'hello_member',
+      ],
+      'Select Gender' => [
+        'ar' => 'اختر نوع الجنس',
+        'context' => 'hello_member',
+      ],
+      'This Phone number is already in use.' => [
+        'ar' => 'الهاتف المحمول مستخدم بالفعل.',
+        'context' => 'hello_member',
+      ],
+      '<span>Members get</span> <span>free delivery and 10% off on your first purchase.</span>' => [
+        'ar' => '<span>يحصل الأعضاء على </span><span>خصم 10% على عملية الشراء الأولى!</span>',
+        'context' => 'hello_member',
+      ],
+      'Added to your bag.' => [
+        'ar' => 'تم الإضافة إلى حقيبة التسوق',
+        'context' => 'hello_member',
+      ],
+      'Plus Member' => [
+        'ar' => 'عضوية مميزه',
+        'context' => 'hello_member',
+      ],
+      '@hm_icon You’re earning @points points as an H&M member' => [
+        'ar' => '@hm_icon لقد حصلت على @points نقطة لكونك عضو في اتش آند ام',
+        'context' => 'hello_member',
+      ],
+      'Members earn @pointValue point(s)' => [
+        'ar' => 'يكسب الأعضاء @pointValue نقطة/نقاط',
+        'context' => 'hello_member',
+      ],
+      'Your membership will be renewed on @expiry_date and points will be reset every year.' => [
+        'ar' => 'سيتم تجديد عضويتك بنسبة @expiry_date وستتم إعادة تعيين النقاط كل عام.',
+        'context' => 'hello_member',
+      ],
+      'Points History' => [
+        'ar' => 'سجّل النقاط',
+        'context' => 'hello_member',
+      ],
+      'Enter now' => [
+        'ar' => 'أدخل الأن',
+        'context' => 'hello_member',
+      ],
+      'Redeem Now' => [
+        'ar' => 'استرد الآن',
+        'context' => 'hello_member',
+      ],
+      'Shop Now' => [
+        'ar' => 'تسوق الآن',
+        'context' => 'hello_member',
+      ],
+      'Book Now' => [
+        'ar' => 'احجز الآن',
+        'context' => 'hello_member',
+      ],
+    ],
   ];
 }
 

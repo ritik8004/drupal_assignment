@@ -99,6 +99,11 @@
     for (let i = 0; i < categoryArray.length; i++) {
       data.ecommerce.items[`item_category${i+2}`] = categoryArray[i];
     }
+
+    // Add product_view_type outside ecommerce.
+    if (enable_quickview) {
+      data.product_view_type = enable_quickview;
+    }
     dataLayer.push(data);
   };
 
@@ -148,11 +153,4 @@
     dataLayer.push(shareWishlistData);
   }
 
-  // Push to GTM when add to bag product drawer is opened.
-  document.addEventListener('drawerOpenEvent', function onDrawerOpen(e) {
-    var $element = e.detail.triggerButtonElement.closest('article.node--view-mode-search-result');
-    if ($element) {
-      Drupal.alshayaSeoGtmPushProductDetailView($element);
-    }
-  });
 }(jQuery, Drupal, dataLayer));

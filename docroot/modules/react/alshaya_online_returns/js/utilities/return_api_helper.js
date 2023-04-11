@@ -57,7 +57,7 @@ const prepareReturnRequestData = async (data) => {
   return processedData;
 };
 
-const createReturnRequest = async (itemsSelected) => {
+const createReturnRequest = async (itemsSelected, egiftCardType, cardNumber) => {
   const data = await prepareReturnRequestData(itemsSelected);
 
   if (hasValue(data.error)) {
@@ -78,6 +78,22 @@ const createReturnRequest = async (itemsSelected) => {
       '@customer_id': customerId,
     });
     return getErrorResponse('No user available in session', 403);
+  }
+
+  if (egiftCardType) {
+    // For users for whom new eGift card needs to be generated.
+    data.rmaDataObject.extension_attributes = {
+      refund_mode: 'hps_payment',
+      egift_card_type: 'new',
+      link_egift_card: 1,
+    };
+  } else if (!egiftCardType && hasValue(cardNumber)) {
+    // For users having linked eGift card.
+    data.rmaDataObject.extension_attributes = {
+      refund_mode: 'hps_payment',
+      egift_card_type: 'linked',
+      egift_card_number: cardNumber,
+    };
   }
 
   data.rmaDataObject.customer_id = customerId;

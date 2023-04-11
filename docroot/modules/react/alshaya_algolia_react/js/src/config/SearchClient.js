@@ -1,8 +1,11 @@
 import algoliasearch from 'algoliasearch/lite';
 
+// Adding _useRequestCache parameter to avoid duplicate requests on Facet filters and sort orders.
 export const searchClient = algoliasearch(
   drupalSettings.algoliaSearch.application_id,
-  drupalSettings.algoliaSearch.api_key,
+  drupalSettings.algoliaSearch.api_key, {
+    _useRequestCache: true,
+  },
 );
 export const algoliaSearchClient = {
   search(requests) {

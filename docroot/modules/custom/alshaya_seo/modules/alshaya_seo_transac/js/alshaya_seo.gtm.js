@@ -192,6 +192,14 @@
         }
 
         var cart_total_count = (event.detail.cartData !== null) ? event.detail.cartData.items_qty : null;
+
+        // Add product view type as 'recommendations_popup' if
+        // view mode is modal.
+        if (Drupal.hasValue(product.data_vmode)
+          && product.data_vmode === 'modal') {
+          product.product_view_type = 'recommendations_popup';
+        }
+
         // Push product addToCart event to GTM.
         Drupal.alshayaSeoGtmPushAddToCart(product, cart_total_count);
       });
@@ -279,6 +287,12 @@
           dataLayer.push(userDetails);
         }
       });
+      // Push for 404 Pages.
+      if(gtmPageType === 'page not found'){
+        dataLayer.push({
+          event: '404_error'
+        });
+      }
 
       // If we receive an empty page type, set page type as not defined.
       if (gtmPageType === 'not defined') {
@@ -805,6 +819,18 @@
     }
   });
 
+  // Push to GTM when add to bag product drawer is opened.
+  document.addEventListener('drawerOpenEvent', function onDrawerOpen(e) {
+    var $element = e.detail.triggerButtonElement.closest('article.node--view-mode-search-result');
+    // Select the proper selector in case of matchback products.
+    if (e.detail.elementViewMode == 'matchback' || e.detail.elementViewMode == 'matchback_mobile') {
+      var $element = e.detail.triggerButtonElement.closest('article.entity--type-node');
+    }
+    if ($element) {
+      Drupal.alshayaSeoGtmPushProductDetailView($element);
+    }
+  });
+
   /**
    * Function to provide product data object.
    *
@@ -877,7 +903,11 @@
         && Object.keys(listValues).length
         && typeof listValues[productData.id] !== 'undefined') {
         // For SRP, use list value 'Search Result Page'.
-        if (listValues[productData.id] === 'Search Results Page' || !$('body').is('[gtm-list-name]') || listValues[productData.id].indexOf('match back') > -1) {
+        if (listValues[productData.id] === 'Search Results Page'
+          || !$('body').is('[gtm-list-name]')
+          || listValues[productData.id].indexOf('match back') > -1
+          || (productData.data_vmode === 'modal'
+          && listValues[productData.id].indexOf(productRecommendationsSuffix) > -1)) {
           productData.list = listValues[productData.id];
         }
       }
@@ -901,9 +931,12 @@
         productData.list = $('body').attr('gtm-list-name').replace('PDP-placeholder', 'match back');
       }
     }
-      // Fetch referrerPageType from localstorage stop in case product is matchback product.
+      // Fetch referrerPageType from localstorage stop in case product is matchback product
+      // and modal view mode.
       const referrerData = Drupal.getItemFromLocalStorage('referrerData');
-      if(referrerData !== null && productData.data_vmode !== 'matchback') {
+      if(referrerData !== null
+        && productData.data_vmode !== 'matchback'
+        && productData.data_vmode !== 'modal') {
         if (referrerData.pageType === 'Search Results Page') {
           // For SRP, use list value 'Search Result Page'
           productData.list = referrerData.pageType;
@@ -1186,6 +1219,11 @@
     // On productClick, add product to product list in local storage.
     if (drupalSettings.gtm && drupalSettings.gtm.productListExpirationMinutes) {
       var listValues = Drupal.getItemFromLocalStorage(productListStorageKey) || {};
+      // If listname used for product recommendation then extract only the first
+      // part prior to '|'.
+      if (listName && listName.indexOf(productRecommendationsSuffix) > -1) {
+        listName = listName.split('|')[0];
+      }
       listValues[product.id] = product.list = listName;
       Drupal.addItemInLocalStorage(productListStorageKey, listValues, drupalSettings.gtm.productListExpirationMinutes);
     }
@@ -1539,6 +1577,12 @@
     if (elementContext.classList !== undefined && elementContext.classList.contains('quick-view')) {
       data.product_view_type = 'quick_view';
     }
+
+    // Add product view type as 'recommendations_popup' if view mode is modal.
+    if (Drupal.hasValue(product.data_vmode) && product.data_vmode === 'modal') {
+      data.product_view_type = 'recommendations_popup';
+    }
+
     dataLayer.push(data);
   }
 

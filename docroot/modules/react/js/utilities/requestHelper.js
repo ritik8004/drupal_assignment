@@ -352,7 +352,7 @@ const callMagentoApi = (url, method = 'GET', data = {}, useBearerToken = true) =
  *   The url to send the request to.
  * @param {string} method
  *   The request method.
- * @param {object} data
+ * @param {mixed} data
  *   The object to send for POST request.
  *
  * @returns {object}

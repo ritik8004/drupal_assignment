@@ -26,6 +26,7 @@ import PriceRangeElement from '../price/PriceRangeElement';
 import { isAddToBagHoverEnabled } from '../../../../../js/utilities/addToBagHelper';
 import ArticleSwatches from '../article_swatch';
 import SliderSwatch from '../slider-swatch';
+import { getShoeAiStatus } from '../../../../../js/utilities/util';
 
 const Teaser = ({
   hit, gtmContainer = null, pageType, extraInfo, indexName,
@@ -47,8 +48,7 @@ const Teaser = ({
   const isDesktop = window.innerWidth > 1024;
   const { currentLanguage } = drupalSettings.path;
   const { showBrandName } = drupalSettings.reactTeaserView;
-  const activateShoeAI = (hasValue(drupalSettings.shoeai) && drupalSettings.shoeai.status === true);
-
+  const activateShoeAI = getShoeAiStatus();
   if (drupalSettings.plp_attributes
     && drupalSettings.plp_attributes.length > 0
     && hasValue(hit.collection_labels)
@@ -282,6 +282,14 @@ const Teaser = ({
               setWishListButtonRef={ref}
             />
           </ConditionalView>
+          {pageType === 'plp' && activateShoeAI === true ? (
+            <div
+              className="ShoeSizeMe ssm_plp"
+              data-shoeid={sku}
+              data-availability={attribute.attr_size_shoe_eu}
+              data-sizerun={attribute.attr_size_shoe_eu}
+            />
+          ) : null}
           {isAddToBagHoverEnabled()
             && (
             <div className="quick-add">
@@ -430,14 +438,6 @@ const Teaser = ({
           />
         </ConditionalView>
       </article>
-      {pageType === 'plp' && activateShoeAI === true ? (
-        <div
-          className="ShoeSizeMe ssm_plp"
-          data-shoeid={sku}
-          data-availability={attribute.attr_size_shoe_eu}
-          data-sizerun={attribute.attr_size_shoe_eu}
-        />
-      ) : null}
     </div>
   );
 };

@@ -1,0 +1,43 @@
+header.c-header {
+  .block-alshaya-react-mini-cart,
+  .block-cart-mini-block {
+    html[lang="ar"] & {
+      @include breakpoint($only-tablet) {
+        left: rem(4);
+      }
+    }
+
+    .cart-link {
+      @include breakpoint($only-mobile) {
+        margin-#{$right}: rem(-10);
+      }
+
+      html[lang="ar"] & {
+        @include breakpoint($only-mobile) {
+          margin-left: 0;
+        }
+
+        @include breakpoint($desktop) {
+          right: 0;
+        }
+      }
+    }
+  }
+}
+
+@include breakpoint($desktop) {
+  .block-alshaya-algolia-react-autocomplete {
+    #alshaya-algolia-autocomplete {
+      // Center aligning the search block.
+      margin: 0 auto;
+    }
+  }
+}
+
+@include breakpoint($desktop-wide-1680) {
+  .c-menu-secondary {
+    .region__menu-secondary {
+      padding-#{$right}: rem(27);
+    }
+  }
+}

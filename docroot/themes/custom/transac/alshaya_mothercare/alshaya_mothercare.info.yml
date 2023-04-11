@@ -157,3 +157,8 @@ libraries-override:
     css:
       theme:
         css/conditional-sass/checkout-tracker/checkout-tracker.ltr.css: css/conditional-sass/checkout-tracker/checkout-tracker.ltr.css
+
+  alshaya_white_label/fullwidth-common:
+    css:
+      theme:
+        css/conditional-sass/fullwidth-common/fullwidth-common.ltr.css: css/conditional-sass/fullwidth-common/fullwidth-common.ltr.css

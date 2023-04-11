@@ -39,6 +39,23 @@ body.aura-enabled {
   }
 }
 
+.visual-mobile-menu--one__list {
+  padding-#{$left}: $full_width_padding_mobile !important;
+}
+
+@include breakpoint($tablet) {
+  .visual-mobile-menu--one__list {
+    padding-#{$left}: $full_width_padding_tablet !important;
+  }
+
+  .visual-mobile-level-two__link {
+    @include sideSpaces(
+      $value: $full_width_padding_tablet,
+      $type: "margin"
+    );
+  }
+}
+
 @include breakpoint($desktop) {
   .c-menu-secondary {
     .c-menu-secondary__region {

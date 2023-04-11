@@ -20,7 +20,6 @@ use Drupal\mobile_number\MobileNumberUtilInterface;
 use Drupal\Core\Session\AccountProxyInterface;
 use Drupal\Core\Entity\EntityTypeManagerInterface;
 use Drupal\alshaya_addressbook\AddressBookAreasTermsHelper;
-use Drupal\alshaya_spc\Helper\AlshayaSpcHelper;
 use Drupal\user\UserInterface;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\DependencyInjection\ContainerInterface;
@@ -105,13 +104,6 @@ class AlshayaSpcController extends ControllerBase {
   protected $checkoutComApiHelper;
 
   /**
-   * SPC helper.
-   *
-   * @var \Drupal\alshaya_spc\Helper\AlshayaSpcHelper
-   */
-  protected $spcHelper;
-
-  /**
    * Delivery Options helper.
    *
    * @var \Drupal\alshaya_acm_product\DeliveryOptionsHelper
@@ -148,8 +140,6 @@ class AlshayaSpcController extends ControllerBase {
    *   Module Handler.
    * @param \Drupal\alshaya_acm_checkoutcom\Helper\AlshayaAcmCheckoutComAPIHelper $checkout_com_api_helper
    *   Acm checkout com api helper.
-   * @param \Drupal\alshaya_spc\Helper\AlshayaSpcHelper $spc_helper
-   *   Spc helper service.
    * @param \Drupal\alshaya_acm_product\DeliveryOptionsHelper $delivery_options_helper
    *   Delivery Options Helper.
    * @param \Drupal\Core\Datetime\DateFormatterInterface $date_formatter
@@ -165,7 +155,6 @@ class AlshayaSpcController extends ControllerBase {
                               LanguageManagerInterface $language_manager,
                               ModuleHandlerInterface $module_handler,
                               AlshayaAcmCheckoutComAPIHelper $checkout_com_api_helper,
-                              AlshayaSpcHelper $spc_helper,
                               DeliveryOptionsHelper $delivery_options_helper,
                               DateFormatterInterface $date_formatter) {
     $this->checkoutOptionManager = $checkout_options_manager;
@@ -178,7 +167,6 @@ class AlshayaSpcController extends ControllerBase {
     $this->languageManager = $language_manager;
     $this->moduleHandler = $module_handler;
     $this->checkoutComApiHelper = $checkout_com_api_helper;
-    $this->spcHelper = $spc_helper;
     $this->deliveryOptionsHelper = $delivery_options_helper;
     $this->dateFormatter = $date_formatter;
   }
@@ -198,7 +186,6 @@ class AlshayaSpcController extends ControllerBase {
       $container->get('language_manager'),
       $container->get('module_handler'),
       $container->get('alshaya_acm_checkoutcom.api_helper'),
-      $container->get('alshaya_spc.helper'),
       $container->get('alshaya_acm_product.delivery_options_helper'),
       $container->get('date.formatter')
     );
@@ -268,10 +255,9 @@ class AlshayaSpcController extends ControllerBase {
 
     $build = $this->addCheckoutConfigSettings($build);
 
-    if ($this->spcHelper->getCommerceBackendVersion() == 2) {
-      $checkout_settings = Settings::get('alshaya_checkout_settings');
-      $build['#attached']['drupalSettings']['cart']['refreshMode'] = $checkout_settings['cart_refresh_mode'];
-    }
+    $checkout_settings = Settings::get('alshaya_checkout_settings');
+    $build['#attached']['drupalSettings']['cart']['refreshMode'] = $checkout_settings['cart_refresh_mode'];
+
     // Advantage card settings only available if it is enabled.
     $advantage_card_config = $this->config('alshaya_spc.advantage_card');
     if ($advantage_card_config->get('advantageCardEnabled')) {
@@ -616,8 +602,6 @@ class AlshayaSpcController extends ControllerBase {
       'value' => $this->t('PM', [], ['context' => 'online_booking']),
     ];
 
-    $backend_version = $this->spcHelper->getCommerceBackendVersion();
-
     $build = [
       '#theme' => 'spc_checkout',
       '#areas' => $areas,
@@ -626,8 +610,7 @@ class AlshayaSpcController extends ControllerBase {
         'library' => [
           'alshaya_acm_checkout/ab_testing',
           'alshaya_spc/googlemapapi',
-          'alshaya_spc/commerce_backend.cart.v' . $backend_version,
-          'alshaya_spc/commerce_backend.checkout.v' . $backend_version,
+          'alshaya_spc/commerce_backend.checkout',
           'alshaya_spc/checkout',
           'alshaya_white_label/spc-checkout',
         ],
@@ -685,11 +668,9 @@ class AlshayaSpcController extends ControllerBase {
 
     $build = $this->addCheckoutConfigSettings($build);
 
-    if ($backend_version == 2) {
-      $checkout_settings = Settings::get('alshaya_checkout_settings');
-      $build['#attached']['drupalSettings']['cart']['siteInfo'] = alshaya_get_site_country_code();
-      $build['#attached']['drupalSettings']['cart']['addressFields'] = Settings::get('alshaya_address_fields', []);
-    }
+    $checkout_settings = Settings::get('alshaya_checkout_settings');
+    $build['#attached']['drupalSettings']['cart']['siteInfo'] = alshaya_get_site_country_code();
+    $build['#attached']['drupalSettings']['cart']['addressFields'] = Settings::get('alshaya_address_fields', []);
 
     $express_delivery_config = $this->config('alshaya_spc.express_delivery');
 
@@ -843,7 +824,7 @@ class AlshayaSpcController extends ControllerBase {
       '#strings' => $strings,
       '#attached' => [
         'library' => [
-          'alshaya_spc/commerce_backend.checkout.v' . $this->spcHelper->getCommerceBackendVersion(),
+          'alshaya_spc/commerce_backend.checkout',
           'alshaya_spc/checkout-confirmation',
           'alshaya_white_label/spc-checkout-confirmation',
         ],

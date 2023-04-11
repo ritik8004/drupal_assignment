@@ -1,0 +1,22 @@
+.block-alshaya-options-list-menu .options-page-menu-list a {
+  @include fullWidthSideSpaces(
+    $is_desktop: true,
+    $is_desktop_wide: true,
+    $side: $right,
+  );
+}
+
+@include breakpoint($desktop) {
+  .block-alshaya-algolia-react-autocomplete {
+    #alshaya-algolia-autocomplete {
+      // Center aligning the search block.
+      margin: 0 auto;
+    }
+  }
+
+  .block-system-branding-block .site-brand-home img {
+    html[lang="ar"] & {
+      margin-right: 0;
+    }
+  }
+}

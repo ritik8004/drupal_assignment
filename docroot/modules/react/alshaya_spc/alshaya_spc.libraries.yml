@@ -17,6 +17,7 @@ mini_cart:
     dist/minicart.bundle.js: { }
   dependencies:
     - alshaya_react/react
+    - alshaya_spc/commerce_backend.cart
 
 cart_notification_drawer:
   version: 1.x
@@ -49,6 +50,7 @@ checkout:
     - alshaya_spc/cart_utilities
     - alshaya_spc/dynamic_promotion_label
     - alshaya_spc/react_datepicker_css
+    - alshaya_spc/commerce_backend.cart
 
 order_details:
   version: 1.x
@@ -106,34 +108,26 @@ googlemapapi:
   js:
     assets/js/google-maps-api.js: {}
 
-commerce_backend.cart.v1:
-  js:
-    dist/backend_cart_v1.bundle.js: {}
-
 # The CSS file needs to be updated if we update the react-datepicker library version, check README file for more information.
 react_datepicker_css:
   css:
     theme:
       assets/css/react-datepicker.min.css: {}
 
-commerce_backend.checkout.v1:
-  js:
-    dist/backend_checkout_v1.bundle.js: {}
-
 security:
   js:
     assets/js/security.js: { }
 
-commerce_backend.cart.v2:
+commerce_backend.cart:
   js:
-    dist/backend_cart_v2.bundle.js: {}
+    dist/backend_cart.bundle.js: {}
   dependencies:
     - alshaya_spc/security
     - alshaya_spc/cart_utilities
 
-commerce_backend.checkout.v2:
+commerce_backend.checkout:
   js:
-    dist/backend_checkout_v2.bundle.js: {}
+    dist/backend_checkout.bundle.js: {}
   dependencies:
     - core/underscore
     - alshaya_spc/security
@@ -145,7 +139,7 @@ express_delivery:
   dependencies:
     - alshaya_react/react
     - alshaya_spc/cart_utilities
-    - alshaya_spc/commerce_backend.cart.v2
+    - alshaya_spc/commerce_backend.cart
 
 dynamic_promotion_label:
   js:

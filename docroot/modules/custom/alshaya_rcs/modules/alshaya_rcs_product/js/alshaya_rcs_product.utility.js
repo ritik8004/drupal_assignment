@@ -1047,7 +1047,7 @@ window.commerceBackend = window.commerceBackend || {};
    */
   window.commerceBackend.getFirstImage = function (product) {
     const galleryProduct = getSkuForGallery(product);
-    return Drupal.hasValue(galleryProduct.media[0]) ? galleryProduct.media[0] : null;
+    return Drupal.hasValue(galleryProduct.media) ? galleryProduct.media[0] : null;
   };
 
   /**
