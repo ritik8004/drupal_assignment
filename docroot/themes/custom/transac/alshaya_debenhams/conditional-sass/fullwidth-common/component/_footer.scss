@@ -13,3 +13,28 @@
     padding-#{$right}: 0;
   }
 }
+
+@include breakpoint($desktop) {
+  .c-footer {
+    .alshaya-newsletter-subscribe {
+      form {
+        display: flex;
+        flex-wrap: wrap;
+        align-items: center;
+      }
+
+      .newsletter-block-label {
+        flex-basis: 100%;
+      }
+
+      .form-item {
+        flex-basis: 0;
+        flex-grow: 1;
+      }
+
+      .form-submit {
+        position: relative;
+      }
+    }
+  }
+}
