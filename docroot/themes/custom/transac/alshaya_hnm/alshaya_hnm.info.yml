@@ -385,7 +385,7 @@ libraries-override:
       theme:
         css/conditional-sass/fullwidth-listing-page/fullwidth-listing-page.ltr.css: css/conditional-sass/fullwidth-listing-page/fullwidth-listing-page.ltr.css
 
-  alshaya_white_label/article-swatch:
+  alshaya_white_label/article-swatch-slider:
     css:
       theme:
-        css/conditional-sass/article-swatch/article-swatch.ltr.css: css/conditional-sass/article-swatch/article-swatch.ltr.css
+        css/conditional-sass/article-swatch-slider/article-swatch-slider.ltr.css: css/conditional-sass/article-swatch-slider/article-swatch-slider.ltr.css

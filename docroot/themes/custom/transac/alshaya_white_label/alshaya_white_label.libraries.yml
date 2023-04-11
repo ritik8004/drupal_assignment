@@ -978,10 +978,10 @@ fullwidth-store-finder:
     theme:
       css/conditional-sass/fullwidth-store-finder/fullwidth-store-finder.ltr.css: { weight: 1 }
 
-article-swatch:
+article-swatch-slider:
   css:
     theme:
-      css/conditional-sass/article-swatch/article-swatch.ltr.css: {}
+      css/conditional-sass/article-swatch-slider/article-swatch-slider.ltr.css: {}
 
 alshaya-accordion:
   js:
