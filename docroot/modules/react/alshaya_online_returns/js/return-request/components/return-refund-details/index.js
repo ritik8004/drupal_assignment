@@ -110,7 +110,7 @@ class ReturnRefundDetails extends React.Component {
    */
   createReturnRequest = async () => {
     const { itemsSelected, handleErrorMessage, orderDetails } = this.props;
-    const { egiftCardType } = this.state;
+    const { cardList, egiftCardType } = this.state;
 
     showFullScreenLoader();
 
@@ -122,7 +122,16 @@ class ReturnRefundDetails extends React.Component {
       return;
     }
 
-    const returnRequest = await createReturnRequest(itemsSelected, egiftCardType);
+    let cardNumber = '';
+    if (hasValue(cardList) && hasValue(cardList.card_number)) {
+      cardNumber = cardList.card_number;
+    }
+
+    const returnRequest = await createReturnRequest(
+      itemsSelected,
+      egiftCardType,
+      cardNumber,
+    );
     removeFullScreenLoader();
 
     if (hasValue(returnRequest.error)) {

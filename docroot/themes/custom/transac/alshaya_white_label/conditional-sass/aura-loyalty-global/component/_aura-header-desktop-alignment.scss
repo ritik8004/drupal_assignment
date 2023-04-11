@@ -62,17 +62,6 @@ body.aura-enabled {
               display: flex;
               margin-top: rem(3);
 
-              .aura-logo {
-                display: inline-flex;
-                margin-#{$right}: rem(10);
-                max-width: 100%;
-
-                img {
-                  height: rem(22);
-                  width: auto;
-                }
-              }
-
               .account-points {
                 padding-top: 0;
               }
@@ -81,5 +70,11 @@ body.aura-enabled {
         }
       }
     }
+  }
+}
+
+.my-aura-link {
+  .my-account-my-aura {
+    color: $aura-my-account-aura-nav-link;
   }
 }

@@ -652,7 +652,8 @@ function alshaya_seo_transac_theme($existing, $type, $theme, $path) {
 function alshaya_seo_transac_node_view(array &$build, EntityInterface $entity, EntityViewDisplayInterface $display, $view_mode) {
   $gtm_disabled_vars = \Drupal::config('alshaya_seo.disabled_gtm_vars')
     ->get('disabled_vars');
-  if ($entity->bundle() == 'acq_product' && $view_mode == 'full') {
+  if ($entity->bundle() == 'acq_product'
+    && in_array($view_mode, ['full', 'modal'])) {
     if (!in_array('dimension6', $gtm_disabled_vars)) {
       /** @var \Drupal\alshaya_acm_product\SkuManager $skuManager */
       $skuManager = \Drupal::service('alshaya_acm_product.skumanager');
@@ -676,6 +677,11 @@ function alshaya_seo_transac_node_view(array &$build, EntityInterface $entity, E
     $product_gtm_settings = \Drupal::config('alshaya_seo_transac.settings');
     $build['#cache']['tags'] = Cache::mergeTags($build['#cache']['tags'] ?? [], $product_gtm_settings->getCacheTags());
     $build['#attached']['drupalSettings']['productSizeOptions'] = $product_gtm_settings->get('product_size_options');
+
+    // Attach gtm pdp modal library for modal view mode only.
+    if ($view_mode == 'modal') {
+      $build['#attached']['library'][] = 'alshaya_seo_transac/gtm_pdp_modal';
+    }
   }
 }
 

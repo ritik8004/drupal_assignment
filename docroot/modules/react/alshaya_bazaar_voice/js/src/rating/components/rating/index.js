@@ -10,7 +10,7 @@ import {
 } from '../../../utilities/api/request';
 import ConditionalView from '../../../common/components/conditional-view';
 import getStringMessage from '../../../../../../js/utilities/strings';
-import { getProductReviewStats } from '../../../utilities/user_util';
+import { getReviewStats } from '../../../utilities/user_util';
 import WriteReviewButton from '../../../reviews/components/reviews-full-submit';
 import { hasValue }
   from '../../../../../../js/utilities/conditionsUtility';
@@ -36,11 +36,12 @@ export default class Rating extends React.Component {
 
     // Check reviews setting exist.
     if (Drupal.hasValue(bazaarVoiceSettings)) {
-      getProductReviewStats(bazaarVoiceSettings.productid).then((result) => {
+      getReviewStats(bazaarVoiceSettings).then((result) => {
         removeFullScreenLoader();
-        if (result !== null) {
+        if (result !== null && Drupal.hasValue(result.Includes.Products)
+          && Drupal.hasValue(result.Includes.Products[bazaarVoiceSettings.productid])) {
           this.setState({
-            reviewsData: result.productData,
+            reviewsData: result.Includes.Products[bazaarVoiceSettings.productid],
           });
         }
       });

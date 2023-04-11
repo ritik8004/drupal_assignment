@@ -5,6 +5,11 @@
 
 (function (Drupal, dataLayer) {
 
+  // Site name for datalayer.
+  var geSiteName = Drupal.hasValue(drupalSettings.dataLayerContent.siteName)
+    ? drupalSettings.dataLayerContent.siteName
+    : '';
+
   /**
    * Checks if all mandatory address fields are filled.
    *
@@ -117,7 +122,7 @@
           "name" : product.ProductName,
           "id" : product.ProductGroupCode,
           "price" : product.ProductPrices.MerchantTransaction.DiscountedPrice.toString(),
-          "brand" : product.Brand,
+          "brand" : Drupal.hasValue(product.Brand) ? product.Brand : geSiteName,
           "category" : Drupal.getProductMetadata(product, 'category'),
           "variant" : product.SKU,
           "dimension2" : Drupal.getProductMetadata(product, 'dimension2'),
@@ -162,9 +167,6 @@
       "cartItemsFlocktory" : cartItemsFlocktory,
     };
 
-    if (step == 3) {
-      cartData.xbDeliveryInfo = geData.xbDeliveryInfo;
-    }
     if (step == 3 || step == 4) {
       // Click and collect is not available on XB sites.
       cartData.deliveryOption = 'Home Delivery';
@@ -193,12 +195,12 @@
    *   The purchase success data object.
    */
   Drupal.mapGlobalePurchaseSuccessData = function (geData) {
-    var productGtm = [];
-    var cartItemsCount = 0;
-    var productSku = [];
-    var productStyleCode = [];
-    var discountAmount = 0;
-    var firstTimeTransaction = null;
+    let productGtm = [];
+    let cartItemsCount = 0;
+    let productSku = [];
+    let productStyleCode = [];
+    let discountAmount = 0;
+    let firstTimeTransaction = null;
     if (geData.details.ProductInformation) {
       Object.entries(geData.details.ProductInformation).forEach(function (productItem) {
         var product = productItem[1];
@@ -206,7 +208,7 @@
           "name": product.ProductName,
           "id": product.ProductGroupCode,
           "price": product.ProductPrices.CustomerTransactionInMerchantCurrency.CustomerDiscountedPriceInMerchantCurrency.toString(),
-          "brand": product.Brand,
+          "brand": Drupal.hasValue(product.Brand) ? product.Brand : geSiteName,
           "category": Drupal.getProductMetadata(product, 'category'),
           "variant": product.SKU,
           "dimension2" : Drupal.getProductMetadata(product, 'dimension2'),

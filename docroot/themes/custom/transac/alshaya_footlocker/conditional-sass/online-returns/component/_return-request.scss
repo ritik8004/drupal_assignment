@@ -124,91 +124,183 @@
   .refund-details-wrapper {
     .refund-method-wrapper {
       .refund-method-title {
-        line-height: 1.22;
-        font-weight: normal;
-        margin-bottom: rem(15);
-      }
+        .refund-method-wrapper,
+        .refund-amount-wrapper,
+        .return-collection-wrapper,
+        .return-address-wrapper {
+          padding-top: rem(20);
 
-      .method-listing-label {
-        font-size: rem(14);
-        line-height: 1.29;
-      }
+          .refund-method-listing {
+            @include breakpoint($only-mobile) {
+              padding-#{$left}: rem(31);
+            }
+          }
 
-      .card-detail {
-        line-height: 1.13;
-      }
+          .method-wrapper {
+            margin-bottom: rem(0);
 
-      .refund-amount-title {
-        line-height: 1.22;
-      }
-    }
+            .card-detail {
+              margin-#{$left}: rem(11);
+            }
+          }
 
-    .return-collection-wrapper {
-      .return-collection-title {
-        line-height: 1.22;
-        margin-bottom: rem(15);
-      }
-    }
+          @include breakpoint($desktop) {
+            padding-#{$left}: 0;
+          }
 
-    .return-address-wrapper {
-      .return-address-title {
-        line-height: 1.22;
-      }
+          @include breakpoint($only-mobile) {
+            padding-#{$left}: rem(10);
+          }
 
-      .return-address-details {
-        .customer-name {
-          font-size: rem(16);
-          line-height: 1.22;
-          font-family: $alshaya-bold;
-          margin-bottom: rem(8);
+          .refund-method-title {
+            font-size: rem(16);
+            line-height: 1.22;
+            font-weight: normal;
+            margin-bottom: rem(15);
+          }
+
+          .method-listing-label {
+            font-size: rem(14);
+            line-height: 1.29;
+          }
+
+          .card-detail {
+            line-height: 1.13;
+
+            .bold-text {
+              font-family: $alshaya-thin;
+            }
+          }
+
+          .refund-message {
+            margin-top: rem(2);
+            margin-bottom: rem(18);
+          }
+
+          .refund-amount-title {
+            line-height: 1.22;
+          }
         }
 
-        .address-line-content,
-        .spc-phone-number {
+        .return-collection-wrapper {
+          .return-collection-title {
+            line-height: 1.22;
+            margin-bottom: rem(15);
+          }
+        }
+
+        div[class$="-title"] {
+          margin-bottom: rem(15);
+        }
+
+        .Collapsible__contentInner {
+          > div:first-child {
+            padding-bottom: rem(0);
+          }
+        }
+
+        .return-address-wrapper {
+          .return-address-title {
+            line-height: 1.22;
+          }
+
+          .return-address-details {
+            .customer-name {
+              font-size: rem(16);
+              line-height: 1.22;
+              font-family: $alshaya-bold;
+              margin-bottom: rem(8);
+            }
+
+            .address-line-content,
+            .spc-phone-number {
+              font-size: rem(14);
+              line-height: 1.29;
+              margin-bottom: rem(2);
+              color: $online-return-address-line-warm-grey-txt;
+            }
+          }
+        }
+      }
+
+      .continue-button-wrapper,
+      .confirm-return-button-wrapper {
+        button {
+          span {
+            text-transform: uppercase;
+          }
+        }
+      }
+
+      .order-details-wrapper {
+        .order-summary-row {
+          .order-total-column {
+            .price {
+              font-weight: normal;
+            }
+          }
+        }
+      }
+
+      .return-request-bottom-page-link {
+        @include breakpoint($tablet) {
+          margin-#{$left}: 0;
+        }
+      }
+
+      div.errors-container {
+        .error-message {
           font-size: rem(14);
           line-height: 1.29;
-          margin-bottom: rem(2);
-          color: $online-return-address-line-warm-grey-txt;
+          font-family: $alshaya-bold;
+          color: $online-return-error-msg-color;
+          margin-top: 0;
+
+          @include breakpoint($tablet) {
+            text-align: $left;
+          }
         }
       }
     }
-  }
 
-  .continue-button-wrapper,
-  .confirm-return-button-wrapper {
-    button {
-      span {
-        text-transform: uppercase;
-      }
-    }
-  }
+    // radio button for Returns and Refunds
+    .method-wrapper {
+      position: relative;
 
-  .order-details-wrapper {
-    .order-summary-row {
-      .order-total-column {
-        .price {
-          font-weight: normal;
+      input[type="radio"] {
+        display: none;
+
+        ~ .radio-sim::before {
+          content: "";
+          position: absolute;
+          #{$left}: rem(-50);
+          text-align: center;
+          font-size: rem(60);
         }
-      }
-    }
-  }
 
-  .return-request-bottom-page-link {
-    @include breakpoint($tablet) {
-      margin-#{$left}: 0;
-    }
-  }
+        ~ .radio-sim {
+          @include icon(radio-empty, before) {
+            color: $online-return-radio-bg;
+          }
+        }
 
-  div.errors-container {
-    .error-message {
-      font-size: rem(14);
-      line-height: 1.29;
-      font-family: $alshaya-bold;
-      color: $online-return-error-msg-color;
-      margin-top: 0;
+        &:checked {
+          ~ .radio-sim {
+            @include icon(radio-filled, before) {
+              color: $online-return-checked-radio-bg;
+            }
+          }
+        }
 
-      @include breakpoint($tablet) {
-        text-align: $left;
+        ~ .radio-label {
+          display: inline-flex;
+          align-items: center;
+
+          .egift-card-detail {
+            padding-#{$left}: rem(6);
+            padding-bottom: rem(4);
+          }
+        }
       }
     }
   }

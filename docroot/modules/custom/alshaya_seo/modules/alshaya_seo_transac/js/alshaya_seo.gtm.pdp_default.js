@@ -18,6 +18,11 @@
       // Push product size click event to GTM.
       // For default and magazine pdp layouts.
       $(document).once('product-size-click').on('click', '.configurable-select .select2Option ul a', function () {
+        // Return if view mode is modal.
+        var viewMode = $(this).closest('.entity--type-node').attr('data-vmode');
+        if (Drupal.hasValue(viewMode) && viewMode === 'modal') {
+          return;
+        }
         // We have different configurable size options available.
         // For eg: VS has band_size and cup_size also.
         var sizeWrapper = $(this).closest('.configurable-select');
@@ -40,6 +45,11 @@
       // Push product size click event to GTM.
       // For the products which have size groups available.
       $(document).once('pdp-size-click').on('click', '.group-wrapper .select2Option ul a', function () {
+        // Return if view mode is modal.
+        var viewMode = $(this).closest('.entity--type-node').attr('data-vmode');
+        if (Drupal.hasValue(viewMode) && viewMode === 'modal') {
+          return;
+        }
         var eventLabel = $(this).attr('data-value');
         var groupLabel = '';
         if ($('.group-anchor-wrapper').length) {
@@ -57,6 +67,11 @@
       // Push product color click event to GTM.
       // For default pdp layout only.
       $(document).once('product-color-click').on('click', '.form-item-configurables-color .select2Option ul a', function () {
+        // Return if view mode is modal.
+        var viewMode = $(this).closest('.entity--type-node').attr('data-vmode');
+        if (Drupal.hasValue(viewMode) && viewMode === 'modal') {
+          return;
+        }
         var color = $(this).attr('data-value');
         Drupal.alshayaSeoGtmPushEcommerceEvents({
           eventAction: 'pdp color click',
@@ -67,6 +82,11 @@
       // Push product color click event to GTM.
       // For magazine pdp layout only.
       $(document).once('pdp-color-click').on('click', '.colour-swatch .select2Option ul a', function () {
+        // Return if view mode is modal.
+        var viewMode = $(this).closest('.entity--type-node').attr('data-vmode');
+        if (Drupal.hasValue(viewMode) && viewMode === 'modal') {
+          return;
+        }
         var color = $(this).attr('data-color-label');
         Drupal.alshayaSeoGtmPushEcommerceEvents({
           eventAction: 'pdp color click',
