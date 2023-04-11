@@ -365,6 +365,12 @@ function alshaya_seo_transac_datalayer_alter(&$data_layer) {
 
       // We check if we have valid order id.
       if (empty($order)) {
+        $request = \Drupal::requestStack()->getCurrentRequest();
+        \Drupal::logger('alshaya_seo_transac')->notice('Empty order on checkout confirmation for Customer: @customer_id with oid: @oid and id: @id', [
+          '@customer_id' => $data_layer['userUid'] ?? 0,
+          '@oid' => $request->get('oid') ?? NULL,
+          '@id' => $request->get('id') ?? NULL,
+        ]);
         return;
       }
 
