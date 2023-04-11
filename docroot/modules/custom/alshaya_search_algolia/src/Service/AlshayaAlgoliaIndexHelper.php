@@ -44,7 +44,7 @@ class AlshayaAlgoliaIndexHelper {
   public const FACET_SOURCE = 'search_api:views_page__search__page';
 
   /**
-   * Index name for product list on PLP, promo, brand listing.
+   * Index name for Search Page.
    */
   public const SEARCH_INDEX = 'alshaya_algolia_index';
 

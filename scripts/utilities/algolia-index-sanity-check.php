@@ -27,6 +27,7 @@ $logger = \Drupal::logger('algolia-index-sanity-check');
 
 $algolia_server_config = \Drupal::config('search_api.server.algolia')->get('backend_config');
 $algolia_index_config = \Drupal::config('search_api.index.alshaya_algolia_index')->get('options');
+// Use SKU as objectID if the configuration is enabled for Search Index.
 $index_sku_as_object_id = \Drupal::config('alshaya_search_algolia.settings')->get('index_sku_as_object_id');
 
 $app_id = $algolia_server_config['application_id'];
