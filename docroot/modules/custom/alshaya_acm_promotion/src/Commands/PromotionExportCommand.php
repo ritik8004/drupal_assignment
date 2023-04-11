@@ -25,7 +25,7 @@ class PromotionExportCommand extends DrushCommands {
    *
    * @var \Drupal\Core\Language\LanguageManagerInterface
    */
-  protected $langugageManager;
+  protected $languageManager;
 
   /**
    * File system.
@@ -33,6 +33,13 @@ class PromotionExportCommand extends DrushCommands {
    * @var \Drupal\Core\File\FileSystemInterface
    */
   protected $fileSystem;
+
+  /**
+   * Entity Query.
+   *
+   * @var \Drupal\Core\Entity\Query\QueryInterface
+   */
+  protected $entityQuery;
 
   /**
    * The export directory path.
@@ -88,6 +95,8 @@ class PromotionExportCommand extends DrushCommands {
       return;
     }
 
+    // Query string for the output files.
+    $query_string = \time();
     // Check if it is possible to create the output files.
     foreach ($this->languageManager->getLanguages() as $langcode => $language) {
       try {
@@ -97,7 +106,8 @@ class PromotionExportCommand extends DrushCommands {
           return;
         }
         else {
-          $this->logger->notice('Lancode: ' . $langcode . '. File: ' . file_create_url($location));
+          $file_url = file_create_url($location);
+          $this->logger->notice('Langcode: ' . $langcode . '. File: ' . "$file_url?$query_string");
         }
 
         // Make the file empty.
