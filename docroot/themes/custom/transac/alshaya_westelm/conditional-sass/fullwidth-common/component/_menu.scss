@@ -20,3 +20,15 @@
     }
   }
 }
+
+@include breakpoint($desktop) {
+  .block-alshaya-main-menu {
+    ul.menu--one__list {
+      justify-content: center;
+    }
+
+    .menu--one__list-item {
+      @include sideSpaces(rem(8), $type: "margin");
+    }
+  }
+}
