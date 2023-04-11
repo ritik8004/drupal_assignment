@@ -14,7 +14,7 @@ const ArticleSwatches = ({
   }
   // Get plp color swatch limit for desktop/mobile view.
   let swatchesLimit = (isMobile())
-    ? drupalSettings.reactTeaserView.swatches.swatchPlpLimitMobileView
+    ? drupalSettings.reactTeaserView.swatches.swatchPlpLimitMobileView + 0.5
     : drupalSettings.reactTeaserView.swatches.swatchPlpLimit;
 
   const { showColorSwatchSlider } = drupalSettings.reactTeaserView.swatches;
@@ -26,7 +26,9 @@ const ArticleSwatches = ({
   const sliderSettings = {
     infinite: false,
     slidesToShow: swatchesLimit,
-    slidesToScroll: 1,
+    slidesToScroll: isMobile()
+      ? drupalSettings.reactTeaserView.swatches.swatchPlpLimitMobileView
+      : drupalSettings.reactTeaserView.swatches.swatchPlpLimit,
   };
 
   // Show all color swatches with slider when total number of swatches

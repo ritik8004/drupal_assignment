@@ -832,3 +832,25 @@ $full_width_padding_desktop_wide: rem(40); /* viewport width >= 1680px */
     }
   }
 }
+
+// dual color tone for circle UI.
+// This can't be used in facet UI.
+@mixin dual-tone-color-swatch() {
+  display: flex;
+  transform: rotate(90deg);
+
+  div,
+  a {
+    width: 50%;
+
+    &:first-child {
+      border-top-#{$left}-radius: rem(50);
+      border-bottom-#{$left}-radius: rem(50);
+    }
+
+    &:last-child {
+      border-top-#{$right}-radius: rem(50);
+      border-bottom-#{$right}-radius: rem(50);
+    }
+  }
+}
