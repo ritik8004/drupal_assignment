@@ -1,0 +1,9 @@
+name: 'Alshaya Aura Loyalty'
+type: module
+description: 'The dedicated module for  Aura Loyalty brand.'
+package: Alshaya
+core_version_requirement: ^9
+dependencies:
+  - alshaya_al:alshaya_al
+themes:
+  - alshaya_aura_loyalty
