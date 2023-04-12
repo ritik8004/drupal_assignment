@@ -192,12 +192,12 @@ export const placeOrder = (paymentMethod) => {
             return;
           }
 
-          logger.notice('Before orderPlaced event on url: @url.', {
+          logger.info('Before orderPlaced event on url: @url.', {
             '@url': response.data.redirectUrl,
           });
           // Dispatch an event after order is placed before redirecting to confirmation page.
           dispatchCustomEvent('orderPlaced', true);
-          logger.notice('After orderPlaced event on url: @url.', {
+          logger.info('After orderPlaced event on url: @url.', {
             '@url': response.data.redirectUrl,
           });
           // This here possibly means that we are redirecting to confirmation page.
