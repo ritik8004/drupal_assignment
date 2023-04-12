@@ -597,7 +597,7 @@ header {
     padding-#{$right}: 0.5rem;
 
     html[lang="ar"] & {
-      padding-top: 1.25rem;
+      padding-top: rem(12);
       padding-left: 0.75rem;
     }
   }
