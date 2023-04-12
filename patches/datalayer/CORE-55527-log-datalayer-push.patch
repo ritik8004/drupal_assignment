@@ -1,17 +1,26 @@
 diff --git a/datalayer.libraries.yml b/datalayer.libraries.yml
-index fb29f2a..7429e11 100644
+index fb29f2a..0222408 100644
 --- a/datalayer.libraries.yml
 +++ b/datalayer.libraries.yml
+@@ -12,7 +12,7 @@ helper:
+   dependencies:
+     - core/jquery
+ datapush:
+-  version: 1.x
++  version: 1.0.0
+   header: true
+   js:
+     js/datapush.js: {}
 @@ -20,3 +20,4 @@ datapush:
      - core/jquery
      - core/drupalSettings
      - core/drupal
 +    - alshaya_master/common_functions
 diff --git a/js/datapush.js b/js/datapush.js
-index 653749f..291609c 100755
+index 653749f..e64f27d 100755
 --- a/js/datapush.js
 +++ b/js/datapush.js
-@@ -8,14 +8,29 @@
+@@ -8,14 +8,34 @@
    Drupal.behaviors.dataPush = {
      attach: function () {
        $('body').once('datapush').each(function () {
@@ -34,16 +43,21 @@ index 653749f..291609c 100755
 +              data: () => dataLayerContent
 +            }
 +          });
++          document.dispatchEvent(event);
 +          if (Drupal.hasValue(dataLayerContent.event) && dataLayerContent.event == 'purchaseSuccess') {
 +            Drupal.alshayaLogger('notice', 'Purchase success event after content alter: @datalayer.', {
 +              '@datalayer': dataLayerContent,
 +            });
 +          }
-+          document.dispatchEvent(event);
 +          window.dataLayer.push(dataLayerContent);
++          if (Drupal.hasValue(dataLayerContent.event) && dataLayerContent.event == 'purchaseSuccess') {
++            Drupal.alshayaLogger('notice', 'Purchase success event after data push: @datalayer.', {
++              '@datalayer': dataLayerContent,
++            });
++          }
 +        }
 +        catch (e) {
-+          Drupal.logJavascriptError('Error while pushing to datalayer.', e);
++          Drupal.logJavascriptError('Error while pushing to datalayer.', `${e} | Data: ${JSON.stringify(dataLayerContent)}`);
 +        }
        });
      }
