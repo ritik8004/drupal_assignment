@@ -195,11 +195,14 @@ function alshaya_super_category_preprocess_block(&$variables) {
       $variables['content']['site_logo']['#alt'] = $super_category->label();
 
       // Check if the metatag data is available from SSR.
-      $rcs_metatags = \Drupal::service('alshaya_rcs_seo.metatag_ssr_helper')->getProcessedMetatags();
-      if (!empty($rcs_metatags['category'])) {
-        // Setting max-age to get refresh after 20min with CF settings.
-        $variables['#cache']['max-age'] = 1200;
-        $meta_title = $rcs_metatags['category']['name'];
+      // This is only for V3 sites.
+      if (\Drupal::moduleHandler()->moduleExists('alshaya_rcs_seo')) {
+        $rcs_metatags = \Drupal::service('alshaya_rcs_seo.metatag_ssr_helper')->getProcessedMetatags();
+        if (!empty($rcs_metatags['category'])) {
+          // Setting max-age to get refresh after 20min with CF settings.
+          $variables['#cache']['max-age'] = 1200;
+          $meta_title = $rcs_metatags['category']['name'];
+        }
       }
 
       $variables['content']['site_name']['#markup'] = $meta_title;
