@@ -1,4 +1,5 @@
 import algoliasearch from 'algoliasearch';
+import { hasValue } from './conditionsUtility';
 
 // Adding _useRequestCache parameter to avoid duplicate requests on Facet filters and sort orders.
 export const searchClient = algoliasearch(
@@ -50,14 +51,14 @@ export const getIndexSettings = (pageType) => {
  */
 export const getFacetListFromAlgolia = async (pageType) => {
   let facets = Drupal.getItemFromLocalStorage(`${pageType}-facets`);
-  if (facets !== null) {
+  if (hasValue(facets)) {
     return facets;
   }
   facets = [];
 
   const indexSettings = await getIndexSettings(pageType);
   const { attributesForFaceting } = indexSettings;
-  if (Drupal.hasValue(attributesForFaceting)) {
+  if (hasValue(attributesForFaceting)) {
     Drupal.addItemInLocalStorage(`${pageType}-facets`, attributesForFaceting, 86400);
     facets = attributesForFaceting;
   }

@@ -1,11 +1,14 @@
-import React, { useEffect, useRef } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import {
   Configure,
   InstantSearch,
   Stats,
 } from 'react-instantsearch-dom';
 
-import { algoliaSearchClient } from '../../../../js/utilities/algoliaHelper';
+import {
+  algoliaSearchClient,
+  getFacetListFromAlgolia,
+} from '../../../../js/utilities/algoliaHelper';
 
 import { productListIndexStatus } from '../utils/indexUtils';
 import { getSuperCategoryOptionalFilter } from '../utils';
@@ -28,6 +31,7 @@ import BecomeHelloMember from '../../../../js/utilities/components/become-hello-
 import { getExpressDeliveryStatus } from '../../../../js/utilities/expressDeliveryHelper';
 import { hasValue } from '../../../../js/utilities/conditionsUtility';
 import { isMobile } from '../../../../js/utilities/display';
+import RefinementList from '../components/algolia/widgets/RefinementList';
 
 if (window.NodeList && !NodeList.prototype.forEach) {
   NodeList.prototype.forEach = Array.prototype.forEach;
@@ -56,9 +60,14 @@ const PlpApp = ({
   promotionNodeId,
 }) => {
   let subCategories = {};
+  const [facets, setFacets] = useState([]);
   useEffect(() => {
     getExpressDeliveryStatus().then((status) => {
       window.sddEdStatus = status;
+    });
+
+    getFacetListFromAlgolia('listing').then((facetsList) => {
+      setFacets(facetsList);
     });
   }, []);
 
@@ -194,6 +203,7 @@ const PlpApp = ({
         filters={finalFilter}
         ruleContexts={context}
         optionalFilters={optionalFilter}
+        facets={facets}
       />
       <PlpStickyFilter
         pageType={pageType}
