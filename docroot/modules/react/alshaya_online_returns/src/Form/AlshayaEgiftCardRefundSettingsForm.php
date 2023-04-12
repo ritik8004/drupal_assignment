@@ -49,14 +49,14 @@ class AlshayaEgiftCardRefundSettingsForm extends ConfigFormBase {
    * {@inheritdoc}
    */
   protected function getEditableConfigNames() {
-    return ['alshaya_online_returns.egift_card_refund_config'];
+    return ['alshaya_online_returns.egift_card_refund'];
   }
 
   /**
    * {@inheritdoc}
    */
   public function buildForm(array $form, FormStateInterface $form_state) {
-    $config = $this->config('alshaya_online_returns.egift_card_refund_config');
+    $config = $this->config('alshaya_online_returns.egift_card_refund');
     $form['egift_card_refund_configuration'] = [
       '#type' => 'details',
       '#title' => $this->t('Configuration'),
@@ -108,7 +108,7 @@ class AlshayaEgiftCardRefundSettingsForm extends ConfigFormBase {
    * {@inheritdoc}
    */
   public function submitForm(array &$form, FormStateInterface $form_state) {
-    $this->config('alshaya_online_returns.egift_card_refund_config')
+    $this->config('alshaya_online_returns.egift_card_refund')
       ->set('egift_card_refund_enabled', $form_state->getValue('enable_disable_egift_card_refund'))
       ->set('not_supported_refund_payment_methods', $form_state->getValue('not_supported_refund_payment_methods'))
       ->set('egift_refund_text', $form_state->getValue('egift_refund_text'))
