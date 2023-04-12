@@ -244,6 +244,16 @@ class RcsPhPathProcessor implements InboundPathProcessorInterface {
   }
 
   /**
+   * Returns RCS page type.
+   *
+   * @return string
+   *   Returns Rcs page type.
+   */
+  public static function getRcsPageType() {
+    return self::$entityType;
+  }
+
+  /**
    * Returns the flipped mapping of entity path and path alias.
    *
    * @param string $path

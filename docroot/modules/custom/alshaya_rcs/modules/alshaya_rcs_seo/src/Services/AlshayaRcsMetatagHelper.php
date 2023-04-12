@@ -256,10 +256,9 @@ class AlshayaRcsMetatagHelper {
         break;
 
       case 'promotion':
-        $data['url_path'] = $this->requestStack->getCurrentRequest()->getUri();
+        $data['url_path'] = rtrim(strtok($this->requestStack->getCurrentRequest()->getUri(), '?'), '/');
         $data['name'] = $data['title'];
         break;
-
     }
   }
 

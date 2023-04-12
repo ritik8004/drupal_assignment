@@ -5,6 +5,7 @@
  * Module file for RCS Seo.
  */
 
+use Drupal\Component\Render\FormattableMarkup;
 use Drupal\Core\Entity\ContentEntityInterface;
 use Drupal\Core\Url;
 use Drupal\rcs_placeholders\Service\RcsPhPathProcessor;
@@ -213,23 +214,24 @@ function alshaya_rcs_seo_metatags_attachments_alter(array &$attachments) {
   }
 
   // Get page type from request i.e. product, category or promotion.
-  $page_type = \Drupal::service('rcs_placeholders.path_prefix_helper')->getRcsPathPageType();
+  $page_type = \Drupal::service('rcs_placeholders.path_processor')->getRcsPageType();
   if (empty($page_type)) {
     return;
   }
 
   /** @var \Drupal\alshaya_rcs_seo\Services\AlshayaRcsMetatagHelper $rcs_metatag_helper */
   $rcs_metatag_helper = \Drupal::service('alshaya_rcs_seo.metatag_helper');
-  $rcs_metatags = &drupal_static(__FUNCTION__);
+  $rcs_metatags = &drupal_static('rcs_seo_metatag_data', []);
+
   // Get metatag details using graphQL call to magento for page type.
-  if (!isset($rcs_metatags)) {
-    $rcs_metatags = $rcs_metatag_helper->getRcsMetatagFromMagento($page_type);
+  if (empty($rcs_metatags[$page_type])) {
+    $rcs_metatags[$page_type] = $rcs_metatag_helper->getRcsMetatagFromMagento($page_type);
     // Process meta details w.r.t page type.
-    $rcs_metatag_helper->processMetaForPageType($page_type, $rcs_metatags);
+    $rcs_metatag_helper->processMetaForPageType($page_type, $rcs_metatags[$page_type]);
   }
 
   // We will not process if data is not available.
-  if (empty($rcs_metatags)) {
+  if (empty($rcs_metatags[$page_type])) {
     return;
   }
 
@@ -242,12 +244,91 @@ function alshaya_rcs_seo_metatags_attachments_alter(array &$attachments) {
 
     // Do the replacement based on RCS data.
     $attribute_data = &$attachment[0]['#attributes'][$attribute_type];
-    if (strpos($attribute_data, "#rcs.$page_type") > -1) {
+    if (is_string($attribute_data) && strpos($attribute_data, "#rcs.$page_type") > -1) {
       $rcs_key = explode('#', $attribute_data)[1];
       $rcs_metatag = str_replace("rcs.$page_type.", '', $rcs_key);
-      if (array_key_exists($rcs_metatag, $rcs_metatags)) {
-        $attribute_data = str_replace("#$rcs_key#", $rcs_metatags[$rcs_metatag], $attribute_data);
+      if (array_key_exists($rcs_metatag, $rcs_metatags[$page_type])) {
+        $attribute_data = str_replace("#$rcs_key#", $rcs_metatags[$page_type][$rcs_metatag], $attribute_data);
       }
+    }
+  }
+}
+
+/**
+ * Implements hook_preprocess_page().
+ */
+function alshaya_rcs_seo_preprocess_page(&$variables) {
+  // Replace the category name and description for PLP pages for SEO.
+  // If the data is available in rcs_seo_processed_metatags.
+  // @see: alshaya_rcs_seo_metatags_attachments_alter
+  // Use the data from static storage to replace the taxonomy data.
+  $route = \Drupal::routeMatch();
+  if ($route->getRouteName() == 'entity.taxonomy_term.canonical') {
+    $term = $route->getParameter('taxonomy_term');
+    if ($term->bundle() == 'rcs_category') {
+      $rcs_metatags = &drupal_static('rcs_seo_metatag_data', []);
+      if (empty($rcs_metatags['category'])) {
+        return;
+      }
+      // Category name and description replacement using SSR.
+      $variables['category_term_name'] = $rcs_metatags['category']['name'];
+      $variables['category_term_description'] = $rcs_metatags['category']['description'];
+      if (strpos($variables['page']['#title'], '#rcs.category.name#') > -1) {
+        $variables['page']['#title'] = $rcs_metatags['category']['name'];
+      }
+    }
+  }
+}
+
+/**
+ * Implements hook_preprocess_block().
+ */
+function alshaya_rcs_seo_preprocess_block(&$variables) {
+  // Replace the category, promotion title and description for PLP pages.
+  // If the data is available in rcs_seo_processed_metatags.
+  // @see: alshaya_rcs_seo_metatags_attachments_alter
+  $block_plugins = [
+    'rcs_term_description',
+    'page_title_block',
+    'alshaya_rcs_promotion_description',
+  ];
+  if (isset($variables['plugin_id'])
+    && in_array($variables['plugin_id'], $block_plugins)) {
+    // Check if the data is available.
+    $rcs_metatags = &drupal_static('rcs_seo_metatag_data', []);
+    // Process only for promo and category pages.
+    if (empty($rcs_metatags['category']) && empty($rcs_metatags['promotion'])) {
+      return;
+    }
+
+    // Replacement for category and promotion name for page title.
+    if ($variables['plugin_id'] == 'page_title_block') {
+      $title = &$variables['content']['#title'];
+      if (!empty($rcs_metatags['category']) && strpos($title['#markup'], '#rcs.category.name#') > -1) {
+        $title['#markup'] = str_replace('#rcs.category.name#', $rcs_metatags['category']['name'], $title['#markup']);
+      }
+      elseif (!empty($rcs_metatags['promotion']) && strpos($title, '#rcs.promotion.name#') > -1) {
+        $title = new FormattableMarkup($title, ['#rcs.promotion.name#' => $rcs_metatags['promotion']['name']]);
+      }
+      return;
+    }
+
+    // Replacement for description.
+    if ($variables['plugin_id'] == 'rcs_term_description'
+      && strpos($variables['content']['#markup'], '#rcs.category.description#') > -1) {
+      // Setting max-age to get refresh after 20min with CF settings.
+      $variables['#cache']['max-age'] = 1200;
+      $variables['content']['#markup'] =
+        str_replace('#rcs.category.description#', $rcs_metatags['category']['description'], $variables['content']['#markup']);
+    }
+
+    // Replacement for promo description.
+    if ($variables['plugin_id'] == 'alshaya_rcs_promotion_description'
+      && strpos($variables['content']['inside']['#children'], '#rcs.promotion.description#') > -1) {
+      // Setting max-age to get refresh after 20min with CF settings.
+      $variables['#cache']['max-age'] = 1200;
+      $variables['content']['inside']['#children'] =
+        str_replace('#rcs.promotion.description#', $rcs_metatags['promotion']['description'], $variables['content']['inside']['#children']);
     }
   }
 }

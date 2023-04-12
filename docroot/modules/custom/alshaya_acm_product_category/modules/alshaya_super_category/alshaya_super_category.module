@@ -193,6 +193,13 @@ function alshaya_super_category_preprocess_block(&$variables) {
       }
       // Set image Alt based on current brand.
       $variables['content']['site_logo']['#alt'] = $super_category->label();
+
+      // Check if the metatag data is available from SSR.
+      $rcs_metatags = &drupal_static('rcs_seo_metatag_data', []);
+      if (!empty($rcs_metatags['category'])) {
+        $meta_title = $rcs_metatags['category']['name'];
+      }
+
       $variables['content']['site_name']['#markup'] = $meta_title;
       // Set the site path to brand page if config for super
       // category url is set as true else set it as home page by default.
