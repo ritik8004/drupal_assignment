@@ -31,7 +31,6 @@ import BecomeHelloMember from '../../../../js/utilities/components/become-hello-
 import { getExpressDeliveryStatus } from '../../../../js/utilities/expressDeliveryHelper';
 import { hasValue } from '../../../../js/utilities/conditionsUtility';
 import { isMobile } from '../../../../js/utilities/display';
-import RefinementList from '../components/algolia/widgets/RefinementList';
 
 if (window.NodeList && !NodeList.prototype.forEach) {
   NodeList.prototype.forEach = Array.prototype.forEach;
