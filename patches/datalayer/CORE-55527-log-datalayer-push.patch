@@ -1,3 +1,12 @@
+diff --git a/datalayer.libraries.yml b/datalayer.libraries.yml
+index fb29f2a..7429e11 100644
+--- a/datalayer.libraries.yml
++++ b/datalayer.libraries.yml
+@@ -20,3 +20,4 @@ datapush:
+     - core/jquery
+     - core/drupalSettings
+     - core/drupal
++    - alshaya_master/common_functions
 diff --git a/js/datapush.js b/js/datapush.js
 index 653749f..291609c 100755
 --- a/js/datapush.js
