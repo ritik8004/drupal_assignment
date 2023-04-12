@@ -122,17 +122,18 @@ function alshaya_online_returns_alshaya_acm_customer_recent_order_build_alter(ar
     // Loop over all the ordered items for each order.
     if (isset($build['recent_order'][$key]['#order']['items'])
       && is_array($build['recent_order'][$key]['#order']['items'])) {
+      // Items count used to calculate count of fully refunded items.
+      $items_count = count($build['recent_order'][$key]['#order']['items']);
       foreach ($build['recent_order'][$key]['#order']['items'] as $product_id => $product) {
-        // Remove the products if the number of refunded items is equal to
-        // the number of ordered items.
+        // If the number of refunded items is equal to the number of
+        // ordered items decrease the items count by one.
         if ($product['refunded'] == $product['ordered']) {
-          // Remove the products that are refunded completely for this order.
-          unset($build['recent_order'][$key]['#order']['items'][$product_id]);
+          $items_count--;
         }
       }
       // Set online returns status based on the count of all products available
       // for return.
-      $build['recent_order'][$key]['#order']['online_returns_status'] = count($build['recent_order'][$key]['#order']['items']) > 0;
+      $build['recent_order'][$key]['#order']['online_returns_status'] = $items_count > 0;
     }
 
     $build['#attached']['drupalSettings']['onlineReturns']['recentOrders'][$order['#order']['id']] = $onlineReturnsHelper->prepareOrderData($order['#order']);
