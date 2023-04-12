@@ -38,9 +38,14 @@ services:
 
   alshaya_rcs_seo.metatag_helper:
     class: Drupal\alshaya_rcs_seo\Services\AlshayaRcsMetatagHelper
+
+  alshaya_rcs_seo.metatag_ssr_helper:
+    class: Drupal\alshaya_rcs_seo\Services\AlshayaRcsMetatagSsrHelper
     arguments:
       - '@alshaya_rcs_product.helper'
       - '@alshaya_rcs_listing.helper'
       - '@alshaya_rcs_promotion.helper'
       - '@alshaya_api.graphql_helper'
       - '@request_stack'
+      - '@config.factory'
+      - '@rcs_placeholders.path_processor'
