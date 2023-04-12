@@ -83,7 +83,7 @@ class OnlineReturnsHelper {
    *   TRUE/FALSE
    */
   public function isEgiftRefundEnabled(): bool {
-    return $this->configFactory->get('alshaya_online_returns.egift_card_refund_config')->get('egift_card_refund_enabled') ?: FALSE;
+    return $this->configFactory->get('alshaya_online_returns.egift_card_refund')->get('egift_card_refund_enabled') ?: FALSE;
   }
 
   /**
@@ -93,7 +93,7 @@ class OnlineReturnsHelper {
    *   An array containting all the payment methods with enable/disable value.
    */
   public function getNotSupportedEgiftMethodsForOnlineReturns() {
-    return $this->configFactory->get('alshaya_online_returns.egift_card_refund_config')->get('not_supported_refund_payment_methods');
+    return $this->configFactory->get('alshaya_online_returns.egift_card_refund')->get('not_supported_refund_payment_methods');
   }
 
   /**
