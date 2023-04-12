@@ -78,3 +78,17 @@ alshaya_algolia_react.color_swatches:
     no_of_swatches_mobile:
       type: integer
       label: 'Set the swatch limit for PLP/SRP on mobile view'
+
+alshaya_algolia_react.swipe_image:
+  type: config_object
+  label: 'Alshaya swipe image configurations'
+  mapping:
+    enable_swipe_image_mobile:
+      type: boolean
+      label: 'Enable / Disable swipe image on mobile view.'
+    no_of_image_scroll:
+      type: integer
+      label: 'Set the swipe image scroll limit for PLP/SRP'
+    slide_effect_fade:
+      type: boolean
+      label: 'Enable / Disable swipe image on mobile view.'
