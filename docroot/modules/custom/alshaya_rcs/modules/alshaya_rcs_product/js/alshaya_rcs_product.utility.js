@@ -64,6 +64,25 @@ window.commerceBackend = window.commerceBackend || {};
   }
 
   /**
+   * Checks if a product is free gift or not.
+   *
+   * @param {object} product
+   *   The raw product object.
+   *
+   * @return boolean
+   */
+  window.commerceBackend.isFreeGiftSku = function isFreeGiftSku(product) {
+    var isFreeGift = false;
+    if (Drupal.hasValue(product.price_range)
+      && Drupal.hasValue(product.price_range.maximum_price)
+      && Drupal.hasValue(product.price_range.maximum_price.final_price)
+    ) {
+      isFreeGift = parseFloat(product.price_range.maximum_price.final_price.value) === 0.01 || parseFloat(product.price_range.maximum_price.final_price.value) === 0;
+    }
+    return isFreeGift;
+  };
+
+  /**
    * Sets product data to storage.
    *
    * @param {object} product
@@ -838,7 +857,7 @@ window.commerceBackend = window.commerceBackend || {};
         await window.commerceBackend.getProductsInStyle(response, loadStyles);
       }
       window.commerceBackend.setRcsProductToStorage(response, null, mainSKU);
-      window.commerceBackend.processAndStoreProductData(mainSKU, sku, 'productInfo');
+      await window.commerceBackend.processAndStoreProductData(mainSKU, sku, 'productInfo');
     });
 
     return staticDataStore.productDataFromBackend[mainSKU][sku];

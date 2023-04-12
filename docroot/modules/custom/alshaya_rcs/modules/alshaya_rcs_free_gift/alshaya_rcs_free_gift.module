@@ -12,3 +12,31 @@ function alshaya_rcs_free_gift_preprocess_node(&$variables) {
     }
   }
 }
+
+/**
+ * Implements hook_alshaya_spc_cart_build_alter().
+ */
+function alshaya_rcs_free_gift_alshaya_spc_cart_build_alter(array &$attachments) {
+  $product_settings = \Drupal::config('alshaya_acm_product.settings');
+  $attachments['#attached']['drupalSettings']['alshaya_white_label']['image_slider_position_pdp'] = 'slider-position-' . $product_settings->get('image_slider_position_pdp');
+  $attachments['#attached']['drupalSettings']['pdp_slider_items_cs_us'] = $product_settings->get('pdp_slider_items_settings.pdp_slider_items_number_cs_us');
+  $attachments['#attached']['drupalSettings']['pdp_slider_items'] = $product_settings->get('pdp_slider_items_settings.pdp_slider_items_number');
+  $attachments['#attached']['library'][] = 'alshaya_rcs_free_gift/rcs_free_gift_cart';
+
+  // Add other common build variables.
+  \Drupal::service('alshaya_rcs_product.helper')->setCommonPdpSettings($attachments);
+}
+
+/**
+ * Implements hook_library_info_alter().
+ */
+function alshaya_rcs_free_gift_library_info_alter(&$libraries, $extension) {
+  if ($extension === 'alshaya_spc') {
+    // Switching free_gift_cart_util.js file with RCS version.
+    $extension_path_resolver = \Drupal::service('extension.path.resolver');
+    $self_module_path = $extension_path_resolver->getPath('module', 'alshaya_rcs_free_gift');
+    $options = $libraries['free_gift_cart_util']['js']['assets/js/free_gift_cart_util.js'];
+    unset($libraries['free_gift_cart_util']['js']['assets/js/free_gift_cart_util.js']);
+    $libraries['free_gift_cart_util']['js']["/$self_module_path/js/alshaya_rcs_free_gift_cart_util.js"] = $options;
+  }
+}
