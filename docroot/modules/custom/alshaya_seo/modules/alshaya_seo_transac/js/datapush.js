@@ -27,7 +27,6 @@
             });
           }
           window.dataLayer.push(dataLayerContent);
-          test = 1
           if (Drupal.hasValue(dataLayerContent.event) && dataLayerContent.event == 'purchaseSuccess') {
             Drupal.alshayaLogger('notice', 'Purchase success event after data push: @datalayer.', {
               '@datalayer': dataLayerContent,
