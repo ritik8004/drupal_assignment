@@ -5,7 +5,21 @@
 
 window.commerceBackend = window.commerceBackend || {};
 
-(function alshayaRcsFreeGiftPdp($, Drupal, drupalSettings) {
+(function alshayaRcsFreeGiftPdp($, Drupal, drupalSettings, RcsEventManager) {
+
+  /**
+   * Event listener of page entity to redirect to 404 for free gift PDPs.
+   */
+  RcsEventManager.addListener('alshayaPageEntityLoaded', async function pdpPageEntityLoaded(e) {
+    var mainProduct = e.detail.entity;
+    // For free gift products we don't display PDP. Redirecting to 404.
+    if (Drupal.hasValue(window.commerceBackend.isFreeGiftSku) && window.commerceBackend.isFreeGiftSku(mainProduct)) {
+      var rcs404 = `${drupalSettings.rcs['404Page']}?referer=${globalThis.rcsWindowLocation().pathname}`;
+      document.body.classList.add('hidden');
+      return globalThis.rcsRedirectToPage(rcs404);
+    }
+  });
+
   /**
    * Drupal behaviour to attach for opening free gift modal on PDP.
    */
@@ -28,4 +42,4 @@ window.commerceBackend = window.commerceBackend || {};
     }
   };
 
-})(jQuery, Drupal, drupalSettings);
+})(jQuery, Drupal, drupalSettings, RcsEventManager);

@@ -3,7 +3,7 @@ alshaya_online_returns.alshaya_return_confirmation_settings:
   title: 'Alshaya Return Confirmation Configuration'
   base_route: alshaya_online_returns.alshaya_return_confirmation_settings
 
-alshaya_online_returns.egift_card_refund_config:
-  route_name: alshaya_online_returns.egift_card_refund_config
+alshaya_online_returns.egift_card_refund:
+  route_name: alshaya_online_returns.egift_card_refund
   title: 'Alshaya Egift Card Refund Settings'
-  base_route: alshaya_online_returns.egift_card_refund_config
+  base_route: alshaya_online_returns.egift_card_refund

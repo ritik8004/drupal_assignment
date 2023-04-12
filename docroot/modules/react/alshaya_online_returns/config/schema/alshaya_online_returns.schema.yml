@@ -39,7 +39,7 @@ return_whats_next_row:
       type: boolean
       label: 'Hide This Row'
 
-alshaya_online_returns.egift_card_refund_config:
+alshaya_online_returns.egift_card_refund:
   type: config_object
   label: 'Return confirmation settings'
   mapping:

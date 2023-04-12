@@ -7,10 +7,7 @@
 >
 
   {{#if freeGiftImage }}
-    <div class="free-gift-image">
-      <img src="{{ freeGiftImage }}" title="{{ freeGiftTitle }}" alt="{{ freeGiftTitle }}" typeof="foaf:Image"
-           loading="lazy">
-    </div>
+    <img src="{{ freeGiftImage }}" title="{{ freeGiftTitle }}" alt="{{ freeGiftTitle }}" typeof="foaf:Image" loading="lazy">
   {{else}}
     {{ freeGiftTitle }}
   {{/if}}
