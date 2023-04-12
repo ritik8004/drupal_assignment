@@ -360,7 +360,8 @@
                 "Ajax support / Use behaviors": "https://www.drupal.org/files/issues/2021-06-03/recaptcha-ajax-2493183-225.patch"
             },
             "drupal/datalayer": {
-                "Log datalayer errors": "patches/datalayer/CORE-55527-log-datalayer-push.patch",
+                "Trigger an event before data push": "https://www.drupal.org/files/issues/2022-03-30/3249444-trigger-an-event-before-data-push-5.patch",
+                "CORE-55527: Log datalayer errors": "patches/datalayer/CORE-55527-log-datalayer-push.patch",
                 "Exception page because of incorrect path.alias_manager service name": "https://www.drupal.org/files/issues/2020-09-18/3171896-path_alias-manager.patch"
             },
             "drupal/acquia_purge": {
