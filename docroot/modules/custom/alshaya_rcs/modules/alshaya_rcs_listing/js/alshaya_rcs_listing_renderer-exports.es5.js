@@ -24,6 +24,13 @@ exports.render = function render(
     hierarchy_list.push(entity.gtm_name);
     context_list.push(formatCleanRuleContext(entity.gtm_name));
     contexts.push(context_list.join('__'));
+
+    // Add prefix "web" to every context value.
+    const webContexts = contexts.map((context) => 'web__' + context);
+
+    // Combine contexts and web contexts.
+    contexts = webContexts.concat(contexts);
+
     // Combine all the items.
     hierarchy_list = hierarchy_list.join(' > ');
     // Add required data as data-attributes.
