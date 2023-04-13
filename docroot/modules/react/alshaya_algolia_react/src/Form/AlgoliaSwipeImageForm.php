@@ -52,8 +52,9 @@ class AlgoliaSwipeImageForm extends ConfigFormBase {
       '#description' => $this->t('Max number swipe image to display upfront in SRP/PLP followed by carousel.'),
     ];
     $form['swipe_image_config']['slide_effect_fade'] = [
-      '#type' => 'checkbox',
-      '#title' => $this->t('Enable / Disable Slide Effect Fade'),
+      '#type' => 'select',
+      '#title' => $this->t('Set the swipe image slide effect'),
+      '#options' => ['slide' => $this->t('Slide'), 'fade' => $this->t('Fade')],
       '#default_value' => $config->get('slide_effect_fade'),
     ];
 

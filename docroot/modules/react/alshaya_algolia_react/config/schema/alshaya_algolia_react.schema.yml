@@ -88,7 +88,7 @@ alshaya_algolia_react.swipe_image:
       label: 'Enable / Disable swipe image on mobile view.'
     no_of_image_scroll:
       type: integer
-      label: 'Set the swipe image scroll limit for PLP/SRP'
+      label: 'Set the swipe image scroll limit for PLP/SRP on desktop view'
     slide_effect_fade:
-      type: boolean
-      label: 'Enable / Disable swipe image on mobile view.'
+      type: string
+      label: 'Set the effect of slide'
