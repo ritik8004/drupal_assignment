@@ -22,20 +22,9 @@
       {{/if}}
     </div>
   </a>
-  {{#if (and selectLink (eq freeGiftItem.type_id 'simple')) }}
+  {{#if select_link }}
     <div class="select-free-gift-link">
-      <a
-        id="select-add-free-gift"
-        class="select-free-gift"
-        href="#"
-        data-variant-sku="{{ freeGiftSku }}"
-        data-sku-type="{{ freeGiftItem.type_id }}"
-        data-coupon="{{ couponCode }}"
-        data-parent-sku="{{ freeGiftParentSku }}"
-        data-promo-rule-id="{{ promoRuleId }}"
-      >
-        {{t 'select' }}
-      </a>
+      {{ select_link }}
     </div>
   {{/if}}
 </div>

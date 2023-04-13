@@ -104,7 +104,7 @@
 
             // Post to ajax for cart update/create.
             window.commerceBackend.addUpdateRemoveCartItem(post_data)
-              .then (async function processCartResponse(responseData) {
+              .then (function (responseData) {
                 const response = responseData.data;
                 // If there any error we throw from middleware.
                 if (response.error === true) {
@@ -166,7 +166,7 @@
                   });
                   $(form).trigger(cartNotification);
 
-                  await window.commerceBackend.processAndStoreProductData(productData.parentSku, productData.variant, productInfoKey);
+                  window.commerceBackend.processAndStoreProductData(productData.parentSku, productData.variant, productInfoKey);
 
                   // Triggering event to notify react component.
                   var event = new CustomEvent('refreshMiniCart', {
