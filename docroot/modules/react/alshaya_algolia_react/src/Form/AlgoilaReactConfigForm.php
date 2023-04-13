@@ -94,7 +94,7 @@ class AlgoilaReactConfigForm extends ConfigFormBase {
       '#type' => 'textfield',
       '#title' => $this->t('Exclude the following filters from single result check.'),
       '#default_value' => $config->get('exclude_render_single_result_facets'),
-      '#description' => $this->t('Checkbox to enable or disable hitsPerPage key in algolia call. Please input comma seprated values.'),
+      '#description' => $this->t('Enter filter keys that you always want to display. Please input comma seprated values.'),
     ];
 
     $form['default_col_grid'] = [
