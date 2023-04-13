@@ -56,24 +56,4 @@ class RcsPhPathPrefixHelper {
     return $prefixes;
   }
 
-  /**
-   * Returns requested path page type.
-   *
-   * @return string
-   *   page type which is configured from URL. eg. product, category, promotion.
-   */
-  public function getRcsPathPageType(): string {
-    $page_type = '';
-    $request_uri = $this->currentRequest->getRequestUri();
-    $rcs_config = $this->configFactory->get('rcs_placeholders.settings');
-    $settings = $rcs_config->getRawData();
-    foreach ($settings as $type => $value) {
-      if (!empty($value['path_prefix']) && strpos(strtolower($request_uri), (string) $value['path_prefix']) > -1) {
-        $page_type = $type;
-        break;
-      }
-    }
-    return $page_type;
-  }
-
 }
