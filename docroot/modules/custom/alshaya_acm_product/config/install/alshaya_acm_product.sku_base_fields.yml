@@ -136,5 +136,5 @@ fields:
   article_swatches:
     label: 'Article Swatches'
     description: 'Stores Swatches info of all SKUs with same style_code in JSON format.'
-    type: 'text_long'
+    type: 'string_long'
     index: 1
