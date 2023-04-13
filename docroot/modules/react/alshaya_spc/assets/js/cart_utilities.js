@@ -382,17 +382,8 @@ Drupal.alshayaSpc = Drupal.alshayaSpc || {};
    * @param {object} productData
    *   An object containing some processed product data.
    */
-  window.commerceBackend.processAndStoreProductData = async function (parentSku, variantSku, viewMode) {
+  window.commerceBackend.processAndStoreProductData = function (parentSku, variantSku, viewMode) {
     var productInfo = window.commerceBackend.getProductData(parentSku, viewMode);
-    // Process free gift response from graphQl if rcs enabled.
-    if (Drupal.hasValue(productInfo.freeGiftPromotion)
-      && Drupal.hasValue(window.commerceBackend.processFreeGiftDataReactRender)) {
-      productInfo = await window.commerceBackend.processFreeGiftDataReactRender(
-        { [parentSku]: productInfo },
-        parentSku,
-      );
-      productInfo = productInfo[parentSku];
-    }
     var options = [];
     var productUrl = productInfo.url;
     var price = productInfo.priceRaw;

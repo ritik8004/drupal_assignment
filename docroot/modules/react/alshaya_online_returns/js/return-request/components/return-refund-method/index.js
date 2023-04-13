@@ -26,19 +26,16 @@ const ReturnRefundMethod = ({
         {cardList || egiftCardType
           ? (
             <div className="refund-method-listing">
-              {isHybrid
-                ? (
-                  <>
-                    <div className="hybrid-method-payment-msg">
-                      { Drupal.t('Original Multiple payment methods used', {}, { context: 'online_returns' }) }
-                    </div>
-                    <div className="hybrid-method-list-msg">
-                      { Drupal.t('Your refund will be credited back to the following payment methods.', {}, { context: 'online_returns' }) }
-                    </div>
-                  </>
-                ) : (
-                  <> </>
-                )}
+              {isHybrid && (
+                <>
+                  <div className="hybrid-method-payment-msg">
+                    { Drupal.t('Original Multiple payment methods used', {}, { context: 'online_returns' }) }
+                  </div>
+                  <div className="hybrid-method-list-msg">
+                    { Drupal.t('Your refund will be credited back to the following payment methods.', {}, { context: 'online_returns' }) }
+                  </div>
+                </>
+              )}
               <EgiftCardDetails
                 cardList={cardList}
                 selectedOption={selectedOption}
