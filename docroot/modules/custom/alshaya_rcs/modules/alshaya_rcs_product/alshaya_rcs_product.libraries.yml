@@ -70,6 +70,11 @@ product.sku_base_form:
   js:
     handlebars/product.sku_base_form.handlebars: {}
 
+product.free_gift_sku_base_form:
+  version: 1.x
+  js:
+    handlebars/product.free_gift_sku_base_form.handlebars: {}
+
 product.sku_base_form_oos:
   version: 1.x
   js:

@@ -2,11 +2,12 @@ import {
   showFullScreenLoader,
   removeFullScreenLoader,
 } from './checkout_util';
+import { hasValue } from '../../../js/utilities/conditionsUtility';
 
 /**
  * Add free gift to cart.
  */
-export const addFreeGift = (freeGiftLink) => {
+export const addFreeGift = async (freeGiftLink) => {
   const freeGiftMainSku = freeGiftLink.getAttribute('data-variant-sku');
   const coupon = freeGiftLink.getAttribute('data-coupon');
   const type = freeGiftLink.getAttribute('data-sku-type');
@@ -24,30 +25,15 @@ export const addFreeGift = (freeGiftLink) => {
       promoRuleId,
     };
   } else {
-    const configurableValues = [];
     const form = freeGiftLink.closest('form');
     const currentSelectedVariant = form
       .querySelector('[name="selected_variant_sku"]')
       .getAttribute('value');
 
-    Object.keys(
-      drupalSettings.configurableCombinations[freeGiftMainSku].configurables,
-    ).forEach((key) => {
-      const optionId = drupalSettings.configurableCombinations[freeGiftMainSku]
-        .configurables[key].attribute_id;
-      // Skipping the psudo attributes.
-      if (
-        drupalSettings.psudo_attribute === undefined
-        || drupalSettings.psudo_attribute === optionId
-      ) {
-        return;
-      }
-      const option = {
-        option_id: optionId,
-        option_value: parseInt(form.querySelector(`[data-configurable-code="${key}"]`).value, 10),
-      };
-      configurableValues.push(option);
-    });
+    const configurableValues = await window.commerceBackend.processFreeGiftConfigurables(
+      freeGiftMainSku,
+      form,
+    );
 
     postData = {
       promo: coupon,
@@ -71,7 +57,7 @@ export const addFreeGift = (freeGiftLink) => {
 
       // Closing the modal window.
       const closeModal = document.querySelector('.ui-dialog-titlebar-close');
-      if (closeModal !== undefined || closeModal !== null) {
+      if (hasValue(closeModal)) {
         closeModal.click();
       }
       removeFullScreenLoader();
@@ -104,7 +90,7 @@ export const selectFreeGiftModal = (e) => {
  */
 export const getCartFreeGiftModalId = (skuCode) => {
   const id = skuCode
-    ? `spc-free-gift-${skuCode.replace(/\s+/g, '')}`
+    ? `spc-free-gift-${skuCode.replace(/\s+/g, '').replace(/,/g, '-')}`
     : 'spc-free-gift';
 
   return id;
@@ -116,7 +102,12 @@ export const getCartFreeGiftModalId = (skuCode) => {
 export const openCartFreeGiftModal = (sku) => {
   const body = document.querySelector('body');
   body.classList.add('free-gifts-modal-overlay');
-  document.getElementById(getCartFreeGiftModalId(sku)).click();
+  // Render free gift modal on cart page.
+  window.commerceBackend.startFreeGiftModalProcess(
+    document.getElementById(getCartFreeGiftModalId(sku)).dataset.sku.split(','),
+    false,
+    document.getElementsByClassName('coupon-code')[0].textContent,
+  );
 };
 
 /**
@@ -128,7 +119,11 @@ export const selectFreeGift = (codeValue, sku, skuType, promoType) => {
     if (promoType === 'FREE_GIFT_SUB_TYPE_ONE_SKU') {
       const body = document.querySelector('body');
       body.classList.add('free-gifts-modal-overlay');
-      document.getElementById(getCartFreeGiftModalId(sku)).click();
+      window.commerceBackend.startFreeGiftModalProcess(
+        document.getElementById(getCartFreeGiftModalId(sku)).dataset.sku.split(','),
+        false,
+        document.getElementsByClassName('coupon-code')[0].textContent,
+      );
     } else if ((promoType === 'FREE_GIFT_SUB_TYPE_ALL_SKUS') && (skuType === 'configurable')) {
       openCartFreeGiftModal(sku);
     } else {
