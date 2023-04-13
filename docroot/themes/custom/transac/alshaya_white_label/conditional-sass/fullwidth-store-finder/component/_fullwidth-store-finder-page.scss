@@ -1,0 +1,54 @@
+.path--store-finder {
+  .c-page-title {
+    @include breakpoint($tablet) {
+      @include sideSpaces(0);
+    }
+  }
+
+  .store-finder--wrapper {
+    @include breakpoint($tablet) {
+      flex-grow: 1;
+    }
+  }
+
+  .label--location {
+    html[lang="ar"] & {
+      @include breakpoint($tablet) {
+        width: auto;
+      }
+    }
+  }
+
+  .c-content__region {
+    @include fullWidthSideSpaces(
+      $is_mobile: true,
+      $is_tablet: true,
+      $is_desktop: true,
+      $is_desktop_wide: true
+    );
+
+    .c-content__region {
+      @include breakpoint($tablet) {
+        @include sideSpaces(0);
+      }
+    }
+
+    .views-exposed-form {
+      >.form--inline {
+        @include breakpoint($tablet) {
+          display: flex;
+          justify-content: space-between;
+
+          &::after {
+            content: none;
+          }
+        }
+      }
+    }
+  }
+
+  .c-content__region,
+  .view-stores-finder {
+    max-width: none;
+  }
+}
