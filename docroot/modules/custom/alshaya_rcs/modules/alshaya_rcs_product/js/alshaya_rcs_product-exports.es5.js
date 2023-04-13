@@ -674,7 +674,16 @@ exports.computePhFilters = function (input, filter) {
         // Add the configurable options to the form.
         data.configurable_options = processedOptions;
       }
-      value = handlebarsRenderer.render(`product.sku_base_form`, data);
+      // Free gift related details for rendering add to cart form
+      // for free gifts inside modal.
+      if (input.context === 'free_gift') {
+        data.couponCode = input.couponCode;
+        data.promoRuleId = input.promoRuleId;
+        value = handlebarsRenderer.render(`product.free_gift_sku_base_form`, data);
+      }
+      else {
+        value = handlebarsRenderer.render(`product.sku_base_form`, data);
+      }
       break;
 
     case 'gtm-price':

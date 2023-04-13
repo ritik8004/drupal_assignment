@@ -145,6 +145,24 @@ window.commerceBackend = window.commerceBackend || {};
     if (Drupal.hasValue(window.commerceBackend.getProductsInStyle)) {
       mainProduct = await window.commerceBackend.getProductsInStyle(mainProduct);
     }
+    // Exclude Free Gift variants in add to cart form in PDP.
+    if (mainProduct.type_id === 'configurable' && Drupal.hasValue(window.commerceBackend.isFreeGiftSku)) {
+      var freeGiftExcludedVariantList = [];
+      mainProduct.variants.forEach(function excludeFreeGifts(variant) {
+        if (Drupal.hasValue(window.commerceBackend.isFreeGiftSku) && !window.commerceBackend.isFreeGiftSku(variant.product)) {
+          freeGiftExcludedVariantList.push(variant);
+        }
+      });
+      if (freeGiftExcludedVariantList.length) {
+        mainProduct.variants = freeGiftExcludedVariantList;
+      }
+      else {
+        // If all variants are free gifts, redirect to 404.
+        var rcs404 = `${drupalSettings.rcs['404Page']}?referer=${globalThis.rcsWindowLocation().pathname}`;
+        document.body.classList.add('hidden');
+        return globalThis.rcsRedirectToPage(rcs404);
+      }
+    }
 
     window.commerceBackend.renderAddToCartForm(mainProduct);
   });
