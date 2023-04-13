@@ -28,6 +28,9 @@ const Filters = ({ indexName, pageType, ...props }) => {
               element.classList.remove('hide-facet-block');
               activeFilters.push(element);
             }
+          } else {
+            activeFilters.push(element);
+            element.classList.remove('hide-facet-block');
           }
         } else if (typeof children !== 'undefined' && children.querySelector('li') === null) {
           element.classList.add('hide-facet-block');
