@@ -30,13 +30,14 @@ export default class SearchResults extends React.Component {
   render() {
     const {
       query,
+      facets,
     } = this.props;
     return ReactDOM.createPortal(
       <>
         <div className="block block-core block-page-title-block">
           <h1 className="c-page-title">{Drupal.t('Search results')}</h1>
         </div>
-        <SearchResultsComponent query={query} />
+        <SearchResultsComponent query={query} facets={facets} />
       </>,
       this.el,
     );
