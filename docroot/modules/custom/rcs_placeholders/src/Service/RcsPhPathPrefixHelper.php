@@ -3,7 +3,6 @@
 namespace Drupal\rcs_placeholders\Service;
 
 use Drupal\Core\Config\ConfigFactoryInterface;
-use Symfony\Component\HttpFoundation\RequestStack;
 
 /**
  * Service provides helper functions for the rcs path prefix.
@@ -18,24 +17,13 @@ class RcsPhPathPrefixHelper {
   protected $configFactory;
 
   /**
-   * The request stack.
-   *
-   * @var \Symfony\Component\HttpFoundation\RequestStack
-   */
-  protected $currentRequest;
-
-  /**
    * Constructs a new RcsPhPathPrefixHelper instance.
    *
-   * @param \Drupal\Core\Entity\ConfigFactoryInterface $config_factory
+   * @param \Drupal\Core\Config\ConfigFactoryInterface $config_factory
    *   Config Factory service.
-   * @param \Symfony\Component\HttpFoundation\RequestStack $request_stack
-   *   Request stock service object.
    */
-  public function __construct(ConfigFactoryInterface $config_factory,
-                              RequestStack $request_stack) {
+  public function __construct(ConfigFactoryInterface $config_factory) {
     $this->configFactory = $config_factory;
-    $this->currentRequest = $request_stack->getCurrentRequest();
   }
 
   /**
