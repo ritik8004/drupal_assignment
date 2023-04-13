@@ -502,6 +502,7 @@ article[gtm-sku-type="simple"] {
     text-transform: capitalize;
     border-bottom: 0.0625rem solid $pdp-ingredient-title-border;
     border-top: none;
+    padding: 0;
 
     &.ui-state-active {
       border-bottom: none;
