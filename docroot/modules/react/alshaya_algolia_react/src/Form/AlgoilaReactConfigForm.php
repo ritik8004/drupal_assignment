@@ -93,7 +93,7 @@ class AlgoilaReactConfigForm extends ConfigFormBase {
     $form['exclude_render_single_result_facets'] = [
       '#type' => 'textfield',
       '#title' => $this->t('Exclude the following filters from single result check.'),
-      '#default_value' => $config->get('exclude_render_single_result_facets') ?: 'sort_by,attr_delivery_ways,final_price,attr_color,attr_gender',
+      '#default_value' => $config->get('exclude_render_single_result_facets') ?: 'attr_delivery_ways,final_price,attr_color,attr_gender',
       '#description' => $this->t('Checkbox to enable or disable hitsPerPage key in algolia call. Please input comma seprated values.'),
     ];
 

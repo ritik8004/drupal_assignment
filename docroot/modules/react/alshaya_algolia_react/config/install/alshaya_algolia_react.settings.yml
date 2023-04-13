@@ -17,4 +17,4 @@ enable_hits_per_page: true
 # To exclude filters that have single option from All Filters.
 render_single_result_facets: true
 # For filters that should not get impacted by the render_single_result_facets value.
-exclude_render_single_result_facets: 'sort_by,attr_delivery_ways,final_price,attr_color,attr_gender'
+exclude_render_single_result_facets: ''
