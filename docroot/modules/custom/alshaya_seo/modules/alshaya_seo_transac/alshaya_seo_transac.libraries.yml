@@ -164,3 +164,14 @@ gtm_pdp_modal:
     js/alshaya_seo.gtm.pdp_modal.js: {}
   dependencies:
     - alshaya_seo_transac/gtm
+
+datapush:
+  version: 1.0.0
+  header: true
+  js:
+    js/datapush.js: {}
+  dependencies:
+    - core/jquery
+    - core/drupalSettings
+    - core/drupal
+    - alshaya_master/common_functions
