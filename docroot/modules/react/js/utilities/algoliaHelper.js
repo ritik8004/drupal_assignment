@@ -35,8 +35,12 @@ export const algoliaSearchClient = {
  *   Settings object.
  */
 export const getIndexSettings = (pageType) => {
+  // Get index name from drupal settings.
   const { indexName } = drupalSettings.algoliaSearch[pageType];
+  // Initialize index.
   const index = searchClient.initIndex(indexName);
+
+  // Get index settings.
   return index.getSettings().then((response) => response);
 };
 
@@ -56,10 +60,12 @@ export const getFacetListFromAlgolia = async (pageType) => {
   }
   facets = [];
 
+  // Get facet list.
   const indexSettings = await getIndexSettings(pageType);
   const { attributesForFaceting } = indexSettings;
   if (hasValue(attributesForFaceting)) {
-    Drupal.addItemInLocalStorage(`${pageType}-facets`, attributesForFaceting, 86400);
+    // Store facets list in local storage with an expiry timestamp for 1hr.
+    Drupal.addItemInLocalStorage(`${pageType}-facets`, attributesForFaceting, 3600);
     facets = attributesForFaceting;
   }
   return facets;
