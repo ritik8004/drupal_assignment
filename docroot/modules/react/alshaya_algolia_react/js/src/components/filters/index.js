@@ -16,9 +16,11 @@ const Filters = ({ indexName, pageType, ...props }) => {
       filters.forEach((element) => {
         const children = element.getElementsByTagName('ul')[0];
         // Do not show facets that have a single value if the render_single_result_facets is false.
-        // Make sure that we donot exclude the facets like price, color etc.
         if (!drupalSettings.algoliaSearch.render_single_result_facets) {
           const exclude = drupalSettings.algoliaSearch.exclude_render_single_result_facets ? drupalSettings.algoliaSearch.exclude_render_single_result_facets.trim().split(',') : '';
+          // Certain factes should always be rendered irrespective of render_single_result_facets.
+          // So we only consider the attributes not part of the exclude_render_single_result_facets.
+          // Sort is not filter attribute but we always need to show it.
           if (exclude.length > 0 && element.getAttribute('id') !== 'sort_by') {
             if ((!exclude.includes(element.getAttribute('id')) && children.childElementCount <= 1)) {
               element.classList.add('hide-facet-block');
