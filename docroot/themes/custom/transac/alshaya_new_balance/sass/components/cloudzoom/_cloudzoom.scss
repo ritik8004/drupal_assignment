@@ -60,6 +60,10 @@
   @include breakpoint($desktop) {
     height: auto;
     list-style: none;
+
+    &.pager-yes {
+      padding-bottom: rem(5);
+    }
   }
 
   @include breakpoint($only-tablet) {
@@ -131,7 +135,7 @@
       #drupal-modal & {
         html[lang="ar"] & {
           @include breakpoint($desktop) {
-            transform: rotate(0deg);
+            transform: rotate(360deg);
           }
         }
       }
