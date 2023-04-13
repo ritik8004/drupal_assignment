@@ -936,12 +936,14 @@ fullwidth-pdp:
   css:
     theme:
       css/conditional-sass/fullwidth-pdp/fullwidth-pdp.ltr.css: { weight: 1 }
+  dependencies:
+    - alshaya_white_label/fullwidth-common
+
+fullwidth-newpdp:
   js:
     js/newpdp_sticky_container.js: {}
   dependencies:
-    - core/jquery
     - core/drupal
-    - alshaya_white_label/fullwidth-common
 
 fullwidth-spc:
   css:
