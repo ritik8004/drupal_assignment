@@ -30,7 +30,6 @@ services:
     class: Drupal\rcs_placeholders\Service\RcsPhPathPrefixHelper
     arguments:
       - '@config.factory'
-      - '@request_stack'
 
   rcs_placeholders.enrichment_helper:
     class: Drupal\rcs_placeholders\Service\RcsPhEnrichmentHelper
