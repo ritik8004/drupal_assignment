@@ -209,6 +209,12 @@ function alshaya_white_label_preprocess_page(&$variables) {
       'alshaya_spc.checkout.confirmation',
     ];
 
+    // List of store finder pages.
+    $store_finder_Pages = [
+      'alshaya_geolocation.store_finder',
+      'alshaya_geolocation.store_finder_list',
+    ];
+
     // Add common library on home page.
     if (\Drupal::service('path.matcher')->isFrontPage()) {
       $variables['#attached']['library'][] = 'alshaya_white_label/fullwidth-common';
@@ -229,6 +235,10 @@ function alshaya_white_label_preprocess_page(&$variables) {
       $variables['#attached']['library'][] = 'alshaya_white_label/fullwidth-listing-page';
     }
 
+    // Add library on Store finder.
+    if (in_array($routematch->getRouteName(), $store_finder_Pages)) {
+      $variables['#attached']['library'][] = 'alshaya_white_label/fullwidth-store-finder';
+    }
   }
 
   // Check if page is panel pages.

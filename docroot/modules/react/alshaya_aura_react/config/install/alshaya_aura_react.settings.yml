@@ -4,6 +4,7 @@ aura_google_play_link: 'https://aura-mena.com/en'
 aura_rewards_header_learn_more_link: 'user/loyalty-club'
 aura_reward_activity_time_limit_in_months: 12
 aura_signup_terms_and_conditions_link: ''
+aura_username_character_limit: 15 # Config for Aura banner username character limit.
 aura_unsupported_payment_methods:
   - cashondelivery
   - postpay

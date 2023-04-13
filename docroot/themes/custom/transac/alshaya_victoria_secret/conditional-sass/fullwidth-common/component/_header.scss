@@ -8,4 +8,22 @@
       );
     }
   }
+
+  header {
+    .block-alshaya-react-mini-cart {
+      padding-#{$right}: rem(14);
+
+      html[lang="ar"] & {
+        padding-left: rem(14);
+      }
+
+      .cart-link-total {
+        padding-#{$right}: rem(32);
+
+        & + .cart-link {
+          #{$right}: rem(19);
+        }
+      }
+    }
+  }
 }
