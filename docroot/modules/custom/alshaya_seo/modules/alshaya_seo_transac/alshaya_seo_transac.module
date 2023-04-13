@@ -1003,9 +1003,10 @@ function alshaya_seo_transac_alshaya_mobile_app_skus_product_list_data_alter(arr
 /**
  * Implements hook_page_attachments().
  *
- * Load all meta tags for this page.
+ * Load data push library.
  */
 function alshaya_seo_transac_page_attachments(array &$attachments) {
+  // We are not checking logs for V3.
   if (\Drupal::moduleHandler()->moduleExists('alshaya_rcs_seo')) {
     return;
   }
