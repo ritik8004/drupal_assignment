@@ -21,16 +21,21 @@ const Filters = ({ indexName, pageType, ...props }) => {
           // Certain factes should always be rendered irrespective of render_single_result_facets.
           // So we only consider the attributes not part of the exclude_render_single_result_facets.
           // Sort is not filter attribute but we always need to show it.
-          if (exclude.length > 0 && element.getAttribute('id') !== 'sort_by') {
+          if (element.getAttribute('id') === 'sort_by') {
+            return;
+          }
+          if (exclude.length > 0) {
             if ((!exclude.includes(element.getAttribute('id')) && children.childElementCount <= 1)) {
               element.classList.add('hide-facet-block');
             } else {
               element.classList.remove('hide-facet-block');
               activeFilters.push(element);
             }
+          } else if (children.childElementCount <= 1) {
+            element.classList.add('hide-facet-block');
           } else {
-            activeFilters.push(element);
             element.classList.remove('hide-facet-block');
+            activeFilters.push(element);
           }
         } else if (typeof children !== 'undefined' && children.querySelector('li') === null) {
           element.classList.add('hide-facet-block');
