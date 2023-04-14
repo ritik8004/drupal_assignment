@@ -133,6 +133,12 @@ class AlshayGraphqlApiWrapper {
       }
 
       $result = json_decode($result, TRUE);
+      if (isset($result['errors'])) {
+        $this->logger->error('Error occured while invoking GraphQL api with following response: @errors', [
+          'errors' => json_decode($result['errors'], TRUE),
+        ]);
+      }
+
       $result = $result['data'] ?? [];
     }
     catch (\Exception $e) {
