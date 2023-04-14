@@ -164,15 +164,3 @@ gtm_pdp_modal:
     js/alshaya_seo.gtm.pdp_modal.js: {}
   dependencies:
     - alshaya_seo_transac/gtm
-
-# Override datapush library in V2 and for V3 we @see docroot/modules/custom/alshaya_rcs/modules/alshaya_rcs_seo/js/datapush.js
-datapush:
-  version: 1.0.0
-  header: true
-  js:
-    js/datapush.js: {}
-  dependencies:
-    - core/jquery
-    - core/drupalSettings
-    - core/drupal
-    - alshaya_master/common_functions
