@@ -19,7 +19,6 @@ use Drupal\facets\Entity\Facet;
  * Migrate swatch_plp_limit_mobile_view config to no_of_swatches_mobile.
  */
 function alshaya_acm_product_update_9406() {
-
   $config_factory = \Drupal::configFactory();
   // Get Old Value swatch_plp_limit_mobile_view.
   $display_settings = $config_factory->get('alshaya_acm_product.display_settings');
