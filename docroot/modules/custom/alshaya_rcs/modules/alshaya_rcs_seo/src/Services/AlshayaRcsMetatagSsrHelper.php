@@ -445,35 +445,45 @@ class AlshayaRcsMetatagSsrHelper {
     }
 
     $rcs_metatags = $rcs_metatags[$page_type];
-    // Replacement for category and promotion name for page title.
-    if ($variables['plugin_id'] == 'page_title_block') {
-      $title = &$variables['content']['#title'];
-      if ($page_type === 'category' && strpos($title['#markup'], '#rcs.category.name#') > -1) {
-        $title['#markup'] = str_replace('#rcs.category.name#', $rcs_metatags['name'], $title['#markup']);
-      }
-      elseif ($page_type === 'promotion' && strpos($title, '#rcs.promotion.name#') > -1) {
-        $title = str_replace('#rcs.promotion.name#', '@rcs.promotion.name', $title);
-        $title = new FormattableMarkup($title, ['@rcs.promotion.name' => $rcs_metatags['name']]);
-      }
-      return;
-    }
+    switch ($variables['base_plugin_id']) {
+      case 'page_title_block':
+        $title = &$variables['content']['#title'];
+        if ($page_type === 'category' && strpos($title['#markup'], '#rcs.category.name#') > -1) {
+          $title['#markup'] = str_replace('#rcs.category.name#', $rcs_metatags['name'], $title['#markup']);
+        }
+        elseif ($page_type === 'promotion' && strpos($title, '#rcs.promotion.name#') > -1) {
+          $title = str_replace('#rcs.promotion.name#', '@rcs.promotion.name', $title);
+          $title = new FormattableMarkup($title, ['@rcs.promotion.name' => $rcs_metatags['name']]);
+        }
+        break;
 
-    // Replacement for description.
-    if ($variables['plugin_id'] == 'rcs_term_description'
-      && strpos($variables['content']['#markup'], '#rcs.category.description#') > -1) {
-      // Setting max-age to get refresh after 20min with CF settings.
-      $variables['#cache']['max-age'] = 1200;
-      $variables['content']['#markup'] =
-        str_replace('#rcs.category.description#', (string) $rcs_metatags['description'], $variables['content']['#markup']);
-    }
+      case 'system_branding_block':
+        if ($page_type === 'category'
+          && strpos($variables['content']['site_name']['#markup'], '#rcs.category.meta_title#') > -1) {
+          // Setting max-age to get refresh after 20min with CF settings.
+          $variables['#cache']['max-age'] = 1200;
+          $variables['content']['site_name']['#markup'] = $variables['site_name'] = $rcs_metatags['name'];
+        }
+        break;
 
-    // Replacement for promo description.
-    if ($variables['plugin_id'] == 'alshaya_rcs_promotion_description'
-      && strpos($variables['content']['inside']['#children'], '#rcs.promotion.description#') > -1) {
-      // Setting max-age to get refresh after 20min with CF settings.
-      $variables['#cache']['max-age'] = 1200;
-      $variables['content']['inside']['#children'] =
-        str_replace('#rcs.promotion.description#', (string) $rcs_metatags['description'], $variables['content']['inside']['#children']);
+      case 'rcs_term_description':
+        if (strpos($variables['content']['#markup'], '#rcs.category.description#') > -1) {
+          // Setting max-age to get refresh after 20min with CF settings.
+          $variables['#cache']['max-age'] = 1200;
+          $variables['content']['#markup'] =
+            str_replace('#rcs.category.description#', (string) $rcs_metatags['description'], $variables['content']['#markup']);
+        }
+        break;
+
+      case 'alshaya_rcs_promotion_description':
+        // Replacement for promo description.
+        if (strpos($variables['content']['inside']['#children'], '#rcs.promotion.description#') > -1) {
+          // Setting max-age to get refresh after 20min with CF settings.
+          $variables['#cache']['max-age'] = 1200;
+          $variables['content']['inside']['#children'] =
+            str_replace('#rcs.promotion.description#', (string) $rcs_metatags['description'], $variables['content']['inside']['#children']);
+        }
+        break;
     }
   }
 
