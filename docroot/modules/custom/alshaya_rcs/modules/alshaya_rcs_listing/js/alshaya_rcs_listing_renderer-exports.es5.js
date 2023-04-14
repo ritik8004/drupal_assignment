@@ -58,7 +58,7 @@ const formatCleanRuleContext = function (context) {
   // Replace &amp; with underscore.
   context = context.replace(/\s*(?:&amp;)\s*/, '_');
   // Remove special characters.
-  context = context.replace("/[^a-zA-Z0-9\s]/", "");
+  context = context.replace(/[^a-zA-Z0-9\s]/, '');
   // Ensure duplicate spaces are replaced with single space.
   // H & M would have become H  M after preg_replace.
   context = context.replace('  ', ' ');
