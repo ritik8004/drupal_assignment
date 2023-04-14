@@ -27,4 +27,24 @@
       }
     }
   }
+
+  .individual--store {
+    .view-content {
+      padding-#{$right}: 1%;
+      padding-#{$left}: 0;
+    }
+  }
+}
+
+@include breakpoint($tablet) {
+  .path--store-finder {
+    .back-link {
+      a {
+        &::after {
+          #{$left}: rem(3);
+          padding-#{$left}: 0;
+        }
+      }
+    }
+  }
 }
