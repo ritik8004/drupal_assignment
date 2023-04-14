@@ -12,17 +12,6 @@ use Drupal\search_api\Entity\Index;
 /**
  * Implements hook_update_N().
  *
- * Add Article Swatches.
- */
-function alshaya_product_update_9401() {
-  /** @var \Drupal\alshaya_config\AlshayaConfigManager $alshayaConfigManager */
-  $alshayaConfigManager = \Drupal::service('alshaya_config.manager');
-  $alshayaConfigManager->updateConfigs(['search_api.index.product'], 'alshaya_product', 'install', AlshayaConfigManager::MODE_MERGE);
-}
-
-/**
- * Implements hook_update_N().
- *
  * Add new view mode 'matchback_mobile' for acq_product node bundle
  * and a new views display.
  */
