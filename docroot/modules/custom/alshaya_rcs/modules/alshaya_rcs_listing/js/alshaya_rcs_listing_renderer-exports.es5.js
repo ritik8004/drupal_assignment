@@ -24,6 +24,13 @@ exports.render = function render(
     hierarchy_list.push(entity.gtm_name);
     context_list.push(formatCleanRuleContext(entity.gtm_name));
     contexts.push(context_list.join('__'));
+
+    // Add prefix "web" to every context value.
+    const webContexts = contexts.map((context) => 'web__' + context);
+
+    // Combine contexts and web contexts.
+    contexts = webContexts.concat(contexts);
+
     // Combine all the items.
     hierarchy_list = hierarchy_list.join(' > ');
     // Add required data as data-attributes.
@@ -51,7 +58,7 @@ const formatCleanRuleContext = function (context) {
   // Replace &amp; with underscore.
   context = context.replace(/\s*(?:&amp;)\s*/, '_');
   // Remove special characters.
-  context = context.replace("/[^a-zA-Z0-9\s]/", "");
+  context = context.replace(/[^a-zA-Z0-9\s]/, '');
   // Ensure duplicate spaces are replaced with single space.
   // H & M would have become H  M after preg_replace.
   context = context.replace('  ', ' ');
