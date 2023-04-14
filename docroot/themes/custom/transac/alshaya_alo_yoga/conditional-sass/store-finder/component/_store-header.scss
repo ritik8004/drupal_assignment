@@ -137,10 +137,6 @@
         padding-bottom: 0;
         border-right: 0;
       }
-
-      @include breakpoint($tablet) {
-        width: auto;
-      }
     }
   }
 
