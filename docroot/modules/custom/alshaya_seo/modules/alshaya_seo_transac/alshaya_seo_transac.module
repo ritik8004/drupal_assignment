@@ -1006,7 +1006,7 @@ function alshaya_seo_transac_alshaya_mobile_app_skus_product_list_data_alter(arr
  * Load data push library.
  */
 function alshaya_seo_transac_page_attachments(array &$attachments) {
-  // We are not checking logs for V3.
+  // We have different datapush library for V3.
   if (\Drupal::moduleHandler()->moduleExists('alshaya_rcs_seo')) {
     return;
   }
@@ -1023,7 +1023,7 @@ function alshaya_seo_transac_library_info_alter(&$libraries, $extension) {
   if ($extension !== 'datalayer') {
     return;
   }
-  // We are not checking logs for V3.
+  // We have different datapush library for V3.
   elseif (\Drupal::moduleHandler()->moduleExists('alshaya_rcs_seo')) {
     return;
   }
