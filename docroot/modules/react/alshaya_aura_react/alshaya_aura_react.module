@@ -346,3 +346,32 @@ function alshaya_aura_react_alshaya_online_returns_order_details_build_alter(arr
   $orderDetails['#order_details']['paymentDetails']['aura'] = $aura_data;
 
 }
+
+/**
+ * Implements hook_library_info_alter().
+ */
+function alshaya_aura_react_library_info_alter(&$libraries, $extension) {
+  $route_match = \Drupal::routeMatch();
+  $route_name = $route_match->getRouteName();
+
+  if ($route_name === 'alshaya_spc.checkout.confirmation') {
+    if ($extension !== 'datalayer') {
+      return;
+    }
+
+    $new_source = '/' . drupal_get_path('module', 'alshaya_aura_react') . '/js/datapush.js';
+    $options = $libraries['datapush']['js']['js/datapush.js'];
+    unset($libraries['datapush']['js']['js/datapush.js']);
+    $libraries['datapush']['js'][$new_source] = $options;
+
+    $libraries['datapush']['dependencies'] = [
+      'core/jquery',
+      'core/drupal',
+      'core/drupalSettings',
+    ];
+
+    // Load it in the footer as the files which contain the event handlers will
+    // be loaded in the footer only.
+    unset($libraries['datapush']['header']);
+  }
+}
