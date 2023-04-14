@@ -226,7 +226,7 @@ window.commerceBackend = window.commerceBackend || {};
         items: [],
       };
       for (var freeGiftSku of skus) {
-        // Fetch free gift data from MDC.
+        // Fetch free gift sku data from MDC.
         var freeGiftItem = await window.commerceBackend.fetchValidFreeGift(freeGiftSku);
         // Prepare the data items.
         if (freeGiftItem) {
