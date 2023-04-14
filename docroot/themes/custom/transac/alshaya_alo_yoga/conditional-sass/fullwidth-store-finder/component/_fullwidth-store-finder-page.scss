@@ -35,16 +35,3 @@
     }
   }
 }
-
-@include breakpoint($tablet) {
-  .path--store-finder {
-    .back-link {
-      a {
-        &::after {
-          #{$left}: rem(3);
-          padding-#{$left}: 0;
-        }
-      }
-    }
-  }
-}

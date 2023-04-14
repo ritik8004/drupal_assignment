@@ -51,4 +51,15 @@
   .view-stores-finder {
     max-width: none;
   }
+
+  .back-link {
+    a {
+      &::after {
+        @include breakpoint($tablet) {
+          #{$left}: rem(3);
+          padding-#{$left}: 0;
+        }
+      }
+    }
+  }
 }
