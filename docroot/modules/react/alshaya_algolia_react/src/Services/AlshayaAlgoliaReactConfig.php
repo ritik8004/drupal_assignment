@@ -181,9 +181,6 @@ class AlshayaAlgoliaReactConfig implements AlshayaAlgoliaReactConfigInterface {
     // Get listing page frames settings.
     $product_frame_settings = $this->configFactory->get('alshaya_algolia_react.product_frames');
 
-    // Get Algolia color swatches settings.
-    $algolia_color_swatches_settings = $this->configFactory->get('alshaya_algolia_react.color_swatches');
-
     if ($default_image = $this->skuImagesManager->getProductDefaultImage()) {
       $default_image = $this->entityTypeManager
         ->getStorage('image_style')
