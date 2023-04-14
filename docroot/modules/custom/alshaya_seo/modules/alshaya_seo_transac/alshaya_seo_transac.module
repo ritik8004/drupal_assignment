@@ -1001,22 +1001,6 @@ function alshaya_seo_transac_alshaya_mobile_app_skus_product_list_data_alter(arr
 }
 
 /**
- * Implements hook_page_attachments().
- *
- * Load data push library.
- */
-function alshaya_seo_transac_page_attachments(array &$attachments) {
-  // We have different datapush library for V3.
-  if (\Drupal::moduleHandler()->moduleExists('alshaya_rcs_seo')) {
-    return;
-  }
-  if (empty($attachments['#attached'])) {
-    $attachments['#attached'] = [];
-  }
-  $attachments['#attached']['library'][] = 'alshaya_seo_transac/datapush';
-}
-
-/**
  * Implements hook_library_info_alter().
  */
 function alshaya_seo_transac_library_info_alter(&$libraries, $extension) {
@@ -1027,5 +1011,17 @@ function alshaya_seo_transac_library_info_alter(&$libraries, $extension) {
   elseif (\Drupal::moduleHandler()->moduleExists('alshaya_rcs_seo')) {
     return;
   }
-  unset($libraries['datapush']);
+
+  $new_source = '/' . drupal_get_path('module', 'alshaya_seo_transac') . '/js/datapush.js';
+  $options = $libraries['datapush']['js']['js/datapush.js'];
+  unset($libraries['datapush']['js']['js/datapush.js']);
+  $libraries['datapush']['js'][$new_source] = $options;
+
+  $libraries['datapush']['dependencies'] = [
+    'core/jquery',
+    'core/drupal',
+    'core/drupalSettings',
+    'alshaya_master/common_functions',
+  ];
+
 }
