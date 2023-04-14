@@ -8,6 +8,7 @@ use Drupal\alshaya_rcs_product\Services\AlshayaRcsProductHelper;
 use Drupal\alshaya_rcs_promotion\Services\AlshayaRcsPromotionHelper;
 use Drupal\Component\Render\FormattableMarkup;
 use Drupal\Core\Config\ConfigFactoryInterface;
+use Drupal\Core\Extension\ModuleHandlerInterface;
 use Drupal\rcs_placeholders\Service\RcsPhPathProcessor;
 use Symfony\Component\HttpFoundation\RequestStack;
 
@@ -70,7 +71,14 @@ class AlshayaRcsMetatagSsrHelper {
    *
    * @var array
    */
-  protected static $processedMetatagData = [];
+  private static $processedMetatagData = [];
+
+  /**
+   * Module Handler.
+   *
+   * @var \Drupal\Core\Extension\ModuleHandlerInterface
+   */
+  protected $moduleHandler;
 
   /**
    * Constructs RCS Metatag Helper service.
@@ -89,6 +97,8 @@ class AlshayaRcsMetatagSsrHelper {
    *   Config Factory service.
    * @param \Drupal\rcs_placeholders\Service\RcsPhPathProcessor $rcs_path_processor
    *   RCS path processor service.
+   * @param \Drupal\Core\Extension\ModuleHandlerInterface $module_handler
+   *   Module Handler.
    */
   public function __construct(
     AlshayaRcsProductHelper $rcs_product_helper,
@@ -97,7 +107,8 @@ class AlshayaRcsMetatagSsrHelper {
     AlshayGraphqlApiWrapper $graphql_api_wrapper,
     RequestStack $request_stack,
     ConfigFactoryInterface $config_factory,
-    RcsPhPathProcessor $rcs_path_processor
+    RcsPhPathProcessor $rcs_path_processor,
+    ModuleHandlerInterface $module_handler
   ) {
     $this->rcsProductHelper = $rcs_product_helper;
     $this->rcsListingHelper = $rcs_listing_helper;
@@ -106,15 +117,16 @@ class AlshayaRcsMetatagSsrHelper {
     $this->requestStack = $request_stack;
     $this->configFactory = $config_factory;
     $this->rcsPathProcessor = $rcs_path_processor;
+    $this->moduleHandler = $module_handler;
   }
 
   /**
-   * Get product metatags graphQL query in rcs.
+   * Get product metatags graphQL query in RCS.
    *
    * @return array
    *   GraphQL query params
    */
-  public function getProductMetatagFields(): array {
+  private function getProductMetatagFields(): array {
     $url_key = $this->rcsProductHelper->getProductUrlKey();
     return [
       'query' => [
@@ -157,12 +169,12 @@ class AlshayaRcsMetatagSsrHelper {
   }
 
   /**
-   * Get listing page metatags graphQL query in rcs.
+   * Get listing page metatags graphQL query in RCS.
    *
    * @return array
    *   GraphQL query params
    */
-  public function getListingMetatagFields(): array {
+  private function getListingMetatagFields(): array {
     $url_key = $this->rcsListingHelper->getListingUrlKey();
     return [
       'query' => [
@@ -190,12 +202,12 @@ class AlshayaRcsMetatagSsrHelper {
   }
 
   /**
-   * Get promotion metatags graphQL query in rcs.
+   * Get promotion metatags graphQL query in RCS.
    *
    * @return array
    *   GraphQL query params
    */
-  public function getPromotionMetatagFields(): array {
+  private function getPromotionMetatagFields(): array {
     $url_key = $this->rcsPromotiontHelper->getPromotionUrlKey();
     return [
       'query' => [
@@ -219,14 +231,17 @@ class AlshayaRcsMetatagSsrHelper {
    * @return array
    *   Response with meta details array.
    */
-  public function getProcessedMetatags(): array {
+  private function getProcessedMetatags(): array {
     return self::$processedMetatagData;
   }
 
   /**
    * Set processed metatags.
+   *
+   * @param array $data
+   *   Page type to look for in magento.
    */
-  public function setProcessedMetatags($data): void {
+  private function setProcessedMetatags(array $data): void {
     self::$processedMetatagData = $data;
   }
 
@@ -234,18 +249,23 @@ class AlshayaRcsMetatagSsrHelper {
    * Get Metatags for particular page type.
    *
    * @param string $page_type
-   *   Page type to look for in magento.
+   *   Page type to look for.
    *
    * @return mixed
    *   Response with meta details array.
    */
-  public function getRcsMetatagFromMagento(string $page_type): mixed {
+  private function getRcsMetatagFromMagento(string $page_type): mixed {
     $item_key = NULL;
     $fields = $response = [];
     // Get query fields based on page type.
     switch ($page_type) {
       case 'product':
         $fields = $this->getProductMetatagFields();
+        // Check if the assets are set for media.
+        if ($this->getProductAssetStatus()) {
+          $query = &$fields['query']['query($url: String)']['products(filter: { url_key: { eq: $url } })'];
+          $query['items']['... on ConfigurableProduct']['variants']['product'][] = 'assets_pdp';
+        }
         $item_key = 'products';
         break;
 
@@ -268,18 +288,26 @@ class AlshayaRcsMetatagSsrHelper {
   }
 
   /**
-   * Process metatags with page type.
+   * Do extra processing for metatags with page type.
    *
    * @param string $page_type
    *   Page type to look for in magento.
    * @param array $data
-   *   Page type to look for in magento.
+   *   Data to do extra processing from request.
    */
-  public function processMetaForPageType(string $page_type, array &$data): void {
+  private function processMetaForPageType(string $page_type, array &$data): void {
     // Get query fields based on page type.
     switch ($page_type) {
       case 'product':
-        if (!empty($data['variants']) && !empty($data['variants'][0]['product']['media_gallery'])) {
+        if ($this->getProductAssetStatus()
+          && !empty($data['variants'])
+          && !empty($data['variants'][0]['product']['assets_pdp'])) {
+          $assets_pdp = json_decode($data['variants'][0]['product']['assets_pdp'], TRUE);
+          if (!empty($assets_pdp)) {
+            $data['_self|first_image'] = $assets_pdp[0]['url'];
+          }
+        }
+        elseif (!empty($data['variants']) && !empty($data['variants'][0]['product']['media_gallery'])) {
           $data['_self|first_image'] = $data['variants'][0]['product']['media_gallery'][0]['url'];
         }
         $data['_self|name'] = $data['name'];
@@ -301,7 +329,7 @@ class AlshayaRcsMetatagSsrHelper {
    * @return string
    *   Return attribute type supported for SEO.
    */
-  public function getRcsSeoMetatagAttribute(array $attachment): string {
+  private function getRcsSeoMetatagAttribute(array $attachment): string {
     $attribute_type = '';
     if (array_key_exists('content', $attachment[0]['#attributes'])) {
       $attribute_type = 'content';
@@ -314,13 +342,22 @@ class AlshayaRcsMetatagSsrHelper {
   }
 
   /**
+   * Check if the asset mapping is enabled for product.
+   *
+   * @return bool
+   *   Return true if applicable otherwise false.
+   */
+  private function getProductAssetStatus(): bool {
+    return $this->moduleHandler->moduleExists('alshaya_rcs_assets');
+  }
+
+  /**
    * Process metatag attachments.
    *
    * @param array $attachments
    *   An array of metatag objects to be attached to the current page.
    */
   public function processMetatagAttachments(array &$attachments): void {
-
     // Check if the SSR is enabled for metatag.
     if (!$this->configFactory->get('alshaya_rcs_seo.settings')->get('enable_ssr_metatag')) {
       return;
@@ -346,7 +383,7 @@ class AlshayaRcsMetatagSsrHelper {
       return;
     }
 
-    // Replace the rcs placeholders in metatags with actual data.
+    // Replace the RCS placeholders in metatags with actual data.
     foreach ($attachments['#attached']['html_head'] as &$attachment) {
       $attribute_type = $this->getRcsSeoMetatagAttribute($attachment);
       if (empty($attribute_type)) {

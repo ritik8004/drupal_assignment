@@ -49,3 +49,4 @@ services:
       - '@request_stack'
       - '@config.factory'
       - '@rcs_placeholders.path_processor'
+      - '@module_handler'
