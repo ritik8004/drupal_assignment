@@ -6,6 +6,19 @@
  */
 
 /**
+ * Implements hook_update_dependencies().
+ */
+function alshaya_vs_update_dependencies() {
+  return [
+    'alshaya_vs' => [
+      '9401' => [
+        'alshaya_algolia_react' => '9408',
+      ],
+    ],
+  ];
+}
+
+/**
  * Update algolia react with default value for render_single_result_facets.
  *
  * And also for exclude_render_single_result_facets.
