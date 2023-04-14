@@ -97,6 +97,7 @@
 
         &.slick-disabled {
           opacity: 0;
+          pointer-events: none;
         }
 
         &.slick-prev {
@@ -105,6 +106,7 @@
           @include breakpoint($only-mobile) {
             // We are not showing the previous button on mobile viewport.
             opacity: 0;
+            pointer-events: none;
           }
         }
 
