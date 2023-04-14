@@ -40,3 +40,13 @@ header {
     }
   }
 }
+
+@include breakpoint($desktop) {
+  #block-cartminiblock,
+  .block-alshaya-react-mini-cart,
+  .static-minicart-wrapper {
+    .quantity {
+      #{$left}: rem(-4);
+    }
+  }
+}

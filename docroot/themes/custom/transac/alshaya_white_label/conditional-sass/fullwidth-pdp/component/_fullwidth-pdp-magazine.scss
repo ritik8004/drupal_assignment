@@ -81,8 +81,8 @@ body.magazine-layout-v2 {
       }
 
       @include breakpoint($desktop-HiDPI) {
-        #{$left}: calc((100% - #{rem(1488)}) / 2);
-        max-width: calc(#{rem(1488)} * 0.72); // PDP sidebar width is 72%.
+        #{$left}: calc((100% - var(--dynamic-container-width)) / 2);
+        max-width: calc(var(--dynamic-container-width) * 0.72); // PDP sidebar width is 72%.
       }
     }
   }
@@ -104,8 +104,8 @@ body.magazine-layout-v2 {
       }
 
       @include breakpoint($desktop-HiDPI) {
-        #{$right}: calc((100% - #{rem(1488)}) / 2);
-        max-width: calc(#{rem(1488)} * 0.28); // PDP sidebar width is 28%.
+        #{$right}: calc((100% - var(--dynamic-container-width)) / 2);
+        max-width: calc(var(--dynamic-container-width) * 0.28); // PDP sidebar width is 28%.
       }
     }
   }
