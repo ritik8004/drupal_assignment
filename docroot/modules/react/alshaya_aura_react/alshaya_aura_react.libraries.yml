@@ -59,4 +59,3 @@ aura_order_confirmation:
     js/alshaya_aura_react.order_confirmation.js: {}
   dependencies:
     - core/drupal
-    - core/drupalSettings
