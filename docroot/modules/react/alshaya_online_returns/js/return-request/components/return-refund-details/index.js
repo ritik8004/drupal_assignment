@@ -140,7 +140,9 @@ class ReturnRefundDetails extends React.Component {
     }
 
     // Checking whether eGift card is selected or not in the refund form options.
-    const isEgiftSelected = document.querySelector('#egift').checked;
+    const isEgiftSelected = document.querySelector('#egift')
+      ? document.querySelector('#egift').checked
+      : false;
     // Adding the refund form selection value to local storage to get the same
     // in return conformation page. True will be stored if eGift card is selected
     // in the refund form options else false will get stored.
