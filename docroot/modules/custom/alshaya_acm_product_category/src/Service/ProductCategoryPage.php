@@ -213,6 +213,14 @@ class ProductCategoryPage {
       $cache_tags = Cache::mergeTags($cache_tags, $term->getCacheTags());
     }
 
+    // Add prefix "web" to every context value.
+    $web_contexts = [];
+    foreach ($contexts as $context_item) {
+      $web_contexts[] = "web__$context_item";
+    }
+    // Combine contexts and web contexts.
+    $contexts = array_merge($web_contexts, $contexts);
+
     $data = [
       'hierarchy' => implode(' > ', $hierarchy_list),
       'level' => count($contexts),
