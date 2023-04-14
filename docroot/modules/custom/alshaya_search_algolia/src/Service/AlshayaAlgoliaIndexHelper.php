@@ -455,6 +455,11 @@ class AlshayaAlgoliaIndexHelper {
     if ($attr_barcode) {
       $object['attr_aims_barcode'] = $attr_barcode;
     }
+    // Index the color swatches data.
+    $attr_article_swatches = $sku->get('attr_article_swatches')->getString();
+    if ($attr_article_swatches) {
+      $object['attr_article_swatches'] = json_decode($attr_article_swatches, TRUE);
+    }
 
     $object['url'] = $this->skuInfoHelper->getEntityUrl($node, FALSE);
     // Convert to array to always send key to index event with empty array.
