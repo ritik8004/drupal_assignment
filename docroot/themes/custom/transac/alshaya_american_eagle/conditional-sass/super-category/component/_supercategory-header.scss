@@ -12,4 +12,16 @@
   &.super-category-aerie {
     @include logo_height(28, 28);
   }
+
+  @include breakpoint($upto-desktop) {
+    & {
+      html[lang="ar"] & {
+        margin-top: rem(15);
+      }
+    }
+
+    .site-brand-wrapper {
+      padding-bottom: rem(8);
+    }
+  }
 }
