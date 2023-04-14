@@ -943,6 +943,7 @@ fullwidth-newpdp:
   js:
     js/newpdp_sticky_container.js: {}
   dependencies:
+    - core/jquery
     - core/drupal
 
 fullwidth-spc:
