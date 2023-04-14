@@ -30,28 +30,10 @@
     document.addEventListener('product-add-to-cart-success', function (e) {
       initialiseShoeSizeShoppingCart(e, 'addToCartPlp');
     });
-
-    // Order confirmation script.
     var confirmationPage = document.querySelectorAll('#spc-checkout-confirmation');
     if (confirmationPage.length > 0 && drupalSettings.order_details) {
-      var orderNumber = drupalSettings.order_details.order_number
-        ? drupalSettings.order_details.order_number
-        : null;
-      if (orderNumber) {
-        // Variable required for shoeai ext. js.
-        window.ShoeSizeShoppingCartConfirmation = {};
-        window.ShoeSizeShoppingCartConfirmation = {
-          shopID: shoeAi.shopId,
-          orderID: orderNumber
-        };
-        var conirmationScript = document.createElement('script');
-        conirmationScript.type = 'text/javascript';
-        conirmationScript.src = 'https://shoesize.me/plugin/confirm.js?'+
-          'shopid='+encodeURIComponent(shoeAi.shopId)+'&id='+orderNumber+
-          '&sid='+Math.round(new Date().getTime()/1000);
-        (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(conirmationScript);
-      }
-    };
+      addShoeSizeConfirmationScript();
+    }
   }
 })(drupalSettings);
 
@@ -162,3 +144,33 @@ function setShoeSizeShoppingCart(totals, items, updated_sku, updated_qty) {
     }
   }
 };
+
+/*
+ * Helper function for populating
+ * ShoeSizeShoppingCartConfirmation variable on confirmation page
+ * and call shoeai ext. script for order confirmation.
+ * Gets response true if order is unique if confirmation URL is reloaded than gets false.
+ */
+function addShoeSizeConfirmationScript() {
+  var shoeAi = drupalSettings.shoeai;
+  // Order confirmation script.
+  var orderNumber = drupalSettings.order_details.order_number
+    ? drupalSettings.order_details.order_number
+    : 'null';
+  var ssm_id = Math.round(new Date().getTime()/1000);
+  if (orderNumber) {
+    // Variable required for shoeai ext. js call returns false.
+    window.ShoeSizeShoppingCartConfirmation = {};
+    window.ShoeSizeShoppingCartConfirmation = {
+      shopID: shoeAi.shopId,
+      orderID: orderNumber,
+      ssm_sid: ssm_id
+    };
+    var conirmationScript = document.createElement('script');
+    conirmationScript.type = 'text/javascript';
+    conirmationScript.src = 'https://shoesize.me/plugin/confirm.js?'+
+      'shopid='+encodeURIComponent(shoeAi.shopId)+'&id='+orderNumber+
+      '&sid='+ssm_id;
+    (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(conirmationScript);
+  };
+}
