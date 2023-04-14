@@ -90,6 +90,18 @@ function alshaya_aura_react_page_attachments_alter(array &$page) {
 
   // Attach the library for Aura backend based on the commerce backend version.
   $page['#attached']['library'][] = 'alshaya_aura_react/aura_backend';
+
+  $route_match = \Drupal::routeMatch();
+  $route_name = $route_match->getRouteName();
+
+  if ($route_name === 'alshaya_spc.checkout.confirmation') {
+    // This adds the library to the top of the array and above the
+    // datalayer/datapush library.
+    // If we put the weight=-1 for this, then the library dependencies are
+    // loaded later, thus causing issues.
+    // Hence we follow this approach.
+    array_unshift($page['#attached']['library'], 'alshaya_aura_react/aura_order_confirmation');
+  }
 }
 
 /**
@@ -345,33 +357,4 @@ function alshaya_aura_react_alshaya_online_returns_order_details_build_alter(arr
   ];
   $orderDetails['#order_details']['paymentDetails']['aura'] = $aura_data;
 
-}
-
-/**
- * Implements hook_library_info_alter().
- */
-function alshaya_aura_react_library_info_alter(&$libraries, $extension) {
-  $route_match = \Drupal::routeMatch();
-  $route_name = $route_match->getRouteName();
-
-  if ($route_name === 'alshaya_spc.checkout.confirmation') {
-    if ($extension !== 'datalayer') {
-      return;
-    }
-
-    $new_source = '/' . drupal_get_path('module', 'alshaya_aura_react') . '/js/datapush.js';
-    $options = $libraries['datapush']['js']['js/datapush.js'];
-    unset($libraries['datapush']['js']['js/datapush.js']);
-    $libraries['datapush']['js'][$new_source] = $options;
-
-    $libraries['datapush']['dependencies'] = [
-      'core/jquery',
-      'core/drupal',
-      'core/drupalSettings',
-    ];
-
-    // Load it in the footer as the files which contain the event handlers will
-    // be loaded in the footer only.
-    unset($libraries['datapush']['header']);
-  }
 }
