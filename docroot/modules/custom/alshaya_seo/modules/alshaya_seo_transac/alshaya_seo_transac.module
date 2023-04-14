@@ -1008,7 +1008,8 @@ function alshaya_seo_transac_library_info_alter(&$libraries, $extension) {
     return;
   }
   // We have different datapush library for V3.
-  elseif (\Drupal::moduleHandler()->moduleExists('alshaya_rcs_seo')) {
+  // @todo check for a way to not use rcs here.
+  if (\Drupal::moduleHandler()->moduleExists('alshaya_rcs_seo')) {
     return;
   }
 
@@ -1016,12 +1017,6 @@ function alshaya_seo_transac_library_info_alter(&$libraries, $extension) {
   $options = $libraries['datapush']['js']['js/datapush.js'];
   unset($libraries['datapush']['js']['js/datapush.js']);
   $libraries['datapush']['js'][$new_source] = $options;
-
-  $libraries['datapush']['dependencies'] = [
-    'core/jquery',
-    'core/drupal',
-    'core/drupalSettings',
-    'alshaya_master/common_functions',
-  ];
-
+  $libraries['datapush']['dependencies'][] = 'alshaya_master/common_functions';
+  $libraries['datapush']['version'] = '1.0.0';
 }
