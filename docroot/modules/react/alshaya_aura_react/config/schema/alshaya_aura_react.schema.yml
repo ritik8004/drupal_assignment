@@ -26,6 +26,9 @@ alshaya_aura_react.settings:
       sequence:
         type: string
         label: 'Unsupported Payment Method'
+    aura_username_character_limit:
+      type: integer
+      label: 'AURA user name character limit'
 
 alshaya_aura_react.loyalty_benefits:
   type: config_object

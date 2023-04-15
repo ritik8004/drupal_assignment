@@ -3,7 +3,7 @@ import { hasValue } from '../../../../../js/utilities/conditionsUtility';
 import CardTypeSVG from '../../../../../alshaya_spc/js/svg-component/card-type-svg';
 
 const EgiftCardDetails = ({
-  cardList, selectedOption, egiftCardType, paymentDetails, setSelectedOption,
+  cardList, selectedOption, egiftCardType, paymentDetails, isHybridPayment, setSelectedOption,
 }) => {
   let selected = cardList ? cardList.card_number : 'newegift';
   // Assigning the variable with the current selected element value.
@@ -47,10 +47,11 @@ const EgiftCardDetails = ({
     <>
       <div className="method-wrapper egift-card" key={selected} onClick={() => onOptionChange('egift')}>
         <div className="method-wrapper" key={selected}>
-          {isReturnConfPage === -1 && radioButton
+          {isReturnConfPage === -1 && radioButton && !isHybridPayment
             ? (
               <input
                 type="radio"
+                id="egift"
                 value={egiftRefundName}
                 name={egiftRefundName}
                 checked={selected === egiftRefundName}
@@ -73,7 +74,7 @@ const EgiftCardDetails = ({
       {egiftCardType && (isReturnConfPage === -1)
         ? (
           <>
-            <div className="refund-method-listing">
+            <div className="refund-method-listing email-text">
               {Drupal.t('Details of your eGift Card will be sent to your email address "@email"', { '@email': drupalSettings.userDetails.userEmailID }, { context: 'online_returns' })}
             </div>
             <div className="refund-message">
