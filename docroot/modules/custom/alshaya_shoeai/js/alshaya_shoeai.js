@@ -158,7 +158,6 @@ function setShoeSizeShoppingCart(totals, items, updated_sku, updated_qty) {
  */
 function addShoeSizeConfirmationScript() {
   var shoeAi = drupalSettings.shoeai;
-  // Order confirmation script.
   var orderNumber = drupalSettings.order_details.order_number
     ? drupalSettings.order_details.order_number
     : 'null';
@@ -171,6 +170,7 @@ function addShoeSizeConfirmationScript() {
       orderID: orderNumber,
       ssm_sid: ssm_id
     };
+    // Order confirmation script.
     var conirmationScript = document.createElement('script');
     conirmationScript.type = 'text/javascript';
     conirmationScript.src = 'https://shoesize.me/plugin/confirm.js?'+
