@@ -352,6 +352,16 @@ class AlshayaRcsMetatagSsrHelper {
   }
 
   /**
+   * Check if the SSR is enabled for metatags.
+   *
+   * @return bool
+   *   Return true if applicable otherwise false.
+   */
+  public function getMetatagSsrStatus(): bool {
+    return (bool) $this->configFactory->get('alshaya_rcs_seo.settings')->get('enable_ssr_metatag');
+  }
+
+  /**
    * Process metatag attachments.
    *
    * @param array $attachments
@@ -359,7 +369,7 @@ class AlshayaRcsMetatagSsrHelper {
    */
   public function processMetatagAttachments(array &$attachments): void {
     // Check if the SSR is enabled for metatag.
-    if (!$this->configFactory->get('alshaya_rcs_seo.settings')->get('enable_ssr_metatag')) {
+    if (!$this->getMetatagSsrStatus()) {
       return;
     }
 
@@ -409,6 +419,10 @@ class AlshayaRcsMetatagSsrHelper {
    *   An array of variable attached to the current page.
    */
   public function preProcessMetatagForPage(array &$variables): void {
+    // Check if the SSR is enabled for metatag.
+    if (!$this->getMetatagSsrStatus()) {
+      return;
+    }
     // Get page type from request i.e. product, category or promotion.
     $page_type = $this->rcsPathProcessor->getRcsPageType();
     if ($page_type === 'category') {
@@ -432,6 +446,10 @@ class AlshayaRcsMetatagSsrHelper {
    *   An array of variable attached to the current page.
    */
   public function preProcessMetatagForBlock(array &$variables): void {
+    // Check if the SSR is enabled for metatag.
+    if (!$this->getMetatagSsrStatus()) {
+      return;
+    }
     // Check for only category and promo pages.
     $page_type = $this->rcsPathProcessor->getRcsPageType();
     if (!in_array($page_type, ['category', 'promotion'])) {
