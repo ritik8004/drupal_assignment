@@ -324,6 +324,12 @@ class AlshayaFeedSkuInfoHelper {
             'final_price' => $this->skuInfoHelper->formatPriceDisplay((float) $prices['final_price']),
             'url' => $this->skuInfoHelper->getEntityUrl($node) . '?selected=' . $child->id(),
           ];
+          // Addition of brand info for child products as well.
+          if ($child->hasField('attr_product_brand') && $child->get('attr_product_brand')->getString() != NULL) {
+            $extra_row['key'] = 'brand';
+            $extra_row['value'] = $child->get('attr_product_brand')->getString();
+            $variant['attributes'][] = $extra_row;
+          }
           // Allow other modules to add/alter variant info.
           $this->moduleHandler->alter('alshaya_feed_variant_info', $variant, $child);
 
