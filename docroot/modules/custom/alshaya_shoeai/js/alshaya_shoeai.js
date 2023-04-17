@@ -161,14 +161,14 @@ function addShoeSizePurchaseConfirmationScript() {
   var orderNumber = drupalSettings.order_details.order_number
     ? drupalSettings.order_details.order_number
     : 'null';
-  var ssm_id = Math.round(new Date().getTime()/1000);
+  var sid = Math.round(new Date().getTime()/1000);
   if (orderNumber) {
     // Variable required for shoeai ext. js call returns false.
     window.ShoeSizeShoppingCartConfirmation = {};
     window.ShoeSizeShoppingCartConfirmation = {
       shopID: shoeAi.shopId,
       orderID: orderNumber,
-      ssm_sid: ssm_id
+      ssm_sid: sid
     };
     // Order confirmation script.
     var conirmationScript = document.createElement('script');
