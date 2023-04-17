@@ -271,7 +271,7 @@ class AlshayaFeedSkuInfoHelper {
         $linked_skus = $this->skuInfoHelper->getLinkedSkus($sku, $linked_type);
         $parentProduct['linked_skus'][$linked_type] = array_keys($linked_skus);
       }
-      if ($sku->hasField('attr_product_brand') && $sku->get('attr_product_brand')->getString() != NULL) {
+      if ($sku->hasField('attr_product_brand') && $sku->get('attr_product_brand')->getString() !== NULL) {
         $extra_row['key'] = 'brand';
         $extra_row['value'] = $sku->get('attr_product_brand')->getString();
         $parentProduct['attributes'][] = $extra_row;
@@ -325,7 +325,7 @@ class AlshayaFeedSkuInfoHelper {
             'url' => $this->skuInfoHelper->getEntityUrl($node) . '?selected=' . $child->id(),
           ];
           // Addition of brand info for child products as well.
-          if ($child->hasField('attr_product_brand') && $child->get('attr_product_brand')->getString() != NULL) {
+          if ($child->hasField('attr_product_brand') && $child->get('attr_product_brand')->getString() !== NULL) {
             $extra_row['key'] = 'brand';
             $extra_row['value'] = $child->get('attr_product_brand')->getString();
             $variant['attributes'][] = $extra_row;
