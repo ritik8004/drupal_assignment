@@ -2,7 +2,6 @@
 
 namespace Drupal\alshaya_rcs_seo\Services;
 
-use Drupal\alshaya_api\AlshayGraphqlApiWrapper;
 use Drupal\alshaya_rcs_listing\Services\AlshayaRcsListingHelper;
 use Drupal\alshaya_rcs_product\Services\AlshayaRcsProductHelper;
 use Drupal\alshaya_rcs_promotion\Services\AlshayaRcsPromotionHelper;
@@ -41,7 +40,7 @@ class AlshayaRcsMetatagSsrHelper {
   /**
    * Alshaya GraphQL API Wrapper.
    *
-   * @var \Drupal\alshaya_api\AlshayGraphqlApiWrapper
+   * @var \Drupal\alshaya_rcs_seo\Services\AlshayGraphqlApiWrapper
    */
   protected $graphqlApiWrapper;
 
@@ -89,7 +88,7 @@ class AlshayaRcsMetatagSsrHelper {
    *   RCS Listing Helper.
    * @param \Drupal\alshaya_rcs_promotion\Services\AlshayaRcsPromotionHelper $rcs_promotion_helper
    *   RCS Promotion Helper.
-   * @param \Drupal\alshaya_api\AlshayGraphqlApiWrapper $graphql_api_wrapper
+   * @param \Drupal\alshaya_rcs_seo\Services\AlshayGraphqlApiWrapper $graphql_api_wrapper
    *   Alshaya GraphQL api wrapper.
    * @param \Symfony\Component\HttpFoundation\RequestStack $request_stack
    *   Request stack service.

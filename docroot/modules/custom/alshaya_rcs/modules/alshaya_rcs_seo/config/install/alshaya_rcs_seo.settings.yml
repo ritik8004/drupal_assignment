@@ -1,2 +1,2 @@
 sitemap_domain_to_use: drupal
-enable_ssr_metatag: true
+enable_ssr_metatag: false
