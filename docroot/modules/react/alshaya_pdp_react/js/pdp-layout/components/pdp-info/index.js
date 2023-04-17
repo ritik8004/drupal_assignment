@@ -77,6 +77,7 @@ const PdpInfo = ({
       </div>
       {postpay}
       <ConditionalView condition={context === 'main'
+        && Tabby.showTabbyWidget()
         && Tabby.isTabbyEnabled()}
       >
         <TabbyWidget
