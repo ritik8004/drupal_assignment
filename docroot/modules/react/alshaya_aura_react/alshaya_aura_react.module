@@ -95,12 +95,7 @@ function alshaya_aura_react_page_attachments_alter(array &$page) {
   $route_name = $route_match->getRouteName();
 
   if ($route_name === 'alshaya_spc.checkout.confirmation') {
-    // This adds the library to the top of the array and above the
-    // datalayer/datapush library.
-    // If we put the weight=-1 for this, then the library dependencies are
-    // loaded later, thus causing issues.
-    // Hence we follow this approach.
-    array_unshift($page['#attached']['library'], 'alshaya_aura_react/aura_order_confirmation');
+    $page['#attached']['library'][] = 'alshaya_aura_react/aura_order_confirmation';
   }
 }
 
