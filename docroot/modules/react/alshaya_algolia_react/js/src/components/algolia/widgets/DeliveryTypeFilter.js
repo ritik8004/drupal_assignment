@@ -4,7 +4,7 @@ import { hasValue } from '../../../../../../js/utilities/conditionsUtility';
 import { checkExpressDeliveryStatus, checkSameDayDeliveryStatus } from '../../../../../../js/utilities/expressDeliveryHelper';
 
 const DeliveryTypeFilter = ({
-  items, itemCount, refine, searchForItems, isFromSearch, ...props
+  items, itemCount, refine, searchForItems, isFromSearch, attribute, ...props
 }) => {
   // Set default state for express delivery state to show hide the facets.
   const [expressDeliveryFlag, setExpressDeliveryFlag] = useState(window.sddEdStatus);
@@ -59,6 +59,20 @@ const DeliveryTypeFilter = ({
   const { facetValues } = props;
   if (!hasValue(deliveryItems)) {
     return <ul />;
+  }
+  // Do not show facets that have a single value if the render_single_result_facets is false.
+  if (!drupalSettings.algoliaSearch.render_single_result_facets) {
+    const exclude = drupalSettings.algoliaSearch.exclude_render_single_result_facets ? drupalSettings.algoliaSearch.exclude_render_single_result_facets.trim().split(',') : '';
+    const show = checkSameDayDeliveryStatus() && checkExpressDeliveryStatus() ? 1 : 0;
+    if (exclude.length > 0) {
+      // If delivery attribute is part of the excluded list then always show.
+      if ((!exclude.includes(attribute) && !show)) {
+        return null;
+      }
+    } else if (!show) {
+      // Hide Delivery filter if 1 type of delivery is enabled and attr not part of exclude list.
+      return null;
+    }
   }
 
   return (
