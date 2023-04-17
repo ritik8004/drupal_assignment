@@ -15,13 +15,7 @@ use Drupal\Core\Entity\EntityInterface;
 function alshaya_shoeai_node_view(array &$build, EntityInterface $entity, EntityViewDisplayInterface $display, $view_mode) {
   $bundle = ['acq_product', 'rcs_product'];
   if (in_array($entity->bundle(), $bundle) && $view_mode == 'full') {
-    $alshaya_shoeai_settings = \Drupal::config('alshaya_shoeai.settings');
-    $build['#cache']['tags'] = Cache::mergeTags($build['#cache']['tags'] ?? [], $alshaya_shoeai_settings->getCacheTags());
-    $shoeai_settings = \Drupal::service('alshaya_shoeai.helper')->getShoeAiSettings();
-    if (!empty($shoeai_settings)) {
-      $build['#attached']['library'][] = 'alshaya_shoeai/shoeai_js';
-      $build['#attached']['drupalSettings']['shoeai'] = $shoeai_settings;
-    }
+    add_shoe_ai_settings($build);
   }
 }
 
@@ -31,13 +25,7 @@ function alshaya_shoeai_node_view(array &$build, EntityInterface $entity, Entity
 function alshaya_shoeai_taxonomy_term_view(array &$build, EntityInterface $entity, EntityViewDisplayInterface $display, $view_mode) {
   $vocabularies = ['rcs_category', 'acq_product_category'];
   if (in_array($entity->bundle(), $vocabularies) && $view_mode == 'full') {
-    $alshaya_shoeai_settings = \Drupal::config('alshaya_shoeai.settings');
-    $build['#cache']['tags'] = Cache::mergeTags($build['#cache']['tags'] ?? [], $alshaya_shoeai_settings->getCacheTags());
-    $shoeai_settings = \Drupal::service('alshaya_shoeai.helper')->getShoeAiSettings();
-    if (!empty($shoeai_settings)) {
-      $build['#attached']['library'][] = 'alshaya_shoeai/shoeai_js';
-      $build['#attached']['drupalSettings']['shoeai'] = $shoeai_settings;
-    }
+    add_shoe_ai_settings($build);
   }
 }
 
@@ -45,7 +33,25 @@ function alshaya_shoeai_taxonomy_term_view(array &$build, EntityInterface $entit
  * Implements hook_alshaya_spc_cart_build_alter().
  */
 function alshaya_shoeai_alshaya_spc_cart_build_alter(array &$build) {
-  // Add script for shoeai in add to cart page.
+  add_shoe_ai_settings($build);
+}
+
+/**
+ * Implements hook_page_attachments_alter().
+ */
+function alshaya_shoeai_page_attachments_alter(array &$page) {
+  $current_route_name = \Drupal::routeMatch()->getRouteName();
+  if ($current_route_name === 'alshaya_spc.checkout.confirmation') {
+    // Add script for shoeai in add to cart page.
+    add_shoe_ai_settings($page);
+  }
+}
+
+/**
+ * Helper function for adding shoeai settings and cache to the page.
+ */
+function add_shoe_ai_settings(&$build) {
+  // Add script for shoeai in order confirmation page.
   $shoeai_config = \Drupal::config('alshaya_shoeai.settings');
   $build['#cache']['tags'] = Cache::mergeTags($build['#cache']['tags'] ?? [], $shoeai_config->getCacheTags());
   $shoeai_settings = \Drupal::service('alshaya_shoeai.helper')->getShoeAiSettings();
