@@ -93,7 +93,7 @@ const ArticleSwatches = ({
     <div className="article-swatch-wrapper">
       { showColorSwatchSlider
         ? (
-          <Slider {...sliderSettings} className={`swatches swatch-slider ${swatchTypeClass}`}>
+          <Slider {...sliderSettings} className={`swatches swatch-slider ${swatchTypeClass} swatch-limit-${Math.floor(sliderSettings.slidesToShow)}`}>
             { renderArticleSwatches }
           </Slider>
         )

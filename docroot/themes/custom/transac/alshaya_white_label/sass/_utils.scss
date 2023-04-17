@@ -854,3 +854,24 @@ $full_width_padding_desktop_wide: rem(40); /* viewport width >= 1680px */
     }
   }
 }
+
+// Assigning max-width according to the number of swatches shown in the slider.
+// This is to not stretch slider and retain correct spacing between the items.
+@mixin swatchSliderMaxWidth(
+  $lower_limit: 2,
+  $upper_limit: 6,
+  $swatch_width: rem(37),
+) {
+  @for $i from $lower_limit through $upper_limit {
+    $max-width: calc(#{$swatch_width} * (#{$i} + 1));
+    $max-width-mobile: calc(#{$swatch_width} * (#{$i} + 1.5));
+
+    &.swatch-limit-#{$i} {
+      max-width: $max-width;
+
+      @include breakpoint($only-mobile) {
+        max-width: $max-width-mobile;
+      }
+    }
+  }
+}

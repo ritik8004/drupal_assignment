@@ -33,6 +33,8 @@ $marine-blue: #003773;
 $grey-shade: #c1c1c1;
 $grey-light: #777;
 $grey-light-two: #f3f3f3;
+$grey-2: #e4e4e4;
+$grey-3: #707070;
 $error-red: #c00;
 $torea-bay: #0b4bb9;
 // Mothercare
@@ -2445,6 +2447,6 @@ $online-return-radio-bg: $black;
 $online-return-checked-radio-bg: $medium-green;
 
 // Swatches
-$swatch-border: #e4e4e4;
-$swatch-border-active: #707070;
+$swatch-border: $grey-2;
+$swatch-border-active: $grey-3;
 $swatch-button-bg: $white-three;

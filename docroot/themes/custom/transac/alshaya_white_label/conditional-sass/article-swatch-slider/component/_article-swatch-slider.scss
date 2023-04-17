@@ -57,7 +57,7 @@
 
     // Article Swatch slider related styles.
     &.swatch-slider {
-      max-width: rem(260);
+      @include swatchSliderMaxWidth;
 
       html[lang="ar"] & {
         transform: scaleX(-1);
