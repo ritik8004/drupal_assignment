@@ -104,13 +104,6 @@ class AlshayaSpcController extends ControllerBase {
   protected $checkoutComApiHelper;
 
   /**
-   * Delivery Options helper.
-   *
-   * @var \Drupal\alshaya_acm_product\DeliveryOptionsHelper
-   */
-  protected $deliveryOptionsHelper;
-
-  /**
    * Date time formatter interface.
    *
    * @var \Drupal\Core\Datetime\DateFormatterInterface
@@ -844,6 +837,27 @@ class AlshayaSpcController extends ControllerBase {
       $base_currency_code = $order['base_currency_code'] ?? '';
       if (!empty($data_apikey)) {
         $this->moduleHandler->alter('checkout_pixel_build', $build, $data_apikey, $base_currency_code);
+      }
+    }
+
+    if ($this->moduleHandler->moduleExists('alshaya_shoeai')) {
+      $shoeai_config = $this->configFactory->get('alshaya_shoeai.settings');
+      $shoeAiSettings = [];
+      if ($shoeai_config->get('enable_shoeai')) {
+        $build['#cache']['tags'] = Cache::mergeTags($build['#cache']['tags'] ?? [], $shoeai_config->getCacheTags());
+        $shoeAiSettings['status'] = $shoeai_config->get('enable_shoeai');
+        $shoeAiSettings['shopId'] = $shoeai_config->get('shop_id') ?: '';
+        $shoeAiSettings['scale'] = 'eu';
+        $shoeAiSettings['zeroHash'] = '';
+        if ($this->currentUser->isAuthenticated() &&
+          !empty($this->currentUser->getEmail())) {
+          $shoeAiSettings['zeroHash'] = md5($this->currentUser->getEmail());
+        }
+      }
+      $build['#cache']['tags'] = Cache::mergeTags($build['#cache']['tags'] ?? [], $shoeai_config->getCacheTags());
+      if (!empty($shoeAiSettings)) {
+        $build['#attached']['library'][] = 'alshaya_shoeai/shoeai_js';
+        $build['#attached']['drupalSettings']['shoeai'] = $shoeAiSettings;
       }
     }
 
