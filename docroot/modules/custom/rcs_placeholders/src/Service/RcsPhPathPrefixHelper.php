@@ -19,7 +19,7 @@ class RcsPhPathPrefixHelper {
   /**
    * Constructs a new RcsPhPathPrefixHelper instance.
    *
-   * @param \Drupal\Core\Entity\ConfigFactoryInterface $config_factory
+   * @param \Drupal\Core\Config\ConfigFactoryInterface $config_factory
    *   Config Factory service.
    */
   public function __construct(ConfigFactoryInterface $config_factory) {
