@@ -28,9 +28,7 @@
     );
 
     .c-content__region {
-      @include breakpoint($tablet) {
         @include sideSpaces(0);
-      }
     }
 
     .views-exposed-form {
