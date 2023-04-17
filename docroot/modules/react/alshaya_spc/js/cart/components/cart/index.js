@@ -11,7 +11,7 @@ import CartPromoBlock from '../cart-promo-block';
 import EmptyResult from '../../../utilities/empty-result';
 import Loading from '../../../utilities/loading';
 import VatFooterText from '../../../utilities/vat-footer';
-import { stickyMobileCartPreview, stickySidebar } from '../../../utilities/stickyElements/stickyElements';
+import { stickyMobileCartPreview } from '../../../utilities/stickyElements/stickyElements';
 import { checkCartCustomer } from '../../../utilities/cart_customer_util';
 import { smoothScrollTo } from '../../../utilities/smoothScroll';
 import { fetchCartData } from '../../../utilities/api/requests';
@@ -116,9 +116,6 @@ export default class Cart extends React.Component {
             wait: false,
           });
         }
-
-        // Make side bar sticky.
-        stickySidebar();
 
         // We will not trigger window.dynamicPromotion.apply on cart page
         // if exclusive coupon is applied.
