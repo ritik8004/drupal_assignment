@@ -1,8 +1,9 @@
 <?php
 
-namespace Drupal\alshaya_api;
+namespace Drupal\alshaya_rcs_seo\Services;
 
 use Drupal\Core\Language\LanguageManagerInterface;
+use Drupal\rcs_placeholders\Graphql\ArrayGraphQL;
 use GuzzleHttp\TransferStats;
 use GuzzleHttp\Client;
 use Drupal\Core\Logger\LoggerChannelFactoryInterface;
@@ -23,7 +24,7 @@ class AlshayGraphqlApiWrapper {
   /**
    * GuzzleHttp\Client definition.
    *
-   * @var GuzzleHttp\Client
+   * @var \GuzzleHttp\Client
    */
   protected $httpClient;
 
@@ -57,7 +58,7 @@ class AlshayGraphqlApiWrapper {
                               Client $http_client,
                               ConfigFactoryInterface $config_factory,
                               LanguageManagerInterface $language_manager) {
-    $this->logger = $logger_factory->get('alshaya_api');
+    $this->logger = $logger_factory->get('alshaya_rcs_seo');
     $this->httpClient = $http_client;
     $this->configFactory = $config_factory;
     $this->languageManager = $language_manager;
@@ -107,7 +108,7 @@ class AlshayGraphqlApiWrapper {
     ];
 
     // Convert array to graphql.
-    $request_options['query']['query'] = $this->processGraphqlQuery($fields['query']);
+    $request_options['query']['query'] = $this->processGraphqlQuery($fields);
     if (!empty($fields['variables'])) {
       $request_options['query']['variables'] = json_encode($fields['variables']);
     }
@@ -161,30 +162,9 @@ class AlshayGraphqlApiWrapper {
    */
   private static function processGraphqlQuery(array $query): string {
     // Convert array to json.
-    $query = json_encode($query, JSON_PRETTY_PRINT);
-
-    // Remove array indexes.
-    $query = preg_replace('~"\d+":\s~', '', $query);
-
-    // Remove colons except inside `()`, i.e. filters, variables etc.
-    $query = preg_replace('/:(?!.*?\\))/', '', $query);
-
-    // Remove [ except inside `()`, i.e. filters, variables etc.
-    $query = preg_replace('/\[(?!.*?\\))/', '{', $query);
-
-    // Remove ] except inside `()`, i.e. filters, variables etc.
-    $query = preg_replace('/\](?!.*?\\))/', '}', $query);
-
-    // Remove quotes and commas (Original code doesn't remove commas).
-    $query = str_replace(['"', ','], '', $query);
-
-    // Compress (Original code doesn't include this).
-    $query = preg_replace("/(\r?\n?\s+)/", ' ', $query);
-
+    $query = ArrayGraphQL::convert($query);
     // Remove the first and last character.
-    $query = substr($query, 1, -1);
-
-    return $query;
+    return substr($query['query'], 1, -1);
   }
 
 }
