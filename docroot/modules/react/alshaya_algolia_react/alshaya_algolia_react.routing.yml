@@ -23,3 +23,12 @@ alshaya_algolia_react.algolia_react_config_setting:
     _title: 'Algolia Configuration'
   requirements:
     _permission: 'administer site configuration'
+
+  # SRP/PLP Color Swatches config form
+alshaya_algolia_react.color_swatches:
+  path: '/admin/config/alshaya/algolia-color-swatches'
+  defaults:
+    _form: '\Drupal\alshaya_algolia_react\Form\AlgoliaColorSwatchesForm'
+    _title: 'SRP/PLP Color Swatches Configuration'
+  requirements:
+    _permission: 'administer site configuration'

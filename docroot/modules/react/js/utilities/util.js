@@ -42,6 +42,18 @@ export const isEgiftRefundEnabled = () => {
 };
 
 /**
+ * Helper function to check if the order is made through multiple
+ * payment methods (for ex. visa + eGift) i.e. hybrid or not.
+ */
+export const isHybridPayment = (paymentDetails) => {
+  if (hasValue(paymentDetails) && Object.keys(paymentDetails).length > 1) {
+    return true;
+  }
+
+  return false;
+};
+
+/**
  * Helper function to get list of not supported payment methods for eGift card refund.
  */
 export const getNotSupportedEgiftMethodsForOnlineReturns = () => {

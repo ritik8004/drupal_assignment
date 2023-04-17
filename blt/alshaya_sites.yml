@@ -386,3 +386,7 @@ sites:
     module: alshaya_nb_transac_rcs
     type: alshaya_transac
     country: jo
+  alkw:
+    module: alshaya_al_transac
+    type: alshaya_transac
+    country: kw

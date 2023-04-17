@@ -45,16 +45,18 @@ const PriceElement = ({ amount, maxAmount, fixedPrice = '' }) => {
     return (null);
   }
 
+  const { currency } = drupalSettings.reactTeaserView.price;
+
   const priceParts = [
     (
-      <span key="currency" className="price-currency suffix">{drupalSettings.reactTeaserView.price.currency}</span>
+      <span key="currency" className="price-currency suffix">{currency}</span>
     ),
     (<PriceItem key="price-item" amount={amount} maxAmount={maxAmount} />),
   ];
 
   return (
     <span className="price-wrapper">
-      <div className="price" data-fp={fixedPrice}>
+      <div className={`price ${hasValue(currency) ? currency.toLowerCase() : ''}`} data-fp={fixedPrice}>
         {drupalSettings.reactTeaserView.price.currencyPosition === 'before' ? priceParts : priceParts.reverse()}
       </div>
     </span>

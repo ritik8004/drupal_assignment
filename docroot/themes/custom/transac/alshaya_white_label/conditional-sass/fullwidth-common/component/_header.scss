@@ -32,29 +32,14 @@ header {
 }
 
 // Styles for Super Category header.
-body[class*="super-category"] {
-  .c-menu-primary {
-    .block-alshaya-super-category {
-      .menu--one__list {
-        @include fullWidthSideSpaces(
-          $is_desktop: true,
-          $is_desktop_wide: true,
-          $side: $left,
-        );
-      }
-    }
-  }
-
-  .c-menu-secondary {
-    .block-language-blocklanguage-interface {
-      a {
-        @include fullWidthSideSpaces(
-          $is_desktop: true,
-          $is_desktop_wide: true,
-          $side: $right,
-          $type: "margin",
-        );
-      }
+.c-menu-primary {
+  .block-alshaya-super-category {
+    .menu--one__list {
+      @include fullWidthSideSpaces(
+        $is_desktop: true,
+        $is_desktop_wide: true,
+        $side: $left,
+      );
     }
   }
 }
@@ -95,17 +80,8 @@ body[class*="super-category"] {
   }
 
   // Styles for Super Category header.
-  body[class*="super-category"] {
-    .c-header__wrapper--inner {
-      max-width: none;
-    }
-
-    .c-menu-secondary {
-      .block-language-blocklanguage-interface {
-        a {
-          padding-#{$right}: 0;
-        }
-      }
-    }
+  .c-header__wrapper--inner,
+  .super-category-enabled .c-header__wrapper--inner {
+    max-width: none;
   }
 }

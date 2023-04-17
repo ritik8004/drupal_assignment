@@ -6,6 +6,7 @@ import PointsExpiryMessage
   from '../../../../alshaya_spc/js/aura-loyalty/components/utilities/points-expiry-message';
 import AuraProgressBar from './progress-bar';
 import Loading from '../../../../alshaya_spc/js/utilities/loading';
+import { hasValue } from '../../../../js/utilities/conditionsUtility';
 
 class AuraProgressWrapper extends React.Component {
   constructor(props) {
@@ -101,6 +102,8 @@ class AuraProgressWrapper extends React.Component {
     // Current User tier class so we can change gradient for progress bar.
     const tierClass = currentTierLevel || 'no-tier';
 
+    // Hide Progressbar if the current user tier level is Tier3
+    const showProgressBar = !!(hasValue(tier) && tier !== 'Tier3');
     // Progress Percentage;
     let progressRatio = (userPoints / nextTierThreshold) * 100;
     progressRatio = (progressRatio > 100) ? 100 : progressRatio;
@@ -111,22 +114,27 @@ class AuraProgressWrapper extends React.Component {
 
     return (
       <div className="aura-progressbar-wrapper">
-        <AuraProgressBar
-          showDotClass={showDotClass}
-          tierClass={tierClass}
-          currentTierLevel={currentTierLevel}
-          nextTierLevel={nextTierLevel}
-          progress={progress}
-          progressRatio={progressRatio}
-          getDotPosition={this.getDotPosition}
-        />
-        <AuraProgressString
-          userPoints={userPoints}
-          nextTierThreshold={nextTierThreshold}
-          showDotClass={showDotClass}
-          nextTierLabel={getAllAuraTier('shortValue')[nextTierLevel]}
-          progressRatio={progressRatio}
-        />
+        {showProgressBar
+        && (
+          <>
+            <AuraProgressBar
+              showDotClass={showDotClass}
+              tierClass={tierClass}
+              currentTierLevel={currentTierLevel}
+              nextTierLevel={nextTierLevel}
+              progress={progress}
+              progressRatio={progressRatio}
+              getDotPosition={this.getDotPosition}
+            />
+            <AuraProgressString
+              userPoints={userPoints}
+              nextTierThreshold={nextTierThreshold}
+              showDotClass={showDotClass}
+              nextTierLabel={getAllAuraTier('shortValue')[nextTierLevel]}
+              progressRatio={progressRatio}
+            />
+          </>
+        )}
         <PointsExpiryMessage
           points={expiringPoints}
           date={expiryDate}

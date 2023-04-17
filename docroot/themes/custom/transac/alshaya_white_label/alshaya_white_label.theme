@@ -452,6 +452,11 @@ function alshaya_white_label_preprocess_page(&$variables) {
     $variables['#attached']['library'][] = 'alshaya_white_label/hide-sidebar';
   }
   $variables['#attached']['drupalSettings']['show_srp_sidebar'] = $show_srp_sidebar;
+
+  // Add article-swatch-slider library when color swatches feature is enabled.
+  if (\Drupal::config('alshaya_algolia_react.color_swatches')->get('enable_listing_page_color_swatch_slider')) {
+    $variables['#attached']['library'][] = 'alshaya_white_label/article-swatch-slider';
+  }
 }
 
 /**
