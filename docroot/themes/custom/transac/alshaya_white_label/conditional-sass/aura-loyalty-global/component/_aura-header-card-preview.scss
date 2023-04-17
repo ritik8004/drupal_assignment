@@ -64,6 +64,9 @@
         font-size: rem(20);
         letter-spacing: rem(0.89);
         border-radius: 1.75rem;
+        // IOS hack for disabled input field.
+        // It will work in android also.
+        opacity: 1;
       }
 
       .content-section {
