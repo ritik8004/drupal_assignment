@@ -28,6 +28,7 @@ function alshaya_rcs_seo_library_info_alter(&$libraries, $extension) {
     'core/drupalSettings',
     'rcs_placeholders/helpers',
     'alshaya_rcs_seo/alshaya_rcs_product_seo',
+    'alshaya_master/common_functions',
   ];
 
   // Load it in the footer as the files which contain the event handlers will
