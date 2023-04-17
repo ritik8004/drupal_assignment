@@ -973,11 +973,6 @@ hide-sidebar:
     theme:
       css/conditional-sass/hide-sidebar/hide-sidebar.ltr.css: {}
 
-fullwidth-store-finder:
-  css:
-    theme:
-      css/conditional-sass/fullwidth-store-finder/fullwidth-store-finder.ltr.css: { weight: 1 }
-
 article-swatch-slider:
   css:
     theme:
