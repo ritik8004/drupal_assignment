@@ -1,0 +1,15 @@
+#aura-mobile-header-signin-register:not(:empty),
+#aura-mobile-header-shop:not(:empty) {
+  @include breakpoint($upto-desktop) {
+    .aura-header-popup-wrapper.sign-up-complete {
+      .aura-popup-header.card-wrapper {
+        .footer-section {
+          .know-more-wrapper a {
+            background: none;
+          }
+        }
+      }
+    }
+  }
+}
+
