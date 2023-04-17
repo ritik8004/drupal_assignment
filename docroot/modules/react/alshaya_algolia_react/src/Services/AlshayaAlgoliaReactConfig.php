@@ -181,6 +181,9 @@ class AlshayaAlgoliaReactConfig implements AlshayaAlgoliaReactConfigInterface {
     // Get listing page frames settings.
     $product_frame_settings = $this->configFactory->get('alshaya_algolia_react.product_frames');
 
+    // Get Algolia Swipe image setting.
+    $algolia_swipe_image_settings = $this->configFactory->get('alshaya_algolia_react.swipe_image');
+
     if ($default_image = $this->skuImagesManager->getProductDefaultImage()) {
       $default_image = $this->entityTypeManager
         ->getStorage('image_style')
@@ -260,7 +263,7 @@ class AlshayaAlgoliaReactConfig implements AlshayaAlgoliaReactConfigInterface {
         'showThumbnails' => ($display_settings->get('gallery_show_hover_image') === TRUE) ? FALSE : $display_settings->get('image_thumb_gallery'),
         'defaultImage' => $default_image ?? FALSE,
         'plp_slider' => $display_settings->get('plp_slider'),
-        'image_slide_timing' => $display_settings->get('image_slide_timing'),
+        'image_slide_timing' => $algolia_swipe_image_settings->get('image_slide_timing'),
       ],
       'swatches' => [
         'showColorImages' => $display_settings->get('show_color_images_on_filter'),
