@@ -4,7 +4,7 @@ import SwatchList from './SwatchList';
 
 // Seprate a string by comma to get the label and color code/image/text.
 const ColorFilter = ({
-  items, itemCount, refine, searchForItems, isFromSearch, ...props
+  items, itemCount, refine, searchForItems, isFromSearch, attribute, ...props
 }) => {
   let searchForm = (null);
   if (isFromSearch) {
@@ -33,6 +33,19 @@ const ColorFilter = ({
   }
 
   const { facetValues } = props;
+  // Do not show facets that have a single value if the render_single_result_facets is false.
+  if (!drupalSettings.algoliaSearch.render_single_result_facets) {
+    const exclude = drupalSettings.algoliaSearch.exclude_render_single_result_facets ? drupalSettings.algoliaSearch.exclude_render_single_result_facets.trim().split(',') : '';
+    // Hide color filter if only one filter value available and not part of excluded list.
+    if (exclude.length > 0) {
+      if ((!exclude.includes(attribute) && items.length <= 1)) {
+        return null;
+      }
+    } else if (items.length <= 1) {
+      // Always hide color filter if attribute has single value and exclude field doesn't have val.
+      return null;
+    }
+  }
 
   return (
     <ul>
