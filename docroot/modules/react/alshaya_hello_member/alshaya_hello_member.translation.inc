@@ -503,18 +503,6 @@ function _alshaya_hello_member_react_translations() {
       ],
     ],
     'v6' => [
-      '<p classname="hello-membership-terms">Please <a href="/membership-info">Click here</a> to read more about Hello Member programme.</p>' => [
-        'ar' => '<p classname="hello-membership-terms"><a href="/ar/membership-info">اضغط هنا</a> لمعرفة المزيد عن برنامج هالو ميمبر</p>',
-        'context' => 'hello_member',
-      ],
-      '<p classname="hello-membership-terms">Read the updated <a href="/terms-and-conditions-sale">Terms and Conditions</a> and <a href="/privacy-policy">Privacy Policy</a></p>' => [
-        'ar' => '<p classname="hello-membership-terms">.اقرأ <a href="/ar/terms-and-conditions-sale">الشروط والأحكام</a> <a href="/ar/privacy-policy">وسياسية الخصوصية</a> المحدثة</p>',
-        'context' => 'hello_member',
-      ],
-      '<p classname="hello-membership-terms">If you do not want to be part of the programme, <a href="/contact">contact us.</a></p>' => [
-        'ar' => '<p classname="hello-membership-terms">.في حال لم ترغب في الاستمرار في البرنامج، <a href="/ar/contact">فقم بالتواصل معنا</a></p>',
-        'context' => 'hello_member',
-      ],
       'Select Gender' => [
         'ar' => 'اختر نوع الجنس',
         'context' => 'hello_member',
