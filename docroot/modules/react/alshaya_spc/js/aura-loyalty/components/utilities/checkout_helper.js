@@ -87,6 +87,7 @@ function processCheckoutCart(data) {
             cardNumber: result.data.data.apc_identifier_number || '',
             tier: result.data.data.tier_code || '',
             email: result.data.data.email || '',
+            isFullyEnrolled: result.data.data.is_fully_enrolled || false,
           };
 
           if (data.type === 'phone') {

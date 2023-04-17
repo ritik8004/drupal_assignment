@@ -422,5 +422,13 @@ function _alshaya_aura_static_strings() {
       'key' => 'otp_label',
       'value' => t('One Time Pin', [], ['context' => 'aura']),
     ],
+    [
+      'key' => 'join_aura_fe_congratulations_text',
+      'value' => t('You can now start building your Aura. Earn points every time you shop online or instore.', [], ['context' => 'aura']),
+    ],
+    [
+      'key' => 'join_aura_fe_congratulations_fe_download_text',
+      'value' => t('Use your points on future purchases or to access a range of rewards and experiences on the Aura app.', [], ['context' => 'aura']),
+    ],
   ];
 }
