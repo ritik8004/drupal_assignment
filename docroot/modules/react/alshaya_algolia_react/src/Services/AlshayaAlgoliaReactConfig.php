@@ -184,9 +184,6 @@ class AlshayaAlgoliaReactConfig implements AlshayaAlgoliaReactConfigInterface {
     // Get Algolia Swipe image setting.
     $algolia_swipe_image_settings = $this->configFactory->get('alshaya_algolia_react.swipe_image');
 
-    // Get Algolia Swipe images setting.
-    $algolia_swipe_image_settings = $this->configFactory->get('alshaya_algolia_react.swipe_image');
-
     if ($default_image = $this->skuImagesManager->getProductDefaultImage()) {
       $default_image = $this->entityTypeManager
         ->getStorage('image_style')

@@ -28,7 +28,7 @@ function alshaya_algolia_react_update_9408() {
  *
  * Add the new alshaya_algolia_react.swipe_image config.
  */
-function alshaya_algolia_react_update_9408() {
+function alshaya_algolia_react_update_9409() {
   /** @var \Drupal\alshaya_config\AlshayaConfigManager $manager */
   $manager = \Drupal::service('alshaya_config.manager');
   $manager->updateConfigs([
