@@ -994,7 +994,7 @@ window.commerceBackend = window.commerceBackend || {};
   /**
    * Get the first child with media.
    *
-   * @param {object}
+   * @param {object} product
    *   The raw product object.
    *
    * @return {object|null}
@@ -1003,15 +1003,23 @@ window.commerceBackend = window.commerceBackend || {};
    * @see \Drupal\alshaya_acm_product\SkuImagesManager::getFirstChildWithMedia()
    */
   const getFirstChildWithMedia = function (product) {
-    const firstChild = product.variants.find(function (variant) {
-      return Drupal.hasValue(variant.product.hasMedia) ? variant.product : false;
-    });
-
-    if (Drupal.hasValue(firstChild)) {
-      return firstChild.product;
+    var firstChild;
+    // If we have first child sku defined, try to check if the first child variant
+    // has media or not.
+    if (Drupal.hasValue(product.firstChild)) {
+      firstChild = product.variants.find(function (variant) {
+        return product.firstChild === variant.product.sku && variant.product.hasMedia ? variant.product : false;
+      });
+    }
+    // If the first child variant does not have media,
+    // look for other variants that does.
+    if (!Drupal.hasValue(firstChild)) {
+      firstChild = product.variants.find(function (variant) {
+        return variant.product.hasMedia ? variant.product : false;
+      });
     }
 
-    return null;
+    return Drupal.hasValue(firstChild) ? firstChild.product : null;
   };
 
   /**
