@@ -3,9 +3,12 @@
     // Check if purchase success event is triggered.
     const eventData = e.detail.data();
     if (eventData.event === 'purchaseSuccess') {
-      eventData.aura_Status = Drupal.getItemFromLocalStorage('gtm_aura_common_data') ? Drupal.getItemFromLocalStorage('gtm_aura_common_data').aura_Status : null;
-      eventData.aura_enrollmentStatus = Drupal.getItemFromLocalStorage('gtm_aura_common_data') ? Drupal.getItemFromLocalStorage('gtm_aura_common_data').aura_enrollmentStatus : null;
-      eventData.aura_balPointsVSorderValue = Drupal.getItemFromLocalStorage('gtm_aura_checkout_data') ? Drupal.getItemFromLocalStorage('gtm_aura_checkout_data') : null;
+      const gtmAuraCommonData = Drupal.getItemFromLocalStorage('gtm_aura_common_data');
+      const gtmAuraCheckoutData = Drupal.getItemFromLocalStorage('gtm_aura_checkout_data');
+      eventData.aura_Status = gtmAuraCommonData ? gtmAuraCommonData.aura_Status : null;
+      eventData.aura_enrollmentStatus = gtmAuraCommonData
+        ? gtmAuraCommonData.aura_enrollmentStatus : null;
+      eventData.aura_balPointsVSorderValue = gtmAuraCheckoutData || null;
     }
   });
 }(Drupal));
