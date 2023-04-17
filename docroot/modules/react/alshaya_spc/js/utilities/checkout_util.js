@@ -11,6 +11,7 @@ import { addPaymentMethodInCart } from './update_cart';
 import { isEgiftCardEnabled } from '../../../js/utilities/util';
 import { callMagentoApi } from '../../../js/utilities/requestHelper';
 import { getApiEndpoint } from '../backend/v2/utility';
+import logger from '../../../js/utilities/logger';
 
 /**
  * Change the interactiveness of CTAs to avoid multiple user clicks.
@@ -191,8 +192,14 @@ export const placeOrder = (paymentMethod) => {
             return;
           }
 
+          logger.info('Before orderPlaced event on url: @url.', {
+            '@url': response.data.redirectUrl,
+          });
           // Dispatch an event after order is placed before redirecting to confirmation page.
           dispatchCustomEvent('orderPlaced', true);
+          logger.info('After orderPlaced event on url: @url.', {
+            '@url': response.data.redirectUrl,
+          });
           // This here possibly means that we are redirecting to confirmation page.
           window.location = Drupal.url(response.data.redirectUrl);
           return;
