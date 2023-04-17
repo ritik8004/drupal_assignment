@@ -103,6 +103,14 @@ class AlshayaSpcController extends ControllerBase {
    */
   protected $checkoutComApiHelper;
 
+
+  /**
+   * Delivery Options helper.
+   *
+   * @var \Drupal\alshaya_acm_product\DeliveryOptionsHelper
+   */
+  protected $deliveryOptionsHelper;
+
   /**
    * Date time formatter interface.
    *
