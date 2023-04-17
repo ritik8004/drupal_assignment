@@ -159,24 +159,9 @@ window.commerceBackend = window.commerceBackend || {};
     freeGiftProduct.promoRuleId = promoRuleId;
     // Rendering sku base form inside modal.
     window.commerceBackend.renderAddToCartForm(freeGiftProduct);
-    if (freeGiftProduct.type_id === 'simple') {
-      // For simple products, remove configurable options section.
-      if (modalContext.find('#configurable_ajax').length) {
-        modalContext.find('#configurable_ajax').remove();
-      }
-    } else {
-      /*
-       * @todo Check why auto-selected variant image not showing up by default from V2 code.
-       *   For now, we have to manually do this to get the variant selected and image in sync
-       *   inside modal on first time load.
-       */
-      // For configurable products, auto-select the first available variant.
-      $('.pdp-modal-box .select2Option').each(function selectItem() {
-        var attributes = $(this).find('ul li:not(.disabled):visible a');
-        if (attributes.length) {
-          $(attributes[0]).click();
-        }
-      });
+    // For simple products, remove configurable options section if exists.
+    if (freeGiftProduct.type_id === 'simple' && modalContext.find('#configurable_ajax').length) {
+      modalContext.find('#configurable_ajax').remove();
     }
     // Only show add free gift button in cart page.
     if (drupalSettings.path.currentPath !== 'cart') {
