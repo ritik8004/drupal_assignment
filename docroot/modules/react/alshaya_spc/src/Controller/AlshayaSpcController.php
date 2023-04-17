@@ -103,7 +103,6 @@ class AlshayaSpcController extends ControllerBase {
    */
   protected $checkoutComApiHelper;
 
-
   /**
    * Delivery Options helper.
    *
