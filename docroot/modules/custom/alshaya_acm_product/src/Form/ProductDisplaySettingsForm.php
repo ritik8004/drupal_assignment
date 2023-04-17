@@ -31,7 +31,6 @@ class ProductDisplaySettingsForm extends ConfigFormBase {
   public function submitForm(array &$form, FormStateInterface $form_state) {
     $config = $this->config('alshaya_acm_product.display_settings');
     $config->set('image_thumb_gallery', $form_state->getValue('image_thumb_gallery'));
-    $config->set('image_slide_timing', $form_state->getValue('image_slide_timing'));
     $config->set('color_swatches', $form_state->getValue('color_swatches'));
     $config->set('color_swatches_hover', $form_state->getValue('color_swatches_hover'));
     $config->set('short_desc_characters', $form_state->getValue('short_desc_characters'));
@@ -55,16 +54,6 @@ class ProductDisplaySettingsForm extends ConfigFormBase {
       '#type' => 'checkbox',
       '#title' => $this->t('Display image thumb gallery on product node.'),
       '#default_value' => $config->get('image_thumb_gallery'),
-    ];
-
-    $form['image_slide_timing'] = [
-      '#type' => 'number',
-      '#min' => '0',
-      '#max' => '2',
-      '#step' => '0.1',
-      '#title' => $this->t('Auto scroll for the Product Image'),
-      '#description' => $this->t('Auto scroll timer(in sec) for auto scrolling the product images on listing pages.'),
-      '#default_value' => $config->get('image_slide_timing') ?? 2,
     ];
 
     $form['show_color_images_on_filter'] = [
