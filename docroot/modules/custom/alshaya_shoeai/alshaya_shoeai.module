@@ -60,7 +60,7 @@ function alshaya_shoeai_alshaya_spc_cart_build_alter(array &$build) {
  */
 function alshaya_shoeai_page_attachments_alter(array &$page) {
   $current_route_name = \Drupal::routeMatch()->getRouteName();
-  if ($current_route_name == 'alshaya_spc.checkout.confirmation') {
+  if ($current_route_name === 'alshaya_spc.checkout.confirmation') {
     // Add script for shoeai in add to cart page.
     $shoeai_config = \Drupal::config('alshaya_shoeai.settings');
     $page['#cache']['tags'] = Cache::mergeTags($page['#cache']['tags'] ?? [], $shoeai_config->getCacheTags());
