@@ -57,7 +57,15 @@ class AlgoliaSwipeImageForm extends ConfigFormBase {
       '#options' => ['slide' => $this->t('Slide'), 'fade' => $this->t('Fade')],
       '#default_value' => $config->get('slide_effect_fade'),
     ];
-
+    $form['swipe_image_config']['image_slide_timing'] = [
+      '#type' => 'number',
+      '#min' => '0',
+      '#max' => '2',
+      '#step' => '0.1',
+      '#title' => $this->t('Auto scroll for the Product Image'),
+      '#description' => $this->t('Auto scroll timer(in sec) for auto scrolling the product images on listing pages.'),
+      '#default_value' => $config->get('image_slide_timing') ?? 2,
+    ];
     return parent::buildForm($form, $form_state);
   }
 
@@ -69,6 +77,7 @@ class AlgoliaSwipeImageForm extends ConfigFormBase {
       ->set('enable_swipe_image_mobile', $form_state->getValue('enable_swipe_image_mobile'))
       ->set('no_of_image_scroll', (int) $form_state->getValue('no_of_image_scroll'))
       ->set('slide_effect_fade', $form_state->getValue('slide_effect_fade'))
+      ->set('image_slide_timing', $form_state->getValue('image_slide_timing'))
       ->save();
 
     parent::submitForm($form, $form_state);
