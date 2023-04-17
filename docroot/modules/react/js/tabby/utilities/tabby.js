@@ -10,6 +10,9 @@ const Tabby = {
   isTabbyEnabled: () => hasValue(drupalSettings.tabby)
     && hasValue(drupalSettings.tabby.widgetInfo),
 
+  showTabbyWidget: () => hasValue(drupalSettings.tabby)
+    && drupalSettings.tabby.showTabbyWidget,
+
   isAvailable: () => window.Tabby,
 
   productAvailable: (that) => {
