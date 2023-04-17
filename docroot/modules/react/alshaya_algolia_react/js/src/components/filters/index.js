@@ -14,30 +14,8 @@ const Filters = ({ indexName, pageType, ...props }) => {
       const filters = ref.current.querySelectorAll('.c-collapse-item');
       const activeFilters = [];
       filters.forEach((element) => {
-        const children = element.getElementsByTagName('ul')[0];
-        // Do not show facets that have a single value if the render_single_result_facets is false.
-        if (!drupalSettings.algoliaSearch.render_single_result_facets) {
-          const exclude = drupalSettings.algoliaSearch.exclude_render_single_result_facets ? drupalSettings.algoliaSearch.exclude_render_single_result_facets.trim().split(',') : '';
-          // Certain factes should always be rendered irrespective of render_single_result_facets.
-          // So we only consider the attributes not part of the exclude_render_single_result_facets.
-          // Sort is not filter attribute but we always need to show it.
-          if (element.getAttribute('id') === 'sort_by') {
-            return;
-          }
-          if (exclude.length > 0) {
-            if ((!exclude.includes(element.getAttribute('id')) && children.childElementCount <= 1)) {
-              element.classList.add('hide-facet-block');
-            } else {
-              element.classList.remove('hide-facet-block');
-              activeFilters.push(element);
-            }
-          } else if (children.childElementCount <= 1) {
-            element.classList.add('hide-facet-block');
-          } else {
-            element.classList.remove('hide-facet-block');
-            activeFilters.push(element);
-          }
-        } else if (typeof children !== 'undefined' && children.querySelector('li') === null) {
+        const children = element.getElementsByTagName('ul');
+        if (children.length === 0 || children[0].querySelector('li') === null) {
           element.classList.add('hide-facet-block');
         } else {
           activeFilters.push(element);
