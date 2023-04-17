@@ -7,7 +7,6 @@
 
       html[lang="ar"] & {
         padding-right: 0 !important; // Overriding !important styles.
-        margin-right: rem(32);
       }
     }
 
@@ -16,8 +15,6 @@
     }
 
     .store-finder--wrapper {
-      margin-#{$right}: rem(24);
-
       .form-item-geolocation-geocoder-google-places-api {
         padding-#{$right}: 0;
 

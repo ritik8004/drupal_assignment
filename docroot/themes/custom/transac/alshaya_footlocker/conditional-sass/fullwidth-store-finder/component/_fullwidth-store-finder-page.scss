@@ -1,6 +1,5 @@
 @include breakpoint($desktop) {
   .path--store-finder {
-
     .label--location {
       width: auto !important;
       text-indent: 0;
@@ -9,7 +8,6 @@
 
       html[lang="ar"] & {
         width: auto !important;
-        margin-right: rem(32);
       }
     }
 
@@ -24,8 +22,6 @@
     }
 
     .store-finder--wrapper {
-      padding-#{$right}: rem(24);
-
       .block-store-finder-form__input__wrapper {
         .form-item-geolocation-geocoder-google-places-api {
           width: 100% !important;

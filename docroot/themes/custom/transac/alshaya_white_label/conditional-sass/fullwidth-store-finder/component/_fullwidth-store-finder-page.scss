@@ -9,12 +9,21 @@
     @include breakpoint($tablet) {
       flex-grow: 1;
     }
+
+    @include breakpoint($desktop) {
+      margin-#{$right}: rem(24);
+      padding-#{$right}: 0;
+    }
   }
 
   .label--location {
     html[lang="ar"] & {
       @include breakpoint($tablet) {
         width: auto;
+      }
+
+      @include breakpoint($desktop) {
+        margin-right: rem(32);
       }
     }
   }
@@ -28,7 +37,7 @@
     );
 
     .c-content__region {
-        @include sideSpaces(0);
+      @include sideSpaces(0);
     }
 
     .views-exposed-form {
