@@ -14,8 +14,9 @@ const Filters = ({ indexName, pageType, ...props }) => {
       const filters = ref.current.querySelectorAll('.c-collapse-item');
       const activeFilters = [];
       filters.forEach((element) => {
-        const children = element.getElementsByTagName('ul')[0];
-        if (typeof children !== 'undefined' && children.querySelector('li') === null) {
+        const ulElement = element.getElementsByTagName('ul');
+        const childrenLi = ulElement[0] ? ulElement[0].querySelector('li') : null;
+        if (ulElement.length === 0 || childrenLi === null) {
           element.classList.add('hide-facet-block');
         } else {
           activeFilters.push(element);

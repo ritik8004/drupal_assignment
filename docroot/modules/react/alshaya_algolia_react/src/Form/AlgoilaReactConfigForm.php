@@ -83,6 +83,20 @@ class AlgoilaReactConfigForm extends ConfigFormBase {
       '#description' => $this->t('Checkbox to enable or disable hitsPerPage key in algolia call.'),
     ];
 
+    $form['render_single_result_facets'] = [
+      '#type' => 'checkbox',
+      '#title' => $this->t('Show single value Facets'),
+      '#default_value' => $config->get('render_single_result_facets') ?: FALSE,
+      '#description' => $this->t('Checkbox to show/hide single value facets.'),
+    ];
+
+    $form['exclude_render_single_result_facets'] = [
+      '#type' => 'textfield',
+      '#title' => $this->t('Exclude the following filters from single result check.'),
+      '#default_value' => $config->get('exclude_render_single_result_facets'),
+      '#description' => $this->t('Enter filter keys that you always want to display. Please input comma seprated values.'),
+    ];
+
     $form['default_col_grid'] = [
       '#type' => 'radios',
       '#title' => $this->t('Default col grid for desktop'),
@@ -116,6 +130,8 @@ class AlgoilaReactConfigForm extends ConfigFormBase {
       ->set('default_col_grid', $form_state->getValue('default_col_grid'))
       ->set('default_col_grid_mobile', $form_state->getValue('default_col_grid_mobile'))
       ->set('enable_hits_per_page', $form_state->getValue('enable_hits_per_page'))
+      ->set('render_single_result_facets', $form_state->getValue('render_single_result_facets'))
+      ->set('exclude_render_single_result_facets', $form_state->getValue('exclude_render_single_result_facets'))
       ->save();
 
     parent::submitForm($form, $form_state);
