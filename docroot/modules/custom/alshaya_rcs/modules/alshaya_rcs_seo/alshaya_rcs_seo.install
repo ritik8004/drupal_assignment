@@ -6,6 +6,16 @@
  */
 
 /**
+ * Implements hook_update_N().
+ *
+ * Add enable_ssr_metatag in config.
+ */
+function alshaya_rcs_seo_update_9401() {
+  $alshaya_api_config = \Drupal::configFactory()->getEditable('alshaya_rcs_seo.settings');
+  $alshaya_api_config->set('enable_ssr_metatag', FALSE)->save();
+}
+
+/**
  * Implements hook_install().
  */
 function alshaya_rcs_seo_install() {
