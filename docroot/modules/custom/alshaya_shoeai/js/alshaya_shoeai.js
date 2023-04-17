@@ -32,7 +32,7 @@
     });
     var confirmationPage = document.querySelectorAll('#spc-checkout-confirmation');
     if (confirmationPage.length > 0 && drupalSettings.order_details) {
-      addShoeSizeConfirmationScript();
+      addShoeSizePurchaseConfirmationScript();
     }
   }
 })(drupalSettings);
@@ -156,7 +156,7 @@ function setShoeSizeShoppingCart(totals, items, updated_sku, updated_qty) {
  * and call shoeai ext. script for order confirmation.
  * Gets response true if order is unique if confirmation URL is reloaded than gets false.
  */
-function addShoeSizeConfirmationScript() {
+function addShoeSizePurchaseConfirmationScript() {
   var shoeAi = drupalSettings.shoeai;
   var orderNumber = drupalSettings.order_details.order_number
     ? drupalSettings.order_details.order_number
