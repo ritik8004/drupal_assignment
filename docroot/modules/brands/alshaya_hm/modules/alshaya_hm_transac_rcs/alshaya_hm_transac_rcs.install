@@ -6,21 +6,6 @@
  */
 
 /**
- * Update algolia react with default value for render_single_result_facets.
- *
- * And also for exclude_render_single_result_facets.
- */
-function alshaya_hm_transac_rcs_update_9401() {
-  $config = \Drupal::configFactory()->getEditable('alshaya_algolia_react.settings');
-  if ($config) {
-    $config->set('render_single_result_facets', FALSE);
-    $config->set('exclude_render_single_result_facets', 'final_price,attr_bv_rating,attr_color,field_acq_promotion_label');
-    $config->save();
-  }
-
-}
-
-/**
  * Implements hook_install().
  */
 function alshaya_hm_transac_rcs_install() {
@@ -32,17 +17,4 @@ function alshaya_hm_transac_rcs_install() {
  */
 function alshaya_hm_transac_rcs_uninstall() {
   \Drupal::service('module_installer')->uninstall(['rcs_placeholders']);
-}
-
-/**
- * Implements hook_update_dependencies().
- */
-function alshaya_hm_transac_rcs_update_dependencies() {
-  return [
-    'alshaya_hm_transac_rcs' => [
-      '9401' => [
-        'alshaya_algolia_react' => '9408',
-      ],
-    ],
-  ];
 }
