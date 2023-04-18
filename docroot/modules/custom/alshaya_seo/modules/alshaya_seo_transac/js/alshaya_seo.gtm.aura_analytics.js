@@ -151,7 +151,7 @@
            }
          }
          // Adding Aura common details in localstorage to use in all Aura events.
-         Drupal.addItemInLocalStorage('gtm_aura_checkout_data', gtmData.aura_balPointsVSorderValue);
+         Drupal.addItemInLocalStorage('gtm_aura_balpoints_vs_order', gtmData.aura_balPointsVSorderValue);
        }
      }
      catch (e) {
