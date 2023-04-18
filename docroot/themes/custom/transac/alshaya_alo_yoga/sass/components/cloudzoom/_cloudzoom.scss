@@ -1,0 +1,23 @@
+#lightSlider {
+  &.pager-yes {
+    .slick-slide {
+      @include breakpoint($only-tablet) {
+        margin-#{$left}: rem(-1) !important;
+      }
+    }
+  }
+
+  .slick-slide {
+    margin-bottom: rem(55);
+    padding: rem(0);
+    border-style: none;
+  }
+
+  .slick-next,
+  .slick-prev {
+    @include breakpoint($only-tablet) {
+      top: 50% !important;
+      width: rem(30);
+    }
+  }
+}
