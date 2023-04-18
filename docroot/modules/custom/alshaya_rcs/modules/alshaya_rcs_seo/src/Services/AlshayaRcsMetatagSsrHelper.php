@@ -281,7 +281,14 @@ class AlshayaRcsMetatagSsrHelper {
 
     if (!empty($fields) && $item_key) {
       $response = $this->graphqlApiWrapper->doGraphqlRequest('GET', $fields);
-      $response = !empty($response[$item_key]['items']) ? $response[$item_key]['items'][0] : $response[$item_key];
+      if (!empty($response[$item_key])) {
+        if ($response[$item_key]['total_count'] === 0) {
+          $response = [];
+        }
+        else {
+          $response = !empty($response[$item_key]['items']) ? $response[$item_key]['items'][0] : $response[$item_key];
+        }
+      }
     }
     return $response;
   }
@@ -382,14 +389,13 @@ class AlshayaRcsMetatagSsrHelper {
     // Get metatag details using graphQL call to magento for page type.
     if (empty($rcs_metatags[$page_type])) {
       $rcs_metatags[$page_type] = $this->getRcsMetatagFromMagento($page_type);
+      // We will not process if data is not available.
+      if (empty($rcs_metatags[$page_type])) {
+        return;
+      }
       // Process meta details w.r.t page type.
       $this->processMetaForPageType($page_type, $rcs_metatags[$page_type]);
       $this->setProcessedMetatags($rcs_metatags);
-    }
-
-    // We will not process if data is not available.
-    if (empty($rcs_metatags[$page_type])) {
-      return;
     }
 
     // Replace the RCS placeholders in metatags with actual data.
@@ -432,7 +438,8 @@ class AlshayaRcsMetatagSsrHelper {
       // Category name and description replacement using SSR.
       $variables['category_term_name'] = $rcs_metatags[$page_type]['name'];
       $variables['category_term_description'] = $rcs_metatags[$page_type]['description'];
-      if (strpos($variables['page']['#title'], '#rcs.category.name#') > -1) {
+      if (isset($variables['page']['#title'])
+        && strpos($variables['page']['#title'], '#rcs.category.name#') > -1) {
         $variables['page']['#title'] = $rcs_metatags[$page_type]['name'];
       }
     }
@@ -465,7 +472,9 @@ class AlshayaRcsMetatagSsrHelper {
     switch ($variables['base_plugin_id']) {
       case 'page_title_block':
         $title = &$variables['content']['#title'];
-        if ($page_type === 'category' && strpos($title['#markup'], '#rcs.category.name#') > -1) {
+        if ($page_type === 'category'
+          && is_array($title)
+          && strpos($title['#markup'], '#rcs.category.name#') > -1) {
           $title['#markup'] = str_replace('#rcs.category.name#', $rcs_metatags['name'], $title['#markup']);
         }
         elseif ($page_type === 'promotion' && strpos($title, '#rcs.promotion.name#') > -1) {
@@ -476,6 +485,7 @@ class AlshayaRcsMetatagSsrHelper {
 
       case 'system_branding_block':
         if ($page_type === 'category'
+          && isset($variables['content']['site_name']['#markup'])
           && strpos($variables['content']['site_name']['#markup'], '#rcs.category.meta_title#') > -1) {
           // Setting max-age to get refresh after 20min with CF settings.
           $variables['#cache']['max-age'] = 1200;
@@ -484,7 +494,8 @@ class AlshayaRcsMetatagSsrHelper {
         break;
 
       case 'rcs_term_description':
-        if (strpos($variables['content']['#markup'], '#rcs.category.description#') > -1) {
+        if (isset($variables['content']['#markup'])
+          && strpos($variables['content']['#markup'], '#rcs.category.description#') > -1) {
           // Setting max-age to get refresh after 20min with CF settings.
           $variables['#cache']['max-age'] = 1200;
           $variables['content']['#markup'] =
@@ -494,7 +505,8 @@ class AlshayaRcsMetatagSsrHelper {
 
       case 'alshaya_rcs_promotion_description':
         // Replacement for promo description.
-        if (strpos($variables['content']['inside']['#children'], '#rcs.promotion.description#') > -1) {
+        if (isset($variables['content']['inside']['#children'])
+          && strpos($variables['content']['inside']['#children'], '#rcs.promotion.description#') > -1) {
           // Setting max-age to get refresh after 20min with CF settings.
           $variables['#cache']['max-age'] = 1200;
           $variables['content']['inside']['#children'] =
