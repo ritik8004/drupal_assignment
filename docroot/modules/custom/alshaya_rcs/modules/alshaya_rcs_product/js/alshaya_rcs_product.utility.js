@@ -1007,14 +1007,14 @@ window.commerceBackend = window.commerceBackend || {};
     // If we have first child sku defined, try to check if the first child variant
     // has media or not.
     if (Drupal.hasValue(product.firstChild)) {
-      firstChild = product.variants.find(function (variant) {
+      firstChild = product.variants.find(function findFirstChildWithMedia(variant) {
         return product.firstChild === variant.product.sku && variant.product.hasMedia ? variant.product : false;
       });
     }
     // If the first child variant does not have media,
     // look for other variants that does.
     if (!Drupal.hasValue(firstChild)) {
-      firstChild = product.variants.find(function (variant) {
+      firstChild = product.variants.find(function findAnyChildWithMedia(variant) {
         return variant.product.hasMedia ? variant.product : false;
       });
     }
