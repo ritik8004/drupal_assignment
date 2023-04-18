@@ -55,7 +55,7 @@ alshaya_algolia_react.settings:
       label: 'Exclude the filters from single results facets.'
     facet_list_local_store_expiry:
       type: integer
-      label: 'Expiry in seconds for facet list in local storage.'
+      label: 'Expiry in seconds for getting facets from algolia.'
 
 alshaya_algolia_react.product_frames:
   type: config_object
