@@ -1,9 +1,11 @@
 import React, { useState, useRef } from 'react';
-import { getFilters } from '../../utils';
 import WidgetManager from '../widget-manager';
+import DynamicWidgets from '../algolia/widgets/DynamicWidgets';
+import { hasValue } from '../../../../../js/utilities/conditionsUtility';
 
 const Filters = ({ indexName, pageType, ...props }) => {
   const [filterCounts, setfilters] = useState([]);
+  const [facets, setFacets] = useState([]);
   const ref = useRef();
 
   // Loop through all the filters given in config and prepare an array of filters.
@@ -28,22 +30,36 @@ const Filters = ({ indexName, pageType, ...props }) => {
     }
   };
 
-  const facets = [];
-  getFilters(pageType).forEach((facet) => {
-    facets.push(
-      <WidgetManager
-        key={facet.identifier}
-        facet={facet}
-        indexName={indexName}
-        filterResult={(test) => updateFilterResult(test)}
-        pageType={pageType}
-      />,
-    );
-  });
+  const buildFacets = (data) => {
+    if (!hasValue(data)) {
+      return;
+    }
+    const { filters } = data[0];
+    setFacets(Object.values(filters));
+  };
+
+  const facetsList = [];
+
+  if (hasValue(facets)) {
+    facets.forEach((facet) => {
+      facetsList.push(
+        <WidgetManager
+          key={facet.identifier}
+          facet={facet}
+          indexName={indexName}
+          filterResult={(test) => updateFilterResult(test)}
+          pageType={pageType}
+          attribute={facet.identifier}
+        />,
+      );
+    });
+  }
 
   return (
     <div ref={ref} className="filter-facets">
-      {facets}
+      <DynamicWidgets buildFacets={buildFacets}>
+        {facetsList}
+      </DynamicWidgets>
     </div>
   );
 };
