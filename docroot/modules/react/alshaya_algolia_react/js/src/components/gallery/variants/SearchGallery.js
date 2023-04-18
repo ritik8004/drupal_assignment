@@ -22,8 +22,8 @@ const sliderSettings = {
   arrows: false,
   touchThreshold: 1750,
   variableWidth: false,
-  autoplaySpeed: hasValue(drupalSettings.reactTeaserView.gallery.image_slide_timing)
-    ? drupalSettings.reactTeaserView.gallery.image_slide_timing * 1000
+  autoplaySpeed: hasValue(drupalSettings.reactTeaserView.swipe_image.image_slide_timing)
+    ? drupalSettings.reactTeaserView.swipe_image.image_slide_timing * 1000
     : 2000,
   autoplay: true,
   pauseOnHover: false,
