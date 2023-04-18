@@ -116,9 +116,9 @@ class AlshayaShoeAi {
   }
 
   /**
-   * Helper function for adding shoeai settings and cache to the page.
+   * Function for adding shoeai drupalSettings and custom library to the page.
    */
-  public function setShoeAiSettings(&$build) {
+  public function attachShoeAiLibrary(&$build) {
     // Add script for shoeai in order confirmation page.
     $shoeai_config = $this->configFactory->get('alshaya_shoeai.settings');
     $build['#cache']['tags'] = Cache::mergeTags($build['#cache']['tags'] ?? [], $shoeai_config->getCacheTags());
