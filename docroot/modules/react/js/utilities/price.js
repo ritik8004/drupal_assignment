@@ -105,10 +105,21 @@ const getDataAttributePrices = (data, field) => JSON.stringify(getDataAttributeP
   field,
 ));
 
+const getFormattedPrice = (priceAmount) => {
+  let amount = priceAmount === null ? 0 : priceAmount;
+
+  // Remove commas if any.
+  amount = amount.toString().replace(/,/g, '');
+  amount = !Number.isNaN(Number(amount)) === true ? parseFloat(amount) : 0;
+
+  return amount.toFixed(drupalSettings.alshaya_spc.currency_config.decimal_points);
+};
+
 export {
   calculateDiscount,
   getVatText,
   isFreeGiftProduct,
   getDataAttributePrices,
   getDataAttributePricesObj,
+  getFormattedPrice,
 };

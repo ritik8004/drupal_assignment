@@ -1,0 +1,5 @@
+name: 'Alshaya Graphql'
+type: module
+description: 'Implementation of Magento graphql calls.'
+package: 'Alshaya'
+core_version_requirement: ^9 || ^10
