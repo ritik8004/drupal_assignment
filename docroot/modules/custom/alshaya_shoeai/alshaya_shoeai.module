@@ -36,7 +36,7 @@ function alshaya_shoeai_alshaya_spc_cart_build_alter(array &$build) {
 }
 
 /**
- * Implements hook_alshaya_spc_checkout_confirmation_order_build().
+ * Implements hook_alshaya_spc_checkout_confirmation_order_build_alter().
  */
 function alshaya_shoeai_alshaya_spc_checkout_confirmation_order_build_alter(array &$build, array $order) {
   \Drupal::service('alshaya_shoeai.helper')->attachShoeAiLibrary($build);
