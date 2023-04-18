@@ -1,11 +1,14 @@
-import React, { useEffect, useRef } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import {
   Configure,
   InstantSearch,
   Stats,
 } from 'react-instantsearch-dom';
 
-import { algoliaSearchClient } from '../../../../js/utilities/algoliaHelper';
+import {
+  algoliaSearchClient,
+  getFacetListFromAlgolia,
+} from '../../../../js/utilities/algoliaHelper';
 
 import { productListIndexStatus } from '../utils/indexUtils';
 import { getSuperCategoryOptionalFilter } from '../utils';
@@ -56,9 +59,14 @@ const PlpApp = ({
   promotionNodeId,
 }) => {
   let subCategories = {};
+  const [facets, setFacets] = useState([]);
   useEffect(() => {
     getExpressDeliveryStatus().then((status) => {
       window.sddEdStatus = status;
+    });
+
+    getFacetListFromAlgolia('listing').then((facetsList) => {
+      setFacets(facetsList);
     });
   }, []);
 
@@ -194,6 +202,7 @@ const PlpApp = ({
         filters={finalFilter}
         ruleContexts={context}
         optionalFilters={optionalFilter}
+        facets={facets}
       />
       <PlpStickyFilter
         pageType={pageType}

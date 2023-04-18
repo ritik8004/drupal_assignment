@@ -47,6 +47,7 @@ const SearchResultsComponent = ({
   searchState,
   createURL,
   onSearchStateChange,
+  facets,
 }) => {
   const parentRef = React.createRef();
   // Do not show out of stock products.
@@ -108,6 +109,7 @@ const SearchResultsComponent = ({
         {...(enableHitsPerPage && { hitsPerPage: drupalSettings.algoliaSearch.itemsPerPage })}
         filters={stockFilter}
         query={query}
+        facets={facets}
       />
       {optionalFilter ? (
         <Configure

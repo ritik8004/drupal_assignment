@@ -52,7 +52,10 @@ alshaya_algolia_react.settings:
       label: 'Enable/Disable single result facets from configuration.'
     exclude_render_single_result_facets:
       type: string
-      label: 'Exclude the filters from single results facets.'     
+      label: 'Exclude the filters from single results facets.'
+    algolia_facets_local_storage_expiry:
+      type: integer
+      label: 'Expiry in seconds for getting facets from algolia.'
 
 alshaya_algolia_react.product_frames:
   type: config_object
