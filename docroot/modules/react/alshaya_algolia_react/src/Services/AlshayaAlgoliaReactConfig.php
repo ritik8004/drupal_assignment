@@ -228,6 +228,7 @@ class AlshayaAlgoliaReactConfig implements AlshayaAlgoliaReactConfigInterface {
       'hitsPerPage' => $alshaya_algolia_react_setting_values->get('enable_hits_per_page'),
       'render_single_result_facets' => $alshaya_algolia_react_setting_values->get('render_single_result_facets'),
       'exclude_render_single_result_facets' => $alshaya_algolia_react_setting_values->get('exclude_render_single_result_facets'),
+      'facetListExpiry' => $alshaya_algolia_react_setting_values->get('facet_list_local_store_expiry'),
     ];
 
     // Set product elements alignment to true only

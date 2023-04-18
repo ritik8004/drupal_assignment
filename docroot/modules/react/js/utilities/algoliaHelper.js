@@ -65,7 +65,13 @@ export const getFacetListFromAlgolia = async (pageType) => {
   const { attributesForFaceting } = indexSettings;
   if (hasValue(attributesForFaceting)) {
     // Store facets list in local storage with an expiry timestamp for 1hr.
-    Drupal.addItemInLocalStorage(`${pageType}-facets`, attributesForFaceting, 3600);
+    Drupal.addItemInLocalStorage(
+      `${pageType}-facets`,
+      attributesForFaceting,
+      (hasValue(drupalSettings.algoliasearch.facetListExpiry)
+        ? parseInt(drupalSettings.algoliasearch.facetListExpiry, 10)
+        : 3600),
+    );
     facets = attributesForFaceting;
   }
   return facets;
