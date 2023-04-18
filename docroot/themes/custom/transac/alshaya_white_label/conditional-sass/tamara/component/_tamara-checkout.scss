@@ -42,6 +42,15 @@
       }
     }
 
+    .payment-method-bottom-panel {
+      .tamara-widget-payment-plan--horizontally {
+        .tamara-logo {
+          max-width: rem(50);
+          height: rem(21) !important;
+        }
+      }
+    }
+
     .tamara-installment-plan-widget {
       padding-top: 0 !important;
       padding-#{$left}: rem(48) !important;
