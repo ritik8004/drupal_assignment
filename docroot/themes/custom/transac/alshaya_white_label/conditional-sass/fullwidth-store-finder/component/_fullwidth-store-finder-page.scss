@@ -5,6 +5,12 @@
     }
   }
 
+  .current-location {
+    @include breakpoint($tablet) {
+      width: 11.5%;
+    }
+  }
+
   .store-finder--wrapper {
     @include breakpoint($tablet) {
       flex-grow: 1;
@@ -13,6 +19,15 @@
     @include breakpoint($desktop) {
       margin-#{$right}: rem(24);
       padding-#{$right}: 0;
+    }
+  }
+
+  #edit-field-latitude-longitude-boundary-geolocation-geocoder-google-places-api,
+  .form-item-geolocation-geocoder-google-places-api {
+    [id^="edit-geolocation-geocoder-google-places-api"] {
+      @include breakpoint($tablet) {
+        max-width: none;
+      }
     }
   }
 
