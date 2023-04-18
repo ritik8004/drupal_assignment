@@ -83,7 +83,8 @@ function alshaya_rcs_seo_page_attachments_alter(&$attachments) {
           )->toString();
 
           // Add the URL as is, RCS expects the URL to be same in all languages.
-          $url .= RcsPhPathProcessor::getFullPath();
+          // Keep only the trailing slash to point to the canonical URLs.
+          $url .= ltrim(RcsPhPathProcessor::getFullPath(FALSE), '/');
 
           // Unset "html_head_link" structure coming from 'content_translation'.
           foreach ($attachments['#attached']['html_head_link'] as $key => $element) {
