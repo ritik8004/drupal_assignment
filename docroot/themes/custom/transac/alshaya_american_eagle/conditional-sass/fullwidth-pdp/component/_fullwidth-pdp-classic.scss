@@ -11,3 +11,27 @@
     }
   }
 }
+
+@include breakpoint($desktop-HiDPI) {
+  .acq-content-product {
+    .form-item-configurables-size {
+      .select2-container {
+        width: 75% !important;
+      }
+    }
+
+    .basic-details-wrapper {
+      .field--name-field-skus {
+        .form-item-quantity {
+          width: rem(112);
+
+          .select2-container {
+            .select2-selection {
+              width: rem(112);
+            }
+          }
+        }
+      }
+    }
+  }
+}
