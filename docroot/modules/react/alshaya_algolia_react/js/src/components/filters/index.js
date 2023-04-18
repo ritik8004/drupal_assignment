@@ -30,6 +30,12 @@ const Filters = ({ indexName, pageType, ...props }) => {
     }
   };
 
+  /**
+   * Builds Facets from userData received from algolia query response.
+   *
+   * @param {object} data
+   *   Facets userData from algolia response.
+   */
   const buildFacets = (data) => {
     if (!hasValue(data)) {
       return;
