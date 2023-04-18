@@ -1,0 +1,143 @@
+.free-gifts-modal-overlay {
+  .ui-dialog-content {
+    .content__title_wrapper {
+      .content--item-code {
+        font-size: rem(14);
+      }
+    }
+
+    .select-free-gift {
+      .form-type-select {
+        .select2Option {
+          .list-title {
+            font-size: rem(16);
+          }
+
+          .select-buttons {
+            li {
+              width: auto;
+              height: auto;
+              padding: rem(6) rem(2);
+              margin: 0;
+              position: relative;
+
+              a {
+                width: rem(35);
+                height: rem(35);
+                border-radius: 50%;
+                border: rem(1) solid $swatch-border;
+
+                &.picked {
+                  &::before {
+                    position: absolute;
+                    content: "";
+                    width: rem(45);
+                    height: rem(45);
+                    top: rem(6);
+                    #{$left}: rem(-3);
+                    display: inline-block;
+                    border-radius: 50%;
+                    border: rem(1) solid $pdp_secondary_text;
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+
+      .size-guide-form-and-link-wrapper {
+        .select2Option {
+          span {
+            font-size: rem(16);
+          }
+
+          .select-buttons {
+            li {
+              padding-#{$right}: rem(10);
+
+              a {
+                width: 100%;
+                height: rem(44);
+                line-height: rem(16);
+                border-radius: 0;
+
+                &.picked {
+                  &::before {
+                    content: none;
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+
+    .mobilegallery {
+      ul.slick-dots {
+        .slick-dots-container {
+          li {
+            button {
+              display: none;
+            }
+          }
+        }
+      }
+    }
+  }
+}
+
+@include breakpoint($only-mobile) {
+  .free-gift-detail-modal.ui-dialog-content {
+    form.select-free-gift {
+      .configurable-select {
+        &::after {
+          top: rem(48);
+          transform: translateY(-50%);
+          height: auto;
+          width: auto;
+          font-size: rem(32);
+        }
+
+        select.form-select {
+          height: rem(53);
+        }
+      }
+    }
+  }
+}
+
+.free-gift-detail-modal.ui-dialog-content {
+  form.select-free-gift {
+    .configurable-select {
+      @include breakpoint($only-mobile) {
+        &::after {
+          top: rem(48);
+          transform: translateY(-50%);
+          height: auto;
+          width: auto;
+          font-size: rem(32);
+        }
+
+        select.form-select {
+          height: rem(53);
+        }
+      }
+    }
+  }
+
+  button {
+    &.select-free-gift {
+      font-weight: 700;
+    }
+  }
+}
+
+.nodetype--acq_product {
+  .free-gift-image {
+    @include breakpoint($only-mobile) {
+      margin-#{$right}: rem(12);
+    }
+  }
+}
