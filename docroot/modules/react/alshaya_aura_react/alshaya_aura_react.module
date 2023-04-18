@@ -91,10 +91,7 @@ function alshaya_aura_react_page_attachments_alter(array &$page) {
   // Attach the library for Aura backend based on the commerce backend version.
   $page['#attached']['library'][] = 'alshaya_aura_react/aura_backend';
 
-  $route_match = \Drupal::routeMatch();
-  $route_name = $route_match->getRouteName();
-
-  if ($route_name === 'alshaya_spc.checkout.confirmation') {
+  if (\Drupal::routeMatch()->getRouteName() === 'alshaya_spc.checkout.confirmation') {
     $page['#attached']['library'][] = 'alshaya_aura_react/aura_order_confirmation';
   }
 }
