@@ -13,6 +13,21 @@ use Drupal\Component\Utility\Unicode;
 use Drupal\block\Entity\Block;
 
 /**
+ * Update algolia react with default value for render_single_result_facets.
+ *
+ * And also for exclude_render_single_result_facets.
+ */
+function alshaya_hm_update_9406() {
+  $config = \Drupal::configFactory()->getEditable('alshaya_algolia_react.settings');
+  if ($config) {
+    $config->set('render_single_result_facets', FALSE);
+    $config->set('exclude_render_single_result_facets', 'final_price,attr_bv_rating,attr_color,field_acq_promotion_label');
+    $config->save();
+  }
+
+}
+
+/**
  * Implements hook_update_N().
  *
  * Set image_thumb_gallery => true to use image gallery on
@@ -1425,6 +1440,11 @@ function alshaya_hm_update_dependencies() {
     'alshaya_hm' => [
       '8034' => [
         'alshaya_seo_transac' => '8402',
+      ],
+    ],
+    'alshaya_hm' => [
+      '9406' => [
+        'alshaya_algolia_react' => '9408',
       ],
     ],
   ];
