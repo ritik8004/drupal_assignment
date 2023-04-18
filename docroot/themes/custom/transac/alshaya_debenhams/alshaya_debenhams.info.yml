@@ -214,3 +214,8 @@ libraries-override:
     css:
       theme:
         css/conditional-sass/fullwidth-pdp/fullwidth-pdp.ltr.css: css/conditional-sass/fullwidth-pdp/fullwidth-pdp.ltr.css
+
+  alshaya_white_label/fullwidth-store-finder:
+    css:
+      theme:
+        css/conditional-sass/fullwidth-store-finder/fullwidth-store-finder.ltr.css: css/conditional-sass/fullwidth-store-finder/fullwidth-store-finder.ltr.css
