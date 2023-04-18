@@ -863,7 +863,9 @@ $full_width_padding_desktop_wide: rem(40); /* viewport width >= 1680px */
   $swatch_width: rem(37),
 ) {
   @for $i from $lower_limit through $upper_limit {
+    // Adding 1 to the limit to account for next arrow button width.
     $max-width: calc(#{$swatch_width} * (#{$i} + 1));
+    // Adding 1.5 to the mobile limit to account for the half of next slide.
     $max-width-mobile: calc(#{$swatch_width} * (#{$i} + 1.5));
 
     &.swatch-limit-#{$i} {

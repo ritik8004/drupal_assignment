@@ -13,6 +13,7 @@ const ArticleSwatches = ({
     return null;
   }
   // Get plp color swatch limit for desktop/mobile view.
+  // Adding 0.5 to the mobile limit to show half of the next slide.
   let swatchesLimit = (isMobile())
     ? drupalSettings.reactTeaserView.swatches.swatchPlpLimitMobileView + 0.5
     : drupalSettings.reactTeaserView.swatches.swatchPlpLimit;
