@@ -19,4 +19,4 @@ render_single_result_facets: true
 # For filters that should not get impacted by the render_single_result_facets value.
 exclude_render_single_result_facets: ''
 # Expiry in seconds for the facets getting from algolia.
-facet_list_local_store_expiry: 3600
+algolia_facets_local_storage_expiry: 3600
