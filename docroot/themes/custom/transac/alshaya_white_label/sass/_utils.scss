@@ -771,7 +771,7 @@ $full_width_padding_desktop_wide: rem(40); /* viewport width >= 1680px */
   }
 }
 
-// Common styles for fullwidth sofa sectional PDP.
+// Common styles for fullwidth sofa-sectional PDP.
 @mixin fullwidth-sofasectional {
   @include breakpoint($desktop) {
     body.nodetype--acq_product:not(.magazine-layout):not(.magazine-layout-v2) {
