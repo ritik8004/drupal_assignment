@@ -141,3 +141,24 @@
     }
   }
 }
+
+.free-gift-promo-list-overlay,
+.free-gifts-modal-overlay {
+  .slick-next {
+    &::before {
+      html[lang="ar"] & {
+        transform: rotate(180deg);
+        content: "";
+      }
+    }
+  }
+
+  .slick-prev {
+    &::before {
+      html[lang="ar"] & {
+        transform: rotate(360deg);
+        content: "";
+      }
+    }
+  }
+}
