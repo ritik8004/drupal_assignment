@@ -20,4 +20,8 @@
       width: rem(30);
     }
   }
+
+  .slick-current {
+    border-width: rem(0) !important;
+  }
 }

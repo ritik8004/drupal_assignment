@@ -14,34 +14,7 @@
           }
 
           .select-buttons {
-            li {
-              width: auto;
-              height: auto;
-              padding: rem(6) rem(2);
-              margin: 0;
-              position: relative;
-
-              a {
-                width: rem(35);
-                height: rem(35);
-                border-radius: 50%;
-                border: rem(1) solid $swatch-border;
-
-                &.picked {
-                  &::before {
-                    position: absolute;
-                    content: "";
-                    width: rem(45);
-                    height: rem(45);
-                    top: rem(6);
-                    #{$left}: rem(-3);
-                    display: inline-block;
-                    border-radius: 50%;
-                    border: rem(1) solid $pdp_secondary_text;
-                  }
-                }
-              }
-            }
+            @include select-buttons;
           }
         }
       }
@@ -88,26 +61,6 @@
   }
 }
 
-@include breakpoint($only-mobile) {
-  .free-gift-detail-modal.ui-dialog-content {
-    form.select-free-gift {
-      .configurable-select {
-        &::after {
-          top: rem(48);
-          transform: translateY(-50%);
-          height: auto;
-          width: auto;
-          font-size: rem(32);
-        }
-
-        select.form-select {
-          height: rem(53);
-        }
-      }
-    }
-  }
-}
-
 .free-gift-detail-modal.ui-dialog-content {
   form.select-free-gift {
     .configurable-select {
@@ -129,7 +82,7 @@
 
   button {
     &.select-free-gift {
-      font-weight: 700;
+      font-family: $alshaya-bold;
     }
   }
 }
@@ -148,7 +101,7 @@
     &::before {
       html[lang="ar"] & {
         transform: rotate(180deg);
-        content: "";
+        content: "";
       }
     }
   }
@@ -157,8 +110,15 @@
     &::before {
       html[lang="ar"] & {
         transform: rotate(360deg);
-        content: "";
+        content: "";
       }
     }
+  }
+}
+
+.free-gift-listing-modal {
+  .free-gift-view {
+    margin-#{$right}: rem(11);
+    margin-#{$left}: rem(11);
   }
 }

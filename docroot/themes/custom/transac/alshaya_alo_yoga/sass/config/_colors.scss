@@ -401,6 +401,10 @@ $pdp_card_bg: $smoke;
 $pdp_secondary_text: $chicago;
 $magazine-pdp-secondary-text: $chicago;
 $pdp_price_text: $black;
+$pdp_size_option_border: $black;
+$pdp_size_option_selected_bg: $black;
+$pdp_size_option_text: $black;
+$pdp_sidebar_label: $black;
 
 // Product Add to cart form.
 $pdp_size_selected_text: $black;
@@ -507,9 +511,7 @@ $content_error_msg_bg: $alert-main;
 $free-gifts-border: $black;
 $magv2-free-gift-modal-item-code: $chicago;
 $free-gifts-title-text: $black;
-$pdp_size_option_border: $black;
-$pdp_size_option_selected_bg: $black;
-$pdp_size_option_text: $black;
-$pdp_sidebar_label: $black;
-$modal_close_bg: $black;
 $free-gifts-select-button-bg: $black;
+
+//Modal
+$modal_close_bg: $black;
