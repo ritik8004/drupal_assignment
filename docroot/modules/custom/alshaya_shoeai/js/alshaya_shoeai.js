@@ -3,7 +3,7 @@
  * Contains Alshaya ShoeAI functionality.
  */
 
-(function (drupalSettings) {  
+(function (Drupal, drupalSettings) {  
   var shoeAi = drupalSettings.shoeai;
   if (shoeAiStatus(shoeAi)) {
     var language = drupalSettings.path.currentLanguage;
@@ -35,7 +35,7 @@
       addShoeSizePurchaseConfirmationScript(Drupal, drupalSettings);
     }
   }
-})(drupalSettings);
+})(Drupal, drupalSettings);
 
 /**
  * Helper function for returning
