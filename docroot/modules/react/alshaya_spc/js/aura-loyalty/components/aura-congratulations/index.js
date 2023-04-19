@@ -35,7 +35,7 @@ class AuraCongratulationsModal extends React.Component {
     // Display different confirmation message inside popup for FE customers after signIn.
     if (isFullyEnrolled) {
       this.setState({
-        isFullyEnrolled: true,
+        isFullyEnrolled,
       });
     }
   }
