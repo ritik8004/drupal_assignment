@@ -55,6 +55,5 @@ services:
       - '@alshaya_rcs_promotion.helper'
       - '@alshaya_rcs_seo.graphql_helper'
       - '@request_stack'
-      - '@config.factory'
       - '@rcs_placeholders.path_processor'
       - '@module_handler'
