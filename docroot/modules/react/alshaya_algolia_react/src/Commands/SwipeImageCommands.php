@@ -65,15 +65,15 @@ class SwipeImageCommands extends DrushCommands {
       $configSwipeImage = $this->configFactory->getEditable('alshaya_algolia_react.swipe_image');
       $configSwipeImage->set('enable_swipe_image_mobile', TRUE);
       $configSwipeImage->set('slide_effect_fade', 'fade');
+      $configSwipeImage->save();
 
       // Set Display Setting config.
       $configDisplaySetting = $this->configFactory->getEditable('alshaya_acm_product.display_settings');
       $configDisplaySetting->set('image_thumb_gallery', TRUE);
       $configDisplaySetting->set('gallery_show_hover_image', FALSE);
+      $configDisplaySetting->save();
 
-      if ($configSwipeImage->save() && $configDisplaySetting->save()) {
-        $this->logger->success('Swipe images feature enabled successfully.');
-      }
+      $this->logger->success('Swipe images feature enabled successfully.');
     }
     else {
       $this->logger->warning('Swipe images feature already enabled.');
@@ -103,15 +103,16 @@ class SwipeImageCommands extends DrushCommands {
       $configSwipeImage = $this->configFactory->getEditable('alshaya_algolia_react.swipe_image');
       $configSwipeImage->set('enable_swipe_image_mobile', FALSE);
       $configSwipeImage->set('slide_effect_fade', 'slide');
+      $configSwipeImage->save();
 
       // Set Display Setting config.
       $configDisplaySetting = $this->configFactory->getEditable('alshaya_acm_product.display_settings');
       $configDisplaySetting->set('image_thumb_gallery', FALSE);
       $configDisplaySetting->set('gallery_show_hover_image', TRUE);
+      $configDisplaySetting->save();
 
-      if ($configSwipeImage->save() && $configDisplaySetting->save()) {
-        $this->logger->success('Swipe images feature disabled successfully.');
-      }
+      $this->logger->success('Swipe images feature disabled successfully.');
+
     }
     else {
       $this->logger->warning('Swipe images feature already disable.');
