@@ -652,6 +652,16 @@ function _alshaya_aura_react_translations() {
         'context' => 'aura',
       ],
     ],
+    'v12' => [
+      'You can now start building your Aura. Earn points every time you shop online or instore.' => [
+        'ar' => 'يمكنك الآن الاستمتاع بتجربة تسوق فريدة مع أورا. اكسب النقاط عند تسوق في محلاتنا أو أونلاين.',
+        'context' => 'aura',
+      ],
+      'Use your points on future purchases or to access a range of rewards and experiences on the Aura app.' => [
+        'ar' => 'استخدم النقاط المكتسبة في عمليات الشراء القادمة أو للاستمتاع بدخول مميز للعديد من المكافآت والتجارب الممتعة عبر تطبيقنا.',
+        'context' => 'aura',
+      ],
+    ],
   ];
 }
 
