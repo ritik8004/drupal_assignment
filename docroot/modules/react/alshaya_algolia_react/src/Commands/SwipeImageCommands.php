@@ -7,7 +7,7 @@ use Drush\Commands\DrushCommands;
 use Drupal\Core\Logger\LoggerChannelFactoryInterface;
 
 /**
- * Class SwipeImage Commands.
+ * Class SwipeImageCommands.
  *
  * Enable/Disable Swipe image for PLP/SRP.
  *
@@ -38,7 +38,6 @@ class SwipeImageCommands extends DrushCommands {
    *   The config factory.
    */
   public function __construct(LoggerChannelFactoryInterface $loggerChannelFactory, ConfigFactoryInterface $config_factory) {
-    parent::__construct();
     $this->logger = $loggerChannelFactory->get('alshaya_algolia_react');
     $this->configFactory = $config_factory;
   }
@@ -46,49 +45,76 @@ class SwipeImageCommands extends DrushCommands {
   /**
    * Swipe Image enable for plp/srp.
    *
-   * @command alshaya_swipe_image
+   * @command alshaya_swipe_image_enable
    *
    * @option enable
-   *   Status of block. ('enable' to enable the swipe image for plp/srp.)
-   * @option disable
-   *   Status of block. ('disable' to enable the swipe image for plp/srp.)
+   *   Status of swipe image. (enable the swipe image for plp/srp.)
    *
-   * @aliases alshaya-swipe-image
+   * @aliases alshaya-swipe-image-enable
    *
-   * @usage drush alshaya-swipe-image --enable  --disable
-   *   Disable algolia for plp and activate db.
+   * @usage drush alshaya-swipe-image-enable
+   *   Enable the Swipe image feature in PLP/SRP.
    */
-  public function toggleSwipeImage($options = [
-    'enable' => FALSE,
-    'disable' => FALSE,
-  ]) {
+  public function enable() {
     // Get enable_swipe_image_mobile.
     $swipe_image_settings = $this->configFactory->get('alshaya_algolia_react.swipe_image');
 
     // Enabled the swipe image features.
-    if ($options['enable']) {
-      $config = $this->configFactory->getEditable('alshaya_algolia_react.swipe_image');
-      $config->set('enable_swipe_image_mobile', TRUE);
-      $config->set('no_of_image_scroll', 6);
-      $config->set('slide_effect_fade', 'slide');
-      $config->set('image_slide_timing', 2);
+    if (!$swipe_image_settings->get('enable_swipe_image_mobile')) {
+      // Set Swipe Image config.
+      $configSwipeImage = $this->configFactory->getEditable('alshaya_algolia_react.swipe_image');
+      $configSwipeImage->set('enable_swipe_image_mobile', TRUE);
+      $configSwipeImage->set('slide_effect_fade', 'fade');
 
-      if (!$swipe_image_settings->get('enable_swipe_image_mobile') &&  $config->save()) {
+      // Set Display Setting config.
+      $configDisplaySetting = $this->configFactory->getEditable('alshaya_acm_product.display_settings');
+      $configDisplaySetting->set('image_thumb_gallery', TRUE);
+      $configDisplaySetting->set('gallery_show_hover_image', FALSE);
+
+      if ($configSwipeImage->save() && $configDisplaySetting->save()) {
         $this->logger->success('Swipe images feature enabled successfully.');
       }
-      else {
-        $this->logger->warning('Swipe images feature already enabled.');
-      }
     }
+    else {
+      $this->logger->warning('Swipe images feature already enabled.');
+    }
+  }
 
-    // Disabled the Swipe Image feature.
-    if ($options['disable']) {
-      if ($swipe_image_settings->get('enable_swipe_image_mobile') && $this->configFactory->getEditable('alshaya_algolia_react.swipe_image')->delete()) {
+  /**
+   * Swipe Image disable for plp/srp.
+   *
+   * @command alshaya_swipe_image_disable
+   *
+   * @option disable
+   *   Status of swipe image. (disable the swipe image for plp/srp.)
+   *
+   * @aliases alshaya-swipe-image-disable
+   *
+   * @usage drush alshaya-swipe-image-disable
+   *   Disable the Swipe image feature in PLP/SRP.
+   */
+  public function disable() {
+    // Get enable_swipe_image_mobile.
+    $swipe_image_settings = $this->configFactory->get('alshaya_algolia_react.swipe_image');
+
+    // Disabled the swipe image features.
+    if ($swipe_image_settings->get('enable_swipe_image_mobile')) {
+      // Set Swipe Image config.
+      $configSwipeImage = $this->configFactory->getEditable('alshaya_algolia_react.swipe_image');
+      $configSwipeImage->set('enable_swipe_image_mobile', FALSE);
+      $configSwipeImage->set('slide_effect_fade', 'slide');
+
+      // Set Display Setting config.
+      $configDisplaySetting = $this->configFactory->getEditable('alshaya_acm_product.display_settings');
+      $configDisplaySetting->set('image_thumb_gallery', FALSE);
+      $configDisplaySetting->set('gallery_show_hover_image', TRUE);
+
+      if ($configSwipeImage->save() && $configDisplaySetting->save()) {
         $this->logger->success('Swipe images feature disabled successfully.');
       }
-      else {
-        $this->logger->warning('Swipe images feature already disabled.');
-      }
+    }
+    else {
+      $this->logger->warning('Swipe images feature already disable.');
     }
   }
 
