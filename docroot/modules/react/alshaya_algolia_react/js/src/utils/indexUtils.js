@@ -416,3 +416,7 @@ export function hasPriceRange(alshayaPriceRange) {
     && (alshayaPriceRange.to.min !== alshayaPriceRange.to.max)
     && (alshayaPriceRange.to.min !== 0 || alshayaPriceRange.to.max !== 0);
 }
+
+export function unescapeFacetValue(value) {
+  return value.replace(/^\\-/, '-');
+}

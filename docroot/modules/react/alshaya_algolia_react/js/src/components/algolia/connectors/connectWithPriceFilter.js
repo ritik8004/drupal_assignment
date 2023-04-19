@@ -16,7 +16,7 @@ function getId(props) {
   return props.attribute;
 }
 
-function getCurrentRefinement(props, searchState, context) {
+function getCurrentRefinement(props, searchState, currentRange, context) {
   return getCurrentRefinementValue(
     props,
     searchState,
@@ -102,7 +102,7 @@ function getLimit(_ref) {
 }
 
 function getValue(name, props, searchState, context) {
-  const currentRefinement = getCurrentRefinement(props, searchState, context);
+  const currentRefinement = getCurrentRefinement(props, searchState, {}, context);
   return (currentRefinement !== name) ? name : '';
 }
 
@@ -127,12 +127,16 @@ export default createConnector({
 
   getProvidedProps(props, searchState, searchResults) {
     const { attribute, granularity } = props;
-    const results = getResults(searchResults, this.context);
+    const results = getResults(searchResults, {
+      ais: props.contextValue,
+      multiIndexContext: props.indexContextValue,
+    });
 
     const currentRefinement = getCurrentRefinement(
       props,
       searchState,
-      this.context,
+      {},
+      { ais: props.contextValue, multiIndexContext: props.indexContextValue },
     );
 
     const canRefine = Boolean(results) && Boolean(results.getFacetByName(attribute));
@@ -154,7 +158,10 @@ export default createConnector({
       if (typeof key === 'undefined') {
         const object = {
           label: rangeKey,
-          value: getValue(rangeKey, props, searchState, this.context),
+          value: getValue(rangeKey, props, searchState, {
+            ais: props.contextValue,
+            multiIndexContext: props.indexContextValue,
+          }),
           sort: range.start == null ? 0 : parseInt(range.start, 10),
           count: parseInt(v.count, 10),
           isRefined: rangeKey === currentRefinement,
@@ -169,13 +176,19 @@ export default createConnector({
 
     return {
       items: sortedItems,
-      currentRefinement: getCurrentRefinement(props, searchState, this.context),
+      currentRefinement: getCurrentRefinement(props, searchState, {}, {
+        ais: props.contextValue,
+        multiIndexContext: props.indexContextValue,
+      }),
       canRefine: sortedItems.length > 0,
     };
   },
 
   refine(props, searchState, nextRefinement) {
-    return refine(props, searchState, nextRefinement, this.context);
+    return refine(props, searchState, nextRefinement, {
+      ais: props.contextValue,
+      multiIndexContext: props.indexContextValue,
+    });
   },
 
   searchForFacetValues(props, searchState, nextRefinement) {
@@ -189,7 +202,10 @@ export default createConnector({
   getSearchParameters(searchParameters, props, searchState) {
     const { attribute } = props;
     const { start, end } = parseItem(
-      getCurrentRefinement(props, searchState, this.context),
+      getCurrentRefinement(props, searchState, {}, {
+        ais: props.contextValue,
+        multiIndexContext: props.indexContextValue,
+      }),
     );
     let finalSearchParameters = searchParameters.addDisjunctiveFacet(attribute);
 
@@ -212,13 +228,22 @@ export default createConnector({
   },
 
   cleanUp(props, searchState) {
-    return cleanUp(props, searchState, this.context);
+    return cleanUp(props, searchState, {
+      ais: props.contextValue,
+      multiIndexContext: props.indexContextValue,
+    });
   },
 
   getMetadata(props, searchState) {
     const id = getId(props);
-    const value = getCurrentRefinement(props, searchState, this.context);
-    const index = getIndexId(this.context);
+    const value = getCurrentRefinement(props, searchState, {}, {
+      ais: props.contextValue,
+      multiIndexContext: props.indexContextValue,
+    });
+    const index = getIndexId({
+      ais: props.contextValue,
+      multiIndexContext: props.indexContextValue,
+    });
     const items = [];
 
     if (value.length > 0) {
@@ -226,7 +251,10 @@ export default createConnector({
         label: `${props.attribute}: ${value}`,
         attribute: props.attribute,
         currentRefinement: value,
-        value: (nextState) => refine(props, nextState, '', this.context),
+        value: (nextState) => refine(props, nextState, '', {
+          ais: props.contextValue,
+          multiIndexContext: props.indexContextValue,
+        }),
       });
     }
     return { id, index, items };
