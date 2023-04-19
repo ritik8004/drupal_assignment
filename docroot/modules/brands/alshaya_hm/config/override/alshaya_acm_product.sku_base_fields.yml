@@ -55,6 +55,7 @@ fields:
     label: 'Article Pattern'
     cardinality: -1
     index: 1
+    facet: 1
 
   article_license_company:
     label: 'Article License Company'
@@ -65,6 +66,7 @@ fields:
     label: 'Article License Item'
     cardinality: -1
     index: 1
+    facet: 1
 
   article_fragrance_description:
     label: 'Article Fragrance Description'
