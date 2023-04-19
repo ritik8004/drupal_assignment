@@ -27,6 +27,8 @@
           width: rem(112);
 
           .select2-container {
+            width: rem(112) !important;
+
             .select2-selection {
               width: rem(112);
             }
