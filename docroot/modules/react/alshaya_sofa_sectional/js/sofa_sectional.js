@@ -11,7 +11,6 @@ import SofaSectionalForm from './components/sofa-sectional';
  */
 const renderSofaSectionalForm = (elementSelector) => {
   const selectedFormElement = document.querySelector(elementSelector);
-
   if (selectedFormElement) {
     // Get sku from forms data-sku attribute.
     const { sku } = selectedFormElement.dataset;
