@@ -3,7 +3,7 @@
  * Contains Alshaya ShoeAI functionality.
  */
 
-(function (drupalSettings) {  
+(function (Drupal, drupalSettings) {  
   var shoeAi = drupalSettings.shoeai;
   if (shoeAiStatus(shoeAi)) {
     var language = drupalSettings.path.currentLanguage;
@@ -30,8 +30,12 @@
     document.addEventListener('product-add-to-cart-success', function (e) {
       initialiseShoeSizeShoppingCart(e, 'addToCartPlp');
     });
+    var confirmationPage = document.querySelectorAll('#spc-checkout-confirmation');
+    if (confirmationPage.length > 0 && Drupal.hasValue(drupalSettings.order_details)) {
+      addShoeSizePurchaseConfirmationScript(Drupal, drupalSettings);
+    }
   }
-})(drupalSettings);
+})(Drupal, drupalSettings);
 
 /**
  * Helper function for returning
@@ -145,3 +149,35 @@ function setShoeSizeShoppingCart(totals, items, updated_sku, updated_qty) {
     }
   }
 };
+
+/*
+ * Helper function for populating
+ * ShoeSizeShoppingCartConfirmation variable on confirmation page
+ * and call shoeai ext. script for order confirmation.
+ * Gets response true if order is unique if confirmation URL is reloaded than gets false.
+ */
+function addShoeSizePurchaseConfirmationScript() {
+  if (Drupal.hasValue(drupalSettings.shoeai)) {
+    var shoeAi = drupalSettings.shoeai;
+    var orderNumber = drupalSettings.order_details.order_number
+      ? drupalSettings.order_details.order_number
+      : 'null';
+    var sid = Math.round(new Date().getTime()/1000);
+    if (orderNumber) {
+      // Variable required for shoeai ext. js call returns false.
+      window.ShoeSizeShoppingCartConfirmation = {};
+      window.ShoeSizeShoppingCartConfirmation = {
+        shopID: shoeAi.shopId,
+        orderID: orderNumber,
+        ssm_sid: sid
+      };
+      // Order confirmation script.
+      var conirmationScript = document.createElement('script');
+      conirmationScript.type = 'text/javascript';
+      conirmationScript.src = 'https://shoesize.me/plugin/confirm.js?'+
+        'shopid='+encodeURIComponent(shoeAi.shopId)+'&id='+orderNumber+
+        '&sid='+sid;
+      (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(conirmationScript);
+    };
+  }
+}
