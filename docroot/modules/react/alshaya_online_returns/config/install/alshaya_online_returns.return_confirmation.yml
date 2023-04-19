@@ -21,3 +21,5 @@ rows:
     icon: 'refund'
     hide_this_row: 0
 return_date_format: 'DD MMM YYYY @H[h]mm'
+# Config for customer service number.
+customer_service_number: ''

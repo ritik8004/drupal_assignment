@@ -303,6 +303,12 @@ function _alshaya_online_returns_translations() {
         'context' => 'online_returns',
       ],
     ],
+    'v4' => [
+      'To return this order, please contact our customer service on @contact_number' => [
+        'ar' => 'لإرجاع هذه الطلبية، يرجى التواصل مع خدمة الزبائن عبر رقم الهاتف @contact_number',
+        'context' => 'online_returns',
+      ],
+    ],
   ];
 
   return $strings;
