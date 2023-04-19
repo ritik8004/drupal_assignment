@@ -307,6 +307,15 @@ const Teaser = ({
               />
             </div>
             )}
+          {(hasValue(attribute.attr_article_swatches[0]) && showColorSwatchSlider)
+            ? (
+              <ArticleSwatches
+                sku={sku}
+                handleSwatchSelect={handleSwatchSelect}
+                articleSwatches={attribute.attr_article_swatches}
+                url={url}
+              />
+            ) : null}
           <div className="product-plp-detail-wrapper">
             { collectionLabel.length > 0
               && (
@@ -378,15 +387,11 @@ const Teaser = ({
             {/* Render color swatches based on article/sku id */}
             {(hasValue(attribute.article_swatches)
               && drupalSettings.reactTeaserView.swatches.showArticleSwatches)
-              || (hasValue(attribute.attr_article_swatches)
-              && showColorSwatchSlider)
               ? (
                 <ArticleSwatches
                   sku={sku}
                   handleSwatchSelect={handleSwatchSelect}
-                  articleSwatches={showColorSwatchSlider
-                    ? attribute.attr_article_swatches
-                    : attribute.article_swatches}
+                  articleSwatches={attribute.article_swatches}
                   url={url}
                 />
               ) : null}

@@ -24,23 +24,25 @@
           recommendationTitle += titleElement.find('.title--eng').text();
         }
         var prefix = productRecommendationsSuffix || 'pr-';
-        var gtmListValues = Drupal.getItemFromLocalStorage(productListStorageKey) || {};
+        var gtmListValues = {};
         // Try to get sku from the element clicked. Works with DY block.
         var sku = $(this).data('sku');
         if (sku) {
           // Extract only the first part prior to '|'.
           listName = listName ? listName.split('|')[0] : '';
           if (listName.indexOf('placeholder') > -1) {
-            gtmListValues[sku] = prefix + listName.replace('placeholder', recommendationTitle).toLowerCase();
+            gtmListValues.list = prefix + listName.replace('placeholder', recommendationTitle).toLowerCase();
           }
           else {
-            gtmListValues[sku] = prefix + (listName + '-' + recommendationTitle).toLowerCase();
+            gtmListValues.list = prefix + (listName + '-' + recommendationTitle).toLowerCase();
           }
           // Override gtm list name for this product even if it already has value
           // in local storage.
           if (typeof drupalSettings.gtm !== undefined
             && typeof drupalSettings.gtm.productListExpirationMinutes !== 'undefined') {
-            Drupal.addItemInLocalStorage(productListStorageKey, gtmListValues, drupalSettings.gtm.productListExpirationMinutes);
+            // Add current DY product recommendations popup in local storage with key
+            // 'gtm_dy_product_list'.
+            Drupal.addItemInLocalStorage('gtm_dy_product_list', gtmListValues, drupalSettings.gtm.productListExpirationMinutes);
           }
         }
 

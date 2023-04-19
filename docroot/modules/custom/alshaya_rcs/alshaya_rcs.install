@@ -8,6 +8,15 @@
 /**
  * Implements hook_update_N().
  *
+ * Install alshaya_rcs_free_gift module.
+ */
+function alshaya_rcs_update_9403() {
+  \Drupal::service('module_installer')->install(['alshaya_rcs_free_gift']);
+}
+
+/**
+ * Implements hook_update_N().
+ *
  * Install alshaya_rcs_mobile_app module.
  */
 function alshaya_rcs_update_9402() {
