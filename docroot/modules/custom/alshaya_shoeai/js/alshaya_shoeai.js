@@ -32,7 +32,7 @@
     });
     var confirmationPage = document.querySelectorAll('#spc-checkout-confirmation');
     if (confirmationPage.length > 0 && Drupal.hasValue(drupalSettings.order_details)) {
-      addShoeSizePurchaseConfirmationScript();
+      addShoeSizePurchaseConfirmationScript(Drupal, drupalSettings);
     }
   }
 })(drupalSettings);
@@ -176,7 +176,7 @@ function addShoeSizePurchaseConfirmationScript() {
       conirmationScript.type = 'text/javascript';
       conirmationScript.src = 'https://shoesize.me/plugin/confirm.js?'+
         'shopid='+encodeURIComponent(shoeAi.shopId)+'&id='+orderNumber+
-        '&sid='+ssm_id;
+        '&sid='+sid;
       (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(conirmationScript);
     };
   }
