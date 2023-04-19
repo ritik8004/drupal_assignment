@@ -1,0 +1,7 @@
+@include breakpoint($only-tablet) {
+  .path--store-finder {
+    .by--alphabet {
+      margin-#{$left}: 0;
+    }
+  }
+}
