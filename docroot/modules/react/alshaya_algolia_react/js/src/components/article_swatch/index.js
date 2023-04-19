@@ -27,9 +27,10 @@ const ArticleSwatches = ({
   const sliderSettings = {
     infinite: false,
     slidesToShow: swatchesLimit,
+    // Scrolling -1 for desktop slider to compensate previous arrow overlap.
     slidesToScroll: isMobile()
       ? drupalSettings.reactTeaserView.swatches.swatchPlpLimitMobileView
-      : drupalSettings.reactTeaserView.swatches.swatchPlpLimit,
+      : drupalSettings.reactTeaserView.swatches.swatchPlpLimit - 1,
   };
 
   // Show all color swatches with slider when total number of swatches
