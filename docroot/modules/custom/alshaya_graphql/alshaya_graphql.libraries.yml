@@ -1,0 +1,6 @@
+main:
+  js:
+    dist/alshaya_graphql.bundle.js: {}
+  dependencies:
+    - core/jquery
+    - core/drupalSettings
