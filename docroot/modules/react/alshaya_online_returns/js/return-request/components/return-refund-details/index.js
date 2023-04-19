@@ -129,7 +129,7 @@ class ReturnRefundDetails extends React.Component {
    */
   createReturnRequest = async () => {
     const { itemsSelected, handleErrorMessage, orderDetails } = this.props;
-    const { cardList, egiftCardType } = this.state;
+    const { cardList, egiftCardType, isHybrid } = this.state;
 
     showFullScreenLoader();
 
@@ -146,10 +146,17 @@ class ReturnRefundDetails extends React.Component {
       cardNumber = cardList.card_number;
     }
 
+    // Checking whether eGift card is selected or not in the refund form options.
+    const isEgiftSelected = document.querySelector('#egift')
+      ? document.querySelector('#egift').checked
+      : false;
+
     const returnRequest = await createReturnRequest(
       itemsSelected,
       egiftCardType,
       cardNumber,
+      isEgiftSelected,
+      isHybrid,
     );
     removeFullScreenLoader();
 
@@ -158,10 +165,6 @@ class ReturnRefundDetails extends React.Component {
       return;
     }
 
-    // Checking whether eGift card is selected or not in the refund form options.
-    const isEgiftSelected = document.querySelector('#egift')
-      ? document.querySelector('#egift').checked
-      : false;
     // Adding the refund form selection value to local storage to get the same
     // in return conformation page. True will be stored if eGift card is selected
     // in the refund form options else false will get stored.
