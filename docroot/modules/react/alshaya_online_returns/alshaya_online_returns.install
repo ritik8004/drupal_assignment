@@ -22,7 +22,7 @@ function alshaya_online_returns_update_9403() {
     AlshayaConfigManager::MODE_ADD_MISSING,
   );
   // Add translation for big ticket order message.
-  module_load_include('inc', 'alshaya_online_returns', 'alshaya_online_returns.translations');
+  \Drupal::moduleHandler()->loadInclude('alshaya_online_returns', 'inc', 'alshaya_online_returns.translations');
   $translations = _alshaya_online_returns_get_translations('v4');
   if (!empty($translations)) {
     alshaya_i18n_save_translations($translations);
