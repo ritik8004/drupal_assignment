@@ -4,6 +4,7 @@ namespace Drupal\alshaya_shoeai\Services;
 
 use Drupal\Core\Config\ConfigFactoryInterface;
 use Drupal\Core\Session\AccountProxyInterface;
+use Drupal\Core\Cache\Cache;
 
 /**
  * Helper class for getting shoeai config.
@@ -112,6 +113,20 @@ class AlshayaShoeAi {
       $shoeAiSettings['zeroHash'] = $this->getShoeAiZeroHash();
     }
     return $shoeAiSettings;
+  }
+
+  /**
+   * Function for adding shoeai drupalSettings and custom library to the page.
+   */
+  public function attachShoeAiLibrary(&$build) {
+    // Add script for shoeai in order confirmation page.
+    $shoeai_config = $this->configFactory->get('alshaya_shoeai.settings');
+    $build['#cache']['tags'] = Cache::mergeTags($build['#cache']['tags'] ?? [], $shoeai_config->getCacheTags());
+    $shoeai_settings = $this->getShoeAiSettings();
+    if (!empty($shoeai_settings)) {
+      $build['#attached']['library'][] = 'alshaya_shoeai/shoeai_js';
+      $build['#attached']['drupalSettings']['shoeai'] = $shoeai_settings;
+    }
   }
 
 }
