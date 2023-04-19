@@ -6,7 +6,6 @@ use Drupal\alshaya_rcs_listing\Services\AlshayaRcsListingHelper;
 use Drupal\alshaya_rcs_product\Services\AlshayaRcsProductHelper;
 use Drupal\alshaya_rcs_promotion\Services\AlshayaRcsPromotionHelper;
 use Drupal\Component\Render\FormattableMarkup;
-use Drupal\Core\Config\ConfigFactoryInterface;
 use Drupal\Core\Extension\ModuleHandlerInterface;
 use Drupal\rcs_placeholders\Service\RcsPhPathProcessor;
 use Symfony\Component\HttpFoundation\RequestStack;
@@ -52,13 +51,6 @@ class AlshayaRcsMetatagSsrHelper {
   protected $requestStack;
 
   /**
-   * The Config Factory service.
-   *
-   * @var \Drupal\Core\Config\ConfigFactoryInterface
-   */
-  protected $configFactory;
-
-  /**
    * The RCS Path processor service.
    *
    * @var \Drupal\rcs_placeholders\Service\RcsPhPathProcessor
@@ -92,8 +84,6 @@ class AlshayaRcsMetatagSsrHelper {
    *   Alshaya GraphQL api wrapper.
    * @param \Symfony\Component\HttpFoundation\RequestStack $request_stack
    *   Request stack service.
-   * @param \Drupal\Core\Config\ConfigFactoryInterface $config_factory
-   *   Config Factory service.
    * @param \Drupal\rcs_placeholders\Service\RcsPhPathProcessor $rcs_path_processor
    *   RCS path processor service.
    * @param \Drupal\Core\Extension\ModuleHandlerInterface $module_handler
@@ -105,7 +95,6 @@ class AlshayaRcsMetatagSsrHelper {
     AlshayaRcsPromotionHelper $rcs_promotion_helper,
     AlshayGraphqlApiWrapper $graphql_api_wrapper,
     RequestStack $request_stack,
-    ConfigFactoryInterface $config_factory,
     RcsPhPathProcessor $rcs_path_processor,
     ModuleHandlerInterface $module_handler
   ) {
@@ -114,7 +103,6 @@ class AlshayaRcsMetatagSsrHelper {
     $this->rcsPromotiontHelper = $rcs_promotion_helper;
     $this->graphqlApiWrapper = $graphql_api_wrapper;
     $this->requestStack = $request_stack;
-    $this->configFactory = $config_factory;
     $this->rcsPathProcessor = $rcs_path_processor;
     $this->moduleHandler = $module_handler;
   }
@@ -358,27 +346,12 @@ class AlshayaRcsMetatagSsrHelper {
   }
 
   /**
-   * Check if the SSR is enabled for metatags.
-   *
-   * @return bool
-   *   Return true if applicable otherwise false.
-   */
-  public function getMetatagSsrStatus(): bool {
-    return (bool) $this->configFactory->get('alshaya_rcs_seo.settings')->get('enable_ssr_metatag');
-  }
-
-  /**
    * Process metatag attachments.
    *
    * @param array $attachments
    *   An array of metatag objects to be attached to the current page.
    */
   public function processMetatagAttachments(array &$attachments): void {
-    // Check if the SSR is enabled for metatag.
-    if (!$this->getMetatagSsrStatus()) {
-      return;
-    }
-
     // Get page type from request i.e. product, category or promotion.
     $page_type = $this->rcsPathProcessor->getRcsPageType();
     if (empty($page_type)) {
@@ -424,10 +397,6 @@ class AlshayaRcsMetatagSsrHelper {
    *   An array of variable attached to the current page.
    */
   public function preProcessMetatagForPage(array &$variables): void {
-    // Check if the SSR is enabled for metatag.
-    if (!$this->getMetatagSsrStatus()) {
-      return;
-    }
     // Get page type from request i.e. product, category or promotion.
     $page_type = $this->rcsPathProcessor->getRcsPageType();
     if ($page_type === 'category') {
@@ -452,10 +421,6 @@ class AlshayaRcsMetatagSsrHelper {
    *   An array of variable attached to the current page.
    */
   public function preProcessMetatagForBlock(array &$variables): void {
-    // Check if the SSR is enabled for metatag.
-    if (!$this->getMetatagSsrStatus()) {
-      return;
-    }
     // Check for only category and promo pages.
     $page_type = $this->rcsPathProcessor->getRcsPageType();
     if (!in_array($page_type, ['category', 'promotion'])) {

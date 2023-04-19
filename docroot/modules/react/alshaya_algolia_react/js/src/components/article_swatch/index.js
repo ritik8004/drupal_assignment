@@ -3,13 +3,14 @@ import Slider from 'react-slick';
 import { hasValue } from '../../../../../js/utilities/conditionsUtility';
 import { isMobile } from '../../../../../js/utilities/display';
 import getSingleProductByColorSku from '../../utils/articleSwatchUtil';
+import { getFormattedPrice } from '../../../../../js/utilities/price';
 
 const ArticleSwatches = ({
   sku, articleSwatches, url, handleSwatchSelect,
 }) => {
   const [selectedSwatch, setActiveSwatch] = useState(sku);
   const [disabled, setDisabled] = useState({});
-  if (typeof articleSwatches === 'undefined') {
+  if (typeof articleSwatches === 'undefined' || articleSwatches[0] === null) {
     return null;
   }
   // Get plp color swatch limit for desktop/mobile view.
@@ -27,9 +28,10 @@ const ArticleSwatches = ({
   const sliderSettings = {
     infinite: false,
     slidesToShow: swatchesLimit,
+    // Scrolling -1 for desktop slider to compensate previous arrow overlap.
     slidesToScroll: isMobile()
       ? drupalSettings.reactTeaserView.swatches.swatchPlpLimitMobileView
-      : drupalSettings.reactTeaserView.swatches.swatchPlpLimit,
+      : drupalSettings.reactTeaserView.swatches.swatchPlpLimit - 1,
   };
 
   // Show all color swatches with slider when total number of swatches
@@ -55,7 +57,13 @@ const ArticleSwatches = ({
     setActiveSwatch(swatch.article_sku_code);
     const response = await getSingleProductByColorSku(swatch.article_sku_code);
     if (hasValue(response)) {
-      const price = window.commerceBackend.getPrices(response[0], true);
+      const price = showColorSwatchSlider
+        ? {
+          price: getFormattedPrice(response[0].price_range.maximum_price.regular_price.value),
+          finalPrice: getFormattedPrice(response[0].price_range.maximum_price.final_price.value),
+          percent_off: response[0].price_range.maximum_price.discount.percent_off,
+        }
+        : window.commerceBackend.getPrices(response[0], true);
       const productData = {
         sku: swatch.article_sku_code,
         media: response[0].article_media_gallery,
