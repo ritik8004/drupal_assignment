@@ -17,6 +17,22 @@ const ReturnRefundMethod = ({
     setSelectedOption(el);
   };
 
+  // Custom function for card details component to avoid the nested ternary expressions.
+  const CardDetailsComponent = () => ((!hasValue(paymentDetails.cashondelivery))
+    ? (
+      <>
+        <div className="method-list-wrapper">
+          <div className="method-wrapper">
+            <CardDetails paymentDetails={paymentDetails} showCardIcon />
+          </div>
+        </div>
+        <div className="refund-message">
+          { Drupal.t('Estimated refund in 3-5 business days after we receive the item', {}, { context: 'online_returns' }) }
+        </div>
+      </>
+    )
+    : <></>);
+
   return (
     <>
       <div className="refund-method-wrapper">
@@ -70,16 +86,7 @@ const ReturnRefundMethod = ({
                     </div>
                   </>
                 ) : (
-                  <>
-                    <div className="method-list-wrapper">
-                      <div className="method-wrapper">
-                        <CardDetails paymentDetails={paymentDetails} showCardIcon />
-                      </div>
-                    </div>
-                    <div className="refund-message">
-                      { Drupal.t('Estimated refund in 3-5 business days after we receive the item', {}, { context: 'online_returns' }) }
-                    </div>
-                  </>
+                  <CardDetailsComponent />
                 )}
             </div>
           )

@@ -1,32 +1,34 @@
-.alshaya-select-wrapper,
-.form-select-wrapper {
-  padding-top: rem(24);
+.product-drawer-container {
+  .alshaya-select-wrapper,
+  .form-select-wrapper {
+    padding-top: rem(24);
 
-  label {
-    font-size: rem(16);
-  }
-}
-
-.alshaya-select {
-  .alshayaSelect__control {
-    height: rem(55);
-
-    > div:nth-child(2) {
-      .alshayaSelect__indicator {
-        background: $primary_dropdown_arrow_bg;
-      }
+    label {
+      font-size: rem(16);
     }
   }
 
-  .alshayaSelect__menu {
-    width: rem(167);
+  .alshaya-select {
+    .alshayaSelect__control {
+      height: rem(55);
+
+      > div:nth-child(2) {
+        .alshayaSelect__indicator {
+          background: $primary_dropdown_arrow_bg;
+        }
+      }
+    }
+
+    .alshayaSelect__menu {
+      width: rem(167);
+    }
   }
-}
 
-.attribute-wrapper {
-  margin: rem(20) rem(0);
+  .attribute-wrapper {
+    margin: rem(20) rem(0);
 
-  @include breakpoint($mobile) {
-    margin: rem(22) rem(0);
+    @include breakpoint($mobile) {
+      margin: rem(22) rem(0);
+    }
   }
 }

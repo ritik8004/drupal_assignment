@@ -1,17 +1,19 @@
-.alshaya-select {
-  .alshayaSelect__control {
-    > div:nth-child(2) {
-      .alshayaSelect__indicator {
-        background: transparent;
+.product-drawer-container {
+  .alshaya-select {
+    .alshayaSelect__control {
+      > div:nth-child(2) {
+        .alshayaSelect__indicator {
+          background: transparent;
+        }
       }
     }
   }
-}
 
-.alshaya-select-wrapper,
-.form-select-wrapper {
-  label {
-    font-size: 1rem;
-    font-family: $dh-light;
+  .alshaya-select-wrapper,
+  .form-select-wrapper {
+    label {
+      font-size: 1rem;
+      font-family: $dh-light;
+    }
   }
 }

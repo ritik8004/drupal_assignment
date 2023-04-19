@@ -1,4 +1,4 @@
-.attribute-wrapper {
+.product-drawer-container .attribute-wrapper {
   &_size {
     + .alshaya-select-wrapper {
       @include breakpoint($only-mobile) {
