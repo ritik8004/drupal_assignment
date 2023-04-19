@@ -455,7 +455,7 @@ function alshaya_pb_transac_update_dependencies() {
   ];
   $dependencies['alshaya_pb_transac'][9403] = [
     'alshaya_algolia_react' => 9408,
-  ]
+  ];
   return $dependencies;
 }
 
