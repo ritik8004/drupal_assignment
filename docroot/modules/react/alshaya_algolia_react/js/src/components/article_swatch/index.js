@@ -9,7 +9,7 @@ const ArticleSwatches = ({
 }) => {
   const [selectedSwatch, setActiveSwatch] = useState(sku);
   const [disabled, setDisabled] = useState({});
-  if (typeof articleSwatches === 'undefined') {
+  if (typeof articleSwatches === 'undefined' || articleSwatches[0] === null) {
     return null;
   }
   // Get plp color swatch limit for desktop/mobile view.

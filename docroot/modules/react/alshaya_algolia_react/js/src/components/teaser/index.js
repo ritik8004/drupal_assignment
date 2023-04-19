@@ -307,7 +307,7 @@ const Teaser = ({
               />
             </div>
             )}
-          {(hasValue(attribute.attr_article_swatches[0]) && showColorSwatchSlider)
+          {(hasValue(attribute.attr_article_swatches) && showColorSwatchSlider)
             ? (
               <ArticleSwatches
                 sku={sku}
