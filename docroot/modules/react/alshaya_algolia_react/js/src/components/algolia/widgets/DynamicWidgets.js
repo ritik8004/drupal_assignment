@@ -1,7 +1,7 @@
 import React, { Fragment } from 'react';
 import { getDisplayName } from 'react-instantsearch-core/dist/cjs/core/utils';
-import { connectDynamicWidgets } from 'react-instantsearch-core';
 import { hasValue } from '../../../../../../js/utilities/conditionsUtility';
+import connectDynamicWidgets from '../connectors/connectDynamicWidgets';
 
 function isReactElement(element) {
   return typeof element === 'object' && element.props;
