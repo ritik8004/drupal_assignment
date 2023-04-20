@@ -206,33 +206,13 @@ $brand_theme_img_directory_path: "/themes/custom/transac/alshaya_alo_yoga/imgs";
   }
 }
 
-@mixin select-buttons {
-  li {
-    width: auto;
-    height: auto;
-    padding: rem(6) rem(2);
-    margin: 0;
-    position: relative;
+@mixin color-picker ($picker-diminision, $br-radius: false) {
+  height: $picker-diminision;
+  width: $picker-diminision;
 
-    a {
-      width: rem(35);
-      height: rem(35);
-      border-radius: 50%;
-      border: rem(1) solid $swatch-border;
-
-      &.picked {
-        &::before {
-          position: absolute;
-          content: "";
-          width: rem(45);
-          height: rem(45);
-          top: rem(7);
-          #{$left}: rem(-3);
-          display: inline-block;
-          border-radius: 50%;
-          border: rem(1) solid $pdp_secondary_text;
-        }
-      }
-    }
+  @if $br-radius {
+    border-radius: $br-radius;
   }
+
+  @content;
 }
