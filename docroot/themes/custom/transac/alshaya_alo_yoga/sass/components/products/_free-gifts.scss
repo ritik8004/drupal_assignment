@@ -137,7 +137,6 @@
 
 .free-gift-listing-modal {
   .free-gift-image {
-    margin-#{$right}: rem(11);
-    margin-#{$left}: rem(11);
+    @include sideSpaces (rem(11), "margin");
   }
 }
