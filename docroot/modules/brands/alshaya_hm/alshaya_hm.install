@@ -18,6 +18,18 @@ use Drupal\block\Entity\Block;
  * Add Article Pattern and License Item field for index and facets.
  */
 function alshaya_hm_update_9407() {
+  // Add string translations.
+  $strings = [
+    'Pattern' => [
+      'en' => 'Pattern',
+      'ar' => 'النمط',
+    ],
+    'License Item' => [
+      'en' => 'License Item',
+      'ar' => 'الطبعة الشخصيات',
+    ],
+  ];
+  alshaya_i18n_save_translations($strings);
   $manager = \Drupal::service('alshaya_config.manager');
   $manager->updateConfigs(
     ['alshaya_acm_product.sku_base_fields'],

@@ -230,7 +230,7 @@ field_settings:
       module:
         - acq_sku
   attr_article_pattern:
-    label: 'Article Pattern'
+    label: 'Pattern'
     datasource_id: entity:node
     property_path: field_skus:entity:attr_article_pattern
     type: string

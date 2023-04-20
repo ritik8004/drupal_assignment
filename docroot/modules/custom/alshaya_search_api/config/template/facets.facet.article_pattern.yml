@@ -5,7 +5,7 @@ dependencies:
   module:
     - alshaya_search_api
 id: article_pattern
-name: Article Pattern
+name: Pattern
 url_alias: article_pattern
 weight: 0
 min_count: 1
