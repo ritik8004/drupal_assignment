@@ -2,3 +2,4 @@ pdp_layout: 'magazine_v2'
 display_upsell: FALSE
 display_crosssell: FALSE
 display_related: FALSE
+pdp_gallery_pager_limit: 3

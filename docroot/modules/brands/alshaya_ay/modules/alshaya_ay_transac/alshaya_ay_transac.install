@@ -5,6 +5,23 @@
  * Install, uninstall and update for alshaya_ay_transac.
  */
 
+use Drupal\alshaya_config\AlshayaConfigManager;
+
+/**
+ * Implements hook_update_N().
+ *
+ * Config change made for product zoom thumbnails image slider.
+ */
+function alshaya_ay_transac_update_9403() {
+  $manager = \Drupal::service('alshaya_config.manager');
+  $manager->updateConfigs(
+  ['alshaya_acm_product.settings'],
+  'alshaya_acm_product',
+  'install',
+  AlshayaConfigManager::MODE_RESAVE
+  );
+}
+
 /**
  * Implements hook_update_N().
  *
