@@ -131,6 +131,7 @@ export default createConnector({
     showMore: false,
     // limit: 10,
     showMoreLimit: 20,
+    facetOrdering: true,
   },
 
   getProvidedProps(
