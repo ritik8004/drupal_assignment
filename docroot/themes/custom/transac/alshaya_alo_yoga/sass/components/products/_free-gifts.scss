@@ -14,7 +14,32 @@
           }
 
           .select-buttons {
-            @include select-buttons;
+            li {
+              @include color-picker (auto) {
+                padding: rem(6) rem(2);
+                margin: 0;
+                position: relative;
+              }
+
+              a {
+                @include color-picker (rem(35), 50%) {
+                  border: rem(1) solid $swatch-border;
+                }
+
+                &.picked {
+                  &::before {
+                    @include color-picker (rem(45), 50%) {
+                      top: rem(7);
+                      #{$left}: rem(-3);
+                      border: rem(1) solid $pdp_secondary_text;
+                      display: inline-block;
+                      position: absolute;
+                      content: "";
+                    }
+                  }
+                }
+              }
+            }
           }
         }
       }
@@ -98,27 +123,21 @@
 .free-gift-promo-list-overlay,
 .free-gifts-modal-overlay {
   .slick-next {
-    &::before {
-      html[lang="ar"] & {
-        transform: rotate(180deg);
-        content: "";
-      }
+    html[lang="ar"] & {
+      @include icon(chevron#{$right});
     }
   }
 
   .slick-prev {
-    &::before {
-      html[lang="ar"] & {
-        transform: rotate(360deg);
-        content: "";
-      }
+    html[lang="ar"] & {
+      @include icon(chevron#{$left});
     }
   }
 }
 
 .free-gift-listing-modal {
-  .free-gift-view {
-    margin-#{$right}: rem(12);
-    margin-#{$left}: rem(12);
+  .free-gift-image {
+    margin-#{$right}: rem(11);
+    margin-#{$left}: rem(11);
   }
 }

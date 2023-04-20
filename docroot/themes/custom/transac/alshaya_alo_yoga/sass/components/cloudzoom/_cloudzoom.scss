@@ -21,7 +21,33 @@
     }
   }
 
-  .slick-current {
-    border-width: rem(1) !important;
+  #drupal-modal #lightSlider.pager-yes {
+    .slick-slide {
+      border-width: rem(0) !important;
+    }
+
+    .slick-next {
+      top: 0% !important;
+    }
+  }
+}
+
+#drupal-modal {
+  #lightSlider {
+    .pager-yes {
+      .slick-slide {
+        margin-#{$left}: rem(2) !important;
+      }
+    }
+  }
+}
+
+.cloudzoom {
+  .cloudzoom__thumbnails {
+    #lightSlider {
+      .slick-slide {
+        margin-#{$left}: rem(2) !important;
+      }
+    }
   }
 }
