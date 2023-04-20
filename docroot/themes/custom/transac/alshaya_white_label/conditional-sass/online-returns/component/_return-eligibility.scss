@@ -60,6 +60,14 @@
             text-align: $right;
           }
         }
+
+        .big-ticket-order {
+          padding-#{$left}: rem(10);
+
+          @include breakpoint($upto-tablet-landscape) {
+            padding-#{$left}: rem(40);
+          }
+        }
       }
 
       .return-message {
