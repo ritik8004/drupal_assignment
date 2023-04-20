@@ -57,7 +57,8 @@ const RefundMethods = ({
     delete paymentData.egift;
   }
   // Components for eGift card single payment method.
-  const SinglePaymentMethod = () => (isEgiftCardSelected && (cardList || showNewEgiftCardOption)
+  const SinglePaymentMethod = () => ((isEgiftCardSelected && (cardList || showNewEgiftCardOption))
+    || paymentData.cashondelivery
     ? (
       <>
         <EgiftCardDetails
