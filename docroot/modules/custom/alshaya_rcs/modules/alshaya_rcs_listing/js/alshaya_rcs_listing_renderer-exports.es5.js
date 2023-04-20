@@ -26,7 +26,7 @@ exports.render = function render(
     contexts.push(context_list.join('__'));
 
     // Add prefix "web" to every context value.
-    const webContexts = contexts.map((context) => 'web__' + context);
+    const webContexts = contexts.map((context) => `web__${context}`);
 
     // Combine all the items.
     hierarchy_list = hierarchy_list.join(' > ');
