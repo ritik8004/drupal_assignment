@@ -69,6 +69,11 @@
 
       .slick-list {
         flex-grow: 1;
+
+        // Compenesating for the absence of next arrow when slide items are less than swatch limit.
+        &:only-child {
+          margin-#{$right}: rem(37);
+        }
       }
 
       .slick-track {
