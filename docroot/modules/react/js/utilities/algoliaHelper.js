@@ -68,7 +68,8 @@ export const getFacetListFromAlgolia = async (pageType) => {
     Drupal.addItemInLocalStorage(
       `${pageType}-facets`,
       attributesForFaceting,
-      (hasValue(drupalSettings.algoliasearch.facetListExpiry)
+      (hasValue(drupalSettings.algoliasearch)
+        && hasValue(drupalSettings.algoliasearch.facetListExpiry)
         ? parseInt(drupalSettings.algoliasearch.facetListExpiry, 10)
         : 3600),
     );

@@ -416,3 +416,16 @@ export function hasPriceRange(alshayaPriceRange) {
     && (alshayaPriceRange.to.min !== alshayaPriceRange.to.max)
     && (alshayaPriceRange.to.min !== 0 || alshayaPriceRange.to.max !== 0);
 }
+
+/**
+ * Converts escaped hyphen to hyphen.
+ *
+ * @param {string} value
+ *   The value to unescape.
+ *
+ * @returns
+ *   The unescaped value.
+ */
+export function unescapeFacetValue(value) {
+  return value.replace(/^\\-/, '-');
+}

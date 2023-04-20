@@ -57,10 +57,15 @@ function diffObject(obj1, obj2) {
  */
 export default createConnector({
   displayName: 'AlgoliaInfiniteHits',
+  $$type: 'ais.infiniteHits',
+
   getProvidedProps: function getProvidedProps(props, searchState, searchResults) {
     const thisLocal = this;
 
-    const results = getResults(searchResults, this.context);
+    const results = getResults(searchResults, {
+      ais: props.contextValue,
+      multiIndexContext: props.indexContextValue,
+    });
     this.allResults = this.allResults || [];
     this.prevState = this.prevState || {};
 
@@ -187,7 +192,10 @@ export default createConnector({
     return searchParameters.setQueryParameters({
       page: (typeof props.defaultpageRender === 'number' && props.defaultpageRender > 1)
         ? 0
-        : getCurrentRefinement(props, searchState, this.context) - 1,
+        : getCurrentRefinement(props, searchState, {
+          ais: props.contextValue,
+          multiIndexContext: props.indexContextValue,
+        }) - 1,
       hitsPerPage: (typeof props.defaultpageRender === 'number' && props.defaultpageRender > 1)
         ? localHitsPerPage * props.defaultpageRender
         : searchParameters.hitsPerPage,
@@ -204,7 +212,10 @@ export default createConnector({
     } else if (finalIndex === undefined) {
       finalIndex = this.lastReceivedPage !== undefined
         ? this.lastReceivedPage + 1
-        : getCurrentRefinement(props, searchState, this.context);
+        : getCurrentRefinement(props, searchState, {
+          ais: props.contextValue,
+          multiIndexContext: props.indexContextValue,
+        });
     }
 
     const id = getId();
@@ -212,6 +223,11 @@ export default createConnector({
     // `index` is indexed from 0 but page number is indexed from 1
     const nextValue = _defineProperty({}, id, finalIndex + 1);
     const resetPage = false;
-    return refineValue(searchState, nextValue, this.context, resetPage);
+    return refineValue(
+      searchState,
+      nextValue,
+      { ais: props.contextValue, multiIndexContext: props.indexContextValue },
+      resetPage,
+    );
   },
 });
