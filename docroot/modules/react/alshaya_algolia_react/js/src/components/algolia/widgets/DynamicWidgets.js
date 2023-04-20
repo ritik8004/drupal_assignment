@@ -33,6 +33,8 @@ function DynamicWidgets({
   buildFacets,
 }) {
   if (hasValue(userData) && !hasValue(children)) {
+    // Get userData from algolia result and if children prop is empty
+    // then call buildFacets from props to pass userData.
     buildFacets(userData);
   }
 
