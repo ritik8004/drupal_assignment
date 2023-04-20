@@ -342,6 +342,23 @@
           }
         }
 
+        const query = new URLSearchParams(window.location.search);
+        const selectedParam = query.get('selected');
+        // Proceed only if there is a 'selected' query param.
+        if (Drupal.hasValue(selectedParam)) {
+          const selectedSkuFromQuery = Drupal.getSelectedProductFromQueryParam(viewMode, productData);
+          const variantInfo = (Drupal.hasValue(productData.variants) && Drupal.hasValue(productData.variants[selectedSkuFromQuery]))
+            ? productData.variants[selectedSkuFromQuery]
+            : null;
+          const variantTitle = Drupal.hasValue(variantInfo) ? variantInfo.cart_title : '';
+          const newUrl = Drupal.removeURLParameter(window.location.href, 'selected');
+
+          // Remove the 'selected' query param once page is fully loaded.
+          if (window && window.history && window.history.replaceState) {
+            window.history.replaceState(variantInfo, variantTitle, newUrl);
+          }
+        }
+
         var skuBaseFormLoadedEvent = new CustomEvent('onSkuBaseFormLoad', { bubbles: true, detail: { data: data }});
         document.dispatchEvent(skuBaseFormLoadedEvent);
       });
