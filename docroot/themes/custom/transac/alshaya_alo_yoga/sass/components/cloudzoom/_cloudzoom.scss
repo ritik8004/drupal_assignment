@@ -1,52 +1,63 @@
-#lightSlider {
-  &.pager-yes {
-    .slick-slide {
-      @include breakpoint($only-tablet) {
-        margin-#{$left}: rem(-1) !important;
-      }
-    }
-  }
-
-  .slick-slide {
-    margin-bottom: rem(55);
-    padding: rem(0);
-    border-style: none;
-  }
-
-  .slick-next,
-  .slick-prev {
-    @include breakpoint($only-tablet) {
-      top: 50% !important;
-      width: rem(30);
-    }
-  }
-
-  #drupal-modal #lightSlider.pager-yes {
-    .slick-slide {
-      border-width: rem(0) !important;
-    }
-
-    .slick-next {
-      top: 0% !important;
-    }
-  }
-}
-
 #drupal-modal {
-  #lightSlider {
-    .pager-yes {
-      .slick-slide {
-        margin-#{$left}: rem(2) !important;
+  @include breakpoint($only-tablet) {
+    #lightSlider {
+      &.pager-yes {
+        .slick-slide {
+          .magazine-layout-v2.nodetype--acq_product .ui-dialog & {
+            width: rem(90) !important;
+            margin: 0 rem(6);
+          }
+        }
       }
     }
   }
-}
 
-.cloudzoom {
-  .cloudzoom__thumbnails {
-    #lightSlider {
-      .slick-slide {
-        margin-#{$left}: rem(2) !important;
+  .cloudzoom {
+    @include breakpoint($desktop) {
+      @for $i from 1 through 3 {
+        &.thumbnail-count-#{$i} {
+          #lightSlider.pager-yes,
+          #lightSlider.pager-no {
+            padding: 0;
+          }
+        }
+      }
+    }
+
+    .cloudzoom__thumbnails {
+      #lightSlider {
+        .slick-slide {
+          margin-bottom: rem(5);
+          padding: rem(0);
+          height: rem(134) !important;
+        }
+
+        .slick-next,
+        .slick-prev {
+          @include breakpoint($only-tablet) {
+            top: rem(69) !important;
+          }
+
+          &::before {
+            html[lang="ar"] & {
+              transform: rotate(360deg);
+
+              @include breakpoint($only-tablet) {
+                transform: rotate(180deg);
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+
+  .content__sidebar {
+    .content--short-description {
+      .desc-wrapper {
+        ul {
+          padding-#{$left}: rem(12);
+        }
       }
     }
   }

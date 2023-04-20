@@ -787,7 +787,7 @@ class AlshayaRcsProductHelper {
     $product_settings = $this->configFactory->get('alshaya_acm_product.settings');
     $attachments['#attached']['drupalSettings']['alshayaRcs']['pdpGalleryLimit'] = [
       'modal' => $product_settings->get('pdp_slider_items_settings.pdp_slider_items_number_cs_us'),
-      'others' => $product_settings->get('pdp_gallery_pager_limits'),
+      'others' => $product_settings->get('pdp_gallery_pager_limit'),
     ];
     $attachments['#attached']['drupalSettings']['alshayaRcs']['pdpGalleryType'] = $product_settings->get('pdp_gallery_type');
     $alshaya_master_settings = $this->configFactory->get('alshaya_master.settings');
