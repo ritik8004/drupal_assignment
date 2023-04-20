@@ -38,6 +38,9 @@ const Teaser = ({
   const { showReviewsRating } = drupalSettings.algoliaSearch;
   const collectionLabel = [];
   const [initSlider, setInitiateSlider] = useState(false);
+  const [touchStart, setTouchStart] = useState(null);
+  const [touchEnd, setTouchEnd] = useState(null);
+  const minSwipeDistance = 50;
   const [slider, setSlider] = useState(false);
   const [sku, setSkuCode] = useState(hit.sku);
   const [media, setSkuMedia] = useState(hit.media);
@@ -47,9 +50,17 @@ const Teaser = ({
     renderProductPrice: null,
   });
   const isDesktop = window.innerWidth > 1024;
+  const isMobile = window.innerWidth < 1025;
   const { currentLanguage } = drupalSettings.path;
   const { showBrandName } = drupalSettings.reactTeaserView;
   const activateShoeAI = getShoeAiStatus();
+  const onTouchStart = (e) => {
+    setTouchEnd(null);
+    setTouchStart(e.targetTouches[0].clientX);
+  };
+
+  const onTouchMove = (e) => setTouchEnd(e.targetTouches[0].clientX);
+
   if (drupalSettings.plp_attributes
     && drupalSettings.plp_attributes.length > 0
     && hasValue(hit.collection_labels)
@@ -239,6 +250,7 @@ const Teaser = ({
           if (isDesktop) {
             setInitiateSlider(true);
             if (slider !== false) {
+              // console.log(slider);
               slider.slickGoTo(0, true);
               slider.slickPlay();
             }
@@ -247,6 +259,25 @@ const Teaser = ({
         onMouseLeave={() => {
           if (isDesktop && (slider !== false)) {
             slider.slickPause();
+          }
+        }}
+        onTouchStart={onTouchStart}
+        onTouchMove={onTouchMove}
+        onTouchEnd={() => {
+          if (!touchStart || !touchEnd) return;
+          const distance = touchStart - touchEnd;
+          const isLeftSwipe = distance > minSwipeDistance;
+          const isRightSwipe = distance < -minSwipeDistance;
+          if (isLeftSwipe || isRightSwipe) {
+            if (isMobile) {
+              setInitiateSlider(true);
+              if (slider !== false) {
+                // console.log(slider);
+                slider.slickGoTo(0, true);
+                slider.slickPlay();
+              }
+              // console.log('swipe', isLeftSwipe ? 'left' : 'right');
+            }
           }
         }}
       >

@@ -11,7 +11,7 @@ const Gallery = (props) => {
   }
 
   if (isMobile()) {
-    return (<SingleImageGallery {...props} />);
+    return (<SearchGallery {...props} />);
   }
 
   if (drupalSettings.reactTeaserView.gallery.showHoverImage) {

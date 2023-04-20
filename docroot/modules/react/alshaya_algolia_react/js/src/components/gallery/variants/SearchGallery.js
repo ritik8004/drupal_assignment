@@ -16,6 +16,8 @@ const SliderElement = ({
 
 const slickEffect = hasValue(drupalSettings.reactTeaserView.swipe_image.slide_effect)
   ? drupalSettings.reactTeaserView.swipe_image.slide_effect : null;
+const isMobile = window.innerWidth < 1025;
+const isDesktop = window.innerWidth > 1024;
 
 const sliderSettings = {
   dots: true,
@@ -33,11 +35,24 @@ const sliderSettings = {
   pauseOnHover: false,
 };
 
+const sliderSwipeSettings = {
+  dots: true,
+  infinite: true,
+  slidesToShow: 1,
+  slidesToScroll: 1,
+  swipe: true,
+  arrows: false,
+  touchThreshold: 1750,
+  variableWidth: false,
+  pauseOnHover: false,
+};
+
 class SearchGallery extends React.PureComponent {
   constructor(props) {
     super(props);
     this.mainImageRef = React.createRef();
     this.onHoverAppendMarkup = this.onHoverAppendMarkup.bind(this);
+    this.onSwipeAppendMarkup = this.onSwipeAppendMarkup.bind(this);
   }
 
   onHoverAppendMarkup = (thumbnails) => (
@@ -48,6 +63,14 @@ class SearchGallery extends React.PureComponent {
         ref={this.getref}
       >
         { thumbnails }
+      </Slider>
+    </div>
+  )
+
+  onSwipeAppendMarkup = (thumbnails) => (
+    <div className="alshaya_search_slider">
+      <Slider {...sliderSwipeSettings} className="search-lightSlider search-lightSliderSwipe" ref={this.getref}>
+        {thumbnails}
       </Slider>
     </div>
   )
@@ -94,7 +117,9 @@ class SearchGallery extends React.PureComponent {
               title={title}
               loading="lazy"
             />
-            {(sliderStatus && initSlider) ? this.onHoverAppendMarkup(thumbnails) : ''}
+            {(sliderStatus && initSlider && isMobile) ? this.onSwipeAppendMarkup(thumbnails) : ''}
+
+            {(sliderStatus && initSlider && isDesktop) ? this.onHoverAppendMarkup(thumbnails) : ''}
           </div>
           <Lozenges labels={labels} sku={sku} />
         </div>
