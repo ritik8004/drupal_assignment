@@ -150,6 +150,8 @@
                : GTM_AURA_VALUES.AURA_BALANCE_LESS_THAN_ORDER_VALUE;
            }
          }
+         // Adding Aura common details in localstorage to use in all Aura events.
+         Drupal.addItemInLocalStorage('gtm_aura_balpoints_vs_order', gtmData.aura_balPointsVSorderValue);
        }
      }
      catch (e) {
