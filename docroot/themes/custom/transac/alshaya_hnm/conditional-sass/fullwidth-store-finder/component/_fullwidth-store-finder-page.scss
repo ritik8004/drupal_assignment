@@ -1,0 +1,24 @@
+@include breakpoint($tablet) {
+  html[lang="ar"] {
+    .path--store-finder {
+      .label--location {
+        width: 45%;
+      }
+    }
+  }
+}
+
+@include breakpoint($desktop) {
+  html[lang="ar"] {
+    .path--store-finder {
+      .label--location {
+        margin-right: 0;
+        width: auto;
+      }
+
+      .current-location {
+        width: 12%;
+      }
+    }
+  }
+}
