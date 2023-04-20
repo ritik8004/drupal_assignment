@@ -28,16 +28,13 @@ exports.render = function render(
     // Add prefix "web" to every context value.
     const webContexts = contexts.map((context) => 'web__' + context);
 
-    // Combine contexts and web contexts.
-    contexts = webContexts.concat(contexts);
-
     // Combine all the items.
     hierarchy_list = hierarchy_list.join(' > ');
     // Add required data as data-attributes.
     innerHtmlObj.attr({
       'data-hierarchy': hierarchy_list,
       'data-level': contexts.length - 1,
-      'data-rule-context': contexts.reverse(),
+      'data-rule-context': contexts.concat(webContexts),
       'data-category-field': 'field_category_name.lvl' + (contexts.length - 1),
     });
   }
