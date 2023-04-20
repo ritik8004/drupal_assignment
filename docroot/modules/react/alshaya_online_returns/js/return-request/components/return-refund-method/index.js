@@ -91,7 +91,7 @@ const ReturnRefundMethod = ({
             </div>
           )
           : (
-            <div className="refund-method-listing">
+            <div className="refund-method-listing hybrid-payment">
               <CardDetails paymentDetails={paymentDetails} showCardIcon />
               <div className="refund-message">
                 { Drupal.t('Estimated refund in 3-5 business days after we receive the item', {}, { context: 'online_returns' }) }
