@@ -1,14 +1,11 @@
+@include breakpoint($desktop) {
+  .path--store-finder {
+    .current-location {
+      width: rem(144);
 
-.path--store-finder {
-  .current-location {
-    html[lang="ar"] & {
-      @include breakpoint($desktop) {
-        width: 14.5%;
+      html[lang="ar"] & {
+        width: rem(176);
         padding-left: 0;
-      }
-
-      @include breakpoint($desktop-wide-1680) {
-        width: 11.5%;
       }
     }
   }
