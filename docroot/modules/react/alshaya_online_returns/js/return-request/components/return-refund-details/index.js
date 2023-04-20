@@ -60,6 +60,12 @@ class ReturnRefundDetails extends React.Component {
           }
         });
       }
+      // Deleting the aura_payment value from the payment object
+      // if we have both aura and aura_payment keys in the payment object,
+      // as we only need to render the data present in aura.
+      if (hasValue(paymentInfo.aura) && hasValue(paymentInfo.aura_payment)) {
+        delete paymentInfo.aura_payment;
+      }
       // Variable to decide whether eGift card details API needs to be called.
       let callEgiftDetailsApi = false;
       if (!hasValue(paymentInfo.aura)

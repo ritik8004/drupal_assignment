@@ -56,6 +56,12 @@ const RefundMethods = ({
   if (isHybrid && hasValue(paymentInfo.egift)) {
     delete paymentData.egift;
   }
+  // Deleting the aura_payment value from the payment object
+  // if we have both aura and aura_payment keys in the payment object,
+  // as we only need to render the data present in aura.
+  if (hasValue(paymentData.aura) && hasValue(paymentData.aura_payment)) {
+    delete paymentData.aura_payment;
+  }
   // Components for eGift card single payment method.
   const SinglePaymentMethod = () => ((isEgiftCardSelected && (cardList || showNewEgiftCardOption))
     || paymentData.cashondelivery
