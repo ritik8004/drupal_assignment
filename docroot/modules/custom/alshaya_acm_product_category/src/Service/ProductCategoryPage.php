@@ -219,12 +219,12 @@ class ProductCategoryPage {
       $web_contexts[] = "web__$context_item";
     }
     // Combine contexts and web contexts.
-    $all_contexts = array_merge($web_contexts, $contexts);
+    $all_contexts = array_merge($contexts, $web_contexts);
 
     $data = [
       'hierarchy' => implode(' > ', $hierarchy_list),
       'level' => count($contexts),
-      'ruleContext' => array_reverse($all_contexts),
+      'ruleContext' => $all_contexts,
       'category_field' => 'field_category_name.lvl' . (count($contexts) - 1),
     ];
 
