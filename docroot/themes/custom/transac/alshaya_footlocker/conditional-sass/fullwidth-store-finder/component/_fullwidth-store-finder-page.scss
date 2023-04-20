@@ -34,17 +34,3 @@
     }
   }
 }
-
-@include breakpoint($only-tablet) {
-  .path--store-finder {
-    .input--wrapper {
-      #{$left}: 16%;
-      width: 46% !important;
-
-      [id^=edit-actions] {
-        border-#{$right}: none;
-        #{$right}: rem(2);
-      }
-    }
-  }
-}
