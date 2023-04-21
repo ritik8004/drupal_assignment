@@ -77,7 +77,7 @@ window.commerceBackend = window.commerceBackend || {};
       && Drupal.hasValue(product.price_range.maximum_price)
       && Drupal.hasValue(product.price_range.maximum_price.final_price)
     ) {
-      isFreeGift = parseFloat(product.price_range.maximum_price.final_price.value) === 0.01 || parseFloat(product.price_range.maximum_price.final_price.value) === 0;
+      isFreeGift = parseFloat(product.price_range.maximum_price.final_price.value) === 0 || parseFloat(product.price_range.maximum_price.final_price.value) === 0.01;
     }
     return isFreeGift;
   };
