@@ -428,16 +428,17 @@ const Teaser = ({
             {/* Render price based on range/single price conditionals */}
             {hasValue(updatedAttribute.renderProductPrice)
               ? updatedAttribute.renderProductPrice : renderPrice}
-            {(hasValue(showProductInfo) && (showProductInfo))
-              && (
-              <div className="gender-text">
-                <span className="categories">
-                  {hasValue(genderText)
-                    ? genderText[0] : ''}
-                  {' '}
-                  {hasValue(productType) ? productType[0] : ''}
-                </span>
-              </div>
+            {(hasValue(showProductInfo))
+              && ((hasValue(genderText) || hasValue(productType))
+                && (
+                <div className="gender-text">
+                  <span className="categories">
+                    {hasValue(genderText[0]) ? genderText[0] : ''}
+                    {' '}
+                    {hasValue(productType[0]) ? productType[0] : ''}
+                  </span>
+                </div>
+                )
               )}
             <ConditionalView condition={isPromotionFrameEnabled()}>
               <PromotionsFrame promotions={attribute.promotions} />
