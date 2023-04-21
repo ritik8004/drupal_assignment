@@ -21,6 +21,9 @@ alshaya_online_returns.return_confirmation:
       label: 'Whats next row'
       sequence:
         - type: return_whats_next_row
+    customer_service_number:
+      type: string
+      label: 'Config to show the customer service number'
 
 return_whats_next_row:
   type: mapping

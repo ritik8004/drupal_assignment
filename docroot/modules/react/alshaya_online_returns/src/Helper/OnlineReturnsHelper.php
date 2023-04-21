@@ -130,10 +130,15 @@ class OnlineReturnsHelper {
    *   SKU is big ticket or not.
    */
   public function isSkuBigTicket(SKUInterface $sku_entity) {
-    $is_big_ticket = $sku_entity->hasField('attr_big_ticket')
-      ? $sku_entity->get('attr_big_ticket')->getString()
-      : FALSE;
-    return !empty($is_big_ticket);
+    if ($sku_entity->hasField('attr_big_ticket')) {
+      return !empty($sku_entity->get('attr_big_ticket')->getString());
+    }
+    // If 'attr_big_ticket' is not available use 'attr_white_glove_delivery'
+    // field to determine if it is big ticket item or not.
+    if ($sku_entity->hasField('attr_white_glove_delivery')) {
+      return !empty($sku_entity->get('attr_white_glove_delivery')->getString());
+    }
+    return FALSE;
   }
 
   /**
@@ -253,6 +258,13 @@ class OnlineReturnsHelper {
       // current time.
       $return_time = strtotime($order_details['#order']['returnExpiration'] . ' 23:59:59');
       if ($return_time < time()) {
+        return FALSE;
+      }
+    }
+
+    // Validate if order contains big ticket items or not.
+    foreach ($order_details['#products'] as $product) {
+      if (isset($product['is_big_ticket']) && $product['is_big_ticket']) {
         return FALSE;
       }
     }
