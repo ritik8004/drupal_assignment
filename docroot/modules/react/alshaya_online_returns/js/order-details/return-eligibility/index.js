@@ -9,6 +9,7 @@ const ReturnEligibility = (returns) => {
       returnExpiration,
       paymentMethod,
       orderType,
+      isBigTicketOrder,
     },
   } = drupalSettings;
 
@@ -20,6 +21,7 @@ const ReturnEligibility = (returns) => {
       paymentMethod={paymentMethod}
       orderType={orderType}
       returns={returns}
+      isBigTicketOrder={isBigTicketOrder}
     />
   );
 };

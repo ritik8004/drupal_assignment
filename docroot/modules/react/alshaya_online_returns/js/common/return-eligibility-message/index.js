@@ -7,6 +7,7 @@ import {
   getReturnRequestUrl,
   hasActiveReturns,
   getReturnWindowEligibleDateMessage,
+  getCustomerServiceNumber,
 } from '../../utilities/online_returns_util';
 import ReturnAction from '../return-action';
 import ReturnAtStore from '../return-at-store';
@@ -26,10 +27,31 @@ class ReturnEligibilityMessage extends React.Component {
       paymentMethod,
       orderType,
       returns,
+      isBigTicketOrder,
     } = this.props;
+
+    // Get customer service number, used as point of contact to return the orders
+    // not available for online returns like orders that have big ticket or
+    // white glove delivery items.
+    const customerServiceNumber = getCustomerServiceNumber();
 
     if (!hasValue(orderId) || isReturnEligible === null || !hasValue(returnExpiration)) {
       return null;
+    }
+
+    // If the order contains atleast one big ticket item and return window is not
+    // closed don't render ReturnAction and ReturnAtStore components.
+    if (hasValue(isBigTicketOrder) && !isReturnWindowClosed(returnExpiration)) {
+      return (
+        <div className="eligibility-window-container">
+          <div className="eligibility-message-wrapper">
+            <ReturnWindow message={getReturnWindowEligibleDateMessage(returnExpiration)} />
+            <div className="big-ticket-order">
+              {`(${Drupal.t('To return this order, please contact our customer service on @contact_number', { '@contact_number': customerServiceNumber }, { context: 'online_returns' })})`}
+            </div>
+          </div>
+        </div>
+      );
     }
 
     if (hasValue(returns) && hasActiveReturns(returns.returns)) {
