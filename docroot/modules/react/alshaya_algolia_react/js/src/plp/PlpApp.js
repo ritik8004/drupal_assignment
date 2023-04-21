@@ -26,7 +26,10 @@ import PLPNoResults from '../components/algolia/PLPNoResults';
 import SubCategoryContent from '../components/subcategory';
 import ConditionalView from '../../common/components/conditional-view';
 import isHelloMemberEnabled from '../../../../js/utilities/helloMemberHelper';
-import { isUserAuthenticated } from '../../../../js/utilities/helper';
+import {
+  isConfigurableFiltersEnabled,
+  isUserAuthenticated,
+} from '../../../../js/utilities/helper';
 import BecomeHelloMember from '../../../../js/utilities/components/become-hello-member';
 import { getExpressDeliveryStatus } from '../../../../js/utilities/expressDeliveryHelper';
 import { hasValue } from '../../../../js/utilities/conditionsUtility';
@@ -65,9 +68,11 @@ const PlpApp = ({
       window.sddEdStatus = status;
     });
 
-    getFacetListFromAlgolia('listing').then((facetsList) => {
-      setFacets(facetsList);
-    });
+    if (isConfigurableFiltersEnabled()) {
+      getFacetListFromAlgolia('listing').then((facetsList) => {
+        setFacets(facetsList);
+      });
+    }
   }, []);
 
   const plpCategoryRef = useRef();

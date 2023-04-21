@@ -21,6 +21,7 @@ import {
 import { algoliaSearchClient } from '../config/SearchClient';
 import { getExpressDeliveryStatus } from '../../../../js/utilities/expressDeliveryHelper';
 import { getFacetListFromAlgolia } from '../../../../js/utilities/algoliaHelper';
+import { isConfigurableFiltersEnabled } from '../../../../js/utilities/helper';
 
 if (window.NodeList && !NodeList.prototype.forEach) {
   NodeList.prototype.forEach = Array.prototype.forEach;
@@ -51,11 +52,13 @@ class SearchApp extends React.PureComponent {
       this.setSddEdStatus();
     }
 
-    getFacetListFromAlgolia('search').then((results) => {
-      this.setState({
-        facets: results,
+    if (isConfigurableFiltersEnabled()) {
+      getFacetListFromAlgolia('search').then((results) => {
+        this.setState({
+          facets: results,
+        });
       });
-    });
+    }
   }
 
   setQueryValue = (queryValue, inputTag = null) => {

@@ -1,5 +1,5 @@
 import React, { Fragment } from 'react';
-import { getDisplayName } from 'react-instantsearch-core/dist/cjs/core/utils';
+import { getDisplayName } from '../../../utils/FilterUtils';
 import { hasValue } from '../../../../../../js/utilities/conditionsUtility';
 import connectDynamicWidgets from '../connectors/connectDynamicWidgets';
 

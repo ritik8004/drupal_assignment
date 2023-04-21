@@ -56,6 +56,9 @@ alshaya_algolia_react.settings:
     algolia_facets_local_storage_expiry:
       type: integer
       label: 'Expiry in seconds for getting facets from algolia.'
+    algolia_enable_configurable_filter:
+      type: boolean
+      label: 'Enable or disable configurable filters.'
 
 alshaya_algolia_react.product_frames:
   type: config_object

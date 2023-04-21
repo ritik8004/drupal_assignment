@@ -20,3 +20,5 @@ render_single_result_facets: true
 exclude_render_single_result_facets: ''
 # Expiry in seconds for the facets getting from algolia.
 algolia_facets_local_storage_expiry: 3600
+# Enable or disable configurable filters.
+algolia_enable_configurable_filter: false

@@ -52,3 +52,18 @@ export const checkBazaarVoiceAvailableForPdp = () => {
  */
 export const isCheckoutTracker = () => hasValue(drupalSettings.checkoutTracker)
   && hasValue(drupalSettings.checkoutTracker.enabled);
+
+/**
+ * Checks if configurable filters is enable or disabled.
+ *
+ * @returns {boolean}
+ *   True if configurable filter enabled else false.
+ */
+export const isConfigurableFiltersEnabled = () => {
+  if (hasValue(drupalSettings.algoliaSearch)
+    && hasValue(drupalSettings.algoliaSearch.enableConfigurableFilters)) {
+    return drupalSettings.algoliaSearch.enableConfigurableFilters;
+  }
+
+  return false;
+};

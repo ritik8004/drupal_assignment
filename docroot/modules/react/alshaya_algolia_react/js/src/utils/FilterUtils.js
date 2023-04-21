@@ -173,6 +173,17 @@ const customQueryRedirect = (items) => {
   return [];
 };
 
+/**
+ * Provides component display name for error message.
+ *
+ * @param Component
+ *   React component.
+ *
+ * @returns {*|string}
+ *   Diaplay name or unkown component.
+ */
+const getDisplayName = (Component) => Component.displayName || Component.name || 'UnknownComponent';
+
 export {
   getFilters,
   hasCategoryFilter,
@@ -180,4 +191,5 @@ export {
   hasSuperCategoryFilter,
   facetFieldAlias,
   customQueryRedirect,
+  getDisplayName,
 };
