@@ -17,8 +17,24 @@ const ReturnRefundMethod = ({
     setSelectedOption(el);
   };
 
+  // Logic to decide whether the payment made through the eGift card
+  // is linked to the user account or a different one which is not linked to the user.
+  let differentEgiftCard = false;
+  if (paymentDetails.egift && hasValue(paymentDetails.egift.card_number)
+    && cardList && hasValue(cardList.card_number) && !isHybrid) {
+    // Fetching the last 4 digits of the linked eGift card.
+    const lastFourChar = cardList.card_number.substring(
+      cardList.card_number.length - 4,
+    );
+    // Checking whether the payment is made through same linked eGift or not.
+    if (lastFourChar !== paymentDetails.egift.card_number) {
+      differentEgiftCard = true;
+    }
+  }
+
   // Custom function for card details component to avoid the nested ternary expressions.
-  const CardDetailsComponent = () => ((!hasValue(paymentDetails.cashondelivery))
+  const CardDetailsComponent = () => ((!hasValue(paymentDetails.cashondelivery)
+    && !differentEgiftCard)
     ? (
       <>
         <div className="method-list-wrapper">
