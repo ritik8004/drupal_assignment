@@ -255,6 +255,15 @@ const Teaser = ({
     renderPrice = <PriceRangeElement priceRange={attribute.alshaya_price_range} />;
   }
 
+  // check if we need to display the productInfo in below the product title.
+  const { showProductInfo } = drupalSettings.algoliaSearch;
+  // Gender Identification.
+  const genderText = hasValue(updatedAttribute.attr_gender)
+    ? updatedAttribute.attr_gender : attribute.attr_gender;
+  // Product type Identification.
+  const productType = hasValue(updatedAttribute.attr_nb_product_type)
+    ? updatedAttribute.attr_nb_product_type : attribute.attr_nb_product_type;
+
   let title = hasValue(updatedAttribute.title) ? updatedAttribute.title : attribute.title;
   title = title.toString();
   const url = hasValue(updatedAttribute.url) ? updatedAttribute.url : attribute.url;
@@ -419,6 +428,17 @@ const Teaser = ({
             {/* Render price based on range/single price conditionals */}
             {hasValue(updatedAttribute.renderProductPrice)
               ? updatedAttribute.renderProductPrice : renderPrice}
+            {(hasValue(showProductInfo) && (showProductInfo))
+              && (
+              <div className="gender-text">
+                <span className="categories">
+                  {hasValue(genderText)
+                    ? genderText[0] : ''}
+                  {' '}
+                  {hasValue(productType) ? productType[0] : ''}
+                </span>
+              </div>
+              )}
             <ConditionalView condition={isPromotionFrameEnabled()}>
               <PromotionsFrame promotions={attribute.promotions} />
             </ConditionalView>

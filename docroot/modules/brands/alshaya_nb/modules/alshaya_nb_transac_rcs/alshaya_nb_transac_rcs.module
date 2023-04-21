@@ -19,6 +19,13 @@ function alshaya_nb_transac_rcs_node_view(array &$build, EntityInterface $entity
 }
 
 /**
+ * Implements hook_algolia_react_common_configs_alter().
+ */
+function alshaya_nb_transac_rcs_algolia_react_common_configs_alter(&$response) {
+  $response['commonAlgoliaSearch']['showProductInfo'] = TRUE;
+}
+
+/**
  * Implements hook_module_implements_alter().
  */
 function alshaya_nb_transac_rcs_module_implements_alter(&$implementations, $hook) {
@@ -42,6 +49,7 @@ function alshaya_nb_transac_rcs_rcs_handlebars_templates_alter(&$templates, $ent
   $templates['product.block.description_details'] = 'alshaya_nb_transac_rcs';
   $templates['product.block.short_description.pdp'] = 'alshaya_nb_transac_rcs';
   $templates['gallery.product.product_zoom'] = 'alshaya_nb_transac_rcs';
+  $templates['product.block.name'] = 'alshaya_nb_transac_rcs';
 }
 
 /**
@@ -51,6 +59,8 @@ function alshaya_nb_transac_rcs_alshaya_rcs_product_product_options_to_query() {
   return [
     'uk_size',
     'european_size',
+    'gender',
+    'nb_product_type',
   ];
 }
 
@@ -65,6 +75,8 @@ function alshaya_nb_transac_rcs_alshaya_rcs_product_query_fields_alter(array &$f
     'feature_bullets',
     'green_leaf_notice',
     'green_leaf',
+    'gender',
+    'nb_product_type',
   );
   array_push($fields['items']['... on ConfigurableProduct']['variants']['product'],
     'width_description',
