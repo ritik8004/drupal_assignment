@@ -7,6 +7,7 @@ import { createConnector } from 'react-instantsearch-dom';
 // @ts-ignore
 import { getResults } from '../../../utils/indexUtils';
 
+// The default number of facet values to request.
 const MAX_WILDCARD_FACETS = 20;
 export default createConnector({
   displayName: 'AlgoliaDynamicWidgets',
