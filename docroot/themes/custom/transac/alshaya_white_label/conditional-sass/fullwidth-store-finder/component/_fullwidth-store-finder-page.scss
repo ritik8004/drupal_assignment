@@ -34,11 +34,12 @@
   .label--location {
     html[lang="ar"] & {
       @include breakpoint($tablet) {
-        width: auto;
+        width: 45%;
       }
 
       @include breakpoint($desktop) {
         margin-right: rem(32);
+        width: auto;
       }
     }
   }
