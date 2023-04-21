@@ -30,6 +30,9 @@ class ReturnEligibilityMessage extends React.Component {
       isBigTicketOrder,
     } = this.props;
 
+    // Get customer service number, used as point of contact to return the orders
+    // not available for online returns like orders that have big ticket or
+    // white glove delivery items.
     const customerServiceNumber = getCustomerServiceNumber();
 
     if (!hasValue(orderId) || isReturnEligible === null || !hasValue(returnExpiration)) {
