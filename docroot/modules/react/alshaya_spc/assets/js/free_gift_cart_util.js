@@ -24,7 +24,7 @@ window.commerceBackend = window.commerceBackend || {};
           .configurables[key].attribute_id;
         // Skipping the psudo attributes.
         if (
-          drupalSettings.psudo_attribute === undefined
+          !Drupal.hasValue(drupalSettings.psudo_attribute)
           || drupalSettings.psudo_attribute === optionId
         ) {
           return;
