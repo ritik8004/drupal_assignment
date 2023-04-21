@@ -45,9 +45,6 @@ function alshaya_hm_update_9407() {
   /** @var \Drupal\acq_sku\SKUFieldsManager $fieldsManager */
   $fieldsManager = \Drupal::service('acq_sku.fields_manager');
   $fieldsManager->resetBaseFields();
-
-  // Queue all products for re-indexing.
-  \Drupal::service('alshaya_acm_product.product_queue_utility')->queueAllProducts();
 }
 
 /**
