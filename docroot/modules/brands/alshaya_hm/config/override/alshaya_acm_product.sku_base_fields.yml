@@ -129,7 +129,7 @@ fields:
     type: 'attribute'
     cardinality: 1
     index: 1
-    facet: 1
+    facet: 0
 
   clothing_style:
     label: 'Clothing Style'

@@ -39,6 +39,7 @@ function alshaya_hm_update_9407() {
   $sku_fields_manager = \Drupal::service('acq_sku.fields_manager');
   $sku_fields_manager->updateFieldMetaInfo('article_pattern', ['facet' => 1]);
   $sku_fields_manager->updateFieldMetaInfo('article_license_item', ['facet' => 1]);
+  $sku_fields_manager->updateFieldMetaInfo('style', ['facet' => 0]);
 
   // Add 'article_pattern and article_license_item' facet in Drupal and Algolia.
   /** @var \Drupal\acq_sku\SKUFieldsManager $fieldsManager */
