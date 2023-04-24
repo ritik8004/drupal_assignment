@@ -68,13 +68,18 @@
         margin-top: 0;
         z-index: 1;
 
+        .slick-slider:not(.slick-effect-fade) {
+          .slick-slide {
+            width: 100% !important;
+          }
+        }
+
         .slick-track {
           display: flex;
           align-items: center;
         }
 
         .slick-slide {
-          width: 100% !important;
           margin: 0;
 
           img {

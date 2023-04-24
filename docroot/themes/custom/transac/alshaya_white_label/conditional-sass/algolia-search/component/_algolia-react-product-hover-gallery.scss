@@ -6,11 +6,15 @@
         width: 12.5rem !important;
 
         .slick-slide {
-          width: 2.75rem !important;
-
           img {
             max-width: none;
             height: 2.5rem;
+          }
+        }
+
+        .slick-slider:not(.slick-effect-fade) {
+          .slick-slide {
+            width: rem(44) !important;
           }
         }
       }
