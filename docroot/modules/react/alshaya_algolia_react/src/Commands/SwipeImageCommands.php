@@ -64,7 +64,7 @@ class SwipeImageCommands extends DrushCommands {
       // Set Swipe Image config.
       $configSwipeImage = $this->configFactory->getEditable('alshaya_algolia_react.swipe_image');
       $configSwipeImage->set('enable_swipe_image_mobile', TRUE);
-      $configSwipeImage->set('slide_effect_fade', 'fade');
+      $configSwipeImage->set('slide_effect', 'fade');
       $configSwipeImage->save();
 
       // Set Display Setting config.
@@ -102,7 +102,7 @@ class SwipeImageCommands extends DrushCommands {
       // Set Swipe Image config.
       $configSwipeImage = $this->configFactory->getEditable('alshaya_algolia_react.swipe_image');
       $configSwipeImage->set('enable_swipe_image_mobile', FALSE);
-      $configSwipeImage->set('slide_effect_fade', 'slide');
+      $configSwipeImage->set('slide_effect', 'slide');
       $configSwipeImage->save();
 
       // Set Display Setting config.
