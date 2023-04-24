@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { hasValue } from '../../../../../js/utilities/conditionsUtility';
 import CardDetails from '../card-details';
 import EgiftCardDetails from '../../../return-request/components/egift-card-details';
@@ -9,12 +9,11 @@ import { isUserAuthenticated } from '../../../../../js/utilities/helper';
 const RefundMethods = ({
   paymentInfo,
 }) => {
+  const [cardList, setCardList] = useState(null);
   if (!hasValue(paymentInfo)) {
     return null;
   }
 
-  // Egift card details linked with the user.
-  const cardList = {};
   // Variable to check whether the new eGift option needs
   // to be given to the user or not in the refund form.
   let showNewEgiftCardOption = false;
@@ -26,7 +25,7 @@ const RefundMethods = ({
       result.then((response) => {
         if (hasValue(response.data) && hasValue(response.data.card_number)) {
           const cardData = response.data ? response.data : null;
-          Object.assign(cardList, cardData);
+          setCardList(cardData);
         } else {
           // If user has no linked eGift card, we call api to get all
           // eGift cards having same email address as of the current user.
@@ -41,6 +40,10 @@ const RefundMethods = ({
         }
       });
     }
+  }
+
+  if (!cardList) {
+    return null;
   }
 
   // Fetching the value from local storage to know whether
@@ -62,9 +65,24 @@ const RefundMethods = ({
   if (hasValue(paymentData.aura) && hasValue(paymentData.aura_payment)) {
     delete paymentData.aura_payment;
   }
+  // Logic to decide whether the payment made through the eGift card
+  // is linked to the user account or a different one which is not linked to the user.
+  let differentEgiftCard = false;
+  if (paymentInfo.egift && hasValue(paymentInfo.egift.card_number)
+    && cardList && hasValue(cardList.card_number) && !isHybrid) {
+    // Fetching the last 4 digits of the linked eGift card.
+    const lastFourChar = cardList.card_number.substring(
+      cardList.card_number.length - 4,
+    );
+    // Checking whether the payment is made through same linked eGift or not.
+    if (lastFourChar !== paymentInfo.egift.card_number) {
+      differentEgiftCard = true;
+    }
+  }
+
   // Components for eGift card single payment method.
   const SinglePaymentMethod = () => ((isEgiftCardSelected && (cardList || showNewEgiftCardOption))
-    || paymentData.cashondelivery
+    || paymentData.cashondelivery || differentEgiftCard
     ? (
       <>
         <EgiftCardDetails
