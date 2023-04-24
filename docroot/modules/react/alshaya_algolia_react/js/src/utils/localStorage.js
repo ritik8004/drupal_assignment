@@ -1,10 +1,17 @@
+import qs from 'qs';
 /**
  * File contains helper method to deal with local storage
  * related get, set, remove.
  */
 
 // Global variable to keep algolia search query.
-window.algoliaSearchQuery = '';
+const searchQuery = qs.parse(window.location.hash.substr(1));
+if (searchQuery !== '') {
+  window.algoliaSearchQuery = searchQuery.query
+    ? searchQuery.query : '';
+} else {
+  window.algoliaSearchQuery = '';
+}
 
 function setSearchQuery(queryValue) {
   window.algoliaSearchQuery = queryValue;
