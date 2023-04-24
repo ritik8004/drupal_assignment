@@ -30,6 +30,13 @@
       $(window).once('alshaya-seo-gtm-product-wishlist-algolia').on('scroll', debounce(function (event) {
         Drupal.alshaya_seo_gtm_prepare_and_push_product_impression(Drupal.alshaya_seo_gtm_prepare_impressions, $('#my-wishlist'), drupalSettings, event);
       }, 500));
+
+      // Push article swatch arrow click events to GTM.
+      $('#my-wishlist').once('bind-swatch-slider-click').on('click', '.article-swatch-wrapper button.slick-arrow', function () {
+        // Get clicked arrow for eventLabel.
+        var eventLabel = $(this).hasClass('slick-prev') ? 'left' : 'right';
+        Drupal.alshayaSeoGtmPushSwatchSliderClick(eventLabel);
+      });
     }
   };
 })(jQuery, Drupal, Drupal.debounce, drupalSettings);
