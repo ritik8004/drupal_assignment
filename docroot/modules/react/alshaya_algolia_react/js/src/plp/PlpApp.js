@@ -68,6 +68,8 @@ const PlpApp = ({
       window.sddEdStatus = status;
     });
 
+    // Check if configurable filter is enabled then request
+    // index settings to get facet list used in config for facets param.
     if (isConfigurableFiltersEnabled()) {
       getFacetListFromAlgolia('listing').then((facetsList) => {
         setFacets(facetsList);

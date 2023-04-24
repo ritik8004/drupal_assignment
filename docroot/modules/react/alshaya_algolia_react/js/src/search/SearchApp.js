@@ -52,6 +52,8 @@ class SearchApp extends React.PureComponent {
       this.setSddEdStatus();
     }
 
+    // Check if configurable filter is enabled then request
+    // index settings to get facet list used in config for facets param.
     if (isConfigurableFiltersEnabled()) {
       getFacetListFromAlgolia('search').then((results) => {
         this.setState({

@@ -3,7 +3,6 @@ import WidgetManager from '../widget-manager';
 import DynamicWidgets from '../algolia/widgets/DynamicWidgets';
 import { hasValue } from '../../../../../js/utilities/conditionsUtility';
 import { isConfigurableFiltersEnabled } from '../../../../../js/utilities/helper';
-import ConditionalView from '../../../common/components/conditional-view';
 import { getFilters } from '../../utils';
 
 const Filters = ({ indexName, pageType, ...props }) => {
@@ -49,6 +48,11 @@ const Filters = ({ indexName, pageType, ...props }) => {
 
   const facetsList = [];
 
+  if (!isConfigurableFiltersEnabled()) {
+    // Check if configurable attributes is disable.
+    setFacets(getFilters(pageType));
+  }
+
   if (hasValue(facets)) {
     facets.forEach((facet) => {
       facetsList.push(
@@ -64,30 +68,15 @@ const Filters = ({ indexName, pageType, ...props }) => {
     });
   }
 
-  if (!isConfigurableFiltersEnabled()) {
-    getFilters(pageType).forEach((facet) => {
-      facetsList.push(
-        <WidgetManager
-          key={facet.identifier}
-          facet={facet}
-          indexName={indexName}
-          filterResult={(test) => updateFilterResult(test)}
-          pageType={pageType}
-        />,
-      );
-    });
-  }
-
   return (
     <div ref={ref} className="filter-facets">
-      <ConditionalView condition={isConfigurableFiltersEnabled()}>
+      {isConfigurableFiltersEnabled()
+        && (
         <DynamicWidgets buildFacets={buildFacets}>
           {facetsList}
         </DynamicWidgets>
-      </ConditionalView>
-      <ConditionalView condition={!isConfigurableFiltersEnabled()}>
-        {facetsList}
-      </ConditionalView>
+        )}
+      {!isConfigurableFiltersEnabled() && facetsList}
     </div>
   );
 };
