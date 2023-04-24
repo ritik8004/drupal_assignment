@@ -13,11 +13,18 @@ use Drupal\Component\Utility\Unicode;
 use Drupal\block\Entity\Block;
 
 /**
- * Implements hook_update_N().
+ * Update algolia react with default value for render_single_result_facets.
  *
+ * And also for exclude_render_single_result_facets.
  * Add Article Pattern and License Item field for index and facets.
  */
-function alshaya_hm_update_9407() {
+function alshaya_hm_update_9406() {
+  $config = \Drupal::configFactory()->getEditable('alshaya_algolia_react.settings');
+  if ($config) {
+    $config->set('render_single_result_facets', FALSE);
+    $config->set('exclude_render_single_result_facets', 'final_price,attr_bv_rating,attr_color,field_acq_promotion_label');
+    $config->save();
+  }
   // Add string translations.
   $strings = [
     'Pattern' => [
@@ -45,20 +52,6 @@ function alshaya_hm_update_9407() {
   /** @var \Drupal\acq_sku\SKUFieldsManager $fieldsManager */
   $fieldsManager = \Drupal::service('acq_sku.fields_manager');
   $fieldsManager->resetBaseFields();
-}
-
-/**
- * Update algolia react with default value for render_single_result_facets.
- *
- * And also for exclude_render_single_result_facets.
- */
-function alshaya_hm_update_9406() {
-  $config = \Drupal::configFactory()->getEditable('alshaya_algolia_react.settings');
-  if ($config) {
-    $config->set('render_single_result_facets', FALSE);
-    $config->set('exclude_render_single_result_facets', 'final_price,attr_bv_rating,attr_color,field_acq_promotion_label');
-    $config->save();
-  }
 
 }
 
