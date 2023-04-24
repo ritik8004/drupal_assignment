@@ -34,3 +34,16 @@
     }
   }
 }
+
+@include breakpoint($only-tablet) {
+  .path--store-finder {
+    .input--wrapper {
+      width: rem(339) !important;
+
+      [id^=edit-actions] {
+        border-#{$right}: none;
+        #{$right}: rem(2);
+      }
+    }
+  }
+}
