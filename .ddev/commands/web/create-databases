@@ -1,0 +1,19 @@
+#!/bin/bash
+
+SCRIPT_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" &> /dev/null && pwd )"
+
+cd $SCRIPT_DIR;
+
+echo "Create user drupal@%"
+mysql -u root -proot -h db -e "CREATE USER IF NOT EXISTS 'drupal'@'%' IDENTIFIED BY 'drupal';"
+
+echo "Grant all privileges to drupal@%"
+mysql -u root -proot -h db -e "GRANT ALL PRIVILEGES ON *.* TO 'drupal'@'%' IDENTIFIED by 'drupal';"
+
+# Script to create databases within the mysql instance running in the database container.
+for site in $(php db_names.php)
+do
+  echo "Create database drupal_alshaya_$site";
+  mysql -u root -proot -h db -e "CREATE DATABASE IF NOT EXISTS drupal_alshaya_$site;"
+done
+
