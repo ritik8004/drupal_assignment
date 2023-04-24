@@ -52,3 +52,23 @@ export const checkBazaarVoiceAvailableForPdp = () => {
  */
 export const isCheckoutTracker = () => hasValue(drupalSettings.checkoutTracker)
   && hasValue(drupalSettings.checkoutTracker.enabled);
+
+/**
+ * Checks if configurable filters is enabled or disabled.
+ *
+ * Once algolia facet display is configured then config
+ * algolia_enable_configurable_filter is set true.
+ * This is passed in drupalsettings to check if facet display is configured
+ * on algolia and display facet from algolia.
+ *
+ * @returns {boolean}
+ *   True if configurable filter enabled else false.
+ */
+export const isConfigurableFiltersEnabled = () => {
+  if (hasValue(drupalSettings.algoliaSearch)
+    && hasValue(drupalSettings.algoliaSearch.enableConfigurableFilters)) {
+    return drupalSettings.algoliaSearch.enableConfigurableFilters;
+  }
+
+  return false;
+};

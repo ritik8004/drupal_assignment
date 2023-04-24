@@ -229,6 +229,7 @@ class AlshayaAlgoliaReactConfig implements AlshayaAlgoliaReactConfigInterface {
       'render_single_result_facets' => $alshaya_algolia_react_setting_values->get('render_single_result_facets'),
       'exclude_render_single_result_facets' => $alshaya_algolia_react_setting_values->get('exclude_render_single_result_facets'),
       'facetListExpiry' => $alshaya_algolia_react_setting_values->get('algolia_facets_local_storage_expiry'),
+      'enableConfigurableFilters' => $alshaya_algolia_react_setting_values->get('algolia_enable_configurable_filter'),
     ];
 
     // Set product elements alignment to true only
