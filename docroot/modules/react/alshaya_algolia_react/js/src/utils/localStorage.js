@@ -5,12 +5,10 @@ import qs from 'qs';
  */
 
 // Global variable to keep algolia search query.
+window.algoliaSearchQuery = '';
 const searchQuery = qs.parse(window.location.hash.substr(1));
-if (searchQuery !== '') {
-  window.algoliaSearchQuery = searchQuery.query
-    ? searchQuery.query : '';
-} else {
-  window.algoliaSearchQuery = '';
+if (searchQuery !== '' && searchQuery.query) {
+  window.algoliaSearchQuery = searchQuery.query;
 }
 
 function setSearchQuery(queryValue) {
