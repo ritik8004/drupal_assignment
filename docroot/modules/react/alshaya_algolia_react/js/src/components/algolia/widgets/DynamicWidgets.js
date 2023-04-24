@@ -42,7 +42,7 @@ function DynamicWidgets({
     buildFacets(userData);
   }
 
-  const Fallback = typeof fallbackComponent === 'undefined' ? function fallback() {
+  const Fallback = hasValue(fallbackComponent) ? function fallback() {
     return null;
   } : fallbackComponent;
 

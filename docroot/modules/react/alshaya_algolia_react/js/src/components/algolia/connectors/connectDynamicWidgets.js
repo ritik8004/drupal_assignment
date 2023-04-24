@@ -16,6 +16,12 @@ export default createConnector({
     transformItems: function transformItems(items) {
       return items;
     },
+    // The default number of facet values to request.
+    // To prevent an additional network request when a widget mounts,
+    // it’s recommended to set this value as high as the highest limit and
+    // showMoreLimit of the dynamic widgets.
+    // To avoid pinned items not showing in the result,
+    // make sure you choose a maxValuesPerFacet as high as all the most pinned items you have.
     maxValuesPerFacet: 20,
   },
   propTypes: {
