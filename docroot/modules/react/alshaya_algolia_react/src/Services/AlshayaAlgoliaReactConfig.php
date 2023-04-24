@@ -284,7 +284,7 @@ class AlshayaAlgoliaReactConfig implements AlshayaAlgoliaReactConfigInterface {
       'swipe_image' => [
         'enable_swipe_image_mobile' => $algolia_swipe_image_settings->get('enable_swipe_image_mobile'),
         'no_of_image_scroll' => $algolia_swipe_image_settings->get('no_of_image_scroll'),
-        'slide_effect_fade' => $algolia_swipe_image_settings->get('slide_effect_fade'),
+        'slide_effect' => $algolia_swipe_image_settings->get('slide_effect'),
         'image_slide_timing' => $algolia_swipe_image_settings->get('image_slide_timing'),
       ],
     ];

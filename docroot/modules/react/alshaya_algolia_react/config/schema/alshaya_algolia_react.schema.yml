@@ -95,7 +95,7 @@ alshaya_algolia_react.swipe_image:
     no_of_image_scroll:
       type: integer
       label: 'Set the swipe image scroll limit for PLP/SRP on desktop view'
-    slide_effect_fade:
+    slide_effect:
       type: string
       label: 'Set the effect of slide'
     image_slide_timing:
