@@ -14,8 +14,12 @@ const SliderElement = ({
   />
 );
 
+const sliderAnimation = hasValue(drupalSettings.reactTeaserView.swipe_image.slide_effect)
+  ? drupalSettings.reactTeaserView.swipe_image.slide_effect : null;
+
 const sliderSettings = {
   dots: true,
+  fade: sliderAnimation === 'fade',
   infinite: true,
   slidesToShow: 1,
   slidesToScroll: 1,
@@ -38,7 +42,11 @@ class SearchGallery extends React.PureComponent {
 
   onHoverAppendMarkup = (thumbnails) => (
     <div className="alshaya_search_slider">
-      <Slider {...sliderSettings} className="search-lightSlider" ref={this.getref}>
+      <Slider
+        {...sliderSettings}
+        className={`search-lightSlider ${sliderAnimation ? `slick-animation-${sliderAnimation}` : ''}`}
+        ref={this.getref}
+      >
         {thumbnails}
       </Slider>
     </div>
