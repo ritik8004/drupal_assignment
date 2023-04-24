@@ -318,6 +318,9 @@ function alshaya_xb_dynamic_yield_context_alter(&$lng) {
  *
  * @param \Drupal\acq_commerce\SKUInterface $sku
  *   SKU Entity.
+ *
+ * @return string
+ *   A string containing the fixed price.
  */
 function _alshaya_xb_get_fixed_price(SKUInterface $sku) {
   if ($sku->hasField('attr_fixed_price')) {
