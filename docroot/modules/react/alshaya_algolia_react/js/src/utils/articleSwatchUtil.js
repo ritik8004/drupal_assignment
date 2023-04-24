@@ -11,12 +11,12 @@ export default async function getSingleProductByColorSku(skuCode) {
   // when Color swatches Slider is enabled.
   if (hasValue(sliderArticleSwatches)) {
     const colorSwatchQuery = alshayaGraphqlQuery.color_swatches.query;
-    const variables = {
+    const data = {
       sku: skuCode,
       type: alshayaGraphqlQuery.color_swatches.variables.type,
     };
     // Call the Graphql Api when showColorSwatchSlider is TRUE.
-    response = await global.graphqlQueryHelper.invokeGraphqlApi(colorSwatchQuery, 'GET', variables);
+    response = await global.graphqlQueryHelper.invokeGraphqlApi(colorSwatchQuery, 'GET', data);
     response = response.data.products.items;
     // Call the graphql api for the sku to get the product info data
     // when Article Swatches is enabled.

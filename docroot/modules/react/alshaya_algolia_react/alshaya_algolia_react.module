@@ -58,10 +58,6 @@ function alshaya_algolia_react_page_attachments(array &$attachments) {
   $attachments['#attached']['drupalSettings']['user']['isCustomer'] = _alshaya_seo_process_gtm();
   $attachments['#attached']['drupalSettings']['reactTeaserView']['isPriceModeFromTo'] = _alshaya_acm_product_get_price_helper()->isPriceModeFromTo();
 
-  // Attach the graphql library if color swatches feature is enabled.
-  if (\Drupal::config('alshaya_algolia_react.color_swatches')->get('enable_listing_page_color_swatch_slider')) {
-    $attachments['#attached']['library'][] = 'alshaya_graphql/main';
-  }
 }
 
 /**
