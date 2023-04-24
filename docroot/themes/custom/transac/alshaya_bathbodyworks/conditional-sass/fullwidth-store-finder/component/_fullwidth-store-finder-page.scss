@@ -18,3 +18,30 @@
     }
   }
 }
+
+@include breakpoint($only-tablet) {
+  .path--store-finder {
+    .input--wrapper {
+      #{$left}: 15%;
+
+      html[lang="ar"] & {
+        right: 13%;
+      }
+
+      [id^=edit-actions] {
+        border-#{$right}: none;
+        #{$right}: rem(2);
+      }
+    }
+
+    .label--location {
+      html[lang="en"] & {
+        padding-#{$left}: rem(16);
+      }
+
+      html[lang="ar"] & {
+        margin-right: rem(13);
+      }
+    }
+  }
+}
