@@ -33,9 +33,15 @@ class ReturnRefundDetails extends React.Component {
 
   componentDidMount = () => {
     document.addEventListener('updateRefundAccordionState', this.updateRefundAccordionState, false);
+    const { paymentInfo } = this.state;
+    // Deleting the aura_payment value from the payment object
+    // if we have both aura and aura_payment keys in the payment object,
+    // as we only need to render the data present in aura.
+    if (hasValue(paymentInfo.aura) && hasValue(paymentInfo.aura_payment)) {
+      delete paymentInfo.aura_payment;
+    }
     // Checking whether the eGift refund feature is enabled or not and the user is authenticated.
     if (isUserAuthenticated() && isEgiftRefundEnabled()) {
-      const { paymentInfo } = this.state;
       // Variable to check the not supported payment methods.
       // This will true as per the config present in eGift refund settings.
       let isNotSupportedPaymentMethod = false;
@@ -59,12 +65,6 @@ class ReturnRefundDetails extends React.Component {
             paymentMethod = paymentInfo[method];
           }
         });
-      }
-      // Deleting the aura_payment value from the payment object
-      // if we have both aura and aura_payment keys in the payment object,
-      // as we only need to render the data present in aura.
-      if (hasValue(paymentInfo.aura) && hasValue(paymentInfo.aura_payment)) {
-        delete paymentInfo.aura_payment;
       }
       // Variable to decide whether eGift card details API needs to be called.
       let callEgiftDetailsApi = false;
@@ -214,7 +214,7 @@ class ReturnRefundDetails extends React.Component {
         <Collapsible trigger={this.refundDetailsHeader()} open={open} triggerDisabled={!open}>
           {/* If the eGift card refund feature is enabled, and we are getting the eGift cards
           info from MDC API, then we are passing the cardList variable and listing that info. */}
-          {cardList || egiftCardType
+          {isEgiftRefundEnabled() && (cardList || egiftCardType)
             ? (
               <ReturnRefundMethod
                 paymentDetails={paymentInfo}

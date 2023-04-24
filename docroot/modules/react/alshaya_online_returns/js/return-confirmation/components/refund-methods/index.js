@@ -42,7 +42,10 @@ const RefundMethods = ({
     }
   }
 
-  if (!cardList) {
+  // If the eGift refund feature is not enabled, there is no eGift card details API called
+  // and the payment is not made through AURA (as for AURA we don't used to call the API)
+  // we will not render any egift components.
+  if (isEgiftRefundEnabled() && !cardList && !hasValue(paymentInfo.aura)) {
     return null;
   }
 
@@ -65,24 +68,13 @@ const RefundMethods = ({
   if (hasValue(paymentData.aura) && hasValue(paymentData.aura_payment)) {
     delete paymentData.aura_payment;
   }
-  // Logic to decide whether the payment made through the eGift card
-  // is linked to the user account or a different one which is not linked to the user.
-  let differentEgiftCard = false;
-  if (paymentInfo.egift && hasValue(paymentInfo.egift.card_number)
-    && cardList && hasValue(cardList.card_number) && !isHybrid) {
-    // Fetching the last 4 digits of the linked eGift card.
-    const lastFourChar = cardList.card_number.substring(
-      cardList.card_number.length - 4,
-    );
-    // Checking whether the payment is made through same linked eGift or not.
-    if (lastFourChar !== paymentInfo.egift.card_number) {
-      differentEgiftCard = true;
-    }
-  }
 
   // Components for eGift card single payment method.
-  const SinglePaymentMethod = () => ((isEgiftCardSelected && (cardList || showNewEgiftCardOption))
-    || paymentData.cashondelivery || differentEgiftCard
+  // For eGift refund feature if the user selected eGift as an option in the refund form,
+  // and the payment is made through COD or eGift we will show the EgiftCardDetails component.
+  const SinglePaymentMethod = () => (isEgiftRefundEnabled()
+    && ((isEgiftCardSelected && (cardList || showNewEgiftCardOption))
+    || paymentData.cashondelivery || paymentData.egift)
     ? (
       <>
         <EgiftCardDetails
@@ -98,7 +90,7 @@ const RefundMethods = ({
     ));
 
   // Components for eGift card hybrid payment method.
-  const HybridPaymentMethods = () => ((cardList || showNewEgiftCardOption)
+  const HybridPaymentMethods = () => (isEgiftRefundEnabled() && (cardList || showNewEgiftCardOption)
   && !hasValue(paymentInfo.aura)
     ? (
       <>
