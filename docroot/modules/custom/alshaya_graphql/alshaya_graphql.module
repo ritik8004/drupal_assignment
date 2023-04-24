@@ -29,11 +29,6 @@ function alshaya_graphql_page_bottom(array &$page_bottom) {
   // Allow other modules to alter the data.
   \Drupal::moduleHandler()->alter('alshaya_graphql_query', $queries);
 
-  // Store cache data an unset in original array so that no further processing
-  // for it occurs in the array.
-  $cache_meta_data = $queries['#cache'] ?? [];
-  unset($queries['#cache']);
-
   // Convert array to graphql.
   foreach ($queries as $query => $fields) {
     $queries[$query] = ArrayGraphQL::convert($fields);
@@ -45,7 +40,6 @@ function alshaya_graphql_page_bottom(array &$page_bottom) {
       '#type'  => 'html_tag',
       '#tag'   => 'script',
       '#value' => Markup::create('var alshayaGraphqlQuery = ' . json_encode($queries) . ';'),
-      '#cache' => $cache_meta_data,
     ];
   }
 }
@@ -58,10 +52,13 @@ function alshaya_graphql_page_attachments_alter(array &$attachments) {
 
   // We proxy the requests via cloudflare, so we use the current domain as is
   // without any language suffix so HTTP_HOST is enough.
-  $attachments['#attached']['drupalSettings']['graphql']['baseUrl'] = 'https://' . $_SERVER['HTTP_HOST'];
+  $attachments['#attached']['drupalSettings']['graphql']['baseUrl'] = \Drupal::request()->getSchemeAndHttpHost();
 
   // Use proxy on only specific environments.
   if (Settings::get('alshaya_use_proxy', FALSE)) {
     $attachments['#attached']['drupalSettings']['graphql']['baseUrl'] = '/proxy/?url=' . $api_settings->get('magento_host');
   }
+
+  // Attach the graphql library.
+  $attachments['#attached']['library'][] = 'alshaya_graphql/main';
 }
