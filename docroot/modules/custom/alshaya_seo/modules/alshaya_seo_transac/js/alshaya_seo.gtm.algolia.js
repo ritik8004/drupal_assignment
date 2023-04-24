@@ -91,6 +91,13 @@
       }
     });
 
+    // Push article swatch arrow click events to GTM.
+    $('.show-algolia-result').once('bind-swatch-slider-click').on('click', '.article-swatch-wrapper button.slick-arrow', function () {
+      // Get clicked arrow for eventLabel.
+      var eventLabel = $(this).hasClass('slick-prev') ? 'left' : 'right';
+      Drupal.alshayaSeoGtmPushSwatchSliderClick(eventLabel);
+    });
+
     // Push load more products click event to GTM.
     $('.show-algolia-result').once('bind-loadmore-button-click').on('click', '.pager button', function () {
       var statsText = $('.pager .ais-Stats-text').attr('gtm-pagination-stats');
