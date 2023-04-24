@@ -8,6 +8,15 @@
 /**
  * Implements hook_update_N().
  *
+ * Install alshaya_rcs_free_gift module.
+ */
+function alshaya_rcs_update_9403() {
+  \Drupal::service('module_installer')->install(['alshaya_rcs_free_gift']);
+}
+
+/**
+ * Implements hook_update_N().
+ *
  * Install alshaya_rcs_mobile_app module.
  */
 function alshaya_rcs_update_9402() {
@@ -69,6 +78,7 @@ function alshaya_rcs_install() {
     'alshaya_rcs_seo',
     'alshaya_rcs_geolocation',
     'alshaya_pims',
+    'alshaya_rcs_free_gift',
   ];
 
   $modules = _alshaya_rcs_get_modules_mapping();

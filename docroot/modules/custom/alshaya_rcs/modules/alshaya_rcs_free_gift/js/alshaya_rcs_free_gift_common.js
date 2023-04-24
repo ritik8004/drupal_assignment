@@ -52,6 +52,9 @@ window.commerceBackend = window.commerceBackend || {};
       });
       // Manually setting product type to simple.
       productData.type_id = 'simple';
+      // Deleting configurable attributes.
+      delete productData.configurable_options;
+      delete productData.variants;
     }
     return productData;
   };
@@ -65,13 +68,13 @@ window.commerceBackend = window.commerceBackend || {};
    * @return {object}
    *   Valid free gift data from MDC.
    */
-  window.commerceBackend.fetchValidFreeGift = function fetchValidFreeGift(freeGiftSku) {
+  window.commerceBackend.fetchValidFreeGift = async function fetchValidFreeGift(freeGiftSku) {
     // On Page load, some free gift data is already cached.
     var freeGiftItem = globalThis.RcsPhStaticStorage.get('product_data_' + freeGiftSku);
     // For uncached data, do api calls.
     if (!Drupal.hasValue(freeGiftItem)) {
       // Synchronous call to get product by skus.
-      freeGiftItem = globalThis.rcsPhCommerceBackend.getDataSynchronous('product_by_sku', { sku: freeGiftSku });
+      freeGiftItem = await globalThis.rcsPhCommerceBackend.getData('product_by_sku', { sku: freeGiftSku });
       if (Drupal.hasValue(freeGiftItem) && Drupal.hasValue(freeGiftItem.sku)) {
         if (freeGiftItem.type_id === 'configurable') {
           if (freeGiftItem.sku !== freeGiftSku) {
@@ -85,12 +88,9 @@ window.commerceBackend = window.commerceBackend || {};
           }
           else {
             // For configurable products having style code, we will take all styled variants.
-            if (Drupal.hasValue(freeGiftItem.style_code) && Drupal.hasValue(window.commerceBackend.getProductsInStyleSynchronous)) {
-              freeGiftItem = window.commerceBackend.getProductsInStyleSynchronous({
-                sku: freeGiftItem.sku,
-                style_code: freeGiftItem.style_code,
-                context: 'modal'
-              });
+            if (Drupal.hasValue(freeGiftItem.style_code) && Drupal.hasValue(window.commerceBackend.getProductsInStyle)) {
+              freeGiftItem.context = 'modal';
+              freeGiftItem = await window.commerceBackend.getProductsInStyle(freeGiftItem);
             }
             else {
               // Process free gift media.
@@ -117,10 +117,14 @@ window.commerceBackend = window.commerceBackend || {};
    *   The free gift product sku.
    * @param {boolean} backToCollection
    *   Boolean flag to show the back to collection link.
+   * @param {string} couponCode
+   *   Free gift promotion coupon code.
+   * @param {string} promoRuleId
+   *   Free gift promotion rule id.
    */
-  window.commerceBackend.showItemModalView = function showItemModalView(sku, backToCollection = false, couponCode = null, promoRuleId = null) {
+  window.commerceBackend.showItemModalView = async function showItemModalView(sku, backToCollection = false, couponCode = null, promoRuleId = null) {
     // Load the product data based on sku.
-    var freeGiftProduct = window.commerceBackend.fetchValidFreeGift(sku);
+    var freeGiftProduct = await window.commerceBackend.fetchValidFreeGift(sku);
 
     var elm = document.createElement('div');
     var data = {
@@ -150,25 +154,18 @@ window.commerceBackend = window.commerceBackend || {};
     $('#drupal-modal').remove();
     modalContext.find('.ui-widget-content').attr('id', 'drupal-modal');
 
-    // For configurable products, show sku base form.
-    if (freeGiftProduct.type_id === 'configurable') {
-      window.commerceBackend.renderAddToCartForm(freeGiftProduct);
-      if (modalContext.find('.sku-base-form').length) {
-        modalContext.find('.sku-base-form').removeClass('visually-hidden');
-      }
-      // Removing style guide modal link inside free gift modal.
-      if (modalContext.find('.size-guide-form-and-link-wrapper').length) {
-        modalContext.find('.size-guide-link').remove();
-      }
-      // Removing quantity dropdown modal link inside free gift modal.
-      if (modalContext.find('.form-item-quantity').length) {
-        modalContext.find('.form-item-quantity').remove();
-      }
-      // As we don't need the add to cart button, so removing it.
-      modalContext.find('button.add-to-cart-button').remove();
-    } else {
-      // For simple products, just remove the add to cart skeletal.
-      modalContext.find('.add_to_cart_form').addClass('rcs-loaded');
+    freeGiftProduct.context = 'free_gift';
+    freeGiftProduct.couponCode = couponCode;
+    freeGiftProduct.promoRuleId = promoRuleId;
+    // Rendering sku base form inside modal.
+    window.commerceBackend.renderAddToCartForm(freeGiftProduct);
+    // For simple products, remove configurable options section if exists.
+    if (freeGiftProduct.type_id === 'simple' && modalContext.find('#configurable_ajax').length) {
+      modalContext.find('#configurable_ajax').remove();
+    }
+    // Only show add free gift button in cart page.
+    if (drupalSettings.path.currentPath !== 'cart') {
+      modalContext.find('button#add-free-gift').remove();
     }
 
     // Call behaviours with modal context.
@@ -178,7 +175,7 @@ window.commerceBackend = window.commerceBackend || {};
   /**
    * Utility function to start free gift modal processing and show.
    */
-  window.commerceBackend.startFreeGiftModalProcess = function startFreeGiftModalProcess (skus, backToCollection = false, couponCode = '') {
+  window.commerceBackend.startFreeGiftModalProcess = async function startFreeGiftModalProcess (skus, backToCollection = false, couponCode = '') {
     // Do not process if skus are not defined.
     if (!Drupal.hasValue(skus)) {
       return;
@@ -206,16 +203,16 @@ window.commerceBackend = window.commerceBackend || {};
     // 2. Collection of item modal ( List of free gift items )
     if (skus.length === 1) {
       // Displaying single free gift item modal.
-      window.commerceBackend.showItemModalView(skus[0], backToCollection, couponCode, promoRuleId);
+      await window.commerceBackend.showItemModalView(skus[0], backToCollection, couponCode, promoRuleId);
     } else if (skus.length > 1) {
       var elm = document.createElement('div');
       var data = {
         title: promotionTitle,
         items: [],
       };
-      skus.forEach(function processMultipleFreeGiftSkus(freeGiftSku) {
-        // Fetch free gift data from MDC.
-        var freeGiftItem = window.commerceBackend.fetchValidFreeGift(freeGiftSku);
+      for (var freeGiftSku of skus) {
+        // Fetch free gift sku data from MDC.
+        var freeGiftItem = await window.commerceBackend.fetchValidFreeGift(freeGiftSku);
         // Prepare the data items.
         if (freeGiftItem) {
           var freeGiftImage = window.commerceBackend.getFirstImage(freeGiftItem);
@@ -224,6 +221,7 @@ window.commerceBackend = window.commerceBackend || {};
             freeGiftImage: Drupal.hasValue(freeGiftImage) ? freeGiftImage.url : drupalSettings.alshayaRcs.default_meta_image,
             freeGiftImageTitle: freeGiftItem.name,
             freeGiftSku,
+            freeGiftParentSku: Drupal.hasValue(freeGiftItem.parent_sku) ? freeGiftItem.parent_sku : freeGiftSku,
             backToCollection: true,
             freeGiftItem,
             couponCode,
@@ -231,12 +229,12 @@ window.commerceBackend = window.commerceBackend || {};
             selectLink: drupalSettings.path.currentPath === 'cart'
           });
         }
-      });
+      }
 
       // If valid sku count is only one after processing, do not render free gift list modal.
       if (data.items.length === 1) {
         // Displaying single free gift item modal.
-        window.commerceBackend.showItemModalView(data.items[0].freeGiftSku, couponCode, promoRuleId);
+        await window.commerceBackend.showItemModalView(data.items[0].freeGiftSku, couponCode, promoRuleId);
         Drupal.cartNotification.spinner_stop();
         return;
       }
@@ -295,21 +293,22 @@ window.commerceBackend = window.commerceBackend || {};
    *
    * @param {object} productInfo
    *   The product info from graphQl.
+   * @param {string} skuItemCode
+   *   SKU of the product.
    * @param {boolean} checkForVariants
    *   Flag to check for product variants in case of configurable products.
    */
-  window.commerceBackend.processFreeGiftDataReactRender = function processFreeGiftDataReactRender (productInfo, checkForVariants = true) {
+  window.commerceBackend.processFreeGiftDataReactRender = async function processFreeGiftDataReactRender (productInfo, skuItemCode, checkForVariants = true) {
     try {
-      var skuItemCode = Object.keys(productInfo)[0];
       // If product does not have any free gifts associated, then return.
-      if (!Drupal.hasValue(productInfo[skuItemCode].freeGiftPromotion)) {
+      if (!Drupal.hasValue(productInfo[skuItemCode]) || !Drupal.hasValue(productInfo[skuItemCode].freeGiftPromotion)) {
         return productInfo;
       }
       // Free gift info from API response.
       var freeGiftApiData = productInfo[skuItemCode].freeGiftPromotion[0];
       var promoUrl = Drupal.url(freeGiftApiData.rule_web_url);
       var processedFreeGiftData = {};
-      var giftItemProductInfo = window.commerceBackend.fetchValidFreeGift(freeGiftApiData.gifts[0].sku);
+      var giftItemProductInfo = await window.commerceBackend.fetchValidFreeGift(freeGiftApiData.gifts[0].sku);
       if (!Drupal.hasValue(giftItemProductInfo)) {
         productInfo[skuItemCode].freeGiftPromotion = [];
         return productInfo;
@@ -395,15 +394,16 @@ window.commerceBackend = window.commerceBackend || {};
         // Shorthand variable to process variants.
         var variants = productInfo[skuItemCode].variants;
         // Loop through each variant.
-        for (const variantSku of Object.keys(variants)) {
+        for (var variantSku of Object.keys(variants)) {
           // Skip if variant does not have free gift.
           if (Drupal.hasValue(variants[variantSku].freeGiftPromotion)) {
             variants[variantSku].skuItemCode = variantSku;
             // Recursive call to same function to process free gift data for variants in exactly same fashion.
-            var variantData = window.commerceBackend.processFreeGiftDataReactRender(
+            var variantData = await window.commerceBackend.processFreeGiftDataReactRender(
               {
                 [variantSku]: variants[variantSku],
               },
+              variantSku,
               false
             );
             // Updating free gift promotion response from graphQl with react processable data for variants.

@@ -15,14 +15,17 @@
     </select>
   </div>
 {{/inline}}
-<form class="sku-base-form visually-hidden" data-sku="{{ sku }}" data-cleaned-sku="{{ sku_clean }}" data-sku-type="{{ sku_type }}">
+<form id="select-free-gift-{{ sku }}" class="sku-base-form visually-hidden select-free-gift" data-sku="{{ sku }}" data-cleaned-sku="{{ sku_clean }}" data-sku-type="{{ sku_type }}">
+  <input data-drupal-selector="edit-coupon" type="hidden" name="coupon" value="{{ couponCode }}">
+  <input data-drupal-selector="edit-sku" type="hidden" name="sku" value="{{ sku }}">
+  <input data-drupal-selector="edit-promotion-id" type="hidden" name="promotion_id" value="{{ promoRuleId }}">
+  <input data-drupal-selector="edit-selected-variant-sku" type="hidden" name="selected_variant_sku" value="">
   <div class="errors-container error-container-{{ sku }} js-form-wrapper form-wrapper" data-drupal-selector="edit-errors-container" data-msg-required="Please enter your This field." id="edit-errors-container"></div>
   {{#if configurable_options}}
     <div id="configurable_ajax" class="configurable-wrapper-{{ sku }} js-form-wrapper form-wrapper" data-drupal-selector="edit-ajax" data-msg-required="Please enter your This field.">
       {{#each configurable_options}}
         {{#if this.attribute_has_size_guide}}
           <div class="size-guide-form-and-link-wrapper">
-            {{{../size_guide_link}}}
             {{> renderSelectList}}
           </div>
         {{else}}
@@ -31,23 +34,7 @@
       {{/each}}
     </div>
   {{/if}}
-  <span class="quantity-{{ sku }}">
-    {{#if quantity_dropdown }}
-      <div class="js-form-item form-item js-form-type-select form-type-select js-form-item-quantity form-item-quantity">
-        <label for="edit-quantity" class="js-form-required form-required">{{ this.quantity_title }}</label>
-        <select name="quantity" class="edit-quantity form-select">
-          {{#each quantity_dropdown}}
-            {{#if (eq @index 0)}}
-              <option value="{{this}}" selected="selected">{{this}}</option>
-            {{else}}
-              <option value="{{this}}">{{this}}</option>
-            {{/if}}
-          {{/each}}
-        </select>
-      </div>
-    {{/if}}
-  </span>
-  <button name="add_to_cart_{{ sku }}" id="edit-add-to-cart-{{ sku }}" class='cv-validate-before-ajax edit-add-to-cart add-to-cart-button ladda-button' data-twig-suggestion="addtocart" type="submit">{{{ add_to_cart_text }}}</button>
-  <input class="selected-variant-sku selected-variant-sku-{{  sku_clean }}" data-drupal-selector="edit-selected-variant-sku" data-msg-required="Please enter your This field." type="hidden" name="selected_variant_sku" value="{{ sku }}">
+  <input class="selected-variant-sku selected-variant-sku-{{  sku_clean }}" data-drupal-selector="edit-selected-variant-sku" data-msg-required="Please enter your This field." type="hidden" name="selected_variant_sku" value="">
   <input class="selected-parent-sku" data-drupal-selector="edit-selected-parent-sku" data-msg-required="Please enter your This field." type="hidden" name="selected_parent_sku" value="{{ sku }}">
+  <button id="add-free-gift" class="select-free-gift button js-form-submit form-submit" data-variant-sku="{{ sku }}" data-sku-type="{{ sku_type }}" data-coupon="{{ couponCode }}" data-parent-sku="{{ sku }}" data-promo-rule-id="{{ promoRuleId }}" data-drupal-selector="edit-select" type="submit" name="op" value="ADD FREE GIFT">{{t 'ADD FREE GIFT' }}</button>
 </form>

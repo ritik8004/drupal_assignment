@@ -91,3 +91,19 @@ rcs_free_gift_pdp_classic_and_magazine_layout:
   dependencies:
     - alshaya_spc/add_to_cart
     - alshaya_rcs_free_gift/rcs_free_gift_common
+
+rcs_free_gift_cart:
+  version: 1.x
+  js:
+    js/alshaya_rcs_free_gift_cart.js: {}
+  dependencies:
+    - alshaya_rcs_free_gift/rcs_free_gift_common
+    - alshaya_rcs_product/gallery.product.product_zoom
+    - alshaya_rcs_product/gallery.product.block.product_zoom_default_gallery
+    - alshaya_rcs_product/gallery.product.block.product_zoom_mobile_gallery
+    - alshaya_rcs_product/gallery.product.block.product_zoom_magazine_gallery
+    - alshaya_rcs_product/gallery.product.block.product_zoom_modal_gallery
+    - alshaya_rcs_product/gallery.product.product_labels
+    - alshaya_rcs_product/product.free_gift_sku_base_form
+    - alshaya_rcs_product/product_attributes
+    - alshaya_acm_product/add_free_gift_promotions

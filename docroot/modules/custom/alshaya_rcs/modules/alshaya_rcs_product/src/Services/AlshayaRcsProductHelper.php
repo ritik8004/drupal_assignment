@@ -2,6 +2,7 @@
 
 namespace Drupal\alshaya_rcs_product\Services;
 
+use Drupal\Core\Cache\Cache;
 use Drupal\Core\Config\ConfigFactoryInterface;
 use Drupal\Core\Extension\ModuleHandlerInterface;
 use Drupal\Core\Routing\RouteMatchInterface;
@@ -117,7 +118,6 @@ class AlshayaRcsProductHelper {
     LoggerChannelFactoryInterface $logger_factory
   ) {
     $this->currentRouteMatch = $current_route_match;
-    $this->configFactory = $config_factory;
     $this->moduleHandler = $module_handler;
     $this->nodeStorage = $entity_type_manager->getStorage('node');
     $this->configFactory = $config_factory;
@@ -775,6 +775,44 @@ class AlshayaRcsProductHelper {
 
     $this->moduleHandler->alter('alshaya_rcs_product_order_details_fields', $fields);
     return $fields;
+  }
+
+  /**
+   * Adds common drupal settings variables to page attachment.
+   *
+   * @param array $attachments
+   *   Page attachment/build variable.
+   */
+  public function setCommonPdpSettings(array &$attachments) {
+    $product_settings = $this->configFactory->get('alshaya_acm_product.settings');
+    $attachments['#attached']['drupalSettings']['alshayaRcs']['pdpGalleryLimit'] = [
+      'modal' => $product_settings->get('pdp_slider_items_settings.pdp_slider_items_number_cs_us'),
+      'others' => $product_settings->get('pdp_gallery_pager_limit'),
+    ];
+    $attachments['#attached']['drupalSettings']['alshayaRcs']['pdpGalleryType'] = $product_settings->get('pdp_gallery_type');
+    $alshaya_master_settings = $this->configFactory->get('alshaya_master.settings');
+    $attachments['#attached']['drupalSettings']['alshayaRcs']['lazyLoadPlaceholder'] = $alshaya_master_settings->get('lazy_load_placeholder');
+
+    $product_display_settings = $this->configFactory->get('alshaya_acm_product.display_settings');
+    $attachments['#attached']['drupalSettings']['alshayaRcs']['pdpSwatchAttributes'] = $product_display_settings->get('swatches.pdp');
+    $attachments['#attached']['drupalSettings']['alshayaRcs']['pdpSizeGroupAttribute'] = $product_display_settings->get('size_group.pdp');
+    $attachments['#attached']['drupalSettings']['alshayaRcs']['pdpSizeGroupAlternates'] = $product_display_settings->get('size_group.alternates');
+    $attachments['#attached']['drupalSettings']['alshayaRcs']['shortDescLimit'] = $product_display_settings->get('short_desc_characters');
+    $attachments['#attached']['drupalSettings']['show_configurable_boxes_after'] = $product_display_settings->get('show_configurable_boxes_after');
+    $attachments['#attached']['drupalSettings']['alshayaRcs']['useParentImages'] = $product_display_settings->get('configurable_use_parent_images');
+    $attachments['#attached']['drupalSettings']['alshayaRcs']['colorAttributeConfig'] = $product_display_settings->get('color_attribute_config');
+    $attachments['#attached']['drupalSettings']['alshayaRcs']['priceDisplayMode'] = $product_display_settings->get('price_display_mode') ?? 'simple';
+    $attachments['#attached']['drupalSettings']['showPreSelectedVariantOnPdp'] = $product_display_settings->get('show_pre_selected_variant_on_pdp');
+
+    $attachments['#cache']['tags'] = Cache::mergeTags(
+      $attachments['#cache']['tags'],
+      $this->configFactory->get('alshaya_acm.cart_config')->getCacheTags(),
+      $product_settings->getCacheTags(),
+      $product_display_settings->getCacheTags(),
+      $this->configFactory->get('acq_sku.configurable_form_settings')->getCacheTags(),
+      $alshaya_master_settings->getCacheTags(),
+      $this->configFactory->get('alshaya_acm_product.fields_labels_n_error')->getCacheTags()
+    );
   }
 
 }
