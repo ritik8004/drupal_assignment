@@ -65,7 +65,7 @@ const Swatches = ({ swatches, url, title }) => {
     swatcheContainer = (
       <div className="swatches">
         {swatches.slice(0, limit).map(
-          (swatch) => <Swatch swatch={swatch} key={swatch.id} url={url} title={title} />,
+          (swatch) => <Swatch swatch={swatch} key={swatch.child_id} url={url} title={title} />,
         )}
         {(diff > 0) ? <a className="swatch-more-link product-selected-url" href={url}>{swatchMoreText}</a> : null}
       </div>
