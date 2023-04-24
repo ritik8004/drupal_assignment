@@ -85,12 +85,4 @@
       }
     }
   }
-
-  .input--wrapper {
-    [id^=edit-actions] {
-      @include breakpoint($only-tablet) {
-        #{$right}: 0;
-      }
-    }
-  }
 }
