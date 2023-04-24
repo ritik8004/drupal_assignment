@@ -1,7 +1,7 @@
 // Copied from https://github.com/algolia/react-instantsearch/blob/master/packages/react-instantsearch-core/src/widgets/DynamicWidgets.tsx
-// This is overriden in order to use custom connectDynamicWidgets connector.
-// The connector collects userData from results and return as the prop to
-// calling component i.e filters.
+// This is overridden in order to use custom connectDynamicWidgets connector.
+// The connector collects userData from results and return to
+// calling component i.e Filters in callback.
 import React, { Fragment } from 'react';
 import { getDisplayName } from '../../../utils/FilterUtils';
 import { hasValue } from '../../../../../../js/utilities/conditionsUtility';

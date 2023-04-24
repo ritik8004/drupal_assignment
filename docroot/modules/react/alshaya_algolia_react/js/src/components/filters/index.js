@@ -46,7 +46,7 @@ const Filters = ({ indexName, pageType, ...props }) => {
     setFacets(Object.values(filters));
   };
 
-  const facetsList = [];
+  let facetsList = [];
 
   if (!isConfigurableFiltersEnabled()) {
     // Check if configurable attributes is disable.
@@ -68,15 +68,20 @@ const Filters = ({ indexName, pageType, ...props }) => {
     });
   }
 
+  // If configurable filters is enabled then wrap facetsLists in
+  // Dynamic widgets component. Dynamic widgets component uses renderingContent
+  // from algolia search result which has the facet display configuration.
+  if (isConfigurableFiltersEnabled()) {
+    facetsList = (
+      <DynamicWidgets buildFacets={buildFacets}>
+        {facetsList}
+      </DynamicWidgets>
+    );
+  }
+
   return (
     <div ref={ref} className="filter-facets">
-      {isConfigurableFiltersEnabled()
-        && (
-        <DynamicWidgets buildFacets={buildFacets}>
-          {facetsList}
-        </DynamicWidgets>
-        )}
-      {!isConfigurableFiltersEnabled() && facetsList}
+      {facetsList}
     </div>
   );
 };
