@@ -459,6 +459,7 @@ window.auraBackend.updateLoyaltyCard = async (action, type, value, context) => {
  */
 window.auraBackend.updateUserAuraStatus = async (inputData) => {
   const data = prepareAuraUserStatusUpdateData(inputData);
+
   if (hasValue(data.error)) {
     logger.error('Error while trying to update user AURA Status. Data: @data.', {
       '@data': JSON.stringify(data),
@@ -515,6 +516,7 @@ window.auraBackend.updateUserAuraStatus = async (inputData) => {
       const customerInfo = getCustomerInfo(customerId);
       const customerPoints = getCustomerPoints(customerId);
       const customerTier = getCustomerTier(customerId);
+
       const values = await Promise.all([customerInfo, customerPoints, customerTier]);
       values.forEach((value) => {
         // If an API call throws error, ignore it.
