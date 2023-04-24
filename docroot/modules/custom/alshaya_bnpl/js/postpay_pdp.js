@@ -18,6 +18,11 @@
       }
 
       var skuBaseForm = $('.sku-base-form', context).not('[data-sku *= "#"]');
+      // Proceed if '.sku-base-form' exists.
+      if (skuBaseForm.length <= 0) {
+        return;
+      }
+
       skuBaseForm.once('postpay-pdp-initial').each(function () {
         setPostpayWidgetAmount(this);
       });
