@@ -85,4 +85,13 @@
       }
     }
   }
+
+  @include breakpoint($desktop) {
+    .individual--store {
+      .view-content {
+        padding-#{$left}: 0;
+        padding-#{$right}: 1%;
+      }
+    }
+  }
 }
