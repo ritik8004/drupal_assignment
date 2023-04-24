@@ -404,7 +404,6 @@ export default class CartItem extends React.Component {
       endPrice = (hasValue(finalPrice) && (price > finalPrice)) ? finalPrice : '0.01';
     }
 
-
     return (
       <div
         className={`spc-cart-item fadeInUp ${qtyLimitClass}`}
