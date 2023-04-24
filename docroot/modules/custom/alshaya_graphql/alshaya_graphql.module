@@ -1,0 +1,64 @@
+<?php
+
+/**
+ * @file
+ * Contains general hooks and alters.
+ */
+
+use Drupal\Core\Render\Markup;
+use Drupal\Core\Site\Settings;
+use Drupal\alshaya_graphql\Graphql\ArrayGraphQL;
+
+/**
+ * Implements hook_page_bottom().
+ */
+function alshaya_graphql_page_bottom(array &$page_bottom) {
+  // Skip some special routes which are marked as admin_route but that
+  // can be accessed by non-admin users as well.
+  if (\Drupal::service('router.admin_context')->isAdminRoute()
+    && !in_array(\Drupal::routeMatch()->getRouteName(), [
+      'change_pwd_page.change_password_form',
+      'entity.user.edit_form',
+    ])) {
+    return;
+  }
+
+  // Invoke hook to get default values.
+  $queries = \Drupal::moduleHandler()->invokeAll('alshaya_graphql_query');
+
+  // Allow other modules to alter the data.
+  \Drupal::moduleHandler()->alter('alshaya_graphql_query', $queries);
+
+  // Convert array to graphql.
+  foreach ($queries as $query => $fields) {
+    $queries[$query] = ArrayGraphQL::convert($fields);
+  }
+
+  if (!empty($queries)) {
+    // Add inline script to the page bottom.
+    $page_bottom['alshaya_graphql_query'] = [
+      '#type'  => 'html_tag',
+      '#tag'   => 'script',
+      '#value' => Markup::create('var alshayaGraphqlQuery = ' . json_encode($queries) . ';'),
+    ];
+  }
+}
+
+/**
+ * Implements hook_page_attachments().
+ */
+function alshaya_graphql_page_attachments_alter(array &$attachments) {
+  $api_settings = \Drupal::config('alshaya_api.settings');
+
+  // We proxy the requests via cloudflare, so we use the current domain as is
+  // without any language suffix so HTTP_HOST is enough.
+  $attachments['#attached']['drupalSettings']['graphql']['baseUrl'] = \Drupal::request()->getSchemeAndHttpHost();
+
+  // Use proxy on only specific environments.
+  if (Settings::get('alshaya_use_proxy', FALSE)) {
+    $attachments['#attached']['drupalSettings']['graphql']['baseUrl'] = '/proxy/?url=' . $api_settings->get('magento_host');
+  }
+
+  // Attach the graphql library.
+  $attachments['#attached']['library'][] = 'alshaya_graphql/main';
+}

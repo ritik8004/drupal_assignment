@@ -4,7 +4,7 @@ import CardDetails from '../../../return-confirmation/components/card-details';
 import EgiftCardDetails from '../egift-card-details';
 
 const ReturnRefundMethod = ({
-  paymentDetails, cardList, egiftCardType,
+  paymentDetails, cardList, egiftCardType, isHybrid,
 }) => {
   if (!hasValue(paymentDetails)) {
     return null;
@@ -17,6 +17,38 @@ const ReturnRefundMethod = ({
     setSelectedOption(el);
   };
 
+  // Logic to decide whether the payment made through the eGift card
+  // is linked to the user account or a different one which is not linked to the user.
+  let differentEgiftCard = false;
+  if (paymentDetails.egift && hasValue(paymentDetails.egift.card_number)
+    && cardList && hasValue(cardList.card_number) && !isHybrid) {
+    // Fetching the last 4 digits of the linked eGift card.
+    const lastFourChar = cardList.card_number.substring(
+      cardList.card_number.length - 4,
+    );
+    // Checking whether the payment is made through same linked eGift or not.
+    if (lastFourChar !== paymentDetails.egift.card_number) {
+      differentEgiftCard = true;
+    }
+  }
+
+  // Custom function for card details component to avoid the nested ternary expressions.
+  const CardDetailsComponent = () => ((!hasValue(paymentDetails.cashondelivery)
+    && !differentEgiftCard)
+    ? (
+      <>
+        <div className="method-list-wrapper">
+          <div className="method-wrapper">
+            <CardDetails paymentDetails={paymentDetails} showCardIcon />
+          </div>
+        </div>
+        <div className="refund-message">
+          { Drupal.t('Estimated refund in 3-5 business days after we receive the item', {}, { context: 'online_returns' }) }
+        </div>
+      </>
+    )
+    : <></>);
+
   return (
     <>
       <div className="refund-method-wrapper">
@@ -26,14 +58,29 @@ const ReturnRefundMethod = ({
         {cardList || egiftCardType
           ? (
             <div className="refund-method-listing">
+              {isHybrid && (
+                <>
+                  <div className="hybrid-method-payment-msg">
+                    { Drupal.t('Original Multiple payment methods used', {}, { context: 'online_returns' }) }
+                  </div>
+                  <div className="hybrid-method-list-msg">
+                    { Drupal.t('Your refund will be credited back to the following payment methods.', {}, { context: 'online_returns' }) }
+                  </div>
+                </>
+              )}
               <EgiftCardDetails
                 cardList={cardList}
                 selectedOption={selectedOption}
                 egiftCardType={egiftCardType}
                 paymentDetails={paymentDetails}
+                isHybridPayment={isHybrid}
                 setSelectedOption={setSelectedOption}
               />
-              {!hasValue(paymentDetails.cashondelivery) && !hasValue(paymentDetails.egift)
+              {/* For the payments made through COD, eGift and if there is multiple payment methods
+              used i.e. hybrid we will not render the CardDetails component with radio button. */}
+              {!hasValue(paymentDetails.cashondelivery)
+                && !hasValue(paymentDetails.egift)
+                && !isHybrid
                 ? (
                   <>
                     <div className="method-wrapper card-details" onClick={() => onOptionChange('card-details')}>
@@ -54,11 +101,13 @@ const ReturnRefundMethod = ({
                       { Drupal.t('Estimated refund in 3-5 business days after we receive the item', {}, { context: 'online_returns' }) }
                     </div>
                   </>
-                ) : (<> </>)}
+                ) : (
+                  <CardDetailsComponent />
+                )}
             </div>
           )
           : (
-            <div className="refund-method-listing">
+            <div className="refund-method-listing hybrid-payment">
               <CardDetails paymentDetails={paymentDetails} showCardIcon />
               <div className="refund-message">
                 { Drupal.t('Estimated refund in 3-5 business days after we receive the item', {}, { context: 'online_returns' }) }

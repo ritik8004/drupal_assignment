@@ -124,8 +124,7 @@ class AlshayaTabbyWidgetHelper {
       ->addCacheableDependency($tabby_config)
       ->applyTo($build);
 
-    if (in_array('tabby', array_filter($excludedPaymentMethods))
-    || ($tabby_config && !$tabby_config->get('show_tabby_widget'))) {
+    if (in_array('tabby', array_filter($excludedPaymentMethods))) {
       return;
     }
 
@@ -140,6 +139,7 @@ class AlshayaTabbyWidgetHelper {
     $tabbyApiConfig['locale'] = $this->langcode;
     $build['#attached']['drupalSettings']['tabby'] = $tabbyApiConfig;
     $build['#attached']['drupalSettings']['tabby']['installmentCount'] = 4;
+    $build['#attached']['drupalSettings']['tabby']['showTabbyWidget'] = $tabby_config->get('show_tabby_widget');
 
     switch ($page_type) {
       case 'cart':

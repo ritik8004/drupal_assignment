@@ -241,10 +241,6 @@ function _alshaya_hello_member_react_translations() {
         'ar' => 'يكمل',
         'context' => 'hello_member',
       ],
-      '<span>Members get</span> <span>free delivery and 10% off on your first purchase.</span>' => [
-        'ar' => '<span>يحصل الأعضاء </span><span>توصيل مجاني وخصم 10٪ على أول عملية شراء.</span>',
-        'context' => 'hello_member',
-      ],
       'Not a member yet? Join now, it’s free!' => [
         'ar' => 'لست عضوا حتى الآن؟ انضم الآن ، إنه مجاني!',
         'context' => 'hello_member',
@@ -511,10 +507,6 @@ function _alshaya_hello_member_react_translations() {
         'ar' => 'الهاتف المحمول مستخدم بالفعل.',
         'context' => 'hello_member',
       ],
-      '<span>Members get</span> <span>free delivery and 10% off on your first purchase.</span>' => [
-        'ar' => '<span>يحصل الأعضاء على </span><span>خصم 10% على عملية الشراء الأولى!</span>',
-        'context' => 'hello_member',
-      ],
       'Added to your bag.' => [
         'ar' => 'تم الإضافة إلى حقيبة التسوق',
         'context' => 'hello_member',
@@ -553,6 +545,12 @@ function _alshaya_hello_member_react_translations() {
       ],
       'Book Now' => [
         'ar' => 'احجز الآن',
+        'context' => 'hello_member',
+      ],
+    ],
+    'v7' => [
+      '<span>Members get</span> <span>10% off on your first purchase.</span>' => [
+        'ar' => '<span>يحصل الأعضاء </span><span>على خصم %10 عند أول عملية شراء</span>',
         'context' => 'hello_member',
       ],
     ],

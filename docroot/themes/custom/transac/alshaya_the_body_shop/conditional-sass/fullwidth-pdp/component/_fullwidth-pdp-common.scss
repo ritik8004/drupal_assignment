@@ -1,0 +1,14 @@
+body.nodetype--acq_product {
+  &:not(.magazine-layout-v2) {
+    .acq-content-product,
+    .magv2-sidebar {
+      .express-delivery-text {
+        &:nth-child(2) {
+          @include breakpoint($desktop) {
+            margin-top: rem(10);
+          }
+        }
+      }
+    }
+  }
+}

@@ -8,6 +8,7 @@ on:
       - master
       - develop-adyen
       - develop-egift-return
+      - develop-freegift-v3
   create:
 
 concurrency: deploy-${{ github.ref }}

@@ -34,6 +34,7 @@ const Teaser = ({
   // we want to use in this component.
 }) => {
   const { showSwatches, showSliderSwatch } = drupalSettings.reactTeaserView.swatches;
+  const { showColorSwatchSlider } = drupalSettings.reactTeaserView.swatches;
   const { showReviewsRating } = drupalSettings.algoliaSearch;
   const collectionLabel = [];
   const [initSlider, setInitiateSlider] = useState(false);
@@ -306,6 +307,15 @@ const Teaser = ({
               />
             </div>
             )}
+          {(hasValue(attribute.attr_article_swatches) && showColorSwatchSlider)
+            ? (
+              <ArticleSwatches
+                sku={sku}
+                handleSwatchSelect={handleSwatchSelect}
+                articleSwatches={attribute.attr_article_swatches}
+                url={url}
+              />
+            ) : null}
           <div className="product-plp-detail-wrapper">
             { collectionLabel.length > 0
               && (
@@ -375,8 +385,8 @@ const Teaser = ({
               />
             ) : null}
             {/* Render color swatches based on article/sku id */}
-            {hasValue(attribute.article_swatches)
-              && drupalSettings.reactTeaserView.swatches.showArticleSwatches
+            {(hasValue(attribute.article_swatches)
+              && drupalSettings.reactTeaserView.swatches.showArticleSwatches)
               ? (
                 <ArticleSwatches
                   sku={sku}

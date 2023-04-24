@@ -10,16 +10,15 @@ import {
 } from '../../../utilities/api/request';
 import ConditionalView from '../../../common/components/conditional-view';
 import getStringMessage from '../../../../../../js/utilities/strings';
-import { getProductReviewStats } from '../../../utilities/user_util';
+import { getReviewStats } from '../../../utilities/user_util';
 import WriteReviewButton from '../../../reviews/components/reviews-full-submit';
-import { hasValue }
-  from '../../../../../../js/utilities/conditionsUtility';
 
 export default class Rating extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
       reviewsData: '',
+      apiFinished: false,
       bazaarVoiceSettings: getbazaarVoiceSettings(),
       userDetails: {
         productReview: null,
@@ -36,11 +35,19 @@ export default class Rating extends React.Component {
 
     // Check reviews setting exist.
     if (Drupal.hasValue(bazaarVoiceSettings)) {
-      getProductReviewStats(bazaarVoiceSettings.productid).then((result) => {
+      getReviewStats(bazaarVoiceSettings).then((result) => {
         removeFullScreenLoader();
         if (result !== null) {
+          let reviewsData = '';
+          if (Drupal.hasValue(result.Includes.Products)
+            && Drupal.hasValue(result.Includes.Products[bazaarVoiceSettings.productid])) {
+            reviewsData = result.Includes.Products[bazaarVoiceSettings.productid];
+          }
+
+          // Update product review data and BV response status.
           this.setState({
-            reviewsData: result.productData,
+            reviewsData,
+            apiFinished: true,
           });
         }
       });
@@ -63,7 +70,12 @@ export default class Rating extends React.Component {
   }
 
   render() {
-    const { reviewsData, bazaarVoiceSettings, userDetails } = this.state;
+    const {
+      reviewsData,
+      bazaarVoiceSettings,
+      userDetails,
+      apiFinished,
+    } = this.state;
 
     const {
       childClickHandler,
@@ -74,8 +86,8 @@ export default class Rating extends React.Component {
     const reviewedByCurrentUser = userDetails.productReview || false;
     const isInline = true;
 
-    // Reviews data is emtpy.
-    if (!hasValue(reviewsData) || reviewsData === '') {
+    // Move forward only if BV API has returned successful response.
+    if (!apiFinished) {
       return null;
     }
 

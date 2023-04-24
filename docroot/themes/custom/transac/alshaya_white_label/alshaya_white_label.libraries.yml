@@ -973,6 +973,11 @@ hide-sidebar:
     theme:
       css/conditional-sass/hide-sidebar/hide-sidebar.ltr.css: {}
 
+article-swatch-slider:
+  css:
+    theme:
+      css/conditional-sass/article-swatch-slider/article-swatch-slider.ltr.css: {}
+
 alshaya-accordion:
   js:
     js/alshaya-accordion.js: {}

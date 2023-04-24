@@ -5,6 +5,7 @@ import {
   getOrderType,
   getPaymentMethod,
   isReturnWindowClosed,
+  isBigTicketOrder,
 } from '../../utilities/online_returns_util';
 import ReturnEligibilityMessage from '../../common/return-eligibility-message';
 import { hasValue } from '../../../../js/utilities/conditionsUtility';
@@ -83,6 +84,7 @@ class OnlineReturnsEligibility extends React.Component {
         paymentMethod={getPaymentMethod(orderId)}
         orderType={getOrderType(orderId)}
         returns={returns}
+        isBigTicketOrder={isBigTicketOrder(orderId)}
       />
     );
   }

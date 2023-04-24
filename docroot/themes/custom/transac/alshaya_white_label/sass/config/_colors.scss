@@ -33,6 +33,8 @@ $marine-blue: #003773;
 $grey-shade: #c1c1c1;
 $grey-light: #777;
 $grey-light-two: #f3f3f3;
+$grey-2: #e4e4e4;
+$grey-3: #707070;
 $error-red: #c00;
 $torea-bay: #0b4bb9;
 // Mothercare
@@ -1048,6 +1050,8 @@ $checkout_payment_checkoutcom_save_card_help: $grey-ash;
 $checkout_payment_checkoutcomcard_expired_label: $formitem_error_label;
 $checkout_payment_checkoutcom_saved_card_warning: $grey-light;
 $checkout_payment_cvv_help_text: $grey-light;
+$checkout_secure_payment_bg: $brownish-grey;
+$checkout_secure_payment_title: $white-five;
 
 // Checkout Home delivery.
 $checkout_hd_selected_add_wrapper_border: $white;
@@ -2437,3 +2441,12 @@ $mob_menu_active_link_txt: $mothercare-black;
 $mob_menu_one_border_color: $grey-light;
 $mob_menu_two_color_text: $white-five;
 $mob_menu_two_img_background: $light-greyish;
+
+// radio button for Returns and Refunds
+$online-return-radio-bg: $black;
+$online-return-checked-radio-bg: $medium-green;
+
+// Swatches
+$swatch-border: $grey-2;
+$swatch-border-active: $grey-3;
+$swatch-button-bg: $white-three;
