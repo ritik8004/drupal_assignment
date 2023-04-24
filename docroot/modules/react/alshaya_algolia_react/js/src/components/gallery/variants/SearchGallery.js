@@ -14,12 +14,12 @@ const SliderElement = ({
   />
 );
 
-const sliderAnimation = hasValue(drupalSettings.reactTeaserView.swipe_image.slide_effect)
+const slickEffect = hasValue(drupalSettings.reactTeaserView.swipe_image.slide_effect)
   ? drupalSettings.reactTeaserView.swipe_image.slide_effect : null;
 
 const sliderSettings = {
   dots: true,
-  fade: sliderAnimation === 'fade',
+  fade: slickEffect === 'fade',
   infinite: true,
   slidesToShow: 1,
   slidesToScroll: 1,
@@ -44,7 +44,7 @@ class SearchGallery extends React.PureComponent {
     <div className="alshaya_search_slider">
       <Slider
         {...sliderSettings}
-        className={`search-lightSlider ${sliderAnimation ? `slick-animation-${sliderAnimation}` : ''}`}
+        className={`search-lightSlider ${slickEffect ? `slick-effect-${slickEffect}` : ''}`}
         ref={this.getref}
       >
         {thumbnails}
