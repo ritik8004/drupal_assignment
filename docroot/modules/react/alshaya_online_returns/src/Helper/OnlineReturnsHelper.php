@@ -7,6 +7,7 @@ use Drupal\acq_commerce\SKUInterface;
 use Drupal\acq_sku\Entity\SKU;
 use Drupal\alshaya_acm_checkout\CheckoutOptionsManager;
 use Drupal\Core\Entity\EntityTypeManagerInterface;
+use Drupal\file\Entity\File;
 
 /**
  * Helper class for Online Returns.
@@ -84,6 +85,38 @@ class OnlineReturnsHelper {
    */
   public function isEgiftRefundEnabled(): bool {
     return $this->configFactory->get('alshaya_online_returns.egift_card_refund')->get('egift_card_refund_enabled') ?: FALSE;
+  }
+
+  /**
+   * Helper to get the eGift card refund helper text.
+   *
+   * @return string
+   *   Egift card refund option text.
+   */
+  public function getEgiftRefundText() {
+    if (!$this->isEgiftRefundEnabled()) {
+      return '';
+    }
+    return $this->configFactory->get('alshaya_online_returns.egift_card_refund_config')->get('egift_refund_text') ?: '';
+  }
+
+  /**
+   * Helper to get the eGift card icon.
+   *
+   * @return string
+   *   Egift card icon.
+   */
+  public function getEgiftCardIcon() {
+    if (!$this->isEgiftRefundEnabled()) {
+      return '';
+    }
+
+    $fileUri = '';
+    if ($this->configFactory->get('alshaya_online_returns.egift_card_refund_config')->get('egift_card_icon')) {
+      $cardImage = $this->configFactory->get('alshaya_online_returns.egift_card_refund_config')->get('egift_card_icon');
+      $fileUri = File::load($cardImage[0])->getFileUri();
+    }
+    return $fileUri ?: '';
   }
 
   /**

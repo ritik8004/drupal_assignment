@@ -22,7 +22,7 @@ const EgiftCardDetails = ({
   const RefundMessage = ({ data }) => ((data === -1)
     ? (
       <div className="refund-message">
-        {Drupal.t('Your refund will be credited immediately after the item is returned to warehouse', {}, { context: 'online_returns' })}
+        {Drupal.t('@refundtext', { '@refundtext': drupalSettings.egiftCardRefund.egiftCardRefundText }, { context: 'online_returns' })}
       </div>
     )
     : <></>);
@@ -78,7 +78,7 @@ const EgiftCardDetails = ({
               {Drupal.t('Details of your eGift Card will be sent to your email address "@email"', { '@email': drupalSettings.userDetails.userEmailID }, { context: 'online_returns' })}
             </div>
             <div className="refund-message">
-              {Drupal.t('Your refund will be credited immediately after the item is returned to warehouse', {}, { context: 'online_returns' })}
+              {Drupal.t('@refundtext', { '@refundtext': drupalSettings.egiftCardRefund.egiftCardRefundText }, { context: 'online_returns' })}
             </div>
           </>
         )
