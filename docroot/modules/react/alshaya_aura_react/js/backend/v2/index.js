@@ -524,6 +524,7 @@ window.auraBackend.updateUserAuraStatus = async (inputData) => {
           customerData = Object.assign(customerData, value);
         }
       });
+      customerData.isFullyEnrolled = searchResponse.data.is_fully_enrolled;
     }
 
     responseData.data = hasValue(customerData)
