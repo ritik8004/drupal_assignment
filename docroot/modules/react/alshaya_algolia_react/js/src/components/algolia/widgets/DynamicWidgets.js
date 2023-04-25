@@ -42,9 +42,9 @@ function DynamicWidgets({
     buildFacets(userData);
   }
 
-  const Fallback = hasValue(fallbackComponent) ? function fallback() {
-    return null;
-  } : fallbackComponent;
+  const Fallback = !hasValue(fallbackComponent)
+    ? function fallback() { return null; }
+    : fallbackComponent;
 
   const widgets = new Map();
 
