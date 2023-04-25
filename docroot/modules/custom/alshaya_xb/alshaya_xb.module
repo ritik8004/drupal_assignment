@@ -294,9 +294,15 @@ function alshaya_xb_alshaya_acm_customer_orders_details_build_alter(array &$orde
  */
 function alshaya_xb_sku_product_info_alter(array &$product_info, SKUInterface $sku) {
   // Get the fixed price info from the SKU.
-  if ($sku->hasField('attr_fixed_price')) {
-    $product_info['extraInfo']['fixedPrice'] = $sku->get('attr_fixed_price')->getString();
-  }
+  $product_info['extraInfo']['fixedPrice'] = _alshaya_xb_get_fixed_price($sku);
+}
+
+/**
+ * Implements hook_sku_variant_info_alter().
+ */
+function alshaya_xb_sku_variant_info_alter(array &$variant, SKUInterface $child, ?SKUInterface $parent) {
+  // Get the fixed price info from the SKU.
+  $variant['extraInfo']['fixedPrice'] = _alshaya_xb_get_fixed_price($child);
 }
 
 /**
@@ -305,4 +311,21 @@ function alshaya_xb_sku_product_info_alter(array &$product_info, SKUInterface $s
 function alshaya_xb_dynamic_yield_context_alter(&$lng) {
   $langcode = \Drupal::languageManager()->getCurrentLanguage()->getId();
   $lng = $langcode . '_XB';
+}
+
+/**
+ * Get the fixed price of the given sku.
+ *
+ * @param \Drupal\acq_commerce\SKUInterface $sku
+ *   SKU Entity.
+ *
+ * @return string
+ *   A string containing the fixed price.
+ */
+function _alshaya_xb_get_fixed_price(SKUInterface $sku) {
+  if ($sku->hasField('attr_fixed_price')) {
+    return $sku->get('attr_fixed_price')->getString();
+  }
+
+  return '';
 }
