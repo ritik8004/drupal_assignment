@@ -121,7 +121,6 @@ class AlshayaEgiftCardSettingsForm extends ConfigFormBase {
   public function submitForm(array &$form, FormStateInterface $form_state) {
     $this->config('alshaya_egift_card.settings')
       ->set('egift_card_enabled', $form_state->getValue('enable_disable_egift_card'))
-      ->set('egift_card_refund_enabled', $form_state->getValue('enable_disable_egift_card_refund'))
       ->set('link_card_for_topup', $form_state->getValue('link_card_for_topup'))
       ->set('payment_methods_not_supported', $form_state->getValue('payment_methods_not_supported'))
       ->set('topup_terms_conditions_text', $form_state->getValue('topup_terms_conditions_text'))
