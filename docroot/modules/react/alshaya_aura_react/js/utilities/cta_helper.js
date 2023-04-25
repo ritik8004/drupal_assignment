@@ -223,7 +223,7 @@ function handleManualLinkYourCard(cardNumber, mobile, otp) {
             pointsOnHold: auraOnHoldPoints || 0,
             firstName: firstName || '',
             lastName: lastName || '',
-            isFullyEnrolled: isFullyEnrolled || '',
+            isFullyEnrolled: isFullyEnrolled || false,
           };
           dispatchCustomEvent('loyaltyStatusUpdated', {
             showCongratulationsPopup: true,
