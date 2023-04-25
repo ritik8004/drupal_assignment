@@ -408,10 +408,17 @@
             max-width: 100%;
             max-height: 100%;
           }
+
+          .spc-card-type {
+            margin-#{$right}: rem(8);
+          }
+
+          .cashondelivery {
+            margin-#{$right}: rem(0);
+          }
         }
 
         .card-detail {
-          margin-#{$left}: rem(8);
           font-size: rem(14);
 
           .bold-text {
