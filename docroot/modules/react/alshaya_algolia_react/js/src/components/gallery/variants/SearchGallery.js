@@ -77,7 +77,7 @@ class SearchGallery extends React.PureComponent {
       ));
     });
 
-    // Set no Of Slides in in thumbnails object.
+    // Set no Of Slides in thumbnails object.
     thumbnails = thumbnails.slice(0, noOfSlidesToShowDesktop);
     const sliderStatus = thumbnails.length > sliderSettings.slidesToShow;
     let classWrapper = 'img-wrapper';
