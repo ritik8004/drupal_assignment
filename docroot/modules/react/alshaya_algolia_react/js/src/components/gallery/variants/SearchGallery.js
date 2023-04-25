@@ -47,7 +47,7 @@ class SearchGallery extends React.PureComponent {
         className={`search-lightSlider ${slickEffect ? `slick-effect-${slickEffect}` : ''}`}
         ref={this.getref}
       >
-        {thumbnails}
+        { thumbnails }
       </Slider>
     </div>
   )
@@ -58,12 +58,14 @@ class SearchGallery extends React.PureComponent {
   }
 
   render() {
+    // Get no Of Slides To Show in Desktop view.
+    const noOfSlidesToShowDesktop = drupalSettings.reactTeaserView.swipe_image.no_of_image_scroll;
     const {
       media, title, labels, sku, initSlider,
     } = this.props;
     const mainImage = media.length ? media[0] : {};
     const mainImageUrl = hasValue(mainImage.url) ? mainImage.url : '';
-    const thumbnails = [];
+    let thumbnails = [];
 
     media.forEach((element) => {
       thumbnails.push((
@@ -75,6 +77,8 @@ class SearchGallery extends React.PureComponent {
       ));
     });
 
+    // Set no Of Slides in thumbnails object.
+    thumbnails = thumbnails.slice(0, noOfSlidesToShowDesktop);
     const sliderStatus = thumbnails.length > sliderSettings.slidesToShow;
     let classWrapper = 'img-wrapper';
     if (sliderStatus) {
