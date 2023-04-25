@@ -41,6 +41,7 @@ class AlgoliaSwipeImageForm extends ConfigFormBase {
       '#type' => 'checkbox',
       '#title' => $this->t('Enable / Disable Swipe Image on Mobile view'),
       '#default_value' => $config->get('enable_swipe_image_mobile'),
+      '#description' => $this->t('Enable / Disable Swipe Image only for Mobile View'),
     ];
     $form['swipe_image_config']['no_of_image_scroll'] = [
       '#type' => 'number',
