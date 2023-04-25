@@ -1,5 +1,6 @@
 import React from 'react';
 import CheckoutConfigurableOption from '../checkout-configurable-option';
+import { hasValue } from '../../../../js/utilities/conditionsUtility';
 
 const CheckoutConfigurableOptions = (props) => {
   const { options, sku, sizeGroup } = props;
@@ -7,7 +8,10 @@ const CheckoutConfigurableOptions = (props) => {
   const configurableOptions = [];
   options.forEach((option) => {
     const configurableOption = option;
-    configurableOption.value = (option.attribute_code === `attr_${drupalSettings.alshaya_spc.sizeGroupAttribute}`)
+    configurableOption.value = (
+      option.attribute_code === `attr_${drupalSettings.alshaya_spc.sizeGroupAttribute}`
+      && hasValue(sizeGroup)
+    )
       ? sizeGroup
       : option.value;
     configurableOptions.push(configurableOption);
