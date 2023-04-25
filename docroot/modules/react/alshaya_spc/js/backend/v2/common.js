@@ -603,6 +603,7 @@ const getProcessedCartData = async (cartData) => {
           ) ? item.extension_attributes.topup_card_name : null;
         }
 
+        // Add all size attributes from cart response in size group.
         if (hasValue(drupalSettings.alshaya_spc.sizeGroupAttribute)) {
           let sizeGroup = '';
           Object.keys(item.extension_attributes).forEach((key) => {
