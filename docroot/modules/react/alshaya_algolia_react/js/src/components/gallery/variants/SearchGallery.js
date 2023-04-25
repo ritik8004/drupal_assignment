@@ -2,7 +2,6 @@ import React from 'react';
 import Slider from 'react-slick';
 import ImageElement from '../imageHelper/ImageElement';
 import { hasValue } from '../../../../../../js/utilities/conditionsUtility';
-import { isDesktop } from '../../../../../../js/utilities/display';
 import Lozenges
   from '../../../../common/components/lozenges';
 
@@ -41,14 +40,14 @@ class SearchGallery extends React.PureComponent {
     this.onHoverAppendMarkup = this.onHoverAppendMarkup.bind(this);
   }
 
-  onHoverAppendMarkup = (showLimitThumb, thumbnails) => (
+  onHoverAppendMarkup = (showLimitThumb) => (
     <div className="alshaya_search_slider">
       <Slider
         {...sliderSettings}
         className={`search-lightSlider ${slickEffect ? `slick-effect-${slickEffect}` : ''}`}
         ref={this.getref}
       >
-        { isDesktop() ? showLimitThumb : thumbnails }
+        { showLimitThumb }
       </Slider>
     </div>
   )
@@ -59,9 +58,7 @@ class SearchGallery extends React.PureComponent {
   }
 
   render() {
-    const scrollImage = hasValue(drupalSettings.reactTeaserView.swipe_image
-      .no_of_image_scroll) ? drupalSettings.reactTeaserView
-        .swipe_image.no_of_image_scroll : 6;
+    const noOfSlidesToShowDesktop = drupalSettings.reactTeaserView.swipe_image.no_of_image_scroll;
     const {
       media, title, labels, sku, initSlider,
     } = this.props;
@@ -78,7 +75,7 @@ class SearchGallery extends React.PureComponent {
           src={element.url}
         />
       ));
-      showLimitThumb = thumbnails.slice(0, scrollImage);
+      showLimitThumb = thumbnails.slice(0, noOfSlidesToShowDesktop);
     });
 
     const sliderStatus = thumbnails.length > sliderSettings.slidesToShow;
@@ -96,7 +93,7 @@ class SearchGallery extends React.PureComponent {
               title={title}
               loading="lazy"
             />
-            {(sliderStatus && initSlider) ? this.onHoverAppendMarkup(showLimitThumb, thumbnails) : ''}
+            {(sliderStatus && initSlider) ? this.onHoverAppendMarkup(showLimitThumb) : ''}
           </div>
           <Lozenges labels={labels} sku={sku} />
         </div>
