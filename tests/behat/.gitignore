@@ -1,6 +1,0 @@
-/bin/*
-!/bin/package.json
-/vendor
-/build
-/feature
-/features/

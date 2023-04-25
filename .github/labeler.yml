@@ -8,9 +8,6 @@ MAPP:
   - 'docroot/modules/**/Plugin/rest/resource/**/*'
   - 'docroot/modules/custom/alshaya_mobile_app/**/*'
 
-behat:
-  - 'tests/behat/**/*'
-
 Composer:
   - 'composer.json'
   - 'composer.lock'

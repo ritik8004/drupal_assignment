@@ -1,4 +1,0 @@
-variables:
-  spc_promotion_listing_page: ' '
-  new_checkout_enabled: TRUE
-  spc_egift_page: '/egift/'
