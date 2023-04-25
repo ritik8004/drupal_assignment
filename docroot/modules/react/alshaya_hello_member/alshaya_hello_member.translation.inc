@@ -531,10 +531,6 @@ function _alshaya_hello_member_react_translations() {
         'ar' => 'سجّل النقاط',
         'context' => 'hello_member',
       ],
-      'Enter now' => [
-        'ar' => 'أدخل الأن',
-        'context' => 'hello_member',
-      ],
     ],
     'v7' => [
       '<span>Members get</span> <span>10% off on your first purchase.</span>' => [
