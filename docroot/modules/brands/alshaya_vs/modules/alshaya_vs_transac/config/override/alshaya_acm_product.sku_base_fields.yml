@@ -31,3 +31,7 @@ fields:
     index: 1
   whats_in_the_box:
     index: 1
+  bra_type:
+    label: 'Bra Type'
+    description: 'Bra Type.'
+    index: 1

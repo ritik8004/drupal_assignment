@@ -10,6 +10,23 @@ use Drupal\Core\Site\Settings;
 use Drupal\Component\Utility\Unicode;
 
 /**
+ * Implements hook_update_N().
+ *
+ * Adds 'bra_type' field in the sku base field existing config.
+ */
+function alshaya_vs_transac_update_9406() {
+  $manager = \Drupal::service('alshaya_config.manager');
+  $manager->updateConfigs(
+    ['alshaya_acm_product.sku_base_fields'],
+    'alshaya_acm_product'
+  );
+  \Drupal::service('acq_sku.fields_manager')->addFields();
+
+  // Queue all products for re-indexing.
+  \Drupal::service('alshaya_acm_product.product_queue_utility')->queueAllProducts();
+}
+
+/**
  * Update algolia react with default value for render_single_result_facets.
  *
  * And also for exclude_render_single_result_facets.
