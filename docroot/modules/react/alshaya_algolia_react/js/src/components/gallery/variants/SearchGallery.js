@@ -40,14 +40,14 @@ class SearchGallery extends React.PureComponent {
     this.onHoverAppendMarkup = this.onHoverAppendMarkup.bind(this);
   }
 
-  onHoverAppendMarkup = (showLimitThumb) => (
+  onHoverAppendMarkup = (thumbnails) => (
     <div className="alshaya_search_slider">
       <Slider
         {...sliderSettings}
         className={`search-lightSlider ${slickEffect ? `slick-effect-${slickEffect}` : ''}`}
         ref={this.getref}
       >
-        { showLimitThumb }
+        { thumbnails }
       </Slider>
     </div>
   )
@@ -58,14 +58,14 @@ class SearchGallery extends React.PureComponent {
   }
 
   render() {
+    // Get no Of Slides To Show in Desktop view.
     const noOfSlidesToShowDesktop = drupalSettings.reactTeaserView.swipe_image.no_of_image_scroll;
     const {
       media, title, labels, sku, initSlider,
     } = this.props;
     const mainImage = media.length ? media[0] : {};
     const mainImageUrl = hasValue(mainImage.url) ? mainImage.url : '';
-    const thumbnails = [];
-    let showLimitThumb = [];
+    let thumbnails = [];
 
     media.forEach((element) => {
       thumbnails.push((
@@ -75,9 +75,10 @@ class SearchGallery extends React.PureComponent {
           src={element.url}
         />
       ));
-      showLimitThumb = thumbnails.slice(0, noOfSlidesToShowDesktop);
     });
 
+    // Set no Of Slides in in thumbnails object.
+    thumbnails = thumbnails.slice(0, noOfSlidesToShowDesktop);
     const sliderStatus = thumbnails.length > sliderSettings.slidesToShow;
     let classWrapper = 'img-wrapper';
     if (sliderStatus) {
@@ -93,7 +94,7 @@ class SearchGallery extends React.PureComponent {
               title={title}
               loading="lazy"
             />
-            {(sliderStatus && initSlider) ? this.onHoverAppendMarkup(showLimitThumb) : ''}
+            {(sliderStatus && initSlider) ? this.onHoverAppendMarkup(thumbnails) : ''}
           </div>
           <Lozenges labels={labels} sku={sku} />
         </div>
