@@ -4,13 +4,13 @@
   data-insights-object-id="entity:node/{{ entity.id }}:{{ language }}"
   data-vmode="modal">
   {{#if back_to_collection }}
-    <a href="" class="free-gift-back-to-collection">{{t "Back to Collection" }}</a>
+    <a href="#" class="free-gift-back-to-collection">{{t 'Back to Collection' }}</a>
   {{/if}}
 
     <div class="acq-content-product-modal">
       <div class="content__title_wrapper">
         {{#if entity.brand_logo_data.url }}
-          <div><img loading="lazy" className="sub-brand-logo"
+          <div><img loading="lazy" class="sub-brand-logo"
               title="{{ entity.brand_logo_data.title }}"
               alt="{{ entity.brand_logo_data.alt }}"
               src="{{ entity.brand_logo_data.url }}" />
