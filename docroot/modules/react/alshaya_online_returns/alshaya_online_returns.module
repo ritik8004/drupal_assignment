@@ -60,6 +60,10 @@ function alshaya_online_returns_page_attachments_alter(array &$page) {
     $onlineReturnsHelper->getNotSupportedEgiftMethodsForOnlineReturns()
       ? array_keys(array_filter($onlineReturnsHelper->getNotSupportedEgiftMethodsForOnlineReturns(), fn($method) => $method !== '0'))
       : [];
+  // Add egift card refund text in drupalSettings.
+  $page['#attached']['drupalSettings']['egiftCardRefund']['egiftCardRefundText'] = $onlineReturnsHelper->getEgiftRefundText();
+  // Add egift card icon in drupalSettings.
+  $page['#attached']['drupalSettings']['egiftCardRefund']['egiftCardIcon'] = $onlineReturnsHelper->getEgiftCardIcon();
 }
 
 /**
