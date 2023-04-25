@@ -3,6 +3,15 @@
     .path--store-finder {
       .label--location {
         width: 30%;
+        margin-right: rem(18);
+      }
+    }
+  }
+
+  html[lang="en"] {
+    .path--store-finder {
+      .label--location {
+        padding-left: rem(24);
       }
     }
   }

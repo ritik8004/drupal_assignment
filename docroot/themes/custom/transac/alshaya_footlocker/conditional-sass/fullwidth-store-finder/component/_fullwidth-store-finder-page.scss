@@ -34,3 +34,16 @@
     }
   }
 }
+
+@include breakpoint($only-tablet) {
+  .path--store-finder {
+    #edit-field-latitude-longitude-boundary-geolocation-geocoder-google-places-api,
+    .form-item-geolocation-geocoder-google-places-api {
+      [id^="edit-geolocation-geocoder-google-places-api"] {
+        html[lang="en"] & {
+          max-width: 89%;
+        }
+      }
+    }
+  }
+}

@@ -25,7 +25,7 @@
   #edit-field-latitude-longitude-boundary-geolocation-geocoder-google-places-api,
   .form-item-geolocation-geocoder-google-places-api {
     [id^="edit-geolocation-geocoder-google-places-api"] {
-      @include breakpoint($tablet) {
+      @include breakpoint($desktop) {
         max-width: none;
       }
     }
