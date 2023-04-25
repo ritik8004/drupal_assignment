@@ -17,6 +17,7 @@ class AuraPointsToEarn extends React.Component {
 
   componentDidMount() {
     document.addEventListener('onLinkCardSuccessful', this.updateEarnPointsData, false);
+    this.setAuraPointsToEarn();
   }
 
   updateEarnPointsData = (e) => {
