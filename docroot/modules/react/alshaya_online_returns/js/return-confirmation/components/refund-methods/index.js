@@ -59,7 +59,7 @@ const RefundMethods = ({
   const paymentData = paymentInfo;
   // Deleting the eGift value from the payment object
   // if it is hybrid, as we are already showing the new eGift option here.
-  if (isHybrid && hasValue(paymentInfo.egift)) {
+  if (isEgiftRefundEnabled() && isHybrid && hasValue(paymentInfo.egift)) {
     delete paymentData.egift;
   }
   // Deleting the aura_payment value from the payment object
