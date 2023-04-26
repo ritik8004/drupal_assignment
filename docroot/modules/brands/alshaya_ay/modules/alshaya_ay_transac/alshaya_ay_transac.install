@@ -10,24 +10,19 @@ use Drupal\alshaya_config\AlshayaConfigManager;
 /**
  * Implements hook_update_N().
  *
+ * Provides default setting for `show_full_width` for theme.
  * Config change made for product zoom thumbnails image slider.
  */
-function alshaya_ay_transac_update_9403() {
-  $manager = \Drupal::service('alshaya_config.manager');
+function alshaya_ay_transac_update_9402() {
+// Config change made for product zoom thumbnails image slider.
+$manager = \Drupal::service('alshaya_config.manager');
   $manager->updateConfigs(
   ['alshaya_acm_product.settings'],
   'alshaya_acm_product',
   'install',
   AlshayaConfigManager::MODE_RESAVE
   );
-}
-
-/**
- * Implements hook_update_N().
- *
- * Provides default setting for `show_full_width` for theme.
- */
-function alshaya_ay_transac_update_9402() {
+  // Provides default setting for `show_full_width` for theme.
   $config = \Drupal::configFactory()->getEditable('alshaya_alo_yoga.settings');
   $config->set('show_full_width', FALSE);
   $config->save();
