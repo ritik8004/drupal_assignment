@@ -27,6 +27,7 @@ import { isAddToBagHoverEnabled } from '../../../../../js/utilities/addToBagHelp
 import ArticleSwatches from '../article_swatch';
 import SliderSwatch from '../slider-swatch';
 import { getShoeAiStatus } from '../../../../../js/utilities/util';
+import { isMobile } from '../../../../../js/utilities/display';
 
 const Teaser = ({
   hit, gtmContainer = null, pageType, extraInfo, indexName,
@@ -40,7 +41,6 @@ const Teaser = ({
   const [initSlider, setInitiateSlider] = useState(false);
   const [touchStart, setTouchStart] = useState(null);
   const [touchEnd, setTouchEnd] = useState(null);
-  const minSwipeDistance = 50;
   const [slider, setSlider] = useState(false);
   const [sku, setSkuCode] = useState(hit.sku);
   const [media, setSkuMedia] = useState(hit.media);
@@ -50,15 +50,16 @@ const Teaser = ({
     renderProductPrice: null,
   });
   const isDesktop = window.innerWidth > 1024;
-  const isMobile = window.innerWidth < 1025;
   const { currentLanguage } = drupalSettings.path;
   const { showBrandName } = drupalSettings.reactTeaserView;
   const activateShoeAI = getShoeAiStatus();
   const onTouchStart = (e) => {
     setTouchEnd(null);
+    // Calculate the cordinates of the touch event.
     setTouchStart(e.targetTouches[0].clientX);
   };
 
+  // Calculate the cordinates of the touch event.
   const onTouchMove = (e) => setTouchEnd(e.targetTouches[0].clientX);
 
   if (drupalSettings.plp_attributes
@@ -250,7 +251,6 @@ const Teaser = ({
           if (isDesktop) {
             setInitiateSlider(true);
             if (slider !== false) {
-              // console.log(slider);
               slider.slickGoTo(0, true);
               slider.slickPlay();
             }
@@ -266,17 +266,16 @@ const Teaser = ({
         onTouchEnd={() => {
           if (!touchStart || !touchEnd) return;
           const distance = touchStart - touchEnd;
-          const isLeftSwipe = distance > minSwipeDistance;
-          const isRightSwipe = distance < -minSwipeDistance;
+          // The minimum swipe distance between touchStart and touchEnd to be detected as a left or right swipe.
+          const isLeftSwipe = distance > 40;
+          const isRightSwipe = distance < -40;
           if (isLeftSwipe || isRightSwipe) {
-            if (isMobile) {
+            if (isMobile()) {
               setInitiateSlider(true);
               if (slider !== false) {
-                // console.log(slider);
-                slider.slickGoTo(0, true);
+                slider.slickGoTo(1, true);
                 slider.slickPlay();
               }
-              // console.log('swipe', isLeftSwipe ? 'left' : 'right');
             }
           }
         }}

@@ -4,6 +4,7 @@ import ImageElement from '../imageHelper/ImageElement';
 import { hasValue } from '../../../../../../js/utilities/conditionsUtility';
 import Lozenges
   from '../../../../common/components/lozenges';
+import { isMobile } from '../../../../../../js/utilities/display';
 
 const SliderElement = ({
   src, title,
@@ -16,63 +17,66 @@ const SliderElement = ({
 
 const slickEffect = hasValue(drupalSettings.reactTeaserView.swipe_image.slide_effect)
   ? drupalSettings.reactTeaserView.swipe_image.slide_effect : null;
-const isMobile = window.innerWidth < 1025;
-const isDesktop = window.innerWidth > 1024;
 
+// Common slider configurations for all viewports.
 const sliderSettings = {
-  dots: true,
-  fade: slickEffect === 'fade',
   infinite: true,
   slidesToShow: 1,
   slidesToScroll: 1,
   arrows: false,
   touchThreshold: 1750,
   variableWidth: false,
+  pauseOnHover: false,
+};
+
+// Slider configurations for desktop devices.
+const sliderHoverSettings = {
+  ...sliderSettings,
+  fade: slickEffect === 'fade',
+  dots: true,
   autoplaySpeed: hasValue(drupalSettings.reactTeaserView.swipe_image.image_slide_timing)
     ? drupalSettings.reactTeaserView.swipe_image.image_slide_timing * 1000
     : 2000,
   autoplay: true,
-  pauseOnHover: false,
-};
+}
 
-const sliderSwipeSettings = {
-  dots: true,
-  infinite: true,
-  slidesToShow: 1,
-  slidesToScroll: 1,
+// Slider configurations for mobile devices.
+const swipeSettings = {
+  ...sliderSettings,
+  dots: false,
+  autoplay: false,
+  initialSlide: 1,
   swipe: true,
-  arrows: false,
-  touchThreshold: 1750,
-  variableWidth: false,
-  pauseOnHover: false,
-};
+  touchThreshold: 40
+}
 
 class SearchGallery extends React.PureComponent {
   constructor(props) {
     super(props);
     this.mainImageRef = React.createRef();
-    this.onHoverAppendMarkup = this.onHoverAppendMarkup.bind(this);
-    this.onSwipeAppendMarkup = this.onSwipeAppendMarkup.bind(this);
+    this.slideAppendMarkup = this.slideAppendMarkup.bind(this);
   }
 
-  onHoverAppendMarkup = (thumbnails) => (
-    <div className="alshaya_search_slider">
-      <Slider
-        {...sliderSettings}
-        className={`search-lightSlider ${slickEffect ? `slick-effect-${slickEffect}` : ''}`}
-        ref={this.getref}
-      >
-        { thumbnails }
-      </Slider>
-    </div>
-  )
-
-  onSwipeAppendMarkup = (thumbnails) => (
-    <div className="alshaya_search_slider">
-      <Slider {...sliderSwipeSettings} className="search-lightSlider search-lightSliderSwipe" ref={this.getref}>
-        {thumbnails}
-      </Slider>
-    </div>
+  // Conditional function for slick carousel initialization.
+  slideAppendMarkup = (thumbnails) => (
+    isMobile()
+      ? (
+        <div className="alshaya_search_slider">
+          <Slider {...swipeSettings} className="search-lightSlider search-lightSliderSwipe" ref={this.getref}>
+            {thumbnails}
+          </Slider>
+        </div>
+      ) : (
+        <div className="alshaya_search_slider">
+          <Slider
+            {...sliderHoverSettings}
+            className={`search-lightSlider ${slickEffect ? `slick-effect-${slickEffect}` : ''}`}
+            ref={this.getref}
+          >
+            {thumbnails}
+          </Slider>
+        </div>
+      )
   )
 
   getref = (slider) => {
@@ -117,9 +121,7 @@ class SearchGallery extends React.PureComponent {
               title={title}
               loading="lazy"
             />
-            {(sliderStatus && initSlider && isMobile) ? this.onSwipeAppendMarkup(thumbnails) : ''}
-
-            {(sliderStatus && initSlider && isDesktop) ? this.onHoverAppendMarkup(thumbnails) : ''}
+            {(sliderStatus && initSlider) ? this.slideAppendMarkup(thumbnails) : ''}
           </div>
           <Lozenges labels={labels} sku={sku} />
         </div>
