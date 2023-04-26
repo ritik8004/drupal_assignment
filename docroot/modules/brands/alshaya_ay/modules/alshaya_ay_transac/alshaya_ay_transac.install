@@ -17,10 +17,10 @@ function alshaya_ay_transac_update_9402() {
   // Config change made for product zoom thumbnails image slider.
   $manager = \Drupal::service('alshaya_config.manager');
   $manager->updateConfigs(
-  ['alshaya_acm_product.settings'],
-  'alshaya_acm_product',
-  'install',
-  AlshayaConfigManager::MODE_RESAVE
+    ['alshaya_acm_product.settings'],
+    'alshaya_acm_product',
+    'install',
+    AlshayaConfigManager::MODE_RESAVE
   );
   // Provides default setting for `show_full_width` for theme.
   $config = \Drupal::configFactory()->getEditable('alshaya_alo_yoga.settings');
