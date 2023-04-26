@@ -6,7 +6,6 @@ use Drupal\Core\Condition\ConditionPluginBase;
 use Drupal\Core\Config\ConfigFactoryInterface;
 use Drupal\Core\Form\FormStateInterface;
 use Drupal\Core\Plugin\ContainerFactoryPluginInterface;
-use Drupal\Core\Session\AccountProxyInterface;
 use Drupal\alshaya_xb\Service\DomainConfigOverrides;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 
@@ -21,18 +20,18 @@ use Symfony\Component\DependencyInjection\ContainerInterface;
 class AlshayaMarketCondition extends ConditionPluginBase implements ContainerFactoryPluginInterface {
 
   /**
-   * The current user.
-   *
-   * @var \Drupal\Core\Session\AccountProxyInterface
-   */
-  protected $currentUser;
-
-  /**
    * The Config Factory service.
    *
    * @var \Drupal\Core\Config\ConfigFactoryInterface
    */
   protected $configFactory;
+
+  /**
+   * The Domain override service.
+   *
+   * @var \Drupal\alshaya_xb\Service\DomainConfigOverrides
+   */
+  protected $domainOverrides;
 
   /**
    * Creates a new AlshayaMarketCondition instance.
@@ -43,8 +42,6 @@ class AlshayaMarketCondition extends ConditionPluginBase implements ContainerFac
    *   The plugin_id for the plugin instance.
    * @param mixed $plugin_definition
    *   The plugin implementation definition.
-   * @param \Drupal\Core\Session\AccountProxyInterface $currentUser
-   *   The current user.
    * @param \Drupal\Core\Config\ConfigFactoryInterface $config_factory
    *   Config factory.
    * @param \Drupal\alshaya_xb\Service\DomainConfigOverrides $domain_overrides
@@ -54,13 +51,11 @@ class AlshayaMarketCondition extends ConditionPluginBase implements ContainerFac
     array $configuration,
     $plugin_id,
     $plugin_definition,
-    AccountProxyInterface $currentUser,
     ConfigFactoryInterface $config_factory,
     DomainConfigOverrides $domain_overrides,
   ) {
     parent::__construct($configuration, $plugin_id, $plugin_definition);
 
-    $this->currentUser = $currentUser;
     $this->configFactory = $config_factory;
     $this->domainOverrides = $domain_overrides;
   }
@@ -73,7 +68,6 @@ class AlshayaMarketCondition extends ConditionPluginBase implements ContainerFac
       $configuration,
       $plugin_id,
       $plugin_definition,
-      $container->get('current_user'),
       $container->get('config.factory'),
       $container->get('alshaya_xb.domain_config_overrides'),
     );
