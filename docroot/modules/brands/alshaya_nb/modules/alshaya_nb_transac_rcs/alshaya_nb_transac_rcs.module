@@ -19,13 +19,6 @@ function alshaya_nb_transac_rcs_node_view(array &$build, EntityInterface $entity
 }
 
 /**
- * Implements hook_algolia_react_common_configs_alter().
- */
-function alshaya_nb_transac_rcs_algolia_react_common_configs_alter(&$response) {
-  $response['commonAlgoliaSearch']['showProductInfo'] = TRUE;
-}
-
-/**
  * Implements hook_module_implements_alter().
  */
 function alshaya_nb_transac_rcs_module_implements_alter(&$implementations, $hook) {
@@ -107,5 +100,6 @@ function alshaya_nb_transac_rcs_library_info_alter(&$libraries, $extension) {
   // Unset plp-swatch-hover library.
   if ($extension === 'alshaya_white_label' && isset($libraries['plp-swatch-hover'])) {
     unset($libraries['plp-swatch-hover']);
+    $build['#attached']['drupalSettings']['showProductCategory'] = TRUE;
   }
 }

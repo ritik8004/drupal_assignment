@@ -34,7 +34,9 @@ set classes = [
           {% block productBrand %}
           {% endblock %}
 
-          <div class="prod-title">#rcs.product._self|name#</div>
+          {% block productTitle %}
+            <h1>#rcs.product._self|name#</h1>
+          {% endblock %}
 
           {% block pricePrefix %}
           {% endblock %}
