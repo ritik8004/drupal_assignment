@@ -18,6 +18,10 @@ export const Swatch = ({ swatch, url, title }) => {
       color: swatch.display_label,
     };
     Drupal.alshayaSeoGtmPushSwatchClick(productData);
+    // Return if we dont have to go to PDP on swatch click.
+    if (typeof drupalSettings.navigateOnSwatchClick !== 'undefined' && !drupalSettings.navigateOnSwatchClick) {
+      return;
+    }
     window.location.href = selectedImage;
   };
 
@@ -25,8 +29,8 @@ export const Swatch = ({ swatch, url, title }) => {
     <a href="#" onClick={(e) => handleSwatchClick(e)}>
       <span className="swatch-block swatch-image">
         {swatch.product_image_url
-          ? <ImageElement data-sku-image={swatch.product_image_url} src={swatch.image_url} loading="lazy" />
-          : <ImageElement src={swatch.image_url} loading="lazy" />}
+          ? <ImageElement data-sku-image={swatch.product_image_url} src={swatch.image_url} loading="lazy" data-sku-id={swatch.child_id} />
+          : <ImageElement src={swatch.image_url} loading="lazy" data-sku-id={swatch.child_id} />}
       </span>
     </a>
   );
