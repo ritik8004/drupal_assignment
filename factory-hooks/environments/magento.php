@@ -954,8 +954,8 @@ $magentos = [
     'magento_secrets' => [
       'consumer_key' => 'm5mabaf4mf6zngfikkdemn1vheihg9zy',
       'consumer_secret' => 'ayxgq9w63432ksed0um17p7aqie9wdql',
-      'access_token' => 'shuviq2hnhj7f8n1w0nqz1612w68a9ko',
-      'access_token_secret' => '6m679iyfdhr3s6novj3hs28kssuk062w',
+      'access_token' => 'qr0myih9ld92dgiye713hhie2ypqlzuk',
+      'access_token_secret' => 'cedhw4qaeyh2mketzkot7zgyizq1m6sl',
     ],
   ],
   'hm_uat' => [
