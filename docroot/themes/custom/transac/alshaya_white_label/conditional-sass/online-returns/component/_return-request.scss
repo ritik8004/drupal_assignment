@@ -411,6 +411,8 @@
 
           .spc-card-type {
             margin-#{$right}: rem(8);
+            top: rem(3);
+            position: relative;
           }
 
           .cashondelivery {
@@ -420,6 +422,7 @@
 
         .card-detail {
           font-size: rem(14);
+          padding-top: rem(1);
 
           .bold-text {
             font-family: $alshaya-thin;
