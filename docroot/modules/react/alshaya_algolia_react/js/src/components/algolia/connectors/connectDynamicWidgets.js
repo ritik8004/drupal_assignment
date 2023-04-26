@@ -59,6 +59,13 @@ export default createConnector({
 
     const { userData } = results;
 
+    // Add sort-by attribute explicitly at the top of facet list
+    // as we want to keep sort-by facet out of facet display configuration
+    // on algolia.
+    if (attributesToRender.indexOf('sort_by') === -1) {
+      attributesToRender.unshift('sort_by');
+    }
+
     return {
       attributesToRender,
       userData,
