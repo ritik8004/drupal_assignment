@@ -114,15 +114,15 @@ const Filters = ({ indexName, pageType, ...props }) => {
    *   userData with facets override by context.
    */
   const processUserDataWithOverrides = (data) => {
-    const { ruleContext } = drupalSettings.algoliaSearch;
     let userData = {};
-    if (hasValue(ruleContext)) {
-      // Get contexts array from drupalSettings.
-      const contexts = Object.values(ruleContext);
+
+    const { ruleContexts } = props;
+
+    if (hasValue(ruleContexts)) {
       // Add default context to the list of contexts.
-      contexts.unshift('default');
+      ruleContexts.unshift('default');
       // Sort userData array by context.
-      data.sort((a, b) => contexts.indexOf(a.context) - contexts.indexOf(b.context));
+      data.sort((a, b) => ruleContexts.indexOf(a.context) - ruleContexts.indexOf(b.context));
     }
 
     data.forEach((filterData) => {
@@ -192,7 +192,7 @@ const Filters = ({ indexName, pageType, ...props }) => {
 
     // Initialize indentifier prefix.
     let identifierPrefix = '';
-    let userData = data[0];
+    let userData = {};
     if (pageType !== 'search') {
       // If the page type is search then prefix is empty
       // else it will be current language code.
@@ -248,9 +248,9 @@ const Filters = ({ indexName, pageType, ...props }) => {
       },
     };
 
-    facets.unshift(sort);
+    facetsArray.unshift(sort);
 
-    setFacets(facets);
+    setFacets(facetsArray);
   };
 
   // Set facets config if facet is build from userData.
