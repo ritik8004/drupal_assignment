@@ -607,8 +607,9 @@ const getProcessedCartData = async (cartData) => {
         if (hasValue(drupalSettings.alshaya_spc.sizeGroupAttribute)) {
           let sizeGroup = '';
           Object.keys(item.extension_attributes).forEach((key) => {
-            if (typeof drupalSettings.alshaya_spc.sizeGroupAlternates[key] !== 'undefined') {
-              sizeGroup += `${item.extension_attributes[key]}(${drupalSettings.alshaya_spc.sizeGroupAlternates[key]}) `;
+            const sizeGroupAlternates = drupalSettings.alshaya_spc.sizeGroupAlternates[key];
+            if (hasValue(sizeGroupAlternates)) {
+              sizeGroup += `${item.extension_attributes[key]}(${sizeGroupAlternates}) `;
             }
           });
           data.items[itemKey].sizeGroup = sizeGroup;
