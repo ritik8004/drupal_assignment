@@ -11,8 +11,9 @@ use Drupal\alshaya_config\AlshayaConfigManager;
  * Implements hook_update_N().
  *
  * Config added for big ticket order return message and customer service number.
+ * Add new translations for alshaya online returns.
  */
-function alshaya_online_returns_update_9403() {
+function alshaya_online_returns_update_9402() {
   /** @var \Drupal\alshaya_config\AlshayaConfigManager $manager */
   $manager = \Drupal::service('alshaya_config.manager');
   $manager->updateConfigs(
@@ -23,19 +24,6 @@ function alshaya_online_returns_update_9403() {
   );
   // Add translation for big ticket order message.
   \Drupal::moduleHandler()->loadInclude('alshaya_online_returns', 'inc', 'alshaya_online_returns.translations');
-  $translations = _alshaya_online_returns_get_translations('v4');
-  if (!empty($translations)) {
-    alshaya_i18n_save_translations($translations);
-  }
-}
-
-/**
- * Implements hook_update_N().
- *
- * Add translations.
- */
-function alshaya_online_returns_update_9402() {
-  module_load_include('inc', 'alshaya_online_returns', 'alshaya_online_returns.translations');
   $translations = _alshaya_online_returns_get_translations('v3');
   if (!empty($translations)) {
     alshaya_i18n_save_translations($translations);
