@@ -4,7 +4,6 @@
  */
 
 (function ($, Drupal, dataLayer) {
-
   $('body[gtm-container="checkout login page"]').once('gtm_checkout_login').each(function () {
     // @todo: Remove when we merge login section with checkout.
     var cart_data = Drupal.alshayaSpc.getCartData();
@@ -19,6 +18,14 @@
     // Tracking Returning customers.
     $('[gtm-type="checkout-signin"]', $(this)).on('mousedown', function () {
       Drupal.alshaya_seo_gtm_push_checkout_option('New Login', 1);
+    });
+
+    // Tracking Social media login.
+    $('[gtm-type="checkout-facebook"]', $(this)).on('click', function () {
+      Drupal.alshaya_seo_gtm_push_checkout_option('Facebook Login', 1);
+    });
+    $('[gtm-type="checkout-google"]', $(this)).on('click', function () {
+      Drupal.alshaya_seo_gtm_push_checkout_option('Google Login', 1);
     });
   });
 
