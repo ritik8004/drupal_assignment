@@ -21,7 +21,6 @@ function alshaya_pb_transac_update_9403() {
     $config->set('exclude_render_single_result_facets', 'final_price,attr_bv_rating,attr_color,field_acq_promotion_label');
     $config->save();
   }
-
 }
 
 /**
