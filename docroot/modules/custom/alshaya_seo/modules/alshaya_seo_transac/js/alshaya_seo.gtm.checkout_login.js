@@ -4,6 +4,7 @@
  */
 
 (function ($, Drupal, dataLayer) {
+
   $('body[gtm-container="checkout login page"]').once('gtm_checkout_login').each(function () {
     // @todo: Remove when we merge login section with checkout.
     var cart_data = Drupal.alshayaSpc.getCartData();
