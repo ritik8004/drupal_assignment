@@ -97,6 +97,13 @@ class MyBenefitsPage extends React.Component {
       qrCodeTitle = getStringMessage('benefit_id_title');
     }
 
+    let userEmail = '';
+
+    if (hasValue(drupalSettings.userDetails)
+      && hasValue(drupalSettings.userDetails.userEmailID)) {
+      userEmail = `?email="${drupalSettings.userDetails.userEmailID}"`;
+    }
+
     const benefitTag = getBenefitTag(myBenefit);
     // Show QRCodeButton, either if response has no benefit tag or has a value '0' or 'S'.
     const showQRButton = !!(!hasValue(benefitTag)
@@ -145,6 +152,13 @@ class MyBenefitsPage extends React.Component {
                 offerType={offerType}
                 promotionType={promotionType}
               />
+            )}
+          {/* CTA for competition benefits. */}
+          {hasValue(myBenefit.benefit_url) && hasValue(benefitTag) && benefitTag === 'C'
+            && (
+              <a target="_blank" rel="noopener noreferrer" className="qr-code-button external-btn" href={myBenefit.benefit_url + userEmail}>
+                {Drupal.t('Enter now', {}, { context: 'hello_member' })}
+              </a>
             )}
         </div>
         <div className="benefit-description">
