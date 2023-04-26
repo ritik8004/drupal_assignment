@@ -191,15 +191,10 @@ const Filters = ({ indexName, pageType, ...props }) => {
     const facetsArray = [];
 
     // Initialize indentifier prefix.
-    let identifierPrefix = '';
-    let userData = {};
-    if (pageType !== 'search') {
-      // If the page type is search then prefix is empty
-      // else it will be current language code.
-      identifierPrefix = drupalSettings.path.currentLanguage;
-      // Process any override rules in userData.
-      userData = processUserDataWithOverrides(data);
-    }
+    const identifierPrefix = drupalSettings.path.currentLanguage;
+
+    // Process any override rules in userData.
+    const userData = (pageType !== 'search') ? processUserDataWithOverrides(data) : data.find((item) => item.context === 'default');
 
     // Get facets config from userData.
     const { facets_config: filters } = userData;
@@ -208,7 +203,7 @@ const Filters = ({ indexName, pageType, ...props }) => {
     Object.entries(filters).forEach(([key, value]) => {
       // Format the filters as required by widget manager.
       const filter = {
-        identifier: `${key}.${identifierPrefix}`,
+        identifier: (pageType !== 'search') ? `${key}.${identifierPrefix}` : key,
         label: value.label[identifierPrefix],
         name: value.label.en, // Used for gtm, hence always english value.
         widget: {
