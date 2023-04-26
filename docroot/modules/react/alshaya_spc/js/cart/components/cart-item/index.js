@@ -1,6 +1,6 @@
 import React from 'react';
 
-import CheckoutConfigurableOption from '../../../utilities/checkout-configurable-option';
+import CheckoutConfigurableOptions from '../../../utilities/checkout-configurable-options';
 import CartPromotion from '../cart-promotion';
 import CartItemOOS from '../cart-item-oos';
 import CartItemError from '../cart-item-error';
@@ -316,6 +316,7 @@ export default class CartItem extends React.Component {
         freeItem,
         stock,
         finalPrice,
+        sizeGroup = '',
         in_stock: inStock,
         error_msg: itemErrorMsg,
       },
@@ -435,7 +436,7 @@ export default class CartItem extends React.Component {
             </div>
             <div className="spc-product-attributes-wrapper">
               { itemCodeLabel }
-              {options.map((key) => <CheckoutConfigurableOption key={`${sku}-${key.value}`} label={key} />)}
+              <CheckoutConfigurableOptions sku={sku} options={options} sizeGroup={sizeGroup} />
             </div>
             <ConditionalView condition={isWishlistEnabled() && !freeItem}>
               <div className="spc-product-wishlist-link">
