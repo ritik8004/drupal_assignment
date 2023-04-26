@@ -15,3 +15,9 @@ alshaya_algolia_react.swipe_image:
   title: 'Swipe Image Configuration for Listing Pages'
   description: 'Configure the settings for Swipe Image Algolia.'
   parent: alshaya_master.alshaya_admin
+
+alshaya_algolia_react.predictive_search:
+  route_name: alshaya_algolia_react.predictive_search
+  title: 'Configurations for algolia predictive search'
+  description: 'Configure the settings for predictive search Algolia.'
+  parent: alshaya_master.alshaya_admin

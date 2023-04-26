@@ -41,3 +41,13 @@ alshaya_algolia_react.swipe_image:
     _title: 'SRP/PLP Swipe Image Configuration'
   requirements:
     _permission: 'administer site configuration'
+
+
+   # Predictive search config form
+alshaya_algolia_react.predictive_search:
+  path: '/admin/config/alshaya/predictive-search'
+  defaults:
+    _form: '\Drupal\alshaya_algolia_react\Form\AlgoliaPredictiveSearchForm'
+    _title: 'Algolia Predictive Search Configuration'
+  requirements:
+    _permission: 'administer site configuration'
