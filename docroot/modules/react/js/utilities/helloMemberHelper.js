@@ -346,3 +346,26 @@ export const getBenefitTag = (responseData) => {
   }
   return null;
 };
+
+/**
+ * Helper function to return button name for external benefits.
+ */
+export const getExternalBenefitText = (responseData) => {
+  let benefitText = null;
+  if (hasValue(responseData) && hasValue(responseData.tag)) {
+    switch (responseData.tag) {
+      case 'ER':
+        benefitText = Drupal.t('Redeem Now', {}, { context: 'hello_member' });
+        break;
+      case 'ES':
+        benefitText = Drupal.t('Shop Now', {}, { context: 'hello_member' });
+        break;
+      case 'EB':
+        benefitText = Drupal.t('Book Now', {}, { context: 'hello_member' });
+        break;
+      default:
+        break;
+    }
+  }
+  return benefitText;
+};

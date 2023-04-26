@@ -538,6 +538,20 @@ function _alshaya_hello_member_react_translations() {
         'context' => 'hello_member',
       ],
     ],
+    'v8' => [
+      'Redeem Now' => [
+        'ar' => 'استرد الآن',
+        'context' => 'hello_member',
+      ],
+      'Shop Now' => [
+        'ar' => 'تسوق الآن',
+        'context' => 'hello_member',
+      ],
+      'Book Now' => [
+        'ar' => 'احجز الآن',
+        'context' => 'hello_member',
+      ],
+    ],
   ];
 }
 
