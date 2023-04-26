@@ -4,7 +4,7 @@ import ImageElement from '../imageHelper/ImageElement';
 import { hasValue } from '../../../../../../js/utilities/conditionsUtility';
 import Lozenges
   from '../../../../common/components/lozenges';
-import { isMobile } from '../../../../../../js/utilities/display';
+import { isMobile, isDesktop } from '../../../../../../js/utilities/display';
 
 const SliderElement = ({
   src, title,
@@ -38,7 +38,7 @@ const sliderHoverSettings = {
     ? drupalSettings.reactTeaserView.swipe_image.image_slide_timing * 1000
     : 2000,
   autoplay: true,
-}
+};
 
 // Slider configurations for mobile devices.
 const swipeSettings = {
@@ -47,9 +47,20 @@ const swipeSettings = {
   autoplay: false,
   initialSlide: 1,
   swipe: true,
-  touchThreshold: 40
+  touchThreshold: 40,
+};
+
+// Slider configurations based on device.
+const slideSettings = isMobile() ? swipeSettings : sliderHoverSettings;
+let slickClassName = 'search-lightSlider';
+
+if (isMobile()) {
+  slickClassName += ' search-lightSliderSwipe';
 }
 
+if (isDesktop() && slickEffect) {
+  slickClassName += ` slick-effect-${slickEffect}`;
+}
 class SearchGallery extends React.PureComponent {
   constructor(props) {
     super(props);
@@ -57,26 +68,14 @@ class SearchGallery extends React.PureComponent {
     this.slideAppendMarkup = this.slideAppendMarkup.bind(this);
   }
 
-  // Conditional function for slick carousel initialization.
+
+  // Function for slick carousel initialization.
   slideAppendMarkup = (thumbnails) => (
-    isMobile()
-      ? (
-        <div className="alshaya_search_slider">
-          <Slider {...swipeSettings} className="search-lightSlider search-lightSliderSwipe" ref={this.getref}>
-            {thumbnails}
-          </Slider>
-        </div>
-      ) : (
-        <div className="alshaya_search_slider">
-          <Slider
-            {...sliderHoverSettings}
-            className={`search-lightSlider ${slickEffect ? `slick-effect-${slickEffect}` : ''}`}
-            ref={this.getref}
-          >
-            {thumbnails}
-          </Slider>
-        </div>
-      )
+    <div className="alshaya_search_slider">
+      <Slider {...slideSettings} className={slickClassName} ref={this.getref}>
+        {thumbnails}
+      </Slider>
+    </div>
   )
 
   getref = (slider) => {

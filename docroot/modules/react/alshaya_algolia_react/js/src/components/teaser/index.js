@@ -266,7 +266,8 @@ const Teaser = ({
         onTouchEnd={() => {
           if (!touchStart || !touchEnd) return;
           const distance = touchStart - touchEnd;
-          // The minimum swipe distance between touchStart and touchEnd to be detected as a left or right swipe.
+          // The minimum swipe distance between touchStart and touchEnd to be detected as
+          // a left or right swipe.
           const isLeftSwipe = distance > 40;
           const isRightSwipe = distance < -40;
           if (isLeftSwipe || isRightSwipe) {
