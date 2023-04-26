@@ -15,6 +15,7 @@ import {
 } from '../../../utils/indexUtils';
 import { isConfigurableFiltersEnabled } from '../../../../../../js/utilities/helper';
 import { hasValue } from '../../../../../../js/utilities/conditionsUtility';
+import logger from '../../../../../../js/utilities/logger';
 
 const namespace = 'refinementList';
 
@@ -171,7 +172,7 @@ export default createConnector({
           facetValues[value.split(',')[0]] = value;
         });
       } catch (e) {
-        Drupal.alshayaLogger('error', 'Exception happened while fetching facet values: @error', {
+        logger.error('error', 'Exception happened while fetching facet values: @error', {
           '@error': e.message,
         });
       }

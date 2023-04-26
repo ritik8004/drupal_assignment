@@ -5,7 +5,6 @@ autocomplete:
     - alshaya_algolia_react/vendor
     - alshaya_algolia_react/search_insights_listing
     - alshaya_algolia_react/algolia_common
-    - alshaya_master/common_functions
 
 vendor:
   js:
@@ -51,7 +50,6 @@ plp:
     - core/jquery.once
     - alshaya_algolia_react/search_insights
     - alshaya_algolia_react/plp_group_by_subcategory
-    - alshaya_master/common_functions
 
 plpv2:
   js:
@@ -62,7 +60,6 @@ plpv2:
     - alshaya_algolia_react/algolia_common
     - alshaya_algolia_react/search_insights
     - alshaya_algolia_react/plp_group_by_subcategory
-    - alshaya_master/common_functions
 
 product_category_carousel:
   js:
