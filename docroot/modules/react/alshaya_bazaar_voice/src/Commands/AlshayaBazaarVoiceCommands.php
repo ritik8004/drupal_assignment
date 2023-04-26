@@ -147,6 +147,8 @@ class AlshayaBazaarVoiceCommands extends DrushCommands {
     $algolia_index = \Drupal::service('alshaya_search_algolia.index_helper');
     $index_names = $algolia_index->getAlgoliaIndexNames();
     $languages = \Drupal::languageManager()->getLanguages();
+    // Check if we are using SKU as ObjectID on search page.
+    $indexSkuAsObjectid = \Drupal::config('alshaya_search_algolia.settings')->get('index_sku_as_object_id');
     foreach ($index_names as $index) {
       $search_api_index = 'search_api.index.' . $index;
       $index_name = \Drupal::configFactory()->get($search_api_index)->get('options.algolia_index_name');
@@ -161,7 +163,18 @@ class AlshayaBazaarVoiceCommands extends DrushCommands {
 
           // Create object ids from node id and language to fetch results from
           // algolia.
-          $objectIDs = array_map(fn($nid) => "entity:node/{$nid}:{$language->getId()}", $nids);
+          // Use the entity:node/{nid}:{lang} pattern by default.
+          if (!$indexSkuAsObjectid) {
+            $objectIDs = array_map(fn($nid) => "entity:node/{$nid}:{$language->getId()}", $nids);
+          }
+          else {
+            // Use SKU if the configuration is enabled for Search Index.
+            $objectIDs = [];
+            foreach ($nids as $nid) {
+              $node = \Drupal::entityTypeManager()->getStorage('node')->load($nid);
+              $objectIDs[] = $node->get('field_skus')->getString();
+            }
+          }
 
           try {
             $objects = $index->getObjects($objectIDs);
