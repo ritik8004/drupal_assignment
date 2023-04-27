@@ -539,6 +539,10 @@ function _alshaya_hello_member_react_translations() {
       ],
     ],
     'v8' => [
+      'Enter now' => [
+        'ar' => 'أدخل الأن',
+        'context' => 'hello_member',
+      ],
       'Redeem Now' => [
         'ar' => 'استرد الآن',
         'context' => 'hello_member',
