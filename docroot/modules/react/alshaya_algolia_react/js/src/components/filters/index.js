@@ -60,7 +60,7 @@ const Filters = ({ indexName, pageType, ...props }) => {
         }
 
         if (hasValue(value.facets_value)) {
-          userData.facets_config[key].slug = value.facets_value;
+          userData.facets_config[key].facets_value = value.facets_value;
         }
       }
     });
@@ -115,7 +115,6 @@ const Filters = ({ indexName, pageType, ...props }) => {
    */
   const processUserDataWithOverrides = (data) => {
     let userData = {};
-
     const { ruleContexts } = props;
 
     if (hasValue(ruleContexts)) {
@@ -209,7 +208,7 @@ const Filters = ({ indexName, pageType, ...props }) => {
         widget: {
           type: value.widget.type,
         },
-        id: value.slug.replace('_', ''),
+        id: value.slug.replace('_', ''), // Remove underscores to set filter id.
         alias: value.slug,
       };
 
