@@ -19,7 +19,8 @@ function alshaya_algolia_react_update_9408() {
   /** @var \Drupal\alshaya_config\AlshayaConfigManager $manager */
   $manager = \Drupal::service('alshaya_config.manager');
   $manager->updateConfigs(['alshaya_algolia_react.swipe_image',
-    'alshaya_algolia_react.predictive_search'],
+    'alshaya_algolia_react.predictive_search',
+  ],
     'alshaya_algolia_react',
   );
   $config_factory = \Drupal::configFactory();
