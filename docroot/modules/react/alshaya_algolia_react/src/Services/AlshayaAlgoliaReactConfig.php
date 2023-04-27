@@ -226,8 +226,8 @@ class AlshayaAlgoliaReactConfig implements AlshayaAlgoliaReactConfigInterface {
       'defaultColgrid' => $alshaya_algolia_react_setting_values->get('default_col_grid'),
       'defaultColGridMobile' => $alshaya_algolia_react_setting_values->get('default_col_grid_mobile'),
       'hitsPerPage' => $alshaya_algolia_react_setting_values->get('enable_hits_per_page'),
-      'render_single_result_facets' => $alshaya_algolia_react_setting_values->get('render_single_result_facets'),
-      'exclude_render_single_result_facets' => $alshaya_algolia_react_setting_values->get('exclude_render_single_result_facets'),
+      'renderSingleResultFacets' => $alshaya_algolia_react_setting_values->get('render_single_result_facets'),
+      'excludeRenderSingleResultFacets' => $alshaya_algolia_react_setting_values->get('exclude_render_single_result_facets'),
     ];
 
     // Set product elements alignment to true only
