@@ -103,10 +103,10 @@ const HelloMemberCartPopupMemberOfferList = (props) => {
                 <input
                   type="radio"
                   id={`offer${index}`}
-                  data-offer={typeof offer.type !== 'undefined' ? offer.type : 'offer'}
+                  data-offer={hasValue(offer.type) ? offer.type : 'offer'}
                   name="radios"
                   value={offer.code}
-                  defaultChecked={typeof totals.hmOfferCode !== 'undefined' ? totals.hmOfferCode === offer.code : false}
+                  defaultChecked={hasValue(totals.hmOfferCode) ? totals.hmOfferCode === offer.code : false}
                   onChange={handleChange}
                 />
                 <label htmlFor={`offer${index}`} className="radio-sim radio-label">
@@ -115,7 +115,7 @@ const HelloMemberCartPopupMemberOfferList = (props) => {
                     <span className="item-sub-title">
                       {Drupal.t(
                         'Expires on @expiryDate',
-                        { '@expiryDate': moment(new Date(typeof offer.end_date !== 'undefined' ? offer.end_date : offer.expiry_date)).format('DD MMMM YYYY') },
+                        { '@expiryDate': moment(new Date(hasValue(offer.end_date) ? offer.end_date : offer.expiry_date)).format('DD MMMM YYYY') },
                         { context: 'hello_member' },
                       )}
                     </span>
