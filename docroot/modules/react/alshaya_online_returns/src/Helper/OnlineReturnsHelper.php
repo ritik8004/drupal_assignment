@@ -8,6 +8,7 @@ use Drupal\acq_sku\Entity\SKU;
 use Drupal\alshaya_acm_checkout\CheckoutOptionsManager;
 use Drupal\Core\Entity\EntityTypeManagerInterface;
 use Drupal\file\Entity\File;
+use Drupal\Component\Serialization\Json;
 
 /**
  * Helper class for Online Returns.
@@ -154,24 +155,29 @@ class OnlineReturnsHelper {
   }
 
   /**
-   * Wrapper function to check if SKU is a big ticket item.
+   * Helper function to check if the product is a big ticket item.
    *
-   * @param \Drupal\acq_commerce\SKUInterface $sku_entity
-   *   SKU entity object.
+   * @param array $item
+   *   Individual product data from orders API.
    *
    * @return bool
-   *   SKU is big ticket or not.
+   *   TRUE if product is big ticket else FALSE.
    */
-  public function isSkuBigTicket(SKUInterface $sku_entity) {
-    if ($sku_entity->hasField('attr_big_ticket')) {
-      return !empty($sku_entity->get('attr_big_ticket')->getString());
+  public function isBigTicketItem(array $item) {
+    if (!isset($item['extension_attributes']['product_options'])) {
+      return FALSE;
     }
-    // If 'attr_big_ticket' is not available use 'attr_white_glove_delivery'
-    // field to determine if it is big ticket item or not.
-    if ($sku_entity->hasField('attr_white_glove_delivery')) {
-      return !empty($sku_entity->get('attr_white_glove_delivery')->getString());
-    }
-    return FALSE;
+    // We expect one value in the `product_options` attribute which is
+    // expected to be a json string.
+    $product_options = reset($item['extension_attributes']['product_options']);
+    $attribute_options = is_string($product_options)
+      ? Json::decode($product_options)
+      : NULL;
+    // New field `big_ticket` introduced in MDC orders API at item level
+    // under extensions attributes, helps in determining whether the ordered
+    // item is big ticket or not.
+    // See CORE-55974 for reference.
+    return $attribute_options['big_ticket'] ?? FALSE;
   }
 
   /**
@@ -252,8 +258,9 @@ class OnlineReturnsHelper {
       $sku = SKU::loadFromSku($item['sku']);
       if ($sku instanceof SKUInterface) {
         $products[$key]['is_returnable'] = $this->isSkuReturnable($sku);
-        $products[$key]['is_big_ticket'] = $this->isSkuBigTicket($sku);
       }
+      // Check if it is big ticket item or not.
+      $products[$key]['is_big_ticket'] = $this->isBigTicketItem($item);
       // Update the order total based on the item qty.
       if ($products[$key]['qty_refunded'] > 0
         && $products[$key]['qty_refunded'] <= $products[$key]['qty_ordered']) {
