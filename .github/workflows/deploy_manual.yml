@@ -32,6 +32,10 @@ jobs:
         with:
           fetch-depth: 0
 
+      - name: Mark Github Workspace Directories Safe
+        run: |
+          git config --global --add safe.directory '*'
+
       - name: Get changed files
         if: ${{ env.SSH_DEPLOYMENT_KEY }}
         id: changes

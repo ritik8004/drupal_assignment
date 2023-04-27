@@ -1,4 +1,4 @@
-.alshaya-select-wrapper {
+.sofa-sectional-form .alshaya-select-wrapper {
   @include breakpoint($tablet) {
     width: 5.375rem !important;
   }
@@ -23,11 +23,8 @@
   .field--name-field-skus .sku-base-form {
     .sofa-sectional-addtobag-button-wrapper {
       @include breakpoint($tablet) {
-        width: 62%;
-      }
-
-      @include breakpoint($desktop) {
-        width: 69%;
+        width: calc(100% - #{rem(96)});
+        margin-#{$left}: rem(10);
       }
 
       .sofa-sectional-addtobag-button {

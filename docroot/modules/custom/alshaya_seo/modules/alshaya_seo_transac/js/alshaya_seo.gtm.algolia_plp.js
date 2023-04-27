@@ -80,6 +80,13 @@
     }
   });
 
+  // Push article swatch arrow click events to GTM.
+  $('#alshaya-algolia-plp').once('bind-swatch-slider-click').on('click', '.article-swatch-wrapper button.slick-arrow', function () {
+    // Get clicked arrow for eventLabel.
+    var eventLabel = $(this).hasClass('slick-prev') ? 'left' : 'right';
+    Drupal.alshayaSeoGtmPushSwatchSliderClick(eventLabel);
+  });
+
   $('#alshaya-algolia-plp').once('bind-loadmore-button-click').on('click', '.pager button', function () {
     var statsText = $('.pager .ais-Stats-text').attr('gtm-pagination-stats');
     // Push load more products click event to GTM.

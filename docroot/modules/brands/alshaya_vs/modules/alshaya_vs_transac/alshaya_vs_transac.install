@@ -13,15 +13,33 @@ use Drupal\Component\Utility\Unicode;
  * Update algolia react with default value for render_single_result_facets.
  *
  * And also for exclude_render_single_result_facets.
+ * Adds 'bra_type' field in the sku base field existing config.
  */
-function alshaya_vs_transac_update_9404() {
+function alshaya_vs_transac_update_9405() {
   $config = \Drupal::configFactory()->getEditable('alshaya_algolia_react.settings');
   if ($config) {
     $config->set('render_single_result_facets', FALSE);
     $config->set('exclude_render_single_result_facets', 'final_price,attr_bv_rating,field_acq_promotion_label,attr_product_collection');
     $config->save();
   }
+  $manager = \Drupal::service('alshaya_config.manager');
+  $manager->updateConfigs(
+    ['alshaya_acm_product.sku_base_fields'],
+    'alshaya_acm_product'
+  );
+  \Drupal::service('acq_sku.fields_manager')->addFields();
 
+  // Queue all products for re-indexing.
+  \Drupal::service('alshaya_acm_product.product_queue_utility')->queueAllProducts();
+}
+
+/**
+ * Implements hook_update_N().
+ *
+ * Queue all products for re-index because of swatches field addition.
+ */
+function alshaya_vs_transac_update_9404() {
+  \Drupal::service('alshaya_acm_product.product_queue_utility')->queueAllProducts();
 }
 
 /**
@@ -514,7 +532,7 @@ function _alshaya_vs_transac_save_metatag_translations() {
 function alshaya_vs_transac_update_dependencies() {
   return [
     'alshaya_vs_transac' => [
-      '9404' => [
+      '9405' => [
         'alshaya_algolia_react' => '9408',
       ],
     ],

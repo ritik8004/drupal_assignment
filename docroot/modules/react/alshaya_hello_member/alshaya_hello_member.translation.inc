@@ -531,6 +531,14 @@ function _alshaya_hello_member_react_translations() {
         'ar' => 'سجّل النقاط',
         'context' => 'hello_member',
       ],
+    ],
+    'v7' => [
+      '<span>Members get</span> <span>10% off on your first purchase.</span>' => [
+        'ar' => '<span>يحصل الأعضاء </span><span>على خصم %10 عند أول عملية شراء</span>',
+        'context' => 'hello_member',
+      ],
+    ],
+    'v8' => [
       'Enter now' => [
         'ar' => 'أدخل الأن',
         'context' => 'hello_member',
@@ -545,12 +553,6 @@ function _alshaya_hello_member_react_translations() {
       ],
       'Book Now' => [
         'ar' => 'احجز الآن',
-        'context' => 'hello_member',
-      ],
-    ],
-    'v7' => [
-      '<span>Members get</span> <span>10% off on your first purchase.</span>' => [
-        'ar' => '<span>يحصل الأعضاء </span><span>على خصم %10 عند أول عملية شراء</span>',
         'context' => 'hello_member',
       ],
     ],

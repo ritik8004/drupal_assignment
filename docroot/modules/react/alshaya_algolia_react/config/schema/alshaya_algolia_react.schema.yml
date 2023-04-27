@@ -95,9 +95,23 @@ alshaya_algolia_react.swipe_image:
     no_of_image_scroll:
       type: integer
       label: 'Set the swipe image scroll limit for PLP/SRP on desktop view'
-    slide_effect_fade:
+    slide_effect:
       type: string
       label: 'Set the effect of slide'
     image_slide_timing:
       type: float
       label: 'Auto scroll timer for auto scrolling the product images on listing pages.'
+
+alshaya_algolia_react.predictive_search:
+  type: config_object
+  label: 'Algolia Predictive Search Configuration'
+  mapping:
+    enable_predictive_search:
+      type: boolean
+      label: 'Enable Predictive Search'
+    predictive_search_layout:
+      type: string
+      label: 'Desktop Layout for Predictive Search'
+    recent_search_count:
+      type: integer
+      label: 'Number of recent searches to be displayed'

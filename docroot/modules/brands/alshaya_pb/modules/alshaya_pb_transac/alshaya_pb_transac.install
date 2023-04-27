@@ -21,7 +21,6 @@ function alshaya_pb_transac_update_9403() {
     $config->set('exclude_render_single_result_facets', 'final_price,attr_bv_rating,attr_color,field_acq_promotion_label');
     $config->save();
   }
-
 }
 
 /**
@@ -455,7 +454,7 @@ function alshaya_pb_transac_update_dependencies() {
   ];
   $dependencies['alshaya_pb_transac'][9403] = [
     'alshaya_algolia_react' => 9408,
-  ]
+  ];
   return $dependencies;
 }
 

@@ -205,3 +205,8 @@ libraries-override:
     css:
       theme:
         /themes/custom/transac/alshaya_pottery_barn/css/conditional-sass/fullwidth-pdp/fullwidth-pdp.ltr.css: /themes/custom/transac/alshaya_pottery_barn_kids/css/conditional-sass/fullwidth-pdp/fullwidth-pdp.ltr.css
+
+  alshaya_white_label/fullwidth-store-finder:
+    css:
+      theme:
+        /themes/custom/transac/alshaya_pottery_barn/css/conditional-sass/fullwidth-store-finder/fullwidth-store-finder.ltr.css: /themes/custom/transac/alshaya_pottery_barn_kids/css/conditional-sass/fullwidth-store-finder/fullwidth-store-finder.ltr.css

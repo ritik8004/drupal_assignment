@@ -163,6 +163,22 @@ body[class*="return-confirmation"] {
     margin: 2.375rem 0;
 
     .return-confirmation-detail-wrapper {
+      .refund-method-wrapper {
+        .method-wrapper {
+          .radio-sim {
+            display: flex;
+
+            .egift-card-detail {
+              padding-top: rem(4);
+            }
+
+            svg {
+              margin-#{$right}: rem(6);
+            }
+          }
+        }
+      }
+
       padding: rem(24) 0;
       font-size: 0.875rem;
       line-height: 1.125rem;

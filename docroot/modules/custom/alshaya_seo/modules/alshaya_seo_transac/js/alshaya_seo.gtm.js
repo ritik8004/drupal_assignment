@@ -897,18 +897,35 @@
         productData.list = $('body').attr('gtm-list-name').replace('PDP-placeholder', 'PLP');
       }
       // If list variable is set in local storage, retrieve it.
-      var listValues = Drupal.getItemFromLocalStorage(productListStorageKey);
+      var listValues = Drupal.getItemFromLocalStorage(productListStorageKey) || {};
       if (listValues
         && typeof listValues === 'object'
         && Object.keys(listValues).length
         && typeof listValues[productData.id] !== 'undefined') {
         // For SRP, use list value 'Search Result Page'.
+        // For product recommendations use list value from local storage.
         if (listValues[productData.id] === 'Search Results Page'
           || !$('body').is('[gtm-list-name]')
           || listValues[productData.id].indexOf('match back') > -1
-          || (productData.data_vmode === 'modal'
-          && listValues[productData.id].indexOf(productRecommendationsSuffix) > -1)) {
+          || listValues[productData.id].indexOf(productRecommendationsSuffix) > -1) {
           productData.list = listValues[productData.id];
+        }
+      }
+
+      // Check if local storage contains list data for DY product recommendations.
+      if (productData.data_vmode == 'modal') {
+        var dyListValues = Drupal.getItemFromLocalStorage('gtm_dy_product_list');
+        if (dyListValues
+          && typeof dyListValues.list !== 'undefined'
+          && dyListValues.list !== '') {
+          // Store updated listValues in local storage and product data.
+          productData.list = listValues[productData.id] = dyListValues.list;
+          if (drupalSettings.gtm && drupalSettings.gtm.productListExpirationMinutes) {
+            Drupal.addItemInLocalStorage(productListStorageKey, listValues, drupalSettings.gtm.productListExpirationMinutes);
+          }
+          // Delete the local storage for gtm dy list so that this value is not
+          // used again for other popups.
+          Drupal.removeItemFromLocalStorage('gtm_dy_product_list');
         }
       }
 
@@ -1297,6 +1314,22 @@
       dataLayer.push(data);
     }
   };
+
+  /**
+   * Helper function to push swatch slider next/prev arrow click events to GTM.
+   *
+   * @param eventLabel
+   *  Contains event label for the event.
+   */
+    Drupal.alshayaSeoGtmPushSwatchSliderClick = function (eventLabel) {
+      var data = {
+        event: 'swatches_chevronclick',
+        eventCategory: 'swatches_chevronclick',
+        eventAction: 'swatches_chevronclick',
+        eventLabel: eventLabel,
+      };
+      dataLayer.push(data);
+    };
 
   /**
    * Helper function to push lead events.

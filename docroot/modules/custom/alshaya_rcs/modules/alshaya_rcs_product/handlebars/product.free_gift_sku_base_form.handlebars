@@ -1,0 +1,40 @@
+{{#*inline "renderSelectList"}}
+  <div class="js-form-item form-item js-form-type-select form-type-select js-form-item-configurables-{{cleanCssIdentifier this.data_configurable_code}} form-item-configurables-{{cleanCssIdentifier this.data_configurable_code}} {{ wrapperClass }} {{ hiddenClass }}">
+    <label for="{{ this.id }}" class="js-form-required form-required">{{ this.data_default_title }}</label>
+    <select data-configurable-code="{{ this.data_configurable_code }}" data-default-title="{{ this.data_default_title }}" data-selected-title="{{ this.data_selected_title }}" class="{{ this.class }} form-select required" data-drupal-selector="{{ this.data_drupal_selector }}" data-msg-required="{{ this.data_msg_required }}" id="{{ this.id }}" name="{{ this.name }}" required="{{ this.required }}" aria-required="{{ this.aria_require }}" aria-invalid="{{ this.aria_invalid }}">
+      <option value="" selected="selected" disabled="disabled">{{ this.select_option_label }}</option>
+      {{#each this.select_options}}
+        {{#if this.swatch-image }}
+          <option value="{{ this.value }}" swatch-image="{{ this.swatch-image }}">{{ this.text }}</option>
+        {{else if this.group-data }}
+          <option value="{{ this.value }}" group-data="{{ this.group-data }}">{{ this.text }}</option>
+        {{else}}
+          <option value="{{ this.value }}" >{{ this.text }}</option>
+        {{/if}}
+      {{/each}}
+    </select>
+  </div>
+{{/inline}}
+<form id="select-free-gift-{{ sku }}" class="sku-base-form visually-hidden select-free-gift" data-sku="{{ sku }}" data-cleaned-sku="{{ sku_clean }}" data-sku-type="{{ sku_type }}">
+  <input data-drupal-selector="edit-coupon" type="hidden" name="coupon" value="{{ couponCode }}">
+  <input data-drupal-selector="edit-sku" type="hidden" name="sku" value="{{ sku }}">
+  <input data-drupal-selector="edit-promotion-id" type="hidden" name="promotion_id" value="{{ promoRuleId }}">
+  <input data-drupal-selector="edit-selected-variant-sku" type="hidden" name="selected_variant_sku" value="">
+  <div class="errors-container error-container-{{ sku }} js-form-wrapper form-wrapper" data-drupal-selector="edit-errors-container" data-msg-required="Please enter your This field." id="edit-errors-container"></div>
+  {{#if configurable_options}}
+    <div id="configurable_ajax" class="configurable-wrapper-{{ sku }} js-form-wrapper form-wrapper" data-drupal-selector="edit-ajax" data-msg-required="Please enter your This field.">
+      {{#each configurable_options}}
+        {{#if this.attribute_has_size_guide}}
+          <div class="size-guide-form-and-link-wrapper">
+            {{> renderSelectList}}
+          </div>
+        {{else}}
+          {{> renderSelectList}}
+        {{/if}}
+      {{/each}}
+    </div>
+  {{/if}}
+  <input class="selected-variant-sku selected-variant-sku-{{  sku_clean }}" data-drupal-selector="edit-selected-variant-sku" data-msg-required="Please enter your This field." type="hidden" name="selected_variant_sku" value="">
+  <input class="selected-parent-sku" data-drupal-selector="edit-selected-parent-sku" data-msg-required="Please enter your This field." type="hidden" name="selected_parent_sku" value="{{ sku }}">
+  <button id="add-free-gift" class="select-free-gift button js-form-submit form-submit" data-variant-sku="{{ sku }}" data-sku-type="{{ sku_type }}" data-coupon="{{ couponCode }}" data-parent-sku="{{ sku }}" data-promo-rule-id="{{ promoRuleId }}" data-drupal-selector="edit-select" type="submit" name="op" value="ADD FREE GIFT">{{t 'ADD FREE GIFT' }}</button>
+</form>

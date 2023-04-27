@@ -35,7 +35,7 @@ window.commerceBackend = window.commerceBackend || {};
       var freeGiftProduct = null;
       for (var i = 0; i < giftItemList.length; i++) {
         // Fetch first valid free gift data.
-        freeGiftProduct = window.commerceBackend.fetchValidFreeGift(giftItemList[i].sku);
+        freeGiftProduct = await window.commerceBackend.fetchValidFreeGift(giftItemList[i].sku);
         if (Drupal.hasValue(freeGiftProduct)) {
           // If a valid free gift found, break. AS we will only cache 1 free gift data.
           // For multiple free gifts, we will load the free gift product info during modal view.

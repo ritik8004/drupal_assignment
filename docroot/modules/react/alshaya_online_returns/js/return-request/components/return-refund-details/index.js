@@ -33,9 +33,20 @@ class ReturnRefundDetails extends React.Component {
 
   componentDidMount = () => {
     document.addEventListener('updateRefundAccordionState', this.updateRefundAccordionState, false);
+    const { paymentInfo } = this.state;
+    // Deleting the aura_payment value from the payment object
+    // if we have both aura and aura_payment keys in the payment object,
+    // as we only need to render the data present in aura.
+    if (hasValue(paymentInfo.aura) && hasValue(paymentInfo.aura_payment)) {
+      delete paymentInfo.aura_payment;
+    }
     // Checking whether the eGift refund feature is enabled or not and the user is authenticated.
     if (isUserAuthenticated() && isEgiftRefundEnabled()) {
-      const { paymentInfo } = this.state;
+      // Variable to check the not supported payment methods.
+      // This will true as per the config present in eGift refund settings.
+      let isNotSupportedPaymentMethod = false;
+      // Variable to store the not supported payment method name.
+      let paymentMethod = '';
       // Setting the state value by checking whether multiple
       // payment methods i.e. hybrid payment has been used or not for the order.
       if (isHybridPayment(paymentInfo)) {
@@ -43,12 +54,25 @@ class ReturnRefundDetails extends React.Component {
           isHybrid: isHybridPayment(paymentInfo),
         });
       }
-      // Deleting the eGift value from the payment object
-      // if it is hybrid, as we are already showing the new eGift option here.
-      if (isHybridPayment(paymentInfo) && hasValue(paymentInfo.egift)) {
-        delete paymentInfo.egift;
+      // To get the not supported payment method if the payment is made through it.
+      if (!isHybridPayment(paymentInfo)) {
+        // Defining the list of not supported payment methods for eGift card refund.
+        const notSupportedEgiftRefundPaymentMethods = getNotSupportedEgiftMethodsForOnlineReturns();
+        notSupportedEgiftRefundPaymentMethods.forEach((method) => {
+          // Set state for the not supported payment method.
+          if (hasValue(paymentInfo[method])) {
+            isNotSupportedPaymentMethod = true;
+            paymentMethod = paymentInfo[method];
+          }
+        });
       }
-      if (!hasValue(paymentInfo.aura)) {
+      // Variable to decide whether eGift card details API needs to be called.
+      let callEgiftDetailsApi = false;
+      if (!hasValue(paymentInfo.aura)
+        || (hasValue(paymentInfo.aura) && isHybridPayment(paymentInfo))) {
+        callEgiftDetailsApi = true;
+      }
+      if (callEgiftDetailsApi && !isNotSupportedPaymentMethod) {
         // Call to get customer linked eGift card details.
         const result = callEgiftApi('eGiftCardList', 'GET', {});
         if (result instanceof Promise) {
@@ -71,17 +95,18 @@ class ReturnRefundDetails extends React.Component {
         this.setState({
           paymentInfo: { aura: paymentInfo.aura },
         });
-      } else {
-        // Defining the list of not supported payment methods for eGift card refund.
-        const notSupportedEgiftRefundPaymentMethods = getNotSupportedEgiftMethodsForOnlineReturns();
-        notSupportedEgiftRefundPaymentMethods.forEach((method) => {
-          // Set state for the not supported payment method.
-          if (hasValue(paymentInfo[method])) {
-            this.setState({
-              paymentInfo: { method: paymentInfo[method] },
-            });
-          }
-        });
+      } else if (isNotSupportedPaymentMethod) {
+        // Set state for the not supported payment method.
+        if (hasValue(paymentMethod)) {
+          this.setState({
+            paymentInfo: { method: paymentMethod },
+          });
+        }
+      }
+      // Deleting the eGift value from the payment object
+      // if it is hybrid, as we are already showing the new eGift option here.
+      if (isHybridPayment(paymentInfo) && hasValue(paymentInfo.egift)) {
+        delete paymentInfo.egift;
       }
     }
   };
@@ -110,7 +135,7 @@ class ReturnRefundDetails extends React.Component {
    */
   createReturnRequest = async () => {
     const { itemsSelected, handleErrorMessage, orderDetails } = this.props;
-    const { cardList, egiftCardType } = this.state;
+    const { cardList, egiftCardType, isHybrid } = this.state;
 
     showFullScreenLoader();
 
@@ -127,10 +152,17 @@ class ReturnRefundDetails extends React.Component {
       cardNumber = cardList.card_number;
     }
 
+    // Checking whether eGift card is selected or not in the refund form options.
+    const isEgiftSelected = document.querySelector('#egift')
+      ? document.querySelector('#egift').checked
+      : false;
+
     const returnRequest = await createReturnRequest(
       itemsSelected,
       egiftCardType,
       cardNumber,
+      isEgiftSelected,
+      isHybrid,
     );
     removeFullScreenLoader();
 
@@ -139,10 +171,6 @@ class ReturnRefundDetails extends React.Component {
       return;
     }
 
-    // Checking whether eGift card is selected or not in the refund form options.
-    const isEgiftSelected = document.querySelector('#egift')
-      ? document.querySelector('#egift').checked
-      : false;
     // Adding the refund form selection value to local storage to get the same
     // in return conformation page. True will be stored if eGift card is selected
     // in the refund form options else false will get stored.
@@ -186,7 +214,7 @@ class ReturnRefundDetails extends React.Component {
         <Collapsible trigger={this.refundDetailsHeader()} open={open} triggerDisabled={!open}>
           {/* If the eGift card refund feature is enabled, and we are getting the eGift cards
           info from MDC API, then we are passing the cardList variable and listing that info. */}
-          {cardList || egiftCardType
+          {isEgiftRefundEnabled() && (cardList || egiftCardType)
             ? (
               <ReturnRefundMethod
                 paymentDetails={paymentInfo}

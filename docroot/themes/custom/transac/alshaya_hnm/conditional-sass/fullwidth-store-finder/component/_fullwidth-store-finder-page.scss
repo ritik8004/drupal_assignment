@@ -1,0 +1,13 @@
+@include breakpoint($desktop) {
+  html[lang="ar"] {
+    .path--store-finder {
+      .label--location {
+        margin-right: 0;
+      }
+
+      .current-location {
+        width: 12%;
+      }
+    }
+  }
+}

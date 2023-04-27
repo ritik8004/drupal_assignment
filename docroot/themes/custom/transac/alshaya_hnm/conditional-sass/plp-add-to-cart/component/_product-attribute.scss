@@ -1,67 +1,69 @@
-.attribute-wrapper {
-  .form-element-hidden {
-    display: none;
-  }
-
-  &_season_code {
-    margin: 0;
-  }
-
-  .alshaya-select {
-    .alshayaSelect__control {
-      font-size: 0.6875rem;
-
-      .alshayaSelect__dropdown-indicator::before {
-        font-size: 0.5rem;
-        top: 52%;
-      }
-    }
-  }
-
-  &.attribute-wrapper_size {
-    @include breakpoint($only-mobile) {
-      float: none;
-      width: 8rem;
-    }
-
-    @include breakpoint($tablet) {
-      margin-bottom: 0;
-    }
-  }
-
-  &.attribute-wrapper_article_castor_id {
-    label span:first-child {
+.product-drawer-container {
+  .attribute-wrapper {
+    .form-element-hidden {
       display: none;
     }
 
-    .selected-text {
-      font-family: $hnm-demibold;
-      font-size: 0.8125rem;
-      color: $hnm-black-three;
+    &_season_code {
+      margin: 0;
     }
-  }
-}
 
-.form-list-wrapper,
-.attribute-wrapper {
-  ul.attribute-options-list {
-    li {
-      &:not(.active) {
-        &:hover {
-          border-color: $plp-quick-view-product-size-border-hover;
-          background: $plp-quick-view-product-size-hover-bg;
+    .alshaya-select {
+      .alshayaSelect__control {
+        font-size: 0.6875rem;
+
+        .alshayaSelect__dropdown-indicator::before {
+          font-size: 0.5rem;
+          top: 52%;
         }
+      }
+    }
+
+    &.attribute-wrapper_size {
+      @include breakpoint($only-mobile) {
+        float: none;
+        width: 8rem;
+      }
+
+      @include breakpoint($tablet) {
+        margin-bottom: 0;
+      }
+    }
+
+    &.attribute-wrapper_article_castor_id {
+      label span:first-child {
+        display: none;
+      }
+
+      .selected-text {
+        font-family: $hnm-demibold;
+        font-size: 0.8125rem;
+        color: $hnm-black-three;
       }
     }
   }
 
-  label {
-    font-size: 0.6875rem;
-  }
+  .form-list-wrapper,
+  .attribute-wrapper {
+    ul.attribute-options-list {
+      li {
+        &:not(.active) {
+          &:hover {
+            border-color: $plp-quick-view-product-size-border-hover;
+            background: $plp-quick-view-product-size-hover-bg;
+          }
+        }
+      }
+    }
 
-  .selected-text {
-    font-weight: bold;
-    display: inline-block;
-    color: $pdp_size_selected_text;
+    label {
+      font-size: 0.6875rem;
+    }
+
+    .selected-text {
+      font-weight: bold;
+      display: inline-block;
+      color: $pdp_size_selected_text;
+    }
   }
 }

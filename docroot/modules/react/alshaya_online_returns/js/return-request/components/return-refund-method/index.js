@@ -2,6 +2,8 @@ import React, { useState } from 'react';
 import { hasValue } from '../../../../../js/utilities/conditionsUtility';
 import CardDetails from '../../../return-confirmation/components/card-details';
 import EgiftCardDetails from '../egift-card-details';
+import { isUserAuthenticated } from '../../../../../js/utilities/helper';
+import { isEgiftRefundEnabled } from '../../../../../js/utilities/util';
 
 const ReturnRefundMethod = ({
   paymentDetails, cardList, egiftCardType, isHybrid,
@@ -17,13 +19,47 @@ const ReturnRefundMethod = ({
     setSelectedOption(el);
   };
 
+  let differentEgiftCard = false;
+  if (isUserAuthenticated() && isEgiftRefundEnabled()) {
+    // Logic to decide whether the payment made through the eGift card
+    // is linked to the user account or a different one which is not linked to the user.
+    if (paymentDetails.egift && hasValue(paymentDetails.egift.card_number)
+      && cardList && hasValue(cardList.card_number) && !isHybrid) {
+      // Fetching the last 4 digits of the linked eGift card.
+      const lastFourChar = cardList.card_number.substring(
+        cardList.card_number.length - 4,
+      );
+      // Checking whether the payment is made through same linked eGift or not.
+      if (lastFourChar !== paymentDetails.egift.card_number) {
+        differentEgiftCard = true;
+      }
+    }
+  }
+
+  // Custom function for card details component to avoid the nested ternary expressions.
+  const CardDetailsComponent = () => (!hasValue(paymentDetails.cashondelivery)
+    && !hasValue(paymentDetails.egift) && !differentEgiftCard && !isHybrid
+    ? (
+      <>
+        <div className="method-list-wrapper">
+          <div className="method-wrapper">
+            <CardDetails paymentDetails={paymentDetails} showCardIcon />
+          </div>
+        </div>
+        <div className="refund-message">
+          { Drupal.t('Estimated refund in 3-5 business days after we receive the item', {}, { context: 'online_returns' }) }
+        </div>
+      </>
+    )
+    : <></>);
+
   return (
     <>
       <div className="refund-method-wrapper">
         <div className="refund-method-title">
           { Drupal.t('Refund Method', {}, { context: 'online_returns' }) }
         </div>
-        {cardList || egiftCardType
+        {isEgiftRefundEnabled() && (cardList || egiftCardType)
           ? (
             <div className="refund-method-listing">
               {isHybrid && (
@@ -70,21 +106,12 @@ const ReturnRefundMethod = ({
                     </div>
                   </>
                 ) : (
-                  <>
-                    <div className="method-list-wrapper">
-                      <div className="method-wrapper">
-                        <CardDetails paymentDetails={paymentDetails} showCardIcon />
-                      </div>
-                    </div>
-                    <div className="refund-message">
-                      { Drupal.t('Estimated refund in 3-5 business days after we receive the item', {}, { context: 'online_returns' }) }
-                    </div>
-                  </>
+                  <CardDetailsComponent />
                 )}
             </div>
           )
           : (
-            <div className="refund-method-listing">
+            <div className="refund-method-listing hybrid-payment">
               <CardDetails paymentDetails={paymentDetails} showCardIcon />
               <div className="refund-message">
                 { Drupal.t('Estimated refund in 3-5 business days after we receive the item', {}, { context: 'online_returns' }) }

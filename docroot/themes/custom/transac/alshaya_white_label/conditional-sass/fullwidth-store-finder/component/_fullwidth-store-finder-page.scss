@@ -5,6 +5,12 @@
     }
   }
 
+  .current-location {
+    @include breakpoint($tablet) {
+      width: 11.5%;
+    }
+  }
+
   .store-finder--wrapper {
     @include breakpoint($tablet) {
       flex-grow: 1;
@@ -16,14 +22,24 @@
     }
   }
 
+  #edit-field-latitude-longitude-boundary-geolocation-geocoder-google-places-api,
+  .form-item-geolocation-geocoder-google-places-api {
+    [id^="edit-geolocation-geocoder-google-places-api"] {
+      @include breakpoint($desktop) {
+        max-width: none;
+      }
+    }
+  }
+
   .label--location {
     html[lang="ar"] & {
       @include breakpoint($tablet) {
-        width: auto;
+        width: 45%;
       }
 
       @include breakpoint($desktop) {
         margin-right: rem(32);
+        width: auto;
       }
     }
   }
@@ -66,6 +82,15 @@
           #{$left}: rem(3);
           padding-#{$left}: 0;
         }
+      }
+    }
+  }
+
+  @include breakpoint($desktop) {
+    .individual--store {
+      .view-content {
+        padding-#{$left}: 0;
+        padding-#{$right}: 1%;
       }
     }
   }

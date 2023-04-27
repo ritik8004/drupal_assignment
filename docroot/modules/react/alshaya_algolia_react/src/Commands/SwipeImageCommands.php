@@ -56,15 +56,15 @@ class SwipeImageCommands extends DrushCommands {
    *   Enable the Swipe image feature in PLP/SRP.
    */
   public function enable() {
-    // Get enable_swipe_image_mobile.
-    $swipe_image_settings = $this->configFactory->get('alshaya_algolia_react.swipe_image');
+    // Get image_thumb_gallery.
+    $check_enable_feature = $this->configFactory->get('alshaya_acm_product.display_settings');
 
-    // Enabled the swipe image features.
-    if (!$swipe_image_settings->get('enable_swipe_image_mobile')) {
+    // Check this feature enable.
+    if (!$check_enable_feature->get('image_thumb_gallery')) {
       // Set Swipe Image config.
       $configSwipeImage = $this->configFactory->getEditable('alshaya_algolia_react.swipe_image');
       $configSwipeImage->set('enable_swipe_image_mobile', TRUE);
-      $configSwipeImage->set('slide_effect_fade', 'fade');
+      $configSwipeImage->set('slide_effect', 'fade');
       $configSwipeImage->save();
 
       // Set Display Setting config.
@@ -94,15 +94,15 @@ class SwipeImageCommands extends DrushCommands {
    *   Disable the Swipe image feature in PLP/SRP.
    */
   public function disable() {
-    // Get enable_swipe_image_mobile.
-    $swipe_image_settings = $this->configFactory->get('alshaya_algolia_react.swipe_image');
+    // Get image_thumb_gallery.
+    $check_enable_feature = $this->configFactory->get('alshaya_acm_product.display_settings');
 
-    // Disabled the swipe image features.
-    if ($swipe_image_settings->get('enable_swipe_image_mobile')) {
+    // Check this feature disable.
+    if ($check_enable_feature->get('image_thumb_gallery')) {
       // Set Swipe Image config.
       $configSwipeImage = $this->configFactory->getEditable('alshaya_algolia_react.swipe_image');
       $configSwipeImage->set('enable_swipe_image_mobile', FALSE);
-      $configSwipeImage->set('slide_effect_fade', 'slide');
+      $configSwipeImage->set('slide_effect', 'slide');
       $configSwipeImage->save();
 
       // Set Display Setting config.

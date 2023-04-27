@@ -53,3 +53,11 @@ aura_backend:
     dist/aura_backend.bundle.js: {}
   dependencies:
    - alshaya_spc/cart_utilities
+
+aura_order_confirmation:
+  version: 1.x
+  js:
+    js/alshaya_aura_react.order_confirmation.js: {}
+  dependencies:
+    - core/drupal
+    - alshaya_seo_transac/gtm_aura

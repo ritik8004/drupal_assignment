@@ -1,0 +1,11 @@
+@include breakpoint($tablet) {
+  .path--store-finder {
+    .form--inline {
+      .current-location {
+        html[lang="en"] & {
+          width: 11.5%;
+        }
+      }
+    }
+  }
+}
