@@ -64,6 +64,12 @@
         });
       });
 
+      // Push product size guide click event to GTM.
+      // For the products which have size guide available.
+      $('.size-guide-link').once('product-size-guide-click').on('click', function () {
+        Drupal.alshayaSeoGtmPushSizeGuideEvents('open');
+      });
+
       // Push product color click event to GTM.
       // For default pdp layout only.
       $(document).once('product-color-click').on('click', '.form-item-configurables-color .select2Option ul a', function () {

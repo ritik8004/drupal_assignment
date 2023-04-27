@@ -1332,6 +1332,20 @@
     };
 
   /**
+   * Helper function to push sizeguide events to GTM.
+   *
+   * @param eventAction
+   */
+  Drupal.alshayaSeoGtmPushSizeGuideEvents = function (eventAction) {
+    var data = {
+      event: 'sizeguide',
+      eventCategory: 'sizeGuide',
+      eventAction
+    };
+    dataLayer.push(data)
+  };
+
+  /**
    * Helper function to push lead events.
    *
    * @param leadType
