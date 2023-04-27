@@ -27,7 +27,6 @@ import { isAddToBagHoverEnabled } from '../../../../../js/utilities/addToBagHelp
 import ArticleSwatches from '../article_swatch';
 import SliderSwatch from '../slider-swatch';
 import { getShoeAiStatus } from '../../../../../js/utilities/util';
-import { isMobile } from '../../../../../js/utilities/display';
 
 const Teaser = ({
   hit, gtmContainer = null, pageType, extraInfo, indexName,
@@ -52,15 +51,24 @@ const Teaser = ({
   const isDesktop = window.innerWidth > 1024;
   const { currentLanguage } = drupalSettings.path;
   const { showBrandName } = drupalSettings.reactTeaserView;
+  const touchEnable = drupalSettings.reactTeaserView.swipe_image.enable_swipe_image_mobile;
   const activateShoeAI = getShoeAiStatus();
+
+  // Touch events for Mobile devices.
   const onTouchStart = (e) => {
-    setTouchEnd(null);
-    // Calculate the cordinates of the touch event.
-    setTouchStart(e.targetTouches[0].clientX);
+    if (!isDesktop) {
+      setTouchEnd(null);
+      // Calculate the cordinates of the touch event.
+      setTouchStart(e.targetTouches[0].clientX);
+    }
   };
 
   // Calculate the cordinates of the touch event.
-  const onTouchMove = (e) => setTouchEnd(e.targetTouches[0].clientX);
+  const onTouchMove = (e) => {
+    if (!isDesktop) {
+      setTouchEnd(e.targetTouches[0].clientX);
+    }
+  };
 
   if (drupalSettings.plp_attributes
     && drupalSettings.plp_attributes.length > 0
@@ -261,8 +269,8 @@ const Teaser = ({
             slider.slickPause();
           }
         }}
-        onTouchStart={onTouchStart}
-        onTouchMove={onTouchMove}
+        onTouchStart={touchEnable ? onTouchStart : null}
+        onTouchMove={touchEnable ? onTouchMove : null}
         onTouchEnd={() => {
           if (!touchStart || !touchEnd) return;
           const distance = touchStart - touchEnd;
@@ -271,7 +279,7 @@ const Teaser = ({
           const isLeftSwipe = distance > 40;
           const isRightSwipe = distance < -40;
           if (isLeftSwipe || isRightSwipe) {
-            if (isMobile()) {
+            if (!isDesktop) {
               setInitiateSlider(true);
               if (slider !== false) {
                 slider.slickGoTo(1, true);

@@ -4,7 +4,7 @@ import ImageElement from '../imageHelper/ImageElement';
 import { hasValue } from '../../../../../../js/utilities/conditionsUtility';
 import Lozenges
   from '../../../../common/components/lozenges';
-import { isMobile, isDesktop } from '../../../../../../js/utilities/display';
+import { isDesktop } from '../../../../../../js/utilities/display';
 
 const SliderElement = ({
   src, title,
@@ -51,10 +51,10 @@ const swipeSettings = {
 };
 
 // Slider configurations based on device.
-const slideSettings = isMobile() ? swipeSettings : sliderHoverSettings;
+const slideSettings = !isDesktop() ? swipeSettings : sliderHoverSettings;
 let slickClassName = 'search-lightSlider';
 
-if (isMobile()) {
+if (!isDesktop()) {
   slickClassName += ' search-lightSliderSwipe';
 }
 
@@ -104,7 +104,9 @@ class SearchGallery extends React.PureComponent {
     });
 
     // Set no Of Slides in thumbnails object.
-    thumbnails = thumbnails.slice(0, noOfSlidesToShowDesktop);
+    if (isDesktop()) {
+      thumbnails = thumbnails.slice(0, noOfSlidesToShowDesktop);
+    }
     const sliderStatus = thumbnails.length > sliderSettings.slidesToShow;
     let classWrapper = 'img-wrapper';
     if (sliderStatus) {
