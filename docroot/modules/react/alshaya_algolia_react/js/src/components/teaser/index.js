@@ -38,6 +38,8 @@ const Teaser = ({
   const { showReviewsRating } = drupalSettings.algoliaSearch;
   const collectionLabel = [];
   const [initSlider, setInitiateSlider] = useState(false);
+  const [touchStart, setTouchStart] = useState(null);
+  const [touchEnd, setTouchEnd] = useState(null);
   const [slider, setSlider] = useState(false);
   const [sku, setSkuCode] = useState(hit.sku);
   const [media, setSkuMedia] = useState(hit.media);
@@ -49,7 +51,43 @@ const Teaser = ({
   const isDesktop = window.innerWidth > 1024;
   const { currentLanguage } = drupalSettings.path;
   const { showBrandName } = drupalSettings.reactTeaserView;
+  const touchEnable = drupalSettings.reactTeaserView.swipe_image.enable_swipe_image_mobile;
   const activateShoeAI = getShoeAiStatus();
+
+  // Touch events for Mobile devices.
+  const onTouchStart = (e) => {
+    if (!isDesktop) {
+      setTouchEnd(null);
+      // Calculate the cordinates of the touch event.
+      setTouchStart(e.targetTouches[0].clientX);
+    }
+  };
+
+  // Calculate the cordinates of the touch event.
+  const onTouchMove = (e) => {
+    if (!isDesktop) {
+      setTouchEnd(e.targetTouches[0].clientX);
+    }
+  };
+
+  const onTouchEnd = () => {
+    if (!touchStart || !touchEnd) return;
+    const distance = touchStart - touchEnd;
+    // The minimum swipe distance between touchStart and touchEnd to be detected as
+    // a left or right swipe.
+    const isLeftSwipe = distance > 40;
+    const isRightSwipe = distance < -40;
+    if (isLeftSwipe || isRightSwipe) {
+      if (!isDesktop) {
+        setInitiateSlider(true);
+        if (slider !== false) {
+          slider.slickGoTo(1, true);
+          slider.slickPlay();
+        }
+      }
+    }
+  };
+
   if (drupalSettings.plp_attributes
     && drupalSettings.plp_attributes.length > 0
     && hasValue(hit.collection_labels)
@@ -249,6 +287,9 @@ const Teaser = ({
             slider.slickPause();
           }
         }}
+        onTouchStart={touchEnable ? onTouchStart : null}
+        onTouchMove={touchEnable ? onTouchMove : null}
+        onTouchEnd={onTouchEnd}
       >
         <div className="field field--name-field-skus field--type-sku field--label-hidden field__items">
           <a
