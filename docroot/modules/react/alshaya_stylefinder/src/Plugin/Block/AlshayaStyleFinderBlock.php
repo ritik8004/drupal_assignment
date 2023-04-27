@@ -267,8 +267,9 @@ class AlshayaStyleFinderBlock extends BlockBase implements ContainerFactoryPlugi
         }
       }
 
-      $uri = $answer_node->get('field_quiz_see_more_url')->first()->getValue();
-      $answer_details['see_more_reference'] = $uri['uri'] ? str_replace('internal:/', '', $uri['uri']) : '';
+      $uri = $answer_node->get('field_quiz_see_more_url')->getValue();
+      $uri = !empty($uri) ? $uri[0]['uri'] : '';
+      $answer_details['see_more_reference'] = $uri ? str_replace('internal:/', '', $uri) : '';
 
       $answer_details['title'] = $answer_node->title->value;
       $answer_details['description'] = strip_tags($answer_node->field_answer_summary->value) ?? NULL;
