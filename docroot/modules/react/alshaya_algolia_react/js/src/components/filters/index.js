@@ -33,20 +33,228 @@ const Filters = ({ indexName, pageType, ...props }) => {
   };
 
   /**
+   * Check overrides and update default context data for facet config.
+   *
+   * @param data
+   *   userData with context from algolia result.
+   * @param facetsConfig
+   *   Facet config from algolia result.
+   *
+   * @returns {*}
+   *   Updated userData with overrides.
+   */
+  const overrideFilterConfig = (data, facetsConfig) => {
+    const userData = data;
+    Object.entries(facetsConfig).forEach(([key, value]) => {
+      if (hasValue(userData.facets_config[key])) {
+        if (hasValue(value.label)) {
+          userData.facets_config[key].label = value.label;
+        }
+
+        if (hasValue(value.widget)) {
+          userData.facets_config[key].widget = value.widget;
+        }
+
+        if (hasValue(value.slug)) {
+          userData.facets_config[key].slug = value.slug;
+        }
+
+        if (hasValue(value.facets_value)) {
+          userData.facets_config[key].facets_value = value.facets_value;
+        }
+      }
+    });
+
+    return userData;
+  };
+
+  /**
+   * Check overrides and update default context data for sort config.
+   *
+   * @param data
+   *   userData with context from algolia result.
+   * @param sortdata
+   *   Sort config from algolia result.
+   * @returns {*}
+   *   Updated userData with overrides.
+   */
+  const overrideSortByConfig = (data, sortdata) => {
+    const userData = data;
+    const { sorting_label: Sortlabel } = sortdata;
+    if (hasValue(Sortlabel)) {
+      Object.entries(Sortlabel).forEach(([key, value]) => {
+        if (hasValue(userData.sorting_label[key])) {
+          userData.sorting_label[key] = value;
+        }
+      });
+    }
+    const { sorting_options: sortOptions } = sortdata;
+    const { sorting_options_config: sortOptionsConfig } = sortdata;
+    if (hasValue(sortOptions)) {
+      if (hasValue(userData.sorting_options)) {
+        userData.sorting_options = sortOptions;
+      }
+      sortOptions.forEach((option) => {
+        if (hasValue(sortOptionsConfig[option])) {
+          userData.sorting_options_config[option] = sortOptionsConfig[option];
+        }
+      });
+    }
+
+    return userData;
+  };
+
+  /**
+   * Fetches userdata from algolia result and process it for facets
+   * override by contexts eg: women_shirt.
+   *
+   * @param {array} data
+   *   userData array from algolia search result.
+   *
+   * @returns {Object}
+   *   userData with facets override by context.
+   */
+  const processUserDataWithOverrides = (data) => {
+    let userData = {};
+    const { ruleContexts } = props;
+
+    if (hasValue(ruleContexts)) {
+      // Add default context to the list of contexts.
+      ruleContexts.unshift('default');
+      // Sort userData array by context.
+      data.sort((a, b) => ruleContexts.indexOf(a.context) - ruleContexts.indexOf(b.context));
+    }
+
+    data.forEach((filterData) => {
+      if (hasValue(filterData) && hasValue(filterData.context) && filterData.context === 'default') {
+        // Collect default context userData in the first iteration.
+        userData = { ...filterData };
+      } else {
+        // The data is available for other contexts then collect the data and
+        // override the default context data.
+        const { facets_config: facetsConfig } = filterData;
+        if (hasValue(facetsConfig)) {
+          // Overrides filter configuration from context data configured in
+          // algolia.
+          userData = overrideFilterConfig(userData, facetsConfig);
+        }
+        // Overrides sort configuration from context data configured in
+        // algolia.
+        userData = overrideSortByConfig(userData, filterData);
+      }
+    });
+
+    return userData;
+  };
+
+  /**
+   * Returns sortby configuration in the required format from userData.
+   *
+   * @param sortOptions
+   *   Sort options like default, title_asc, final_price_desc etc.
+   * @param sortOptionsConfig
+   *   Sort options config like index, label.
+   * @param langcode
+   *   Language code to select english or arabic index, label.
+   *
+   * @returns {[]}
+   *   Array of items for sortby facet.
+   */
+  const getSortByOptions = (sortOptions, sortOptionsConfig, langcode) => {
+    const items = [];
+    sortOptions.forEach((option) => {
+      const item = {
+        value: sortOptionsConfig[option].index[langcode],
+        label: sortOptionsConfig[option].label[langcode],
+        gtm_key: option,
+      };
+
+      items.push(item);
+    });
+
+    return items;
+  };
+
+  /**
    * Builds Facets from userData received from algolia query response.
    *
    * @param {object} data
    *   Facets userData from algolia response.
    */
   const buildFacets = (data) => {
+    // Check if algolia response userData has value.
     if (!hasValue(data)) {
       return;
     }
-    const { filters } = data[0];
-    setFacets(Object.values(filters));
+
+    // Initialize facets array to get facets from userData.
+    const facetsArray = [];
+    // Initialize indentifier prefix.
+    const identifierPrefix = drupalSettings.path.currentLanguage;
+    // Process any override rules in userData.
+    const userData = (pageType !== 'search') ? processUserDataWithOverrides(data) : data.find((item) => item.context === 'default');
+    // Get facets config from userData.
+    const { facets_config: filters } = userData;
+
+    // Loop through the facets config from userData.
+    Object.entries(filters).forEach(([key, value]) => {
+      // Format the filters as required by widget manager.
+      const filter = {
+        label: value.label[identifierPrefix],
+        name: value.label.en, // Used for gtm, hence always english value.
+        widget: {
+          type: value.widget.type,
+        },
+        id: value.slug.replace('_', ''), // Remove underscores to set filter id.
+        alias: value.slug,
+      };
+
+      if (hasValue(value.identifier)) {
+        // Get identifier for facet from userData config if explicitly added
+        // in the userData for eg: field_acq_promotion_label.en.web
+        filter.identifier = value.identifier[identifierPrefix];
+      } else {
+        // If identifier is not given in userData then prepare
+        // from attribute key and langcode eg attr_size.en or attr
+        filter.identifier = (pageType !== 'search') ? `${key}.${identifierPrefix}` : key;
+      }
+
+      if (hasValue(value.widget.config)) {
+        // Get config is present in facet config.
+        filter.widget.config = value.widget.config;
+      }
+
+      if (hasValue(value.facets_values)) {
+        // Get facet values if explicitly set in config for some facets
+        // like attr_delivery_ways.
+        filter.facets_value = value.facets_value;
+      }
+
+      facetsArray.push(filter);
+    });
+
+    const {
+      sorting_label: sortlabel,
+      sorting_options: sortOptions,
+      sorting_options_config: sortOptionsConfig,
+    } = userData;
+
+    const sort = {
+      identifier: 'sort_by',
+      name: sortlabel.en, // Use english label for gtm.
+      label: sortlabel[identifierPrefix],
+      widget: {
+        type: 'sort_by',
+        items: getSortByOptions(sortOptions, sortOptionsConfig, identifierPrefix),
+      },
+    };
+
+    facetsArray.unshift(sort);
+
+    setFacets(facetsArray);
   };
 
-  let facetsList = [];
+  // Set facets config if facet is build from userData.
   let facetsConfig = facets;
 
   if (!isConfigurableFiltersEnabled()) {
@@ -54,6 +262,8 @@ const Filters = ({ indexName, pageType, ...props }) => {
     // Set facet config from drupal settings.
     facetsConfig = getFilters(pageType);
   }
+
+  let facetsList = [];
 
   if (hasValue(facetsConfig)) {
     facetsConfig.forEach((facet) => {

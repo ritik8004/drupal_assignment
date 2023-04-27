@@ -232,6 +232,7 @@ const PlpApp = ({
               limit={drupalSettings.algoliaSearch.topFacetsLimit}
               pageType="listing"
               callback={(callerProps) => callback(callerProps)}
+              ruleContexts={context}
             />
 
             <ConditionalView condition={categoryFieldAttributes.length > 0}>
@@ -264,6 +265,7 @@ const PlpApp = ({
             indexName={indexName}
             pageType="listing"
             callback={(callerProps) => callback(callerProps)}
+            ruleContexts={context}
           />
         )}
       </AllFilters>
