@@ -156,6 +156,12 @@ class MyBenefitsPage extends React.Component {
                 promotionType={promotionType}
               />
             )}
+          {hasValue(myBenefit.benefit_url) && hasValue(benefitTag) && benefitTag === 'I'
+          && (
+            <a className="button-wide learn-more" href={myBenefit.benefit_url}>
+              {Drupal.t('Learn more', {}, { context: 'aura' })}
+            </a>
+          )}
           {/* CTA for competition benefits. */}
           {hasValue(myBenefit.benefit_url) && hasValue(benefitTag) && benefitTag === 'C'
             && (
