@@ -1,0 +1,8 @@
+@include breakpoint($tablet) {
+  .field--name-field-skus .sku-base-form {
+    .sofa-sectional-addtobag-button-wrapper {
+      width: calc(100% - #{rem(102)});
+      margin-#{$left}: rem(32);
+    }
+  }
+}

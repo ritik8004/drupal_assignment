@@ -275,6 +275,27 @@
       }
     }
 
+    .refund-method-wrapper {
+      .refund-method-listing {
+        .egift-card {
+          .radio-sim {
+            display: flex;
+
+            .egift-card-detail {
+              padding-#{$left}: rem(7);
+              padding-top: rem(4);
+            }
+          }
+        }
+      }
+
+      .hybrid-payment {
+        .method-wrapper {
+          margin-bottom: rem(22);
+        }
+      }
+    }
+
     .refund-method-wrapper,
     .refund-amount-wrapper,
     .return-collection-wrapper,
@@ -329,7 +350,7 @@
       .refund-method-listing {
         @include breakpoint($only-mobile) {
           padding-top: rem(12);
-          padding-#{$left}: rem(31);
+          padding-#{$left}: rem(0);
         }
 
         .hybrid-method-payment-msg {
@@ -358,6 +379,8 @@
       }
 
       .email-text {
+        padding-top: rem(6);
+
         @include breakpoint($only-mobile) {
           padding-#{$left}: rem(0);
         }
@@ -381,18 +404,25 @@
         }
 
         .card-icon {
-          width: rem(35);
-          height: rem(22);
-
           svg {
             max-width: 100%;
             max-height: 100%;
           }
+
+          .spc-card-type {
+            margin-#{$right}: rem(8);
+            top: rem(3);
+            position: relative;
+          }
+
+          .cashondelivery {
+            margin-#{$right}: rem(0);
+          }
         }
 
         .card-detail {
-          margin-#{$left}: rem(8);
           font-size: rem(14);
+          padding-top: rem(1);
 
           .bold-text {
             font-family: $alshaya-thin;
@@ -403,8 +433,8 @@
       .refund-message {
         font-size: 0.75rem;
         line-height: 1.25rem;
-        margin-top: rem(5);
-        margin-bottom: rem(28);
+        margin-top: rem(8);
+        margin-bottom: rem(20);
         color: $online-return-refund-grey-txt;
       }
     }
@@ -574,12 +604,14 @@
     ~ .radio-sim::before {
       content: "";
       position: absolute;
-      #{$left}: rem(-50);
+      #{$left}: rem(-20);
       text-align: center;
       font-size: rem(60);
     }
 
     ~ .radio-sim {
+      padding-#{$left}: rem(30);
+
       @include icon(radio-empty, before) {
         color: $online-return-radio-bg;
       }
@@ -598,10 +630,14 @@
       align-items: center;
 
       .egift-card-detail {
-        padding-#{$left}: rem(6);
+        padding-#{$left}: rem(7);
         padding-bottom: rem(4);
         padding-top: rem(4);
       }
     }
+  }
+
+  .radio-sim {
+    padding-#{$left}: rem(0);
   }
 }

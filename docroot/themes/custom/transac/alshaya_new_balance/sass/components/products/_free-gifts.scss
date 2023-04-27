@@ -1,0 +1,58 @@
+.nodetype--acq_product {
+  .free-gift-promotions {
+    margin-#{$left}: 0;
+  }
+}
+
+.free-gift-detail-modal.ui-dialog-content {
+  form.select-free-gift {
+    .form-type-configurable-select-group {
+      .group-wrapper {
+        .group {
+          select.form-select {
+            height: rem(53);
+          }
+
+          &::after {
+            top: 50%;
+            transform: translateY(-50%);
+          }
+        }
+
+        .select2Option {
+          .select-buttons {
+            li {
+              a {
+                width: rem(84);
+                height: rem(44);
+                line-height: rem(16);
+              }
+            }
+          }
+        }
+      }
+    }
+
+    .configurable-select {
+      select.form-select {
+        height: rem(53);
+      }
+
+      &::after {
+        display: none;
+      }
+    }
+  }
+}
+
+.free-gift-promo-list-overlay,
+.free-gifts-modal-overlay {
+  .slick-prev,
+  .slick-next {
+    &::before {
+      html[lang="ar"] & {
+        transform: rotate(360deg);
+      }
+    }
+  }
+}

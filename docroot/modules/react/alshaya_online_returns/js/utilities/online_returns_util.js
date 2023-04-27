@@ -251,6 +251,30 @@ function getPrintLabelStatus(returnData) {
   return false;
 }
 
+/**
+ * Helper function to check if order contains big ticket items or not.
+ */
+function isBigTicketOrder(orderId) {
+  let bigTicketOrder = false;
+  if (hasValue(drupalSettings.onlineReturns)
+    && hasValue(drupalSettings.onlineReturns.recentOrders[orderId])
+    && hasValue(drupalSettings.onlineReturns.recentOrders[orderId].isBigTicketOrder)) {
+    bigTicketOrder = drupalSettings.onlineReturns.recentOrders[orderId].isBigTicketOrder;
+  }
+  return bigTicketOrder;
+}
+
+/**
+ * Utility function to get customer service number.
+ */
+function getCustomerServiceNumber() {
+  if (hasValue(drupalSettings.onlineReturns)
+    && hasValue(drupalSettings.onlineReturns.customerServiceNumber)) {
+    return drupalSettings.onlineReturns.customerServiceNumber;
+  }
+  return '';
+}
+
 export {
   isReturnEligible,
   getReturnExpiration,
@@ -270,4 +294,6 @@ export {
   getReturnWindowEligibleDateMessage,
   getPrintLabelStatus,
   getCancelButtonStatus,
+  isBigTicketOrder,
+  getCustomerServiceNumber,
 };

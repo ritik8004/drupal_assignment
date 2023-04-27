@@ -16,6 +16,7 @@ use Drupal\block\Entity\Block;
  * Update algolia react with default value for render_single_result_facets.
  *
  * And also for exclude_render_single_result_facets.
+ * Add Article Pattern and License Item field for index and facets.
  */
 function alshaya_hm_update_9406() {
   $config = \Drupal::configFactory()->getEditable('alshaya_algolia_react.settings');
@@ -24,7 +25,33 @@ function alshaya_hm_update_9406() {
     $config->set('exclude_render_single_result_facets', 'final_price,attr_bv_rating,attr_color,field_acq_promotion_label');
     $config->save();
   }
+  // Add string translations.
+  $strings = [
+    'Pattern' => [
+      'en' => 'Pattern',
+      'ar' => 'النمط',
+    ],
+    'License Item' => [
+      'en' => 'License Item',
+      'ar' => 'الطبعة الشخصيات',
+    ],
+  ];
+  alshaya_i18n_save_translations($strings);
+  $manager = \Drupal::service('alshaya_config.manager');
+  $manager->updateConfigs(
+    ['alshaya_acm_product.sku_base_fields'],
+    'alshaya_acm_product'
+  );
 
+  $sku_fields_manager = \Drupal::service('acq_sku.fields_manager');
+  $sku_fields_manager->updateFieldMetaInfo('article_pattern', ['facet' => 1]);
+  $sku_fields_manager->updateFieldMetaInfo('article_license_item', ['facet' => 1]);
+  $sku_fields_manager->updateFieldMetaInfo('style', ['facet' => 0]);
+
+  // Add 'article_pattern and article_license_item' facet in Drupal and Algolia.
+  /** @var \Drupal\acq_sku\SKUFieldsManager $fieldsManager */
+  $fieldsManager = \Drupal::service('acq_sku.fields_manager');
+  $fieldsManager->resetBaseFields();
 }
 
 /**

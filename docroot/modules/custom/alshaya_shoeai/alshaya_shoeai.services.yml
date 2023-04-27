@@ -4,3 +4,5 @@ services:
     arguments:
      - '@config.factory'
      - '@current_user'
+     - '@path.current'
+     - '@path_alias.manager'

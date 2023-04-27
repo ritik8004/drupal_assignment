@@ -7,6 +7,7 @@
 
 use Drupal\acq_commerce\SKUInterface;
 use Drupal\Core\Cache\Cache;
+use Drupal\acq_sku\Entity\SKU;
 
 /**
  * Implements hook_preprocess_node().
@@ -59,6 +60,10 @@ function alshaya_online_returns_page_attachments_alter(array &$page) {
     $onlineReturnsHelper->getNotSupportedEgiftMethodsForOnlineReturns()
       ? array_keys(array_filter($onlineReturnsHelper->getNotSupportedEgiftMethodsForOnlineReturns(), fn($method) => $method !== '0'))
       : [];
+  // Add egift card refund text in drupalSettings.
+  $page['#attached']['drupalSettings']['egiftCardRefund']['egiftCardRefundText'] = $onlineReturnsHelper->getEgiftRefundText();
+  // Add egift card icon in drupalSettings.
+  $page['#attached']['drupalSettings']['egiftCardRefund']['egiftCardIcon'] = $onlineReturnsHelper->getEgiftCardIcon();
 }
 
 /**
@@ -119,6 +124,7 @@ function alshaya_online_returns_alshaya_acm_customer_recent_order_build_alter(ar
 
   foreach ($build['recent_order'] as $key => $order) {
     $build['recent_order'][$key]['#order']['online_returns_status'] = TRUE;
+    $isBigTicketOrder = FALSE;
     // Loop over all the ordered items for each order.
     if (isset($build['recent_order'][$key]['#order']['items'])
       && is_array($build['recent_order'][$key]['#order']['items'])) {
@@ -130,6 +136,16 @@ function alshaya_online_returns_alshaya_acm_customer_recent_order_build_alter(ar
         if ($product['refunded'] == $product['ordered']) {
           $items_count--;
         }
+
+        // Check if the product is big ticket or not.
+        // Proceed only if we haven't find any big ticket item to avoid
+        // unnecessary iterations.
+        if (!$isBigTicketOrder) {
+          $sku = SKU::loadFromSku($product['sku']);
+          if ($sku instanceof SKUInterface) {
+            $isBigTicketOrder = $onlineReturnsHelper->isSkuBigTicket($sku);
+          }
+        }
       }
       // Set online returns status based on the count of all products available
       // for return.
@@ -137,7 +153,10 @@ function alshaya_online_returns_alshaya_acm_customer_recent_order_build_alter(ar
     }
 
     $build['#attached']['drupalSettings']['onlineReturns']['recentOrders'][$order['#order']['id']] = $onlineReturnsHelper->prepareOrderData($order['#order']);
+    $build['#attached']['drupalSettings']['onlineReturns']['recentOrders'][$order['#order']['id']]['isBigTicketOrder'] = $isBigTicketOrder;
   }
+  // Add customer service number for online returns.
+  $build['#attached']['drupalSettings']['onlineReturns']['customerServiceNumber'] = \Drupal::config('alshaya_online_returns.return_confirmation')->get('customer_service_number') ?? '';
 }
 
 /**
@@ -187,7 +206,21 @@ function alshaya_online_returns_alshaya_acm_customer_orders_details_build_alter(
   $build['#attached']['drupalSettings']['onlineReturns']['return_config'] = \Drupal::service('alshaya_online_returns.online_returns_api_helper')->getLanguageBasedReturnsConfig(
     \Drupal::languageManager()->getCurrentLanguage()->getId(),
   );
-  $build['#attached']['drupalSettings']['onlineReturns']['refunded_products'] = $onlineReturnsHelper->prepareProductsData($build["#refunded_products"]);
+
+  // Add customer service number for online returns.
+  $build['#attached']['drupalSettings']['onlineReturns']['customerServiceNumber'] = \Drupal::config('alshaya_online_returns.return_confirmation')->get('customer_service_number') ?? '';
+
+  $refunded_products = $onlineReturnsHelper->prepareProductsData($build["#refunded_products"]);
+  $build['#attached']['drupalSettings']['onlineReturns']['refunded_products'] = $refunded_products;
+
+  // Add 'isBigTicketOrder' variable, TRUE if order contains atleast one
+  // big ticket item otherwise don't add this variable.
+  foreach ($refunded_products ?? [] as $product) {
+    if (isset($product['is_big_ticket']) && $product['is_big_ticket']) {
+      $build['#attached']['drupalSettings']['onlineReturns']['isBigTicketOrder'] = TRUE;
+      break;
+    }
+  }
 
   // Attach the theming library.
   $build['#attached']['library'][] = 'alshaya_white_label/online-returns';

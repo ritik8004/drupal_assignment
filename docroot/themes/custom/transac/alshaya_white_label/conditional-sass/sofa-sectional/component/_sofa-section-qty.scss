@@ -1,4 +1,4 @@
-.alshaya-select-wrapper {
+.sofa-sectional-form .alshaya-select-wrapper {
   position: relative;
 
   @include breakpoint($tablet) {
@@ -177,7 +177,7 @@
     }
   }
 
-  .alshaya-select-wrapper {
+  &.sofa-sectional-form .alshaya-select-wrapper {
     display: inline-block;
     vertical-align: middle;
     margin: 0;

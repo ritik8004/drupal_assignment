@@ -17,7 +17,6 @@
       margin: rem(3);
       margin-#{$right}: rem(8);
       flex-shrink: 0;
-      border-radius: 50%;
       border: rem(1) solid $swatch-border;
 
       &.active::before,
@@ -31,7 +30,6 @@
         top: rem(-4);
         #{$left}: rem(-4);
         z-index: 1;
-        border-radius: 50%;
       }
 
       &.disabled {
@@ -55,6 +53,17 @@
       }
     }
 
+    &.swatch-circle {
+      .article-swatch {
+        border-radius: 50%;
+
+        &.active::before,
+        &:hover::before {
+          border-radius: 50%;
+        }
+      }
+    }
+
     // Article Swatch slider related styles.
     &.swatch-slider {
       @include swatchSliderMaxWidth;
@@ -69,6 +78,11 @@
 
       .slick-list {
         flex-grow: 1;
+
+        // Compenesating for the absence of next arrow when slide items are less than swatch limit.
+        &:only-child {
+          margin-#{$right}: rem(37);
+        }
       }
 
       .slick-track {

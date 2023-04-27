@@ -771,6 +771,24 @@ $full_width_padding_desktop_wide: rem(40); /* viewport width >= 1680px */
   }
 }
 
+// Common styles for fullwidth sofa-sectional PDP.
+@mixin fullwidth-sofasectional {
+  @include breakpoint($desktop) {
+    body.nodetype--acq_product:not(.magazine-layout):not(.magazine-layout-v2) {
+      .basic-details-wrapper {
+        .field--name-field-skus {
+          .sku-base-form {
+            button[type="submit"].sofa-sectional-addtobag-button {
+              width: 100%;
+              margin-#{$left}: 0;
+            }
+          }
+        }
+      }
+    }
+  }
+}
+
 // Listing pages product hover images.
 @mixin alshayaSearchHoverImage {
   .alshaya_search_gallery {

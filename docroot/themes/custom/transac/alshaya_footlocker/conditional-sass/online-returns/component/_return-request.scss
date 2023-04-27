@@ -128,20 +128,6 @@
     .return-address-wrapper {
       padding-top: rem(20);
 
-      .refund-method-listing {
-        @include breakpoint($only-mobile) {
-          padding-#{$left}: rem(31);
-        }
-      }
-
-      .method-wrapper {
-        margin-bottom: rem(0);
-
-        .card-detail {
-          margin-#{$left}: rem(11);
-        }
-      }
-
       @include breakpoint($desktop) {
         padding-#{$left}: 0;
       }
@@ -151,7 +137,6 @@
       }
 
       .refund-method-title {
-        font-size: rem(16);
         line-height: 1.22;
         font-weight: normal;
         margin-bottom: rem(15);
@@ -168,11 +153,6 @@
         .bold-text {
           font-family: $alshaya-thin;
         }
-      }
-
-      .refund-message {
-        margin-top: rem(2);
-        margin-bottom: rem(18);
       }
 
       .refund-amount-title {
@@ -256,47 +236,6 @@
 
       @include breakpoint($tablet) {
         text-align: $left;
-      }
-    }
-  }
-}
-
-// radio button for Returns and Refunds
-.method-wrapper {
-  position: relative;
-
-  input[type="radio"] {
-    display: none;
-
-    ~ .radio-sim::before {
-      content: "";
-      position: absolute;
-      #{$left}: rem(-50);
-      text-align: center;
-      font-size: rem(60);
-    }
-
-    ~ .radio-sim {
-      @include icon(radio-empty, before) {
-        color: $online-return-radio-bg;
-      }
-    }
-
-    &:checked {
-      ~ .radio-sim {
-        @include icon(radio-filled, before) {
-          color: $online-return-checked-radio-bg;
-        }
-      }
-    }
-
-    ~ .radio-label {
-      display: inline-flex;
-      align-items: center;
-
-      .egift-card-detail {
-        padding-#{$left}: rem(6);
-        padding-bottom: rem(4);
       }
     }
   }

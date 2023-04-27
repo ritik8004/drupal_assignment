@@ -173,6 +173,17 @@
       cartData.deliveryType = geData.details.ShippingMethodType;
       cartData.deliveryCity = geData.details.CustomerDetails.ShippingAddress.ShippingCity;
       cartData.deliveryArea = geData.details.CustomerDetails.ShippingAddress.ShippingCityRegion;
+      // Verify if the deliveryCity & deliveryArea is empty, if Yes then check
+      // if we have value in custom `xbDeliveryInfo`. If Yes then use from it.
+      if (!Drupal.hasValue(cartData.deliveryCity) && Drupal.hasValue(geData.xbDeliveryInfo)
+        && Drupal.hasValue(geData.xbDeliveryInfo.deliveryCity)) {
+        cartData.deliveryCity = geData.xbDeliveryInfo.deliveryCity;
+      }
+
+      if (!Drupal.hasValue(cartData.deliveryArea) && Drupal.hasValue(geData.xbDeliveryInfo)
+        && Drupal.hasValue(geData.xbDeliveryInfo.deliveryRegion)) {
+        cartData.deliveryArea = geData.xbDeliveryInfo.deliveryRegion;
+      }
     }
     if (step == 3 || step == 2) {
       cartData.cartTotalValue = geData.details.OrderPrices.CustomerTransactionInMerchantCurrency.CustomerTotalProductsPriceInMerchantCurrency;

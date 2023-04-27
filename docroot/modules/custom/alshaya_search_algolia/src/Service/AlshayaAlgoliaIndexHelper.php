@@ -501,7 +501,7 @@ class AlshayaAlgoliaIndexHelper {
     $object['is_new'] = $sku->get('attr_is_new')->getString();
     $object['is_buyable'] = (bool) $sku->get('attr_is_buyable')->getString();
     // Used for new arrivals.
-    $object['new_arrivals'] = $sku->get('created')->getString();
+    $object['new_arrivals'] = (int) $sku->get('created')->getString();
     $this->updatePrettyPathAlias($object);
     unset($object['field_category_aliases']);
 

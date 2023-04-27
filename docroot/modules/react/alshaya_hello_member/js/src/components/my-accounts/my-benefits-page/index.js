@@ -156,12 +156,12 @@ class MyBenefitsPage extends React.Component {
                 promotionType={promotionType}
               />
             )}
-          {hasValue(myBenefit.benefit_url) && hasValue(benefitTag) && hasValue(externalBenefitText)
-            && (
-              <a target="_blank" rel="noopener noreferrer" className="qr-code-button external-btn" href={myBenefit.benefit_url}>
-                { externalBenefitText }
-              </a>
-            )}
+          {hasValue(myBenefit.benefit_url) && hasValue(benefitTag) && benefitTag === 'I'
+          && (
+            <a className="button-wide learn-more" href={myBenefit.benefit_url}>
+              {Drupal.t('Learn more', {}, { context: 'aura' })}
+            </a>
+          )}
           {/* CTA for competition benefits. */}
           {hasValue(myBenefit.benefit_url) && hasValue(benefitTag) && benefitTag === 'C'
             && (
@@ -169,14 +169,10 @@ class MyBenefitsPage extends React.Component {
                 {Drupal.t('Enter now', {}, { context: 'hello_member' })}
               </a>
             )}
-          {hasValue(myBenefit.benefit_url) && hasValue(benefitTag) && benefitTag === 'I'
+          {hasValue(myBenefit.benefit_url) && hasValue(benefitTag) && hasValue(externalBenefitText)
             && (
-              <a className="button-wide learn-more" href={myBenefit.benefit_url}>
-                {Drupal.t(
-                  'Learn more',
-                  {},
-                  { context: 'aura' },
-                )}
+              <a target="_blank" rel="noopener noreferrer" className="qr-code-button external-btn" href={myBenefit.benefit_url}>
+                { externalBenefitText }
               </a>
             )}
         </div>

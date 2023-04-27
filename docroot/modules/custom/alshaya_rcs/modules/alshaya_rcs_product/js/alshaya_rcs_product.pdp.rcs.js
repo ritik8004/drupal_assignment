@@ -37,7 +37,7 @@ window.commerceBackend = window.commerceBackend || {};
 
     var context = window.commerceBackend.getProductContext(productData);
     // For product modal, we always use classic gallery.
-    if (context === 'modal') {
+    if (context === 'modal' || context === 'free_gift') {
       galleryType = 'classic-gallery';
     }
 
@@ -118,7 +118,8 @@ window.commerceBackend = window.commerceBackend || {};
     var sku = node.attr('data-sku');
     const productData = window.commerceBackend.getProductData(sku, null, false);
     if (productData.type_id === 'configurable') {
-      window.commerceBackend.updateGallery(node, productData.layout, '', sku, productData.variants[0].product.sku);
+      var variantSku = Drupal.hasValue(productData.firstChild) ? productData.firstChild : productData.variants[0].product.sku;
+      window.commerceBackend.updateGallery(node, productData.layout, '', sku, variantSku);
     }
     else {
       window.commerceBackend.updateGallery(node, productData.layout, '', sku);
@@ -144,6 +145,24 @@ window.commerceBackend = window.commerceBackend || {};
     var mainProduct = e.detail.entity;
     if (Drupal.hasValue(window.commerceBackend.getProductsInStyle)) {
       mainProduct = await window.commerceBackend.getProductsInStyle(mainProduct);
+    }
+    // Exclude Free Gift variants in add to cart form in PDP.
+    if (mainProduct.type_id === 'configurable' && Drupal.hasValue(window.commerceBackend.isFreeGiftSku)) {
+      var freeGiftExcludedVariantList = [];
+      mainProduct.variants.forEach(function excludeFreeGifts(variant) {
+        if (Drupal.hasValue(window.commerceBackend.isFreeGiftSku) && !window.commerceBackend.isFreeGiftSku(variant.product)) {
+          freeGiftExcludedVariantList.push(variant);
+        }
+      });
+      if (freeGiftExcludedVariantList.length) {
+        mainProduct.variants = freeGiftExcludedVariantList;
+      }
+      else {
+        // If all variants are free gifts, redirect to 404.
+        var rcs404 = `${drupalSettings.rcs['404Page']}?referer=${globalThis.rcsWindowLocation().pathname}`;
+        document.body.classList.add('hidden');
+        return globalThis.rcsRedirectToPage(rcs404);
+      }
     }
 
     window.commerceBackend.renderAddToCartForm(mainProduct);

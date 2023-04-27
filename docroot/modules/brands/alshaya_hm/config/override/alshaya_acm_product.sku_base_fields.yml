@@ -52,9 +52,10 @@ fields:
     type: 'string'
 
   article_pattern:
-    label: 'Article Pattern'
+    label: 'Pattern'
     cardinality: -1
     index: 1
+    facet: 1
 
   article_license_company:
     label: 'Article License Company'
@@ -62,9 +63,10 @@ fields:
     index: 1
 
   article_license_item:
-    label: 'Article License Item'
+    label: 'License Item'
     cardinality: -1
     index: 1
+    facet: 1
 
   article_fragrance_description:
     label: 'Article Fragrance Description'
@@ -125,9 +127,9 @@ fields:
     label: 'Style'
     description: 'Part of description.'
     type: 'attribute'
-    cardinality: -1
+    cardinality: 1
     index: 1
-    facet: 1
+    facet: 0
 
   clothing_style:
     label: 'Clothing Style'

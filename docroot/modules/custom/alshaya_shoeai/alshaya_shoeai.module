@@ -5,7 +5,6 @@
  * File for shoe AI Implementation.
  */
 
-use Drupal\Core\Cache\Cache;
 use Drupal\Core\Entity\Display\EntityViewDisplayInterface;
 use Drupal\Core\Entity\EntityInterface;
 
@@ -14,14 +13,11 @@ use Drupal\Core\Entity\EntityInterface;
  */
 function alshaya_shoeai_node_view(array &$build, EntityInterface $entity, EntityViewDisplayInterface $display, $view_mode) {
   $bundle = ['acq_product', 'rcs_product'];
-  if (in_array($entity->bundle(), $bundle) && $view_mode == 'full') {
-    $alshaya_shoeai_settings = \Drupal::config('alshaya_shoeai.settings');
-    $build['#cache']['tags'] = Cache::mergeTags($build['#cache']['tags'] ?? [], $alshaya_shoeai_settings->getCacheTags());
-    $shoeai_settings = \Drupal::service('alshaya_shoeai.helper')->getShoeAiSettings();
-    if (!empty($shoeai_settings)) {
-      $build['#attached']['library'][] = 'alshaya_shoeai/shoeai_js';
-      $build['#attached']['drupalSettings']['shoeai'] = $shoeai_settings;
-    }
+  $shoe_ai_helper = \Drupal::service('alshaya_shoeai.helper');
+  // Attaching shoeai library if current node is shoeai landing page or product.
+  if ((in_array($entity->bundle(), $bundle) && $view_mode == 'full') ||
+    $shoe_ai_helper->isShoeAiLandingPage()) {
+    $shoe_ai_helper->attachShoeAiLibrary($build);
   }
 }
 
@@ -31,13 +27,7 @@ function alshaya_shoeai_node_view(array &$build, EntityInterface $entity, Entity
 function alshaya_shoeai_taxonomy_term_view(array &$build, EntityInterface $entity, EntityViewDisplayInterface $display, $view_mode) {
   $vocabularies = ['rcs_category', 'acq_product_category'];
   if (in_array($entity->bundle(), $vocabularies) && $view_mode == 'full') {
-    $alshaya_shoeai_settings = \Drupal::config('alshaya_shoeai.settings');
-    $build['#cache']['tags'] = Cache::mergeTags($build['#cache']['tags'] ?? [], $alshaya_shoeai_settings->getCacheTags());
-    $shoeai_settings = \Drupal::service('alshaya_shoeai.helper')->getShoeAiSettings();
-    if (!empty($shoeai_settings)) {
-      $build['#attached']['library'][] = 'alshaya_shoeai/shoeai_js';
-      $build['#attached']['drupalSettings']['shoeai'] = $shoeai_settings;
-    }
+    \Drupal::service('alshaya_shoeai.helper')->attachShoeAiLibrary($build);
   }
 }
 
@@ -45,12 +35,12 @@ function alshaya_shoeai_taxonomy_term_view(array &$build, EntityInterface $entit
  * Implements hook_alshaya_spc_cart_build_alter().
  */
 function alshaya_shoeai_alshaya_spc_cart_build_alter(array &$build) {
-  // Add script for shoeai in add to cart page.
-  $shoeai_config = \Drupal::config('alshaya_shoeai.settings');
-  $build['#cache']['tags'] = Cache::mergeTags($build['#cache']['tags'] ?? [], $shoeai_config->getCacheTags());
-  $shoeai_settings = \Drupal::service('alshaya_shoeai.helper')->getShoeAiSettings();
-  if (!empty($shoeai_settings)) {
-    $build['#attached']['library'][] = 'alshaya_shoeai/shoeai_js';
-    $build['#attached']['drupalSettings']['shoeai'] = $shoeai_settings;
-  }
+  \Drupal::service('alshaya_shoeai.helper')->attachShoeAiLibrary($build);
+}
+
+/**
+ * Implements hook_alshaya_spc_checkout_confirmation_order_build_alter().
+ */
+function alshaya_shoeai_alshaya_spc_checkout_confirmation_order_build_alter(array &$build, array $order) {
+  \Drupal::service('alshaya_shoeai.helper')->attachShoeAiLibrary($build);
 }

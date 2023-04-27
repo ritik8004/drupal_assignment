@@ -122,7 +122,7 @@ window.commerceBackend = window.commerceBackend || {};
           maxSaleQtyParent: response.max_sale_qty_parent,
           isNonRefundable: Drupal.alshayaSpc.getAttributeVal(response.attributes, 'non_refundable_products'),
           gtmAttributes: response.gtm_attributes,
-          extraInfo: Drupal.hasValue(response.extraInfo) ? response.extraInfo : null,
+          extraInfo: Drupal.hasValue(response.extraInfo) ? response.extraInfo : {},
         });
       }
     });

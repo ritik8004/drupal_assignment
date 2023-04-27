@@ -602,6 +602,18 @@ const getProcessedCartData = async (cartData) => {
             hasValue(item.extension_attributes.topup_card_name)
           ) ? item.extension_attributes.topup_card_name : null;
         }
+
+        // Add all size attributes from cart response in size group.
+        if (hasValue(drupalSettings.alshaya_spc.sizeGroupAttribute)) {
+          let sizeGroup = '';
+          Object.keys(item.extension_attributes).forEach((key) => {
+            const sizeGroupAlternates = drupalSettings.alshaya_spc.sizeGroupAlternates[key];
+            if (hasValue(sizeGroupAlternates)) {
+              sizeGroup += `${item.extension_attributes[key]}(${sizeGroupAlternates}) `;
+            }
+          });
+          data.items[itemKey].sizeGroup = sizeGroup;
+        }
       }
 
       // This is to determine whether item to be shown free or not in cart.

@@ -127,6 +127,9 @@ window.commerceBackend = window.commerceBackend || {};
             mainProduct = JSON.parse(JSON.stringify(styleProduct));
           }
         });
+        if (!Drupal.hasValue(mainProduct)) {
+          mainProduct = product;
+        }
       }
       else {
         mainProduct = product;
@@ -264,34 +267,6 @@ window.commerceBackend = window.commerceBackend || {};
     if (loadStyles) {
       // Get the products with the same style.
       styleProducts = await globalThis.rcsPhCommerceBackend.getData('products-in-style', { styleCode: product.style_code });
-    }
-
-    return getProcessedStyleProducts(product, styleProducts);
-  };
-
-  /**
-   * Synchronously fetches and processes style products data.
-   *
-   * This is used only for PDP.
-   *
-   * @param {object} product
-   *   Raw product object.
-   * @param {string} loadStyles
-   *   Load styled products.
-   *
-   * @returns {void}
-   */
-  window.commerceBackend.getProductsInStyleSynchronous = function getProductsInStyleSynchronous(product, loadStyles = true) {
-    // Return if result is empty.
-    if (!Drupal.hasValue(product)
-      || !Drupal.hasValue(product.style_code)) {
-      return product;
-    }
-
-    var styleProducts = [];
-    if (loadStyles) {
-      // Get the products with the same style.
-      styleProducts = globalThis.rcsPhCommerceBackend.getDataSynchronous('products-in-style', { styleCode: product.style_code });
     }
 
     return getProcessedStyleProducts(product, styleProducts);

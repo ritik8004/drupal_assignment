@@ -20,7 +20,6 @@ function alshaya_aeo_transac_update_9403() {
     $config->set('exclude_render_single_result_facets', 'final_price,attr_color');
     $config->save();
   }
-
 }
 
 /**

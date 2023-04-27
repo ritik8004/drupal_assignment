@@ -32,6 +32,8 @@ const CartPromotionFreeGift = ({
         <a
           id={getCartFreeGiftModalId(promo['#free_sku_code'])}
           className="use-ajax visually-hidden"
+          data-sku={promo['#free_sku_code']}
+          data-promo-rule-id={promo.promoRuleId}
           data-dialog-type="modal"
           href={promo.promo_web_url}
         />

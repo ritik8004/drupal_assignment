@@ -1,0 +1,9 @@
+{
+  "name": "alshaya_graphql",
+  "version": "0.1.0",
+  "private": true,
+  "scripts": {
+    "build:dev": "../node_modules/.bin/webpack --mode=development",
+    "build": "../node_modules/.bin/webpack --mode=production"
+  }
+}

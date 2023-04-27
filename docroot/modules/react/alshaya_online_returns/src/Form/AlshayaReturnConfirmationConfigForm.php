@@ -97,6 +97,13 @@ class AlshayaReturnConfirmationConfigForm extends ConfigFormBase {
       '#default_value' => $config->get('return_date_format'),
     ];
 
+    $form['return_confirmation']['customer_service_number'] = [
+      '#type' => 'textfield',
+      '#title' => $this->t('Customer service number'),
+      '#description' => $this->t('Number to contact customer service to return orders not available for online returns like big ticket, white glove items.'),
+      '#default_value' => $config->get('customer_service_number'),
+    ];
+
     return parent::buildForm($form, $form_state);
   }
 
@@ -131,6 +138,7 @@ class AlshayaReturnConfirmationConfigForm extends ConfigFormBase {
     }
     // Save date format for return date.
     $config->set('return_date_format', $form_state->getValue('return_date_format'));
+    $config->set('customer_service_number', $form_state->getValue('customer_service_number'));
     $config->save();
     parent::submitForm($form, $form_state);
   }

@@ -80,9 +80,11 @@ class ReturnItemsListing extends React.Component {
   processSelectedItems = (checked, item) => {
     const { handleSelectedItems, itemsSelected, products } = this.props;
     const {
-      auto_select: autoSelect,
-      applied_rule_ids_with_discount: appliedRuleIdsWithDiscount,
-    } = item.extension_attributes;
+      extension_attributes: {
+        auto_select: autoSelect,
+      },
+      applied_rule_ids: appliedRuleIdsWithDiscount,
+    } = item;
     let selectedItemDiscountPromotion = [];
 
     // Check for discount promotion only if autoselect is set.
@@ -97,7 +99,7 @@ class ReturnItemsListing extends React.Component {
       // Filter out all the valid product which are having discounted rule id and
       // non zero ordered qty available.
       discountedProducts = products.filter(
-        (product) => product.extension_attributes.applied_rule_ids_with_discount
+        (product) => product.applied_rule_ids
         && item.sku !== product.sku
         && product.ordered > 0,
       );
@@ -106,7 +108,7 @@ class ReturnItemsListing extends React.Component {
       itemEligibleForReturn = !(discountedProducts.some(
         (individualItem) => {
         // Explode all the applied discounted rule ids.
-          const itemDiscountedRuleIds = individualItem.extension_attributes.applied_rule_ids_with_discount.split(',');
+          const itemDiscountedRuleIds = individualItem.applied_rule_ids.split(',');
           return !(itemDiscountedRuleIds.some((pid) => selectedItemDiscountPromotion.includes(pid))
             && individualItem.is_returnable);
         },
@@ -173,8 +175,8 @@ class ReturnItemsListing extends React.Component {
     products.forEach((product) => {
       const productDetails = product;
       let productDiscountedRuleIds = [];
-      if (hasValue(product.extension_attributes.applied_rule_ids_with_discount)) {
-        productDiscountedRuleIds = product.extension_attributes.applied_rule_ids_with_discount.split(',');
+      if (hasValue(product.applied_rule_ids)) {
+        productDiscountedRuleIds = product.applied_rule_ids.split(',');
       }
       if (hasValue(productDiscountedRuleIds)
         && productDiscountedRuleIds.some((pid) => discountedRuleId.includes(pid))
@@ -213,8 +215,8 @@ class ReturnItemsListing extends React.Component {
     products.forEach((product) => {
       const productDetails = product;
       let productDiscountedRuleIds = [];
-      if (hasValue(product.extension_attributes.applied_rule_ids_with_discount)) {
-        productDiscountedRuleIds = product.extension_attributes.applied_rule_ids_with_discount.split(',');
+      if (hasValue(product.applied_rule_ids)) {
+        productDiscountedRuleIds = product.applied_rule_ids.split(',');
       }
       if (hasValue(productDiscountedRuleIds)
         && productDiscountedRuleIds.some((pid) => discountedRuleId.includes(pid))) {
