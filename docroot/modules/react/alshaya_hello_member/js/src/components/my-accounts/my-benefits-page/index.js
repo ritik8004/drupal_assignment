@@ -5,6 +5,7 @@ import {
   callHelloMemberApi,
   getHelloMemberCustomerInfo,
   getBenefitTag,
+  getExternalBenefitText,
 } from '../../../../../../js/utilities/helloMemberHelper';
 import logger from '../../../../../../js/utilities/logger';
 import QrCodeDisplay from '../my-membership/qr-code-display';
@@ -97,7 +98,16 @@ class MyBenefitsPage extends React.Component {
       qrCodeTitle = getStringMessage('benefit_id_title');
     }
 
+    let userEmail = '';
+
+    if (hasValue(drupalSettings.userDetails)
+      && hasValue(drupalSettings.userDetails.userEmailID)) {
+      userEmail = `?email="${drupalSettings.userDetails.userEmailID}"`;
+    }
+
     const benefitTag = getBenefitTag(myBenefit);
+    // Variable to catch the button text based on the tag from myBenefit response.
+    const externalBenefitText = getExternalBenefitText(myBenefit);
     // Show QRCodeButton, either if response has no benefit tag or has a value '0' or 'S'.
     const showQRButton = !!(!hasValue(benefitTag)
     || (hasValue(benefitTag) && (benefitTag === 'O' || benefitTag === 'S')));
@@ -152,6 +162,19 @@ class MyBenefitsPage extends React.Component {
               {Drupal.t('Learn more', {}, { context: 'aura' })}
             </a>
           )}
+          {/* CTA for competition benefits. */}
+          {hasValue(myBenefit.benefit_url) && hasValue(benefitTag) && benefitTag === 'C'
+            && (
+              <a target="_blank" rel="noopener noreferrer" className="qr-code-button external-btn" href={myBenefit.benefit_url + userEmail}>
+                {Drupal.t('Enter now', {}, { context: 'hello_member' })}
+              </a>
+            )}
+          {hasValue(myBenefit.benefit_url) && hasValue(benefitTag) && hasValue(externalBenefitText)
+            && (
+              <a target="_blank" rel="noopener noreferrer" className="qr-code-button external-btn" href={myBenefit.benefit_url}>
+                { externalBenefitText }
+              </a>
+            )}
         </div>
         <div className="benefit-description">
           {(hasValue(myBenefit.applied_conditions)) ? HTMLReactParser(myBenefit.applied_conditions) : ''}
