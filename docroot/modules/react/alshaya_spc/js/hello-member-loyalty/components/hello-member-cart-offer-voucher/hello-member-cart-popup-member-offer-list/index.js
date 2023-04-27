@@ -106,7 +106,9 @@ const HelloMemberCartPopupMemberOfferList = (props) => {
                   data-offer={hasValue(offer.type) ? offer.type : 'offer'}
                   name="radios"
                   value={offer.code}
-                  defaultChecked={hasValue(totals.hmOfferCode) ? totals.hmOfferCode === offer.code : false}
+                  defaultChecked={hasValue(totals.hmOfferCode)
+                    ? totals.hmOfferCode === offer.code
+                    : false}
                   onChange={handleChange}
                 />
                 <label htmlFor={`offer${index}`} className="radio-sim radio-label">
