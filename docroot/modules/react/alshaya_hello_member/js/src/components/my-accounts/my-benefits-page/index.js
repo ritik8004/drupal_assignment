@@ -76,6 +76,15 @@ class MyBenefitsPage extends React.Component {
     }
   }
 
+  // function to pass benefit name and button name to GTM method.
+  async handleClick() {
+    const { myBenefit } = this.state;
+    const buttonName = getExternalBenefitText(myBenefit);
+    if (hasValue(myBenefit)) {
+      Drupal.alshayaSeoGtmPushBenefitButton({ buttonName, myBenefit });
+    }
+  }
+
   render() {
     const {
       wait, myBenefit, codeId, couponId, offerType, promotionType,
@@ -158,20 +167,20 @@ class MyBenefitsPage extends React.Component {
             )}
           {hasValue(myBenefit.benefit_url) && hasValue(benefitTag) && benefitTag === 'I'
           && (
-            <a className="button-wide learn-more" href={myBenefit.benefit_url}>
+            <a className="button-wide learn-more" href={myBenefit.benefit_url} onClick={() => this.handleClick()}>
               {Drupal.t('Learn more', {}, { context: 'aura' })}
             </a>
           )}
           {/* CTA for competition benefits. */}
           {hasValue(myBenefit.benefit_url) && hasValue(benefitTag) && benefitTag === 'C'
             && (
-              <a target="_blank" rel="noopener noreferrer" className="qr-code-button external-btn" href={myBenefit.benefit_url + userEmail}>
-                {Drupal.t('Enter now', {}, { context: 'hello_member' })}
+              <a target="_blank" rel="noopener noreferrer" className="qr-code-button external-btn" href={myBenefit.benefit_url + userEmail} onClick={() => this.handleClick()}>
+                {Drupal.t('Enter now', {}, { context: 'hello_member' }) }
               </a>
             )}
           {hasValue(myBenefit.benefit_url) && hasValue(benefitTag) && hasValue(externalBenefitText)
             && (
-              <a target="_blank" rel="noopener noreferrer" className="qr-code-button external-btn" href={myBenefit.benefit_url}>
+              <a target="_blank" rel="noopener noreferrer" className="qr-code-button external-btn" href={myBenefit.benefit_url} onClick={() => this.handleClick()}>
                 { externalBenefitText }
               </a>
             )}
