@@ -9,16 +9,18 @@ const Gallery = (props) => {
   if (typeof media === 'undefined') {
     return (null);
   }
+  // eslint-disable-next-line camelcase
+  const { swipe_image, gallery } = drupalSettings.reactTeaserView;
 
-  if (!isDesktop() && drupalSettings.reactTeaserView.swipe_image.enable_swipe_image_mobile) {
+  if (!isDesktop() && swipe_image.enable_swipe_image_mobile) {
     return (<SearchGallery {...props} />);
   }
 
-  if (drupalSettings.reactTeaserView.gallery.showHoverImage) {
+  if (gallery.showHoverImage) {
     return (<AssetGallery {...props} />);
   }
 
-  if (drupalSettings.reactTeaserView.gallery.showThumbnails) {
+  if (gallery.showThumbnails) {
     return (<SearchGallery {...props} />);
   }
 
