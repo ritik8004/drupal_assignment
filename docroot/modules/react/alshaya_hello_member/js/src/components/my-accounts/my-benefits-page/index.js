@@ -149,11 +149,7 @@ class MyBenefitsPage extends React.Component {
           {hasValue(myBenefit.benefit_url) && hasValue(benefitTag) && benefitTag === 'I'
           && (
             <a className="button-wide learn-more" href={myBenefit.benefit_url}>
-              {Drupal.t(
-                'Learn more',
-                {},
-                { context: 'aura' },
-              )}
+              {Drupal.t('Learn more', {}, { context: 'aura' })}
             </a>
           )}
         </div>
