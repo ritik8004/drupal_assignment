@@ -340,7 +340,7 @@
             },
             "drupal/search_api_algolia": {
                 "CORE-27152: Mimic facets behavior": "patches/search_api_algolia/CORE-27152-mimic-facets-behavior.patch",
-                "CORE-53039: Using SKU as objectID for search index": "https://www.drupal.org/files/issues/2023-04-10/use-sku-as-objectid-search-index.patch"
+                "CORE-53039: Using SKU as objectID https://www.drupal.org/project/search_api_algolia/issues/3353201": "https://www.drupal.org/files/issues/2023-04-10/use-sku-as-objectid-search-index.patch"
 
             },
             "drupal/lightning_media": {
