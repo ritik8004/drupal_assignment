@@ -10,23 +10,10 @@ use Drupal\alshaya_config\AlshayaConfigManager;
 /**
  * Implements hook_update_N().
  *
- * Adding new predictive search configurations.
- */
-function alshaya_algolia_react_update_9409() {
-
-  $manager = \Drupal::service('alshaya_config.manager');
-  $manager->updateConfigs([
-    'alshaya_algolia_react.predictive_search',
-  ],
-    'alshaya_algolia_react',
-  );
-}
-
-/**
- * Implements hook_update_N().
- *
- * Update algolia react with default value for render_single_result_facets.
+ * Update algolia react with default value for render_single_result_facets
+ * and predictive search.
  * Add the new alshaya_algolia_react.swipe_image.config.
+ * Add the new predictive search configurations.
  */
 function alshaya_algolia_react_update_9408() {
   /** @var \Drupal\alshaya_config\AlshayaConfigManager $manager */
@@ -34,7 +21,12 @@ function alshaya_algolia_react_update_9408() {
   $manager->updateConfigs([
     'alshaya_algolia_react.swipe_image',
   ],
-    'alshaya_algolia_react',
+  'alshaya_algolia_react',
+  );
+  $manager->updateConfigs([
+    'alshaya_algolia_react.predictive_search',
+  ],
+  'alshaya_algolia_react',
   );
 
   $config_factory = \Drupal::configFactory();
