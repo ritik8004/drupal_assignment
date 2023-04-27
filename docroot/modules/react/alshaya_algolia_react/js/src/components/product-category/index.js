@@ -15,9 +15,9 @@ const ProductCategory = ({
   return (
     <div className="gender-text">
       <span className="categories">
-        {hasValue(genderText[0]) ? genderText[0] : ''}
+        {hasValue(genderText[0]) ? genderText.join(', ') : ''}
         {' '}
-        {hasValue(productType[0]) ? productType[0] : ''}
+        {hasValue(productType[0]) ? productType.join(', ') : ''}
       </span>
     </div>
   );
