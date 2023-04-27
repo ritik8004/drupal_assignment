@@ -80,21 +80,30 @@ class AlshayaMarketCondition extends ConditionPluginBase implements ContainerFac
     // Get the list of available domains.
     $domain_list = $this->configFactory->get('alshaya_xb.settings')->get('domain_mapping');
 
-    $form['domain_visibility'] = [
-      '#title' => $this->t('Select the Markets'),
-      '#type' => 'fieldset',
-      '#description' => $this->t('Select from the list of available market,
-        Based on this the visibility of this block varies. Leave empty to show
-        this in all the above mentioned markets.'),
+    $form['domain_visibility_enabled'] = [
+      '#type' => 'checkbox',
+      '#title' => $this->t('Enable market based visibility check'),
+      '#default_value' => $this->configuration['domain_visibility_enabled'],
     ];
 
+    $options = [];
+    // Get the list of all the available markets.
     foreach ($domain_list as $domain) {
-      $form['domain_visibility'][$domain['code']] = [
-        '#type' => 'checkbox',
-        '#title' => $domain['country'],
-        '#default_value' => $this->configuration['domain_visibility'][$domain['code']] ?? '',
-      ];
+      $options[$domain['code']] = $domain['country'];
     }
+
+    $form['markets'] = [
+      '#type' => 'checkboxes',
+      '#title' => $this->t('Select the Markets'),
+      '#default_value' => $this->configuration['markets'],
+      '#description' => $this->t('Select one or more markets where this block should appear. The block will only be visible on selected markets. The market is automatically detected based on the domain in the url.'),
+      '#options' => $options,
+      '#states' => [
+        'visible' => [
+          ':input[name="visibility[alshaya_market_condition][domain_visibility_enabled]"]' => ['checked' => TRUE],
+        ],
+      ],
+    ];
 
     $form += parent::buildConfigurationForm($form, $form_state);
     unset($form['negate']);
@@ -108,7 +117,8 @@ class AlshayaMarketCondition extends ConditionPluginBase implements ContainerFac
    */
   public function submitConfigurationForm(array &$form, FormStateInterface $form_state) {
     // Save the submitted value to configuration.
-    $this->configuration['domain_visibility'] = $form_state->getValue('domain_visibility');
+    $this->configuration['domain_visibility_enabled'] = $form_state->getValue('domain_visibility_enabled');
+    $this->configuration['markets'] = $form_state->getValue('markets');
 
     parent::submitConfigurationForm($form, $form_state);
   }
@@ -119,7 +129,8 @@ class AlshayaMarketCondition extends ConditionPluginBase implements ContainerFac
   public function defaultConfiguration() {
     // The default configuration will be have the block hidden (0).
     return [
-      'domain_visibility' => [],
+      'domain_visibility_enabled' => FALSE,
+      'markets' => [],
     ] + parent::defaultConfiguration();
   }
 
@@ -133,7 +144,7 @@ class AlshayaMarketCondition extends ConditionPluginBase implements ContainerFac
    * {@inheritdoc}
    */
   public function evaluate() {
-    if (empty($this->configuration['domain_visibility'])) {
+    if (!$this->configuration['domain_visibility_enabled']) {
       return TRUE;
     }
 
@@ -142,12 +153,10 @@ class AlshayaMarketCondition extends ConditionPluginBase implements ContainerFac
       return TRUE;
     }
 
-    $domain_visibility = array_filter($this->configuration['domain_visibility'] ?? []);
-
+    $markets = $this->configuration['markets'] ?? [];
     // If domain visibility is set & doesn't match with the current site then
     // return false.
-    if (!empty($domain_visibility)
-      && !array_key_exists($configOverrides['code'], $domain_visibility)) {
+    if (!$markets[$configOverrides['code']]) {
       return FALSE;
     }
 
