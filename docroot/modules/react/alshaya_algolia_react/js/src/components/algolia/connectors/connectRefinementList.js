@@ -160,7 +160,7 @@ export default createConnector({
     // if that filter data is indexed in Algolia.
     // For other filters, we load filter values which is being passed from
     // backend.
-    if (isConfigurableFiltersEnabled() && props.swatch) {
+    if (isConfigurableFiltersEnabled() && hasValue(props.swatch)) {
       try {
         // For swatch_list widget, we have results in .label field.
         // This is similar to how it is done in backend in
@@ -172,7 +172,7 @@ export default createConnector({
           facetValues[value.split(',')[0]] = value;
         });
       } catch (e) {
-        logger.error('error', 'Exception happened while fetching facet values: @error', {
+        logger.error('Exception happened while fetching facet values: @error', {
           '@error': e.message,
         });
       }
