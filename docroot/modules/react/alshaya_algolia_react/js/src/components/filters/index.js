@@ -64,6 +64,7 @@ const Filters = ({ indexName, pageType, ...props }) => {
         }
       }
     });
+
     return userData;
   };
 
@@ -188,13 +189,10 @@ const Filters = ({ indexName, pageType, ...props }) => {
 
     // Initialize facets array to get facets from userData.
     const facetsArray = [];
-
     // Initialize indentifier prefix.
     const identifierPrefix = drupalSettings.path.currentLanguage;
-
     // Process any override rules in userData.
     const userData = (pageType !== 'search') ? processUserDataWithOverrides(data) : data.find((item) => item.context === 'default');
-
     // Get facets config from userData.
     const { facets_config: filters } = userData;
 
@@ -243,7 +241,7 @@ const Filters = ({ indexName, pageType, ...props }) => {
 
     const sort = {
       identifier: 'sort_by',
-      name: sortlabel.en,
+      name: sortlabel.en, // Use english label for gtm.
       label: sortlabel[identifierPrefix],
       widget: {
         type: 'sort_by',
