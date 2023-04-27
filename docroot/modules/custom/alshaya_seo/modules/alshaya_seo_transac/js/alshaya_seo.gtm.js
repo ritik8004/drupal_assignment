@@ -1803,4 +1803,18 @@
     };
   }
 
+  /**
+   * Helper funciton to push image swipe events.
+   *
+   */
+  Drupal.alshayaSeoGtmPushImageSwipe = function () {
+
+    var data = {
+      event: 'imageswipe',
+      eventCategory: 'imageswipe',
+      eventAction: 'imageswipe',
+    };
+    dataLayer.push(data);
+  }
+
 })(jQuery, Drupal, dataLayer);

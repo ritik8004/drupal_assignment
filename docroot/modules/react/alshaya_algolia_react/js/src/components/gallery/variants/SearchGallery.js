@@ -15,8 +15,8 @@ const SliderElement = ({
   />
 );
 
-const slickEffect = hasValue(drupalSettings.reactTeaserView.swipe_image.slide_effect)
-  ? drupalSettings.reactTeaserView.swipe_image.slide_effect
+const slickEffect = hasValue(drupalSettings.reactTeaserView.swipeImage.slideEffect)
+  ? drupalSettings.reactTeaserView.swipeImage.slideEffect
   : null;
 
 // Common slider configurations for all viewports.
@@ -35,8 +35,8 @@ const sliderHoverSettings = {
   ...sliderSettings,
   fade: slickEffect === 'fade',
   dots: true,
-  autoplaySpeed: hasValue(drupalSettings.reactTeaserView.swipe_image.image_slide_timing)
-    ? drupalSettings.reactTeaserView.swipe_image.image_slide_timing * 1000
+  autoplaySpeed: hasValue(drupalSettings.reactTeaserView.swipeImage.imageSlideTiming)
+    ? drupalSettings.reactTeaserView.swipeImage.imageSlideTiming * 1000
     : 2000,
   autoplay: true,
 };
@@ -86,7 +86,7 @@ class SearchGallery extends React.PureComponent {
 
   render() {
     // Get no Of Slides To Show in Desktop view.
-    const noOfSlidesToShowDesktop = drupalSettings.reactTeaserView.swipe_image.no_of_image_scroll;
+    const noOfSlidesToShowDesktop = drupalSettings.reactTeaserView.swipeImage.noOfImageScroll;
     const {
       media, title, labels, sku, initSlider,
     } = this.props;
