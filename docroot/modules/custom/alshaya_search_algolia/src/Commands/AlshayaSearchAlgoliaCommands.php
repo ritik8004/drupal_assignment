@@ -134,8 +134,9 @@ class AlshayaSearchAlgoliaCommands extends DrushCommands {
     $client = SearchClient::create($app_id, $app_secret_admin);
 
     $index_name = \Drupal::configFactory()->get('search_api.index.alshaya_algolia_index')->get('options.algolia_index_name');
+    // Check if we are using SKU as ObjectID on search page.
+    $index_sku_as_objectid = \Drupal::config('alshaya_search_algolia.settings')->get('index_sku_as_object_id');
     $languages = \Drupal::languageManager()->getLanguages();
-
     $skuManager = \Drupal::service('alshaya_acm_product.skumanager');
 
     $logger = \Drupal::logger('alshaya_search_algolia');
@@ -144,11 +145,17 @@ class AlshayaSearchAlgoliaCommands extends DrushCommands {
     foreach ($languages as $language) {
       $name = $index_name . '_' . $language->getId();
       $index = $client->initIndex($name);
-
       // Create object ids from node id and language to fetch results from
       // algolia.
+      // Use the entity:node/{nid}:{lang} pattern by default.
       $objectIDs = array_map(fn($nid) => "entity:node/{$nid}:{$language->getId()}", $nids);
-
+      if ($index_sku_as_objectid) {
+        $objectIDs = [];
+        foreach ($nids as $nid) {
+          $node = \Drupal::entityTypeManager()->getStorage('node')->load($nid);
+          $objectIDs[] = $node->get('field_skus')->getString();
+        }
+      }
       try {
         $objects = $index->getObjects($objectIDs, [
           'attributesToRetrieve' => [

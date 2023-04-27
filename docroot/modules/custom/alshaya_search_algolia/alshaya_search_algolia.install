@@ -11,6 +11,25 @@ use Drupal\alshaya_config\AlshayaConfigManager;
 /**
  * Implements hook_update_N().
  *
+ * Added new key index_sku_as_object_id in the config.
+ * To flag if we should add SKU for objectID for alshaya_algolia_index.
+ */
+function alshaya_search_algolia_update_9401() {
+  $manager = \Drupal::service('alshaya_config.manager');
+  // Adding fields in search_api index.
+  $manager->updateConfigs(
+    [
+      'alshaya_search_algolia.settings',
+    ],
+    'alshaya_search_algolia',
+    'install',
+    AlshayaConfigManager::MODE_ADD_MISSING
+  );
+}
+
+/**
+ * Implements hook_update_N().
+ *
  * Added index prefix config for algolia to use drupal or mdc indices.
  */
 function alshaya_search_algolia_update_8013() {

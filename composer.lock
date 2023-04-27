@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "d20d3cfdaa35654fbd958cf251a85c08",
+    "content-hash": "440b86bc783eb1f8f4a04b1004ae8eaf",
     "packages": [
         {
             "name": "acquia/acsf-tools",
@@ -13263,21 +13263,21 @@
         },
         {
             "name": "drupal/search_api_algolia",
-            "version": "3.0.0-beta4",
+            "version": "3.0.0-beta5",
             "source": {
                 "type": "git",
                 "url": "https://git.drupalcode.org/project/search_api_algolia.git",
-                "reference": "3.0.0-beta4"
+                "reference": "3.0.0-beta5"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://ftp.drupal.org/files/projects/search_api_algolia-3.0.0-beta4.zip",
-                "reference": "3.0.0-beta4",
-                "shasum": "478a29060e30719602f5718264da3fe73873d5b9"
+                "url": "https://ftp.drupal.org/files/projects/search_api_algolia-3.0.0-beta5.zip",
+                "reference": "3.0.0-beta5",
+                "shasum": "ba5348fb8f33d7987802f466e6a94b88e8ae85d9"
             },
             "require": {
                 "algolia/algoliasearch-client-php": "^3.0",
-                "drupal/core": "^8 || ^9",
+                "drupal/core": "^9.3 || ^10",
                 "drupal/search_api": "*"
             },
             "suggest": {
@@ -13286,8 +13286,8 @@
             "type": "drupal-module",
             "extra": {
                 "drupal": {
-                    "version": "3.0.0-beta4",
-                    "datestamp": "1644316380",
+                    "version": "3.0.0-beta5",
+                    "datestamp": "1659792927",
                     "security-coverage": {
                         "status": "not-covered",
                         "message": "Beta releases are not covered by Drupal security advisories."
@@ -13295,7 +13295,7 @@
                 },
                 "drush": {
                     "services": {
-                        "drush.services.yml": "^9"
+                        "drush.services.yml": "^9 || ^10"
                     }
                 }
             },
