@@ -118,7 +118,13 @@ class AlshayaMarketCondition extends ConditionPluginBase implements ContainerFac
   public function submitConfigurationForm(array &$form, FormStateInterface $form_state) {
     // Save the submitted value to configuration.
     $this->configuration['domain_visibility_enabled'] = $form_state->getValue('domain_visibility_enabled');
-    $this->configuration['markets'] = $form_state->getValue('markets');
+    // Remove all the previous entries if the condition is disabled.
+    if (!$this->configuration['domain_visibility_enabled']) {
+      $this->configuration['markets'] = [];
+    }
+    else {
+      $this->configuration['markets'] = $form_state->getValue('markets');
+    }
 
     parent::submitConfigurationForm($form, $form_state);
   }
