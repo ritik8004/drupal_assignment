@@ -53,11 +53,11 @@
   /**
    * Get user bazaar voice settings.
    *
-   * @returns {*[]}
+   * @returns {Object}
    *   Bazaar voice settings for user.
    */
   window.alshayaBazaarVoice.getUserBazaarVoiceSettings = function getUserBazaarSettings() {
-    var settings = [];
+    var settings = {};
     if (drupalSettings.userInfo) {
       settings.reviews = drupalSettings.userInfo;
     }
