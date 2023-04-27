@@ -8,6 +8,7 @@
 use Drupal\acq_commerce\SKUInterface;
 use Drupal\acq_sku\Entity\SKU;
 use Drupal\alshaya_acm_product\SkuImagesHelper;
+use Drupal\alshaya_acm_product\SkuManager;
 use Drupal\Component\Utility\Unicode;
 use Drupal\user\UserInterface;
 
@@ -484,8 +485,9 @@ function alshaya_acm_customer_build_order_detail(array $order) {
         $product['image']['#skip_lazy_loading'] = TRUE;
       }
 
-      // If 'applied_rule_ids' is set and price is 0, set the free gift label.
-      if (isset($item['applied_rule_ids']) && (int) $item['price'] == 0) {
+      // If 'applied_rule_ids' is set and price is 0 or 0.01,
+      // set the free gift label.
+      if (isset($item['applied_rule_ids']) && ($item['price'] == 0 || $item['price'] == SkuManager::FREE_GIFT_PRICE)) {
         $product['free_gift_label'] = t('Free Gift with Purchase');
         $product['price'] = t('Free');
         $product['total'] = '';
