@@ -84,7 +84,6 @@ function alshaya_nb_transac_rcs_alshaya_rcs_product_query_fields_alter(array &$f
 function alshaya_nb_transac_rcs_block_view_alter(array &$build, BlockPluginInterface $block) {
   // Add plp click library for NB.
   if ($build['#configuration']['id'] == 'alshaya_algolia_react_autocomplete') {
-    $build['#attached']['library'][] = 'alshaya_nb_transac_rcs/plp-swatch-click';
     $build['#attached']['drupalSettings']['navigateOnSwatchClick'] = FALSE;
   }
 }

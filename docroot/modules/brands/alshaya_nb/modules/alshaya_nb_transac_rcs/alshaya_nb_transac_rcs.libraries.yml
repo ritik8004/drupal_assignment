@@ -24,10 +24,3 @@ gallery.product.product_zoom:
   version: 1.x
   js:
     handlebars/gallery.product.product_zoom.handlebars: {}
-
-plp-swatch-click:
-  js:
-    js/plp-swatch-click.js: {}
-  dependencies:
-    - core/drupal
-    - core/jquery.once
