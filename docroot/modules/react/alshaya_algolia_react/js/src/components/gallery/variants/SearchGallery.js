@@ -15,7 +15,8 @@ const SliderElement = ({
 );
 
 const slickEffect = hasValue(drupalSettings.reactTeaserView.swipe_image.slide_effect)
-  ? drupalSettings.reactTeaserView.swipe_image.slide_effect : null;
+  ? drupalSettings.reactTeaserView.swipe_image.slide_effect
+  : null;
 
 const sliderSettings = {
   dots: true,
