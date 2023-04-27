@@ -202,7 +202,6 @@ const Filters = ({ indexName, pageType, ...props }) => {
     Object.entries(filters).forEach(([key, value]) => {
       // Format the filters as required by widget manager.
       const filter = {
-        identifier: (pageType !== 'search') ? `${key}.${identifierPrefix}` : key,
         label: value.label[identifierPrefix],
         name: value.label.en, // Used for gtm, hence always english value.
         widget: {
@@ -211,6 +210,16 @@ const Filters = ({ indexName, pageType, ...props }) => {
         id: value.slug.replace('_', ''), // Remove underscores to set filter id.
         alias: value.slug,
       };
+
+      if (hasValue(value.identifier)) {
+        // Get identifier for facet from userData config if explicitly added
+        // in the userData for eg: field_acq_promotion_label.en.web
+        filter.identifier = value.identifier[identifierPrefix];
+      } else {
+        // If identifier is not given in userData then prepare
+        // from attribute key and langcode eg attr_size.en or attr
+        filter.identifier = (pageType !== 'search') ? `${key}.${identifierPrefix}` : key;
+      }
 
       if (hasValue(value.widget.config)) {
         // Get config is present in facet config.
