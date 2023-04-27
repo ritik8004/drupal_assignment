@@ -13,6 +13,9 @@ import {
   getResults,
   unescapeFacetValue,
 } from '../../../utils/indexUtils';
+import { isConfigurableFiltersEnabled } from '../../../../../../js/utilities/helper';
+import { hasValue } from '../../../../../../js/utilities/conditionsUtility';
+import logger from '../../../../../../js/utilities/logger';
 
 const namespace = 'refinementList';
 
@@ -152,6 +155,33 @@ export default createConnector({
       multiIndexContext: props.indexContextValue,
     });
 
+    let facetValues = {};
+    // When configurable filters is enabled, we try to load data from Algolia
+    // if that filter data is indexed in Algolia.
+    // For other filters, we load filter values which is being passed from
+    // backend.
+    if (isConfigurableFiltersEnabled() && hasValue(props.swatch)) {
+      try {
+        // For swatch_list widget, we have results in .label field.
+        // This is similar to how it is done in backend in
+        // AlshayaAlgoliaReactConfig::loadFacetValues().
+        // facetValues will then be available in the refinementList component.
+        const labelAttribute = props.attribute.replace('value', 'label');
+        // eslint-disable-next-line no-underscore-dangle
+        Object.keys(results._rawResults[0].facets[labelAttribute]).forEach((value) => {
+          facetValues[value.split(',')[0]] = value;
+        });
+      } catch (e) {
+        logger.error('Exception happened while fetching facet values: @error', {
+          '@error': e.message,
+        });
+      }
+    } else {
+      facetValues = hasValue(props.filterConfig) && hasValue(props.filterConfig.facet_values)
+        ? props.filterConfig.facet_values
+        : facetValues;
+    }
+
     const canRefine = Boolean(results) && Boolean(results.getFacetByName(attribute));
 
     const isFromSearch = Boolean(
@@ -227,6 +257,7 @@ export default createConnector({
       isFromSearch,
       searchable,
       canRefine: transformedItems.length > 0,
+      facetValues,
     };
   },
 

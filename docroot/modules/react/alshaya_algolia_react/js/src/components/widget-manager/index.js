@@ -21,6 +21,7 @@ const WidgetManager = React.memo((props) => {
   let currentWidget = '';
   let className = '';
   let plpSortIndex = null;
+
   switch (filter.widget.type) {
     case 'sort_by':
       // If page type is search then default sort index is taken from filter.
@@ -41,10 +42,11 @@ const WidgetManager = React.memo((props) => {
       currentWidget = (
         <ColorFilter
           name={name}
-          facetValues={filter.facet_values}
+          filterConfig={filter}
           attribute={`${filter.identifier}.value`}
           searchable={false}
           itemCount={itemCount}
+          swatch
         />
       );
       break;

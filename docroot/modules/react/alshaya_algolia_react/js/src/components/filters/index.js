@@ -47,14 +47,16 @@ const Filters = ({ indexName, pageType, ...props }) => {
   };
 
   let facetsList = [];
+  let facetsConfig = facets;
 
   if (!isConfigurableFiltersEnabled()) {
-    // Check if configurable attributes is disable.
-    setFacets(getFilters(pageType));
+    // Check if configurable attributes is disabled.
+    // Set facet config from drupal settings.
+    facetsConfig = getFilters(pageType);
   }
 
-  if (hasValue(facets)) {
-    facets.forEach((facet) => {
+  if (hasValue(facetsConfig)) {
+    facetsConfig.forEach((facet) => {
       facetsList.push(
         <WidgetManager
           key={facet.identifier}
