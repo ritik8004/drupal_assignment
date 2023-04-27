@@ -23,10 +23,10 @@
 
     // Tracking Social media login.
     $('.social-signup-form .auth-link', $(this)).on('click', function () {
-      const gtmTypeAttribute = $(this).attr('gtm-social-type');
+      var gtmTypeAttribute = $(this).attr('gtm-social-type');
 
       if(gtmTypeAttribute) {
-        const socialType = gtmTypeAttribute.replace('checkout-', '');
+        var socialType = gtmTypeAttribute.replace('checkout-', '');
         Drupal.alshaya_seo_gtm_push_checkout_option(`${socialType} Login`, 1);
       }
     })
