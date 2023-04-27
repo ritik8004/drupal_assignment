@@ -16,11 +16,11 @@ use Drupal\Core\Logger\LoggerChannelFactoryInterface;
 class SwipeImageCommands extends DrushCommands {
 
   /**
-   * The logger channel.
+   * The drupalLogger channel.
    *
    * @var \Drupal\Core\Logger\LoggerChannelFactoryInterface
    */
-  protected $logger;
+  protected $drupalLogger;
 
   /**
    * The config factory service.
@@ -38,7 +38,7 @@ class SwipeImageCommands extends DrushCommands {
    *   The config factory.
    */
   public function __construct(LoggerChannelFactoryInterface $loggerChannelFactory, ConfigFactoryInterface $config_factory) {
-    $this->logger = $loggerChannelFactory->get('alshaya_algolia_react');
+    $this->drupalLogger = $loggerChannelFactory->get('SwipeImageCommands');
     $this->configFactory = $config_factory;
   }
 
@@ -73,10 +73,10 @@ class SwipeImageCommands extends DrushCommands {
       $configDisplaySetting->set('gallery_show_hover_image', FALSE);
       $configDisplaySetting->save();
 
-      $this->logger->success('Swipe images feature enabled successfully.');
+      $this->drupalLogger->notice('Swipe images feature enabled successfully.');
     }
     else {
-      $this->logger->warning('Swipe images feature already enabled.');
+      $this->drupalLogger->warning('Swipe images feature is already enabled.');
     }
   }
 
@@ -111,11 +111,11 @@ class SwipeImageCommands extends DrushCommands {
       $configDisplaySetting->set('gallery_show_hover_image', TRUE);
       $configDisplaySetting->save();
 
-      $this->logger->success('Swipe images feature disabled successfully.');
+      $this->drupalLogger->notice('Swipe images feature disabled successfully.');
 
     }
     else {
-      $this->logger->warning('Swipe images feature already disable.');
+      $this->drupalLogger->warning('Swipe images feature is already disabled.');
     }
   }
 

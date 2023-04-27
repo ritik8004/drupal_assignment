@@ -2,7 +2,7 @@ import React from 'react';
 import AssetGallery from './variants/AssetGallery';
 import SearchGallery from './variants/SearchGallery';
 import SingleImageGallery from './variants/SingleImageGallery';
-import { isMobile } from '../../utils';
+import { isDesktop } from '../../../../../js/utilities/display';
 
 const Gallery = (props) => {
   const { media } = props;
@@ -10,14 +10,17 @@ const Gallery = (props) => {
     return (null);
   }
 
-  if (isMobile()) {
-    return (<SingleImageGallery {...props} />);
+  const { swipe_image: swipeImage, gallery } = drupalSettings.reactTeaserView;
+
+  if (!isDesktop() && swipeImage.enable_swipe_image_mobile) {
+    return (<SearchGallery {...props} />);
   }
 
-  if (drupalSettings.reactTeaserView.gallery.showHoverImage) {
+  if (gallery.showHoverImage) {
     return (<AssetGallery {...props} />);
   }
-  if (drupalSettings.reactTeaserView.gallery.showThumbnails) {
+
+  if (gallery.showThumbnails) {
     return (<SearchGallery {...props} />);
   }
 
