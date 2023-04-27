@@ -38,7 +38,7 @@ class SwipeImageCommands extends DrushCommands {
    *   The config factory.
    */
   public function __construct(LoggerChannelFactoryInterface $loggerChannelFactory, ConfigFactoryInterface $config_factory) {
-    $this->drupalLogger = $loggerChannelFactory->get('alshaya_algolia_react');
+    $this->drupalLogger = $loggerChannelFactory->get('SwipeImageCommands');
     $this->configFactory = $config_factory;
   }
 
