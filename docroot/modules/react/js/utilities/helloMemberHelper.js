@@ -180,13 +180,14 @@ export const getHelloMemberCustomerData = async () => {
 
   return callHelloMemberApi('helloMemberGetCustomerData', 'GET', params)
     .then((response) => {
+      const errorCode = hasValue(response.data.error_code) ? response.data.error_code : 500;
       if (hasValue(response.data.error)) {
         const message = hasValue(response.data.error_message) ? response.data.error_message : '';
         logger.error('Error while trying to fetch hello member customer information for user with customer id @customerId. Message: @message', {
           '@customerId': customerId,
           '@message': message,
         });
-        return getErrorResponse(message, 500);
+        return getErrorResponse(message, errorCode);
       }
       return response;
     });

@@ -28,7 +28,7 @@ class MyMembership extends React.Component {
           myMembershipData = response.data;
           // Dispatch event when hello member points are loaded on my account points block.
           dispatchCustomEvent('helloMemberPointsLoaded', response.data.extension_attributes);
-        } else if (hasValue(response.error)) {
+        } else if (hasValue(response.error) && response.error_code === 503) {
           this.setState({
             wait: false,
             errorMessage: response.error_message,

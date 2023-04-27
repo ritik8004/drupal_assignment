@@ -11,6 +11,11 @@ const cartErrorCodes = {
 };
 
 /**
+ * Contains CLM Error codes.
+ */
+const clmErrorCode = 503;
+
+/**
  * Get default error message.
  *
  * @return string
@@ -101,6 +106,7 @@ const getErrorResponse = (message, code = '-', custom = false) => ({
 export {
   getErrorResponse,
   cartErrorCodes,
+  clmErrorCode,
   getDefaultErrorMessage,
   getExceptionMessageType,
   getProcessedErrorMessage,
