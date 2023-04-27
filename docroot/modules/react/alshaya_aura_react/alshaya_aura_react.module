@@ -351,7 +351,7 @@ function alshaya_aura_react_alshaya_online_returns_order_details_build_alter(arr
  * Implements hook_alshaya_spc_checkout_confirmation_order_build().
  */
 function alshaya_aura_react_alshaya_spc_checkout_confirmation_order_build_alter(array &$build, array $order) {
-  if (\Drupal::service('alshaya_aura_react.aura_helper')->isAuraEnabled() == TRUE) {
+  if (\Drupal::service('alshaya_aura_react.aura_helper')->isAuraEnabled()) {
     $build['#attached']['library'][] = 'alshaya_aura_react/aura_order_confirmation';
   }
 }
