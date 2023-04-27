@@ -18,13 +18,10 @@ use Drupal\alshaya_config\AlshayaConfigManager;
 function alshaya_algolia_react_update_9408() {
   /** @var \Drupal\alshaya_config\AlshayaConfigManager $manager */
   $manager = \Drupal::service('alshaya_config.manager');
-  $manager->updateConfigs(['alshaya_algolia_react.swipe_image'],
+  $manager->updateConfigs(['alshaya_algolia_react.swipe_image',
+    'alshaya_algolia_react.predictive_search'],
     'alshaya_algolia_react',
   );
-  $manager->updateConfigs(['alshaya_algolia_react.predictive_search'],
-    'alshaya_algolia_react',
-  );
-
   $config_factory = \Drupal::configFactory();
   // Get Old Value image_slide_timing.
   $display_settings = $config_factory->get('alshaya_acm_product.display_settings');
