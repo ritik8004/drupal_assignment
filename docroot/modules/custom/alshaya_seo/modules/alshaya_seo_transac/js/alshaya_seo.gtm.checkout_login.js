@@ -22,12 +22,14 @@
     });
 
     // Tracking Social media login.
-    $('[gtm-type="checkout-facebook"]', $(this)).on('click', function () {
-      Drupal.alshaya_seo_gtm_push_checkout_option('Facebook Login', 1);
-    });
-    $('[gtm-type="checkout-google"]', $(this)).on('click', function () {
-      Drupal.alshaya_seo_gtm_push_checkout_option('Google Login', 1);
-    });
+    $('.social-signup-form .auth-link', $(this)).on('click', function () {
+      const gtmTypeAttribute = $(this).attr('gtm-social-type');
+
+      if(gtmTypeAttribute) {
+        const socialType = gtmTypeAttribute.replace('checkout-', '');
+        Drupal.alshaya_seo_gtm_push_checkout_option(`${socialType} Login`, 1);
+      }
+    })
   });
 
 })(jQuery, Drupal, dataLayer);
