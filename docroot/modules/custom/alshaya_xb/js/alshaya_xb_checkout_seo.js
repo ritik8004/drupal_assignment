@@ -49,6 +49,10 @@
    *   Returns attribute value.
    */
   Drupal.getProductMetadata = function (product, key) {
+    if (!Drupal.hasValue(product.MetaData)) {
+      return '';
+    }
+
     for (var i = 0; i < product.MetaData.length; i++) {
       if (product.MetaData[i].AttributeKey === key) {
         return product.MetaData[i].AttributeValue;
@@ -117,12 +121,16 @@
     if (geData.details.ProductInformation) {
       Object.entries(geData.details.ProductInformation).forEach(function (productItem) {
         var product = productItem[1];
+        var brand = Drupal.getProductMetadata(product, 'Brand');
+        if (!Drupal.hasValue(brand)) {
+          brand = geSiteName;
+        }
         var productGtmData = {
           "quantity" : product.Quantity,
           "name" : product.ProductName,
           "id" : product.ProductGroupCode,
           "price" : product.ProductPrices.MerchantTransaction.DiscountedPrice.toString(),
-          "brand" : Drupal.hasValue(product.Brand) ? product.Brand : geSiteName,
+          "brand": brand,
           "category" : Drupal.getProductMetadata(product, 'category'),
           "variant" : product.SKU,
           "dimension2" : Drupal.getProductMetadata(product, 'dimension2'),
@@ -215,11 +223,15 @@
     if (geData.details.ProductInformation) {
       Object.entries(geData.details.ProductInformation).forEach(function (productItem) {
         var product = productItem[1];
+        var brand = Drupal.getProductMetadata(product, 'Brand');
+        if (!Drupal.hasValue(brand)) {
+          brand = geSiteName;
+        }
         var productGtmData = {
           "name": product.ProductName,
           "id": product.ProductGroupCode,
           "price": product.ProductPrices.CustomerTransactionInMerchantCurrency.CustomerDiscountedPriceInMerchantCurrency.toString(),
-          "brand": Drupal.hasValue(product.Brand) ? product.Brand : geSiteName,
+          "brand": brand,
           "category": Drupal.getProductMetadata(product, 'category'),
           "variant": product.SKU,
           "dimension2" : Drupal.getProductMetadata(product, 'dimension2'),
