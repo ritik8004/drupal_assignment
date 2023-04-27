@@ -9,10 +9,10 @@ const Gallery = (props) => {
   if (typeof media === 'undefined') {
     return (null);
   }
-  // eslint-disable-next-line camelcase
-  const { swipe_image, gallery } = drupalSettings.reactTeaserView;
 
-  if (!isDesktop() && swipe_image.enable_swipe_image_mobile) {
+  const { swipe_image: swipeImage, gallery } = drupalSettings.reactTeaserView;
+
+  if (!isDesktop() && swipeImage.enable_swipe_image_mobile) {
     return (<SearchGallery {...props} />);
   }
 
