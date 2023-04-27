@@ -70,6 +70,24 @@ const Teaser = ({
     }
   };
 
+  const onTouchEnd = () => {
+    if (!touchStart || !touchEnd) return;
+    const distance = touchStart - touchEnd;
+    // The minimum swipe distance between touchStart and touchEnd to be detected as
+    // a left or right swipe.
+    const isLeftSwipe = distance > 40;
+    const isRightSwipe = distance < -40;
+    if (isLeftSwipe || isRightSwipe) {
+      if (!isDesktop) {
+        setInitiateSlider(true);
+        if (slider !== false) {
+          slider.slickGoTo(1, true);
+          slider.slickPlay();
+        }
+      }
+    }
+  };
+
   if (drupalSettings.plp_attributes
     && drupalSettings.plp_attributes.length > 0
     && hasValue(hit.collection_labels)
@@ -271,23 +289,7 @@ const Teaser = ({
         }}
         onTouchStart={touchEnable ? onTouchStart : null}
         onTouchMove={touchEnable ? onTouchMove : null}
-        onTouchEnd={() => {
-          if (!touchStart || !touchEnd) return;
-          const distance = touchStart - touchEnd;
-          // The minimum swipe distance between touchStart and touchEnd to be detected as
-          // a left or right swipe.
-          const isLeftSwipe = distance > 40;
-          const isRightSwipe = distance < -40;
-          if (isLeftSwipe || isRightSwipe) {
-            if (!isDesktop) {
-              setInitiateSlider(true);
-              if (slider !== false) {
-                slider.slickGoTo(1, true);
-                slider.slickPlay();
-              }
-            }
-          }
-        }}
+        onTouchEnd={onTouchEnd}
       >
         <div className="field field--name-field-skus field--type-sku field--label-hidden field__items">
           <a
