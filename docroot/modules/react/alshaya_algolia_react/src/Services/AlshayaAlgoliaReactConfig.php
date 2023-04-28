@@ -281,11 +281,11 @@ class AlshayaAlgoliaReactConfig implements AlshayaAlgoliaReactConfigInterface {
         'showColorSwatchSlider' => $show_color_swatch_slider,
       ],
       'showBrandName' => $display_settings->get('show_brand_name_plp'),
-      'swipe_image' => [
-        'enable_swipe_image_mobile' => $algolia_swipe_image_settings->get('enable_swipe_image_mobile'),
-        'no_of_image_scroll' => $algolia_swipe_image_settings->get('no_of_image_scroll'),
-        'slide_effect' => $algolia_swipe_image_settings->get('slide_effect'),
-        'image_slide_timing' => $algolia_swipe_image_settings->get('image_slide_timing'),
+      'swipeImage' => [
+        'enableSwipeImageMobile' => $algolia_swipe_image_settings->get('enable_swipe_image_mobile'),
+        'noOfImageScroll' => $algolia_swipe_image_settings->get('no_of_image_scroll'),
+        'slideEffect' => $algolia_swipe_image_settings->get('slide_effect'),
+        'imageSlideTiming' => $algolia_swipe_image_settings->get('image_slide_timing'),
       ],
     ];
     // Allow other modules to alter or add extra configs

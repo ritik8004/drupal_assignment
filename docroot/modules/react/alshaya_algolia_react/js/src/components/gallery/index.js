@@ -10,9 +10,9 @@ const Gallery = (props) => {
     return (null);
   }
 
-  const { swipe_image: swipeImage, gallery } = drupalSettings.reactTeaserView;
+  const { swipeImage, gallery } = drupalSettings.reactTeaserView;
 
-  if (!isDesktop() && swipeImage.enable_swipe_image_mobile) {
+  if (!isDesktop() && swipeImage.enableSwipeImageMobile) {
     return (<SearchGallery {...props} />);
   }
 
