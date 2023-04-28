@@ -72,6 +72,16 @@ const Teaser = ({
         eventCategory: 'imageswipe',
         eventAction: 'imageswipe',
       });
+
+      // Check color swatch is enable.
+      if (showColorSwatchSlider) {
+      // Push color swatch data in GTM.
+        window.dataLayer.push({
+          event: 'swatches_imageswipe',
+          eventCategory: 'swatches_imageswipe',
+          eventAction: 'swatches_imageswipe',
+        });
+      }
       setTouchEnd(e.targetTouches[0].clientX);
     }
   };
