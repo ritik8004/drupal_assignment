@@ -16,6 +16,14 @@ body.wishlist-enabled {
         @include breakpoint($only-tablet) {
           top: 0;
         }
+
+        .acq-mini-cart {
+          html[lang="en"] & {
+            @include breakpoint($tablet) {
+              padding-right: rem(12);
+            }
+          }
+        }
       }
     }
   }
