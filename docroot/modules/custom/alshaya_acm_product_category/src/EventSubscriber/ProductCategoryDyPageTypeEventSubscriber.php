@@ -87,7 +87,6 @@ class ProductCategoryDyPageTypeEventSubscriber implements EventSubscriberInterfa
   public function setContextCategory(Event $event) {
     $term = $this->routeMatch->getParameter('taxonomy_term');
     if ($term instanceof TermInterface && $term->bundle() === 'rcs_category') {
-
       // We only have PLP `type`, don't have `data` for V3. It is handled in
       // 'alshaya_rcs_listing_dy.js' file.
       $event->setDyContext('CATEGORY');
