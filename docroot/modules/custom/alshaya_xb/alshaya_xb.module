@@ -303,6 +303,8 @@ function alshaya_xb_sku_product_info_alter(array &$product_info, SKUInterface $s
  * Implements hook_dynamic_yield_context_alter().
  */
 function alshaya_xb_dynamic_yield_context_alter(&$lng) {
+  // Get config overrides by domain.
+  $configOverrides = \Drupal::service('alshaya_xb.domain_config_overrides')->getConfigByDomain();
   $langcode = \Drupal::languageManager()->getCurrentLanguage()->getId();
-  $lng = $langcode . '_XB';
+  $lng = $langcode . '_' . $configOverrides['code'];
 }
