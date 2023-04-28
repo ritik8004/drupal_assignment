@@ -212,6 +212,7 @@ const handleResponse = (apiResponse) => {
       } else if (apiResponse.status === 400
         && typeof apiResponse.data.code !== 'undefined'
         && apiResponse.data.code === clmErrorCode) {
+        // Set error code as '503' as clm returns the same code when it is down.
         response.data.error_code = apiResponse.data.code;
       } else if (apiResponse.status === 404) {
         response.data.error_code = 404;
