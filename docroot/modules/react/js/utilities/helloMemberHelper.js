@@ -355,13 +355,13 @@ export const getExternalBenefitText = (responseData) => {
   if (hasValue(responseData) && hasValue(responseData.tag)) {
     switch (responseData.tag) {
       case 'ER':
-        benefitText = Drupal.t('Redeem Now', {}, { context: 'hello_member' });
+        benefitText = 'Redeem Now';
         break;
       case 'ES':
-        benefitText = Drupal.t('Shop Now', {}, { context: 'hello_member' });
+        benefitText = 'Shop Now';
         break;
       case 'EB':
-        benefitText = Drupal.t('Book Now', {}, { context: 'hello_member' });
+        benefitText = 'Book Now';
         break;
       default:
         break;

@@ -77,7 +77,7 @@ class MyBenefitsPage extends React.Component {
   }
 
   // function to pass benefit name and button name to GTM method.
-  async handleClick() {
+  handleClick() {
     const { myBenefit } = this.state;
     const buttonName = getExternalBenefitText(myBenefit);
     if (hasValue(myBenefit)) {
@@ -175,13 +175,13 @@ class MyBenefitsPage extends React.Component {
           {hasValue(myBenefit.benefit_url) && hasValue(benefitTag) && benefitTag === 'C'
             && (
               <a target="_blank" rel="noopener noreferrer" className="qr-code-button external-btn" href={myBenefit.benefit_url + userEmail} onClick={() => this.handleClick()}>
-                {Drupal.t('Enter now', {}, { context: 'hello_member' }) }
+                {Drupal.t('Enter now', {}, { context: 'hello_member' })}
               </a>
             )}
           {hasValue(myBenefit.benefit_url) && hasValue(benefitTag) && hasValue(externalBenefitText)
             && (
               <a target="_blank" rel="noopener noreferrer" className="qr-code-button external-btn" href={myBenefit.benefit_url} onClick={() => this.handleClick()}>
-                { externalBenefitText }
+                { Drupal.t(externalBenefitText, {}, { context: 'hello_member' }) }
               </a>
             )}
         </div>
