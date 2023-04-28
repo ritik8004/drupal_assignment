@@ -1059,8 +1059,8 @@ class AlshayaSpcController extends ControllerBase {
     $product_display_settings = $this->config('alshaya_acm_product.display_settings');
     $settings['alshaya_spc']['sizeGroupAttribute'] = $product_display_settings->get('size_group.pdp');
     $settings['alshaya_spc']['sizeGroupAlternates'] = array_reduce($product_display_settings->get('size_group.alternates'), function ($unique_arr, $currentValue) {
-      if (!in_array($currentValue["value"], array_column($unique_arr, "value"))) {
-        $unique_arr[$currentValue["value"]] = $currentValue['label'];
+      if (!in_array($currentValue['value'], array_column($unique_arr, 'value'))) {
+        $unique_arr[$currentValue['value']] = $currentValue['label'];
       }
       return $unique_arr;
     }, []);
