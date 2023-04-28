@@ -87,10 +87,14 @@ const Teaser = ({
     const isRightSwipe = distance < -40;
     if (isLeftSwipe || isRightSwipe) {
       if (!isDesktop) {
-        setInitiateSlider(true);
+        // Check if Slick is initialized.
+        if (!initSlider) {
+          setInitiateSlider(true);
+        }
         if (slider !== false) {
+          // Setting the first slide to 1 since on-swipe the image change should occur
+          // else we don't see any visible change as the slick gets initialized.
           slider.slickGoTo(1, true);
-          slider.slickPlay();
         }
       }
     }
