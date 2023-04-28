@@ -104,7 +104,6 @@ class ProductDyPageTypeEventSubscriber implements EventSubscriberInterface {
         }
       }
       elseif ($node->bundle() === 'rcs_product') {
-
         // We only have PDP `type`, don't have `data` for V3. It is handled in
         // 'alshaya_rcs_product_dy.js' file.
         $event->setDyContext('PRODUCT');
