@@ -24,6 +24,7 @@ use GuzzleHttp\Client;
 use GuzzleHttp\HandlerStack;
 use GuzzleHttp\Subscriber\Oauth\Oauth1;
 use GuzzleHttp\TransferStats;
+use Drupal\acq_commerce\I18nHelper;
 
 /**
  * Class Alshaya Api Wrapper.
@@ -73,6 +74,13 @@ class AlshayaApiWrapper {
    * @var \Drupal\Core\Logger\LoggerChannelInterface
    */
   protected $logger;
+
+  /**
+   * I18n Helper.
+   *
+   * @var \Drupal\acq_commerce\I18nHelper
+   */
+  private $i18nHelper;
 
   /**
    * The state factory.
@@ -127,6 +135,8 @@ class AlshayaApiWrapper {
    *   Cache Backend object for "cache.data".
    * @param \Drupal\Core\Logger\LoggerChannelFactoryInterface $logger_factory
    *   LoggerFactory object.
+   * @param \Drupal\acq_commerce\I18nHelper $i18n_helper
+   *   I18nHelper object.
    * @param \Drupal\Core\State\StateInterface $state
    *   The state factory.
    * @param \Drupal\Core\File\FileSystemInterface $fileSystem
@@ -145,6 +155,7 @@ class AlshayaApiWrapper {
     TimeInterface $date_time,
     CacheBackendInterface $cache,
     LoggerChannelFactoryInterface $logger_factory,
+    I18nHelper $i18n_helper,
     StateInterface $state,
     FileSystemInterface $fileSystem,
     MagentoApiHelper $mdc_helper,
@@ -157,6 +168,7 @@ class AlshayaApiWrapper {
     $this->dateTime = $date_time;
     $this->cache = $cache;
     $this->logger = $logger_factory->get('alshaya_api');
+    $this->i18nHelper = $i18n_helper;
     $this->state = $state;
     $this->fileSystem = $fileSystem;
     $this->mdcHelper = $mdc_helper;
@@ -366,7 +378,7 @@ class AlshayaApiWrapper {
 
     $filters[] = [
       'field' => 'store_id',
-      'value' => Settings::get('store_id')[$langcode],
+      'value' => $this->i18nHelper->getStoreIdFromLangcode($langcode),
       'condition_type' => 'eq',
       'group_id' => 1,
     ];
