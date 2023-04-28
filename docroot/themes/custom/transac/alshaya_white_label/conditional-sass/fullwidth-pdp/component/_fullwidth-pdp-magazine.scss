@@ -71,18 +71,23 @@ body.magazine-layout-v2 {
 
     &.sticky-element {
       @include breakpoint($tablet) {
-        max-width: calc((100% - #{rem(32)}) * 0.65); // PDP sidebar width is 65%.
-        #{$left}: $full_width_padding_tablet;
+        max-width: calc(var(--dynamic-container-width) * 0.65); // PDP sidebar width is 65%.
+        #{$left}: calc((100% - var(--dynamic-container-width)) / 2);
       }
 
       @include breakpoint($desktop) {
-        max-width: calc((100% - #{rem(48)}) * 0.72); // PDP sidebar width is 72%.
-        #{$left}: $full_width_padding_desktop;
+        max-width: calc(var(--dynamic-container-width) * 0.72); // PDP sidebar width is 72%.
+        #{$left}: calc((100% - var(--dynamic-container-width)) / 2);
       }
 
-      @include breakpoint($desktop-HiDPI) {
-        #{$left}: calc((100% - var(--dynamic-container-width)) / 2);
-        max-width: calc(var(--dynamic-container-width) * 0.72); // PDP sidebar width is 72%.
+      &.contain {
+        @include breakpoint($tablet) {
+          max-width: 65%;
+        }
+
+        @include breakpoint($desktop) {
+          max-width: 72%;
+        }
       }
     }
   }
