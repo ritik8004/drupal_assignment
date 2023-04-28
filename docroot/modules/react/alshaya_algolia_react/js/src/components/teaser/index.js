@@ -51,21 +51,27 @@ const Teaser = ({
   const isDesktop = window.innerWidth > 1024;
   const { currentLanguage } = drupalSettings.path;
   const { showBrandName } = drupalSettings.reactTeaserView;
-  const touchEnable = drupalSettings.reactTeaserView.swipe_image.enable_swipe_image_mobile;
+  const touchEnable = drupalSettings.reactTeaserView.swipeImage.enableSwipeImageMobile;
   const activateShoeAI = getShoeAiStatus();
 
   // Touch events for Mobile devices.
   const onTouchStart = (e) => {
     if (!isDesktop) {
       setTouchEnd(null);
-      // Calculate the cordinates of the touch event.
+      // Calculate the coordinates of the touch event.
       setTouchStart(e.targetTouches[0].clientX);
     }
   };
 
-  // Calculate the cordinates of the touch event.
+  // Calculate the coordinates of the touch event.
   const onTouchMove = (e) => {
     if (!isDesktop) {
+      // Push image swipe data in GTM.
+      window.dataLayer.push({
+        event: 'imageswipe',
+        eventCategory: 'imageswipe',
+        eventAction: 'imageswipe',
+      });
       setTouchEnd(e.targetTouches[0].clientX);
     }
   };
