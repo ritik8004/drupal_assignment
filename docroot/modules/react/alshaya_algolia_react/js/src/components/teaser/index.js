@@ -67,7 +67,11 @@ const Teaser = ({
   const onTouchMove = (e) => {
     if (!isDesktop) {
       // Push image swipe data in GTM.
-      Drupal.alshayaSeoGtmPushImageSwipe();
+      window.dataLayer.push({
+        event: 'imageswipe',
+        eventCategory: 'imageswipe',
+        eventAction: 'imageswipe',
+      });
       setTouchEnd(e.targetTouches[0].clientX);
     }
   };
