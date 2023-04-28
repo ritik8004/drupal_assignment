@@ -57,3 +57,4 @@ services:
       - '@request_stack'
       - '@rcs_placeholders.path_processor'
       - '@module_handler'
+      - '@logger.factory'

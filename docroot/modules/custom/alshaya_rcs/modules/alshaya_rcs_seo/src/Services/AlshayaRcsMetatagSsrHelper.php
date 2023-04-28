@@ -7,7 +7,10 @@ use Drupal\alshaya_rcs_product\Services\AlshayaRcsProductHelper;
 use Drupal\alshaya_rcs_promotion\Services\AlshayaRcsPromotionHelper;
 use Drupal\Component\Render\FormattableMarkup;
 use Drupal\Core\Extension\ModuleHandlerInterface;
+use Drupal\Core\Logger\LoggerChannelFactoryInterface;
+use Drupal\Core\Url;
 use Drupal\rcs_placeholders\Service\RcsPhPathProcessor;
+use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\RequestStack;
 
 /**
@@ -72,6 +75,13 @@ class AlshayaRcsMetatagSsrHelper {
   protected $moduleHandler;
 
   /**
+   * The logger.
+   *
+   * @var \Drupal\Core\Logger\LoggerChannelFactoryInterface
+   */
+  protected $logger;
+
+  /**
    * Constructs RCS Metatag Helper service.
    *
    * @param \Drupal\alshaya_rcs_product\Services\AlshayaRcsProductHelper $rcs_product_helper
@@ -88,6 +98,8 @@ class AlshayaRcsMetatagSsrHelper {
    *   RCS path processor service.
    * @param \Drupal\Core\Extension\ModuleHandlerInterface $module_handler
    *   Module Handler.
+   * @param \Drupal\Core\Logger\LoggerChannelFactoryInterface $logger_factory
+   *   Logger factory.
    */
   public function __construct(
     AlshayaRcsProductHelper $rcs_product_helper,
@@ -96,7 +108,8 @@ class AlshayaRcsMetatagSsrHelper {
     AlshayGraphqlApiWrapper $graphql_api_wrapper,
     RequestStack $request_stack,
     RcsPhPathProcessor $rcs_path_processor,
-    ModuleHandlerInterface $module_handler
+    ModuleHandlerInterface $module_handler,
+    LoggerChannelFactoryInterface $logger_factory,
   ) {
     $this->rcsProductHelper = $rcs_product_helper;
     $this->rcsListingHelper = $rcs_listing_helper;
@@ -105,6 +118,7 @@ class AlshayaRcsMetatagSsrHelper {
     $this->requestStack = $request_stack;
     $this->rcsPathProcessor = $rcs_path_processor;
     $this->moduleHandler = $module_handler;
+    $this->logger = $logger_factory->get('alshaya_rcs_seo');
   }
 
   /**
@@ -131,6 +145,13 @@ class AlshayaRcsMetatagSsrHelper {
               'meta_keyword',
               'og_meta_title',
               'og_meta_description',
+              'price_range' => [
+                'maximum_price' => [
+                  'final_price' => [
+                    'value',
+                  ],
+                ],
+              ],
               '... on ConfigurableProduct' => [
                 'variants' => [
                   'product' => [
@@ -243,7 +264,7 @@ class AlshayaRcsMetatagSsrHelper {
    */
   private function getRcsMetatagFromMagento(string $page_type): mixed {
     $item_key = NULL;
-    $fields = $response = [];
+    $fields = [];
     // Get query fields based on page type.
     switch ($page_type) {
       case 'product':
@@ -269,16 +290,69 @@ class AlshayaRcsMetatagSsrHelper {
 
     if (!empty($fields) && $item_key) {
       $response = $this->graphqlApiWrapper->doGraphqlRequest('GET', $fields);
-      if (!empty($response[$item_key])) {
-        if ($response[$item_key]['total_count'] === 0) {
-          $response = [];
-        }
-        else {
-          $response = !empty($response[$item_key]['items']) ? $response[$item_key]['items'][0] : $response[$item_key];
-        }
-      }
+      return $this->handleRcsResponse($item_key, $response);
     }
-    return $response;
+    return [];
+  }
+
+  /**
+   * Handle response from graphql request.
+   *
+   * @param string $item_key
+   *   Item key to check.
+   * @param array $response
+   *   Response to handle.
+   *
+   * @return mixed
+   *   Response with data.
+   */
+  private function handleRcsResponse(string $item_key, array $response): mixed {
+    // Check if response is empty.
+    if (empty($response) || empty($response[$item_key])) {
+      return [];
+    }
+
+    // Check if the response have count is zero. return 404.
+    // Check if the request is for the free gift, return 404.
+    if (empty($response[$item_key]['total_count'])
+      || ($item_key === 'products'
+      && !empty($response['products']['items'][0]['price_range'])
+      && $this->isProductFreeGift($response['products']['items'][0]['price_range']))) {
+      $currentRequest = $this->requestStack->getCurrentRequest();
+      $this->logger->warning('GraphQL data is empty for request @request or its a free gift page request with price @price_range.', [
+        '@request' => $currentRequest->getUri(),
+        '@price_range' => json_encode($response['products']['items'][0]['price_range']),
+      ]);
+      $response = new RedirectResponse(Url::fromRoute('system.404', [
+        'referer' => $currentRequest->getRequestUri(),
+      ])->toString());
+      $response->send();
+      exit;
+    }
+
+    return !empty($response[$item_key]['items'])
+      ? $response[$item_key]['items'][0]
+      : $response[$item_key];
+  }
+
+  /**
+   * Helper function to check if product is a free gift.
+   *
+   * @param array $price_range
+   *   Price range to check.
+   *
+   * @return bool
+   *   TRUE if free gift, else FALSE.
+   */
+  public function isProductFreeGift(array $price_range): bool {
+    $freeGift = FALSE;
+    if (!empty($price_range['maximum_price'])
+      && !empty($price_range['maximum_price']['final_price'])
+    ) {
+      $productPrice = (float) $price_range['maximum_price']['final_price']['value'];
+      $freeGift = $productPrice === 0.0 || $productPrice === 0.01;
+    }
+    return $freeGift;
   }
 
   /**
@@ -337,6 +411,11 @@ class AlshayaRcsMetatagSsrHelper {
 
   /**
    * Check if the asset mapping is enabled for product.
+   *
+   * We will get status based on alshaya_rcs_assets module
+   * is enabled to check whether we need to use assets
+   * for media. ex. HM and COS. As we wanted to keep the SSR related code
+   * available in one module, added a check for alshaya_rcs_assets module.
    *
    * @return bool
    *   Return true if applicable otherwise false.
