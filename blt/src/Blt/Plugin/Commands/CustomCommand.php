@@ -360,6 +360,10 @@ class CustomCommand extends BltTasks {
       // Flush memcache.
       $this->_exec('echo "flush_all" | nc -q 2 memcache 11211');
     }
+    elseif (getenv('IS_DDEV_PROJECT')) {
+      // Flush memcache.
+      $this->_exec('echo "flush_all" | nc -q 2 memcached 11211');
+    }
     elseif (getenv('AH_SITE_ENVIRONMENT')) {
       $this->taskDrush()
         ->drush('cr')
@@ -645,7 +649,7 @@ class CustomCommand extends BltTasks {
    *   URL.
    */
   public static function getSiteUri($site_code) {
-    if (getenv('LANDO')) {
+    if (getenv('LANDO') || getenv('IS_DDEV_PROJECT')) {
       return $site_code . '.alshaya.lndo.site';
     }
 

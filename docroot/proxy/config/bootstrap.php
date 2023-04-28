@@ -22,6 +22,9 @@ if (getenv('AH_SITE_ENVIRONMENT')) {
 elseif (getenv('LANDO')) {
   $home = '/app/local_home';
 }
+elseif (getenv('IS_DDEV_PROJECT')) {
+  $home = '/var/www/html/local_home';
+}
 
 $env = 'local';
 
