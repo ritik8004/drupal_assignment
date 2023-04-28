@@ -66,22 +66,14 @@ const Teaser = ({
   // Calculate the coordinates of the touch event.
   const onTouchMove = (e) => {
     if (!isDesktop) {
+      // Set object data for GTM.
+      const swipeGAData = {
+        event: showColorSwatchSlider ? 'swatches_imageswipe' : 'imageswipe',
+        eventCategory: showColorSwatchSlider ? 'swatches_imageswipe' : 'imageswipe',
+        eventAction: showColorSwatchSlider ? 'swatches_imageswipe' : 'imageswipe',
+      };
       // Push image swipe data in GTM.
-      window.dataLayer.push({
-        event: 'imageswipe',
-        eventCategory: 'imageswipe',
-        eventAction: 'imageswipe',
-      });
-
-      // Check color swatch is enable.
-      if (showColorSwatchSlider) {
-      // Push color swatch data in GTM.
-        window.dataLayer.push({
-          event: 'swatches_imageswipe',
-          eventCategory: 'swatches_imageswipe',
-          eventAction: 'swatches_imageswipe',
-        });
-      }
+      window.dataLayer.push(swipeGAData);
       setTouchEnd(e.targetTouches[0].clientX);
     }
   };
