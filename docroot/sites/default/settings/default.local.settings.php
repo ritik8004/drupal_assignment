@@ -20,7 +20,13 @@ $drupal_database = $host_site_code == 'default_local'
   ? 'drupal'
   : 'drupal_alshaya_' . str_replace('-', '_', $host_site_code);
 
-$host = getenv('LANDO') ? 'database' : 'localhost';
+$host = 'localhost';
+if (getenv('LANDO')) {
+  $host = 'database';
+}
+elseif (getenv('IS_DDEV_PROJECT')) {
+  $host = 'db';
+}
 
 $prefix = '';
 
