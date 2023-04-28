@@ -6,6 +6,7 @@ services:
       - '@datetime.time'
       - '@cache.data'
       - '@logger.factory'
+      - '@acq_commerce.i18n_helper'
       - '@state'
       - '@file_system'
       - '@alshaya_api.mdc_helper'
