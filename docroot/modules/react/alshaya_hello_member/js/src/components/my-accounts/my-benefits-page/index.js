@@ -77,13 +77,11 @@ class MyBenefitsPage extends React.Component {
   }
 
   // function to pass benefit name and button name to GTM method.
-  handleClick() {
-    const { myBenefit } = this.state;
-    const buttonName = getExternalBenefitText(myBenefit);
+  handleClick = (myBenefit, buttonName) => {
     if (hasValue(myBenefit)) {
       Drupal.alshayaSeoGtmPushBenefitButton({ buttonName, myBenefit });
     }
-  }
+  };
 
   render() {
     const {
@@ -115,8 +113,10 @@ class MyBenefitsPage extends React.Component {
     }
 
     const benefitTag = getBenefitTag(myBenefit);
-    // Variable to catch the button text based on the tag from myBenefit response.
-    const externalBenefitText = getExternalBenefitText(myBenefit);
+    // Variable to catch the buttonText with translation based on the tag from myBenefit.
+    const externalBenefitText = getExternalBenefitText(myBenefit, true);
+    // Variable to catch the buttonText without translation based on the tag from myBenefit.
+    const externalBenefitGtmText = getExternalBenefitText(myBenefit, false);
     // Show QRCodeButton, either if response has no benefit tag or has a value '0' or 'S'.
     const showQRButton = !!(!hasValue(benefitTag)
     || (hasValue(benefitTag) && (benefitTag === 'O' || benefitTag === 'S')));
@@ -167,20 +167,20 @@ class MyBenefitsPage extends React.Component {
             )}
           {hasValue(myBenefit.benefit_url) && hasValue(benefitTag) && benefitTag === 'I'
           && (
-            <a className="button-wide learn-more" href={myBenefit.benefit_url} onClick={() => this.handleClick()}>
+            <a className="button-wide learn-more" href={myBenefit.benefit_url} onClick={() => this.handleClick(myBenefit, 'Learn more')}>
               {Drupal.t('Learn more', {}, { context: 'aura' })}
             </a>
           )}
           {/* CTA for competition benefits. */}
           {hasValue(myBenefit.benefit_url) && hasValue(benefitTag) && benefitTag === 'C'
             && (
-              <a target="_blank" rel="noopener noreferrer" className="qr-code-button external-btn" href={myBenefit.benefit_url + userEmail} onClick={() => this.handleClick()}>
+              <a target="_blank" rel="noopener noreferrer" className="qr-code-button external-btn" href={myBenefit.benefit_url + userEmail} onClick={() => this.handleClick(myBenefit, 'Enter now')}>
                 {Drupal.t('Enter now', {}, { context: 'hello_member' })}
               </a>
             )}
           {hasValue(myBenefit.benefit_url) && hasValue(benefitTag) && hasValue(externalBenefitText)
             && (
-              <a target="_blank" rel="noopener noreferrer" className="qr-code-button external-btn" href={myBenefit.benefit_url} onClick={() => this.handleClick()}>
+              <a target="_blank" rel="noopener noreferrer" className="qr-code-button external-btn" href={myBenefit.benefit_url} onClick={() => this.handleClick(myBenefit, externalBenefitGtmText)}>
                 { Drupal.t(externalBenefitText, {}, { context: 'hello_member' }) }
               </a>
             )}
