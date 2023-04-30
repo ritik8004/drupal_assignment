@@ -167,7 +167,7 @@ class MyBenefitsPage extends React.Component {
             )}
           {hasValue(myBenefit.benefit_url) && hasValue(benefitTag) && benefitTag === 'I'
           && (
-            <a className="button-wide learn-more" href={myBenefit.benefit_url} onClick={() => this.handleClick(myBenefit, 'Learn more')}>
+            <a target="_blank" rel="noopener noreferrer" className="button-wide learn-more" href={myBenefit.benefit_url} onClick={() => this.handleClick(myBenefit, 'Learn more')}>
               {Drupal.t('Learn more', {}, { context: 'aura' })}
             </a>
           )}
