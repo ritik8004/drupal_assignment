@@ -276,6 +276,18 @@ window.commerceBackend = window.commerceBackend || {};
         });
       }
 
+      if (Drupal.hasValue(drupalSettings.alshaya_spc.sizeGroupAttribute)
+        && attributeCode === drupalSettings.alshaya_spc.sizeGroupAttribute) {
+        let sizeGroup = '';
+        const sizeGroupAlternates = drupalSettings.alshaya_spc.sizeGroupAlternates;
+        Object.keys(sizeGroupAlternates).forEach(function (key) {
+          const value = variant.product[key];
+          const valueLabel = window.commerceBackend.getAttributeValueLabel(key, value);
+          sizeGroup += `${valueLabel}(${sizeGroupAlternates[key]}) `;
+        });
+        value = sizeGroup;
+      }
+
       variantConfigurableOptions.push({
         attribute_code: `attr_${attributeCode}`,
         attribute_id: `attr_${attributeCode}`,
