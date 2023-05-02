@@ -91,7 +91,7 @@ class AlshayaShoeAi {
     // If user is anonymous.
     $zeroHash = '';
     if ($this->currentUser->isAuthenticated() &&
-     !empty($this->currentUser->getEmail())) {
+      !empty($this->currentUser->getEmail())) {
       $zeroHash = md5($this->currentUser->getEmail());
     }
     return $zeroHash;

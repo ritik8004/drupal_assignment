@@ -62,7 +62,7 @@ window.shoe_size_add_to_cart = function (recommendation) {
       return;
     }
   }
-};
+}
 
 // Helper function for getting recommended shoesize from shoeai and select the size in PDP if available.
 window.shoe_size_recommendation = function (recommendation) {
@@ -81,11 +81,11 @@ window.shoe_size_recommendation = function (recommendation) {
       }
     }
   }
-};
+}
 
 // Helper function for initialising setShoeSizeShoppingCart function.
 function initialiseShoeSizeShoppingCart(e, event) {
-  const localCart = window.commerceBackend.getCartDataFromStorage();
+  var localCart = window.commerceBackend.getCartDataFromStorage();
   var items = localCart.cart.items;
   var totals = localCart.cart.totals.items;
   var updated_sku = '';
@@ -97,7 +97,7 @@ function initialiseShoeSizeShoppingCart(e, event) {
     updated_qty = e.detail.data.qty;
   }
   setShoeSizeShoppingCart(totals, items, updated_sku, updated_qty);
-};
+}
 
 /*
  * Helper function for populating
@@ -148,7 +148,7 @@ function setShoeSizeShoppingCart(totals, items, updated_sku, updated_qty) {
       (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(script);
     }
   }
-};
+}
 
 /*
  * Helper function for populating
