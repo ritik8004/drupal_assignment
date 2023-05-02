@@ -478,7 +478,7 @@ header {
       .menu--one__link {
         margin-top: initial;
 
-        @include sideSpaces(15px);
+        @include sideSpaces(rem(15));
       }
 
       &:last-of-type {
