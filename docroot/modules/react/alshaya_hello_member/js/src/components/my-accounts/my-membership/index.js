@@ -30,6 +30,8 @@ class MyMembership extends React.Component {
           // Dispatch event when hello member points are loaded on my account points block.
           dispatchCustomEvent('helloMemberPointsLoaded', response.data.extension_attributes);
         } else if (hasValue(response.error) && response.error_code === clmErrorCode) {
+          // Set response.error_message only
+          // if response.error_code is equal to clmErrorCode (i.e) 503
           this.setState({
             wait: false,
             errorMessage: response.error_message,

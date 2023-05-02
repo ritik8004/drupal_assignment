@@ -11,7 +11,7 @@ const cartErrorCodes = {
 };
 
 /**
- * Contains CLM Error codes.
+ * Contains the code (i.e) 503, which is received from CLM when it is down.
  */
 const clmErrorCode = 503;
 
