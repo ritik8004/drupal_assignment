@@ -253,6 +253,9 @@ class AlshayaAlgoliaReactConfig implements AlshayaAlgoliaReactConfigInterface {
       'max_category_tree_depth' => $alshaya_algolia_react_setting_values->get('max_category_tree_depth'),
     ];
     $show_color_swatch_slider = (bool) $algolia_color_swatches_settings->get('enable_listing_page_color_swatch_slider');
+    $swatch_plp_limit = $show_color_swatch_slider
+      ? $algolia_color_swatches_settings->get('no_of_swatches_desktop')
+      : $display_settings->get('swatch_plp_limit');
     $response['commonReactTeaserView'] = [
       'price' => [
         'currency' => $currency->get('currency_code'),
@@ -272,9 +275,7 @@ class AlshayaAlgoliaReactConfig implements AlshayaAlgoliaReactConfigInterface {
         'showVariantsThumbnail' => $display_settings->get('show_variants_thumbnail_plp_gallery'),
         'showSwatches' => $display_settings->get('color_swatches'),
         'showSliderSwatch' => $display_settings->get('show_variants_thumbnail_plp_gallery2'),
-        'swatchPlpLimit' => $show_color_swatch_slider
-        ? $algolia_color_swatches_settings->get('no_of_swatches_desktop')
-        : $display_settings->get('swatch_plp_limit'),
+        'swatchPlpLimit' => $swatch_plp_limit,
         'swatchPlpLimitMobileView' => $algolia_color_swatches_settings->get('no_of_swatches_mobile'),
         'showArticleSwatches' => $alshaya_algolia_react_setting_values->get('show_article_swatches'),
         'articleSwatchType' => $algolia_color_swatches_settings->get('swatch_type'),
