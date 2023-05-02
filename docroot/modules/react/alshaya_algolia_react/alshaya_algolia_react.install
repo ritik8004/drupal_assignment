@@ -22,8 +22,11 @@ function alshaya_algolia_react_update_9408() {
     [
       'alshaya_algolia_react.swipe_image',
       'alshaya_algolia_react.predictive_search',
+      'alshaya_algolia_react.settings',
     ],
     'alshaya_algolia_react',
+    'install',
+    AlshayaConfigManager::MODE_ADD_MISSING
   );
   $config_factory = \Drupal::configFactory();
   // Get Old Value image_slide_timing.
@@ -36,16 +39,6 @@ function alshaya_algolia_react_update_9408() {
     // Delete image_slide_timing Key.
     $config_factory->getEditable('alshaya_acm_product.display_settings')->clear('image_slide_timing')->save();
   }
-
-  // And also for exclude_render_single_result_facets.
-  /** @var \Drupal\alshaya_config\AlshayaConfigManager $manager */
-  $manager = \Drupal::service('alshaya_config.manager');
-  $manager->updateConfigs(
-    ['alshaya_algolia_react.settings'],
-    'alshaya_algolia_react',
-    'install',
-    AlshayaConfigManager::MODE_ADD_MISSING
-  );
 }
 
 /**
