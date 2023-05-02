@@ -181,7 +181,7 @@ class MyBenefitsPage extends React.Component {
           {hasValue(myBenefit.benefit_url) && hasValue(benefitTag) && hasValue(externalBenefitText)
             && (
               <a target="_blank" rel="noopener noreferrer" className="qr-code-button external-btn" href={myBenefit.benefit_url} onClick={() => this.handleClick(myBenefit, externalBenefitGtmText)}>
-                { Drupal.t(externalBenefitText, {}, { context: 'hello_member' }) }
+                { externalBenefitText }
               </a>
             )}
         </div>
