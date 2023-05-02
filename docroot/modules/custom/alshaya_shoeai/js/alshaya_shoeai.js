@@ -20,7 +20,7 @@
       shoe_size_add_to_cart(recommendation)
     };
     script.text = '{shopID:"' + shoeAi.shopId + '", locale:"' +
-     language + '", scale: "eu", zeroHash:"' + shoeAi.zeroHash + '", newRecommendation:' + newRecommendation +', inCart:' + inCart + '}';
+     language + '", scale: "eu", kids: true, zeroHash:"' + shoeAi.zeroHash + '", newRecommendation:' + newRecommendation +', inCart:' + inCart + '}';
     document.body.appendChild(script);
     // Initialize shoeai purchase tracking script on cart page.
     document.addEventListener('updateCartItemData', function (e) {
