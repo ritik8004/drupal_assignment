@@ -50,6 +50,16 @@ class AlshayaShoeaiSettingsForm extends ConfigFormBase {
       '#required' => TRUE,
       '#description' => $this->t('shopID config provided by ShoeAI for this site.'),
     ];
+    $form['landing_page_path'] = [
+      '#type' => 'textfield',
+      '#title' => $this
+        ->t('ShoeAI Landing page path'),
+      '#default_value' => $config->get('landing_page_path') ?: 'shoeai',
+      '#size' => 60,
+      '#maxlength' => 128,
+      '#description' => $this->t('Enter the path like “shoeai“ or “node/42“ and this would load the ShoeAI
+       Loader Script on it. For multiple paths add them comma separated.'),
+    ];
     return $form;
   }
 
@@ -60,6 +70,7 @@ class AlshayaShoeaiSettingsForm extends ConfigFormBase {
     $config = $this->config('alshaya_shoeai.settings');
     $config->set('enable_shoeai', $form_state->getValue('enable_shoeai'));
     $config->set('shop_id', $form_state->getValue('shop_id'));
+    $config->set('landing_page_path', $form_state->getValue('landing_page_path'));
     $config->save();
 
     return parent::submitForm($form, $form_state);

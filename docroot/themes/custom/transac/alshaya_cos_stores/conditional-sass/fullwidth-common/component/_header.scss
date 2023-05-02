@@ -34,6 +34,8 @@
   }
 
   .region__header {
+    position: relative;
+
     .block-alshaya-algolia-react-autocomplete {
       flex-grow: 1;
       display: flex;
@@ -43,6 +45,19 @@
         margin-#{$right}: rem(12);
         top: 0;
         #{$left}: 0;
+      }
+    }
+  }
+
+  .block-alshaya-main-menu {
+    position: unset;
+
+    &:not(.megamenu-inline-layout) {
+      li.menu--one__list-item {
+        ul.menu--two__list {
+          #{$left}: 0;
+          min-width: unset;
+        }
       }
     }
   }

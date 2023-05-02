@@ -10,6 +10,20 @@ use Drupal\alshaya_config\AlshayaConfigManager;
 use Drupal\Core\Site\Settings;
 
 /**
+ * Update algolia react with default value for render_single_result_facets.
+ *
+ * And also for exclude_render_single_result_facets.
+ */
+function alshaya_pb_transac_update_9403() {
+  $config = \Drupal::configFactory()->getEditable('alshaya_algolia_react.settings');
+  if ($config) {
+    $config->set('render_single_result_facets', FALSE);
+    $config->set('exclude_render_single_result_facets', 'final_price,attr_bv_rating,attr_color,field_acq_promotion_label');
+    $config->save();
+  }
+}
+
+/**
  * Implements hook_update_N().
  *
  * Provides default setting for `show_full_width` for theme.
@@ -437,6 +451,9 @@ function alshaya_pb_transac_update_dependencies() {
   // Ensure the footer links menu is created first in alshaya_menus.
   $dependencies['alshaya_pb_transac'][8009] = [
     'alshaya_menus' => 8001,
+  ];
+  $dependencies['alshaya_pb_transac'][9403] = [
+    'alshaya_algolia_react' => 9408,
   ];
   return $dependencies;
 }

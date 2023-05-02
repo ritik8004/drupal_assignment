@@ -188,6 +188,8 @@ class AlshayaAlgoliaReactAutocomplete extends AlshayaAlgoliaReactBlockBase {
       'config:alshaya_search.settings',
       'config:alshaya_spc.express_delivery',
       'config:alshaya_algolia_react.color_swatches',
+      'config:alshaya_algolia_react.swipe_image',
+      'config:alshaya_acm_product.display_settings',
     ]);
   }
 

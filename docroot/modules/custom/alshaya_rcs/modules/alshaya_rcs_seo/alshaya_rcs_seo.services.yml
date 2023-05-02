@@ -38,3 +38,22 @@ services:
 
   alshaya_rcs_seo.metatag_helper:
     class: Drupal\alshaya_rcs_seo\Services\AlshayaRcsMetatagHelper
+
+  alshaya_rcs_seo.graphql_helper:
+    class: Drupal\alshaya_rcs_seo\Services\AlshayGraphqlApiWrapper
+    arguments:
+      - '@logger.factory'
+      - '@http_client'
+      - '@config.factory'
+      - '@language_manager'
+
+  alshaya_rcs_seo.metatag_ssr_helper:
+    class: Drupal\alshaya_rcs_seo\Services\AlshayaRcsMetatagSsrHelper
+    arguments:
+      - '@alshaya_rcs_product.helper'
+      - '@alshaya_rcs_listing.helper'
+      - '@alshaya_rcs_promotion.helper'
+      - '@alshaya_rcs_seo.graphql_helper'
+      - '@request_stack'
+      - '@rcs_placeholders.path_processor'
+      - '@module_handler'

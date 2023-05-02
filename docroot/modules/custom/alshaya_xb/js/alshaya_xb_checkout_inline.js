@@ -6,12 +6,18 @@ var glegem = glegem || function () {
 var geData = {};
 
 glegem("OnClientEvent", function (source, data) {
-  if (source === 'ComboChanged' && (data.id === 'BillingCity' || data.id === 'ShippingCity')) {
-    // Set delivery city.
+  if ((source === 'ComboChanged' || source === 'fieldBlur')) {
     geData.xbDeliveryInfo = {
       deliveryOption: 'Home Delivery',
-      deliveryCity: data.value,
     };
+
+    if (data.id === 'BillingCity' || data.id === 'ShippingCity') {
+      // Set delivery city.
+      geData.xbDeliveryInfo.deliveryCity = data.value;
+    } else if (data.id === 'BillingCityRegionID' || data.id === 'ShippingCityRegionID') {
+      // Set delivery region.
+      geData.xbDeliveryInfo.deliveryRegion = data.value;
+    }
   }
 
   // BillingAddressCompleted is fired first then ShippingAddressCompleted

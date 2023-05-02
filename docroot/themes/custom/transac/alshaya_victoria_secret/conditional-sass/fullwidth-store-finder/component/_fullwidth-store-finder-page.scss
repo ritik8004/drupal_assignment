@@ -1,0 +1,32 @@
+@include breakpoint($desktop) {
+  .path--store-finder {
+    .label--location {
+      html[lang="ar"] & {
+        padding-right: 0;
+        border-right: none;
+      }
+    }
+
+    .store-finder--wrapper {
+      .form-item-geolocation-geocoder-google-places-api {
+        padding-#{$right}: 0;
+      }
+
+      .input--wrapper {
+        [id^=edit-actions] {
+          #{$right}: 0;
+        }
+      }
+    }
+  }
+}
+
+@include breakpoint($tablet) {
+  .path--store-finder {
+    .list-view-locator {
+      .store-row--counter {
+        #{$left}: rem(11);
+      }
+    }
+  }
+}

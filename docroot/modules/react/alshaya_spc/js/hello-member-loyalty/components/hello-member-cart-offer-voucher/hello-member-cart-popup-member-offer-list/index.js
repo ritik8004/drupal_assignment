@@ -96,29 +96,35 @@ const HelloMemberCartPopupMemberOfferList = (props) => {
         <div className="hello-member-promo-tab-content-list radio-btn-list">
           <div id="offer-err-msg" className="offer-err-msg" />
           {offers.map((offer, index) => (
-            <div key={offer.code} className="hello-member-promo-tab-cont-item">
-              <input
-                type="radio"
-                id={`offer${index}`}
-                data-offer={typeof offer.type !== 'undefined' ? offer.type : 'offer'}
-                name="radios"
-                value={offer.code}
-                defaultChecked={typeof totals.hmOfferCode !== 'undefined' ? totals.hmOfferCode === offer.code : false}
-                onChange={handleChange}
-              />
-              <label htmlFor={`offer${index}`} className="radio-sim radio-label">
-                <div className="item-title">
-                  <span className="title-text">{offer.description}</span>
-                  <span className="item-sub-title">
-                    {Drupal.t(
-                      'Expires on @expiryDate',
-                      { '@expiryDate': moment(new Date(typeof offer.end_date !== 'undefined' ? offer.end_date : offer.expiry_date)).format('DD MMMM YYYY') },
-                      { context: 'hello_member' },
-                    )}
-                  </span>
-                </div>
-              </label>
-            </div>
+            // List offers excluding In-store offers on Discounts & Vouchers popup on cart page.
+            hasValue(offer.tag) && offer.tag !== 'S'
+              && (
+              <div key={offer.code} className="hello-member-promo-tab-cont-item">
+                <input
+                  type="radio"
+                  id={`offer${index}`}
+                  data-offer={hasValue(offer.type) ? offer.type : 'offer'}
+                  name="radios"
+                  value={offer.code}
+                  defaultChecked={hasValue(totals.hmOfferCode)
+                    ? totals.hmOfferCode === offer.code
+                    : false}
+                  onChange={handleChange}
+                />
+                <label htmlFor={`offer${index}`} className="radio-sim radio-label">
+                  <div className="item-title">
+                    <span className="title-text">{offer.description}</span>
+                    <span className="item-sub-title">
+                      {Drupal.t(
+                        'Expires on @expiryDate',
+                        { '@expiryDate': moment(new Date(hasValue(offer.end_date) ? offer.end_date : offer.expiry_date)).format('DD MMMM YYYY') },
+                        { context: 'hello_member' },
+                      )}
+                    </span>
+                  </div>
+                </label>
+              </div>
+              )
           ))}
         </div>
         <div className="hello-member-promo-tab-cont-action">

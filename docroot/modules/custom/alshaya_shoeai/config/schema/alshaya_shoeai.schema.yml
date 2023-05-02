@@ -8,3 +8,6 @@ alshaya_shoeai.settings:
     shop_id:
       type: text
       label: 'Shoe AI shop ID'
+    landing_page_path:
+      type: text
+      label: ShoeAI Landing page path

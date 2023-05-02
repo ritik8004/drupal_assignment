@@ -38,6 +38,8 @@ const Teaser = ({
   const { showReviewsRating } = drupalSettings.algoliaSearch;
   const collectionLabel = [];
   const [initSlider, setInitiateSlider] = useState(false);
+  const [touchStart, setTouchStart] = useState(null);
+  const [touchEnd, setTouchEnd] = useState(null);
   const [slider, setSlider] = useState(false);
   const [sku, setSkuCode] = useState(hit.sku);
   const [media, setSkuMedia] = useState(hit.media);
@@ -49,7 +51,55 @@ const Teaser = ({
   const isDesktop = window.innerWidth > 1024;
   const { currentLanguage } = drupalSettings.path;
   const { showBrandName } = drupalSettings.reactTeaserView;
+  const touchEnable = drupalSettings.reactTeaserView.swipeImage.enableSwipeImageMobile;
   const activateShoeAI = getShoeAiStatus();
+
+  // Touch events for Mobile devices.
+  const onTouchStart = (e) => {
+    if (!isDesktop) {
+      setTouchEnd(null);
+      // Calculate the coordinates of the touch event.
+      setTouchStart(e.targetTouches[0].clientX);
+    }
+  };
+
+  // Calculate the coordinates of the touch event.
+  const onTouchMove = (e) => {
+    if (!isDesktop) {
+      // Set object data for GTM.
+      const swipeGAData = {
+        event: showColorSwatchSlider ? 'swatches_imageswipe' : 'imageswipe',
+        eventCategory: showColorSwatchSlider ? 'swatches_imageswipe' : 'imageswipe',
+        eventAction: showColorSwatchSlider ? 'swatches_imageswipe' : 'imageswipe',
+      };
+      // Push image swipe data in GTM.
+      window.dataLayer.push(swipeGAData);
+      setTouchEnd(e.targetTouches[0].clientX);
+    }
+  };
+
+  const onTouchEnd = () => {
+    if (!touchStart || !touchEnd) return;
+    const distance = touchStart - touchEnd;
+    // The minimum swipe distance between touchStart and touchEnd to be detected as
+    // a left or right swipe.
+    const isLeftSwipe = distance > 40;
+    const isRightSwipe = distance < -40;
+    if (isLeftSwipe || isRightSwipe) {
+      if (!isDesktop) {
+        // Check if Slick is initialized.
+        if (!initSlider) {
+          setInitiateSlider(true);
+        }
+        if (slider !== false) {
+          // Setting the first slide to 1 since on-swipe the image change should occur
+          // else we don't see any visible change as the slick gets initialized.
+          slider.slickGoTo(1, true);
+        }
+      }
+    }
+  };
+
   if (drupalSettings.plp_attributes
     && drupalSettings.plp_attributes.length > 0
     && hasValue(hit.collection_labels)
@@ -249,6 +299,9 @@ const Teaser = ({
             slider.slickPause();
           }
         }}
+        onTouchStart={touchEnable ? onTouchStart : null}
+        onTouchMove={touchEnable ? onTouchMove : null}
+        onTouchEnd={onTouchEnd}
       >
         <div className="field field--name-field-skus field--type-sku field--label-hidden field__items">
           <a
@@ -280,7 +333,7 @@ const Teaser = ({
               sku={sku}
               title={title && Parser(title)}
               format="icon"
-              setWishListButtonRef={ref}
+              setWishListButtonRef={ref.current}
             />
           </ConditionalView>
           {pageType === 'plp' && activateShoeAI === true ? (
