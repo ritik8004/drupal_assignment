@@ -154,6 +154,19 @@ const PdpLayout = ({ productInfo, configurableCombinations }) => {
     });
   };
 
+  // Calculate width of gallery and sidebar.
+  const setCSSVariable = () => {
+    if (!Drupal.hasValue(drupalSettings.show_full_width)) {
+      return;
+    }
+
+    const galleryWidth = galleryContainer.current.offsetWidth;
+    const sidebarWidth = sidebarContainer.current.offsetWidth;
+    const totalWidth = `${galleryWidth + sidebarWidth}px`;
+
+    document.documentElement.style.setProperty('--dynamic-container-width', totalWidth);
+  };
+
   const [cardNumber, setCard] = useState(null);
   const stickyButton = () => {
     const headerButton = () => {
@@ -181,6 +194,7 @@ const PdpLayout = ({ productInfo, configurableCombinations }) => {
     removeClassFromPDPLayout('content-loading');
     sidebarSticky();
     showStickyHeader();
+    setCSSVariable();
     if (isAuraEnabled()) {
       document.addEventListener('customerDetailsFetched', (e) => {
         const { stateValues } = e.detail;

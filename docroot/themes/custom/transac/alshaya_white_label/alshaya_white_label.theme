@@ -209,6 +209,8 @@ function alshaya_white_label_preprocess_page(&$variables) {
       'alshaya_spc.checkout.confirmation',
     ];
 
+    $variables['#attached']['drupalSettings']['show_full_width'] = TRUE;
+
     // Add common library on home page.
     if (\Drupal::service('path.matcher')->isFrontPage()) {
       $variables['#attached']['library'][] = 'alshaya_white_label/fullwidth-common';
@@ -270,11 +272,6 @@ function alshaya_white_label_preprocess_page(&$variables) {
     // Check the site full width enable.
     if ($is_full_width_feature_enabled) {
       $variables['#attached']['library'][] = 'alshaya_white_label/fullwidth-pdp';
-      $skuManager = \Drupal::service('alshaya_acm_product.skumanager');
-      $pdp_layout = $skuManager->getPdpLayout($node, 'pdp');
-      if ($pdp_layout === 'pdp-magazine_v2') {
-        $variables['#attached']['library'][] = 'alshaya_white_label/fullwidth-newpdp';
-      }
     }
   }
 
