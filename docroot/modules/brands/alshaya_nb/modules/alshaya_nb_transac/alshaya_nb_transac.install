@@ -10,6 +10,46 @@ use Drupal\facets\Entity\Facet;
 /**
  * Implements hook_update_N().
  *
+ * Save translations for Cart.
+ */
+function alshaya_nb_transac_update_9408() {
+  $strings = [
+    'Move to basket' => [
+      'en' => 'Move to Cart',
+      'ar' => '',
+    ],
+    'Bag' => [
+      'en' => 'Cart',
+      'ar' => 'حقيبة التسوق',
+    ],
+    'Basket' => [
+      'en' => 'Cart',
+      'ar' => 'حقيبة التسوق',
+    ],
+    'add to cart' => [
+      'en' => 'Add to Cart',
+      'ar' => '',
+    ],
+    'my shopping bag' => [
+      'en' => 'my shopping cart',
+      'ar' => '',
+    ],
+    'Shopping Bag' => [
+      'en' => 'Shopping Cart',
+      'ar' => '',
+    ],
+    'view cart' => [
+      'en' => 'view cart',
+      'ar' => '',
+    ],
+  ];
+
+  alshaya_i18n_save_translations($strings);
+}
+
+/**
+ * Implements hook_update_N().
+ *
  * Provides default setting for `show_full_width` for theme.
  */
 function alshaya_nb_transac_update_9407() {
