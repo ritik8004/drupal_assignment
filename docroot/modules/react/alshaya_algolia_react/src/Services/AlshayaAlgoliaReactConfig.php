@@ -241,7 +241,10 @@ class AlshayaAlgoliaReactConfig implements AlshayaAlgoliaReactConfigInterface {
       $response['commonAlgoliaSearch']['productElementAlignmentEnabled'] = TRUE;
     }
 
-    $response[$page_type]['filters'] = $this->getFilters($index_name, $page_type, $sub_page);
+    $response[$page_type]['filters'] = [];
+    if (!$alshaya_algolia_react_setting_values->get('algolia_enable_configurable_filter')) {
+      $response[$page_type]['filters'] = $this->getFilters($index_name, $page_type, $sub_page);
+    }
 
     $response['autocomplete'] = [
       'hits' => $alshaya_algolia_react_setting_values->get('hits') ?? 4,

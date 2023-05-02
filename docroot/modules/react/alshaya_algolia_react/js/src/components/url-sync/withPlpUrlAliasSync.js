@@ -184,13 +184,8 @@ const withPlpUrlAliasSync = (
 
     // Update the state based on url for selected filters / sort.
     showLoader();
-    const { filters } = getBaseRouteAndFilters();
-    if (filters.length > 0) {
-      const decodedFilters = await this.getRefinementListForFilters(filters);
-      this.setState({
-        searchState: decodedFilters,
-      });
-    }
+
+    document.addEventListener('userDataReceived', this.applyFilters);
     window.addEventListener('popstate', this.onPopState);
   }
 
@@ -201,6 +196,17 @@ const withPlpUrlAliasSync = (
 
     clearTimeout(this.debouncedSetState);
     window.removeEventListener('popstate', this.onPopState);
+  }
+
+  applyFilters = async () => {
+    const { filters } = getBaseRouteAndFilters();
+    console.log(filters);
+    if (filters.length > 0) {
+      const decodedFilters = await this.getRefinementListForFilters(filters);
+      this.setState({
+        searchState: decodedFilters,
+      });
+    }
   }
 
   onPopState = async (event) => {

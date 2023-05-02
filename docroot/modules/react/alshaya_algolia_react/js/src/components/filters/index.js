@@ -4,6 +4,7 @@ import DynamicWidgets from '../algolia/widgets/DynamicWidgets';
 import { hasValue } from '../../../../../js/utilities/conditionsUtility';
 import { isConfigurableFiltersEnabled } from '../../../../../js/utilities/helper';
 import { getFilters } from '../../utils';
+import dispatchCustomEvent from '../../../../../js/utilities/events';
 
 const Filters = ({ indexName, pageType, ...props }) => {
   const [filterCounts, setfilters] = useState([]);
@@ -27,8 +28,6 @@ const Filters = ({ indexName, pageType, ...props }) => {
           element.classList.remove('hide-facet-block');
         }
       });
-
-      props.callback({ activeFilters, filterCounts, ...props });
     }
   };
 
@@ -187,8 +186,10 @@ const Filters = ({ indexName, pageType, ...props }) => {
       return;
     }
 
-    // Initialize facets array to get facets from userData.
-    const facetsArray = [];
+    // Initialize facets data to get facets from userData.
+    const facetsObject = {};
+    const filterAlias = {};
+
     // Initialize indentifier prefix.
     const identifierPrefix = drupalSettings.path.currentLanguage;
     // Process any override rules in userData.
@@ -205,7 +206,6 @@ const Filters = ({ indexName, pageType, ...props }) => {
         widget: {
           type: value.widget.type,
         },
-        id: value.slug.replace('_', ''), // Remove underscores to set filter id.
         alias: value.slug,
       };
 
@@ -230,8 +230,19 @@ const Filters = ({ indexName, pageType, ...props }) => {
         filter.facets_value = value.facets_value;
       }
 
-      facetsArray.push(filter);
+      facetsObject[key] = filter;
+      filterAlias[filter.alias] = filter.identifier;
     });
+
+    // Set filter data in settings for use with helper methods.
+    drupalSettings.algoliaSearch.search.filters = facetsObject;
+    if (pageType !== 'search') {
+      drupalSettings.algoliaSearch.listing.filters = facetsObject;
+    }
+    drupalSettings.algoliaSearch.filters_alias = filterAlias;
+
+    // Dispatch event userDataReceived for Plp url alias sync.
+    dispatchCustomEvent('userDataReceived', {});
 
     const {
       sorting_label: sortlabel,
@@ -249,8 +260,11 @@ const Filters = ({ indexName, pageType, ...props }) => {
       },
     };
 
+    const facetsArray = Object.values(facetsObject);
+    // Add sorting facet to the list of facets.
     facetsArray.unshift(sort);
 
+    // Set facets to render.
     setFacets(facetsArray);
   };
 
