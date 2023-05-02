@@ -16,9 +16,21 @@ use Drupal\facets\Entity\Facet;
 /**
  * Implements hook_update_N().
  *
- * Migrate swatch_plp_limit_mobile_view config to no_of_swatches_mobile.
+ * Add the article_swatches and migrate swatch_plp_limit_mobile_view
+ * config to no_of_swatches_mobile.
  */
-function alshaya_acm_product_update_9406() {
+function alshaya_acm_product_update_9405() {
+  // Add the article swatches field to SKU entity.
+  $manager = \Drupal::service('alshaya_config.manager');
+  $manager->updateConfigs(
+    ['alshaya_acm_product.sku_base_fields'],
+    'alshaya_acm_product',
+    'install',
+    AlshayaConfigManager::MODE_MERGE
+  );
+  \Drupal::service('acq_sku.fields_manager')->addFields();
+
+  // Migrate swatch_plp_limit_mobile_view config to no_of_swatches_mobile.
   $config_factory = \Drupal::configFactory();
   // Get Old Value swatch_plp_limit_mobile_view.
   $display_settings = $config_factory->get('alshaya_acm_product.display_settings');
@@ -30,20 +42,6 @@ function alshaya_acm_product_update_9406() {
     // Delete swatch_plp_limit_mobile_view Key.
     $config_factory->getEditable('alshaya_acm_product.display_settings')->clear('swatch_plp_limit_mobile_view')->save();
   }
-}
-
-/**
- * Add the article_swatches.
- */
-function alshaya_acm_product_update_9405() {
-  $manager = \Drupal::service('alshaya_config.manager');
-  $manager->updateConfigs(
-    ['alshaya_acm_product.sku_base_fields'],
-    'alshaya_acm_product',
-    'install',
-    AlshayaConfigManager::MODE_MERGE
-  );
-  \Drupal::service('acq_sku.fields_manager')->addFields();
 }
 
 /**

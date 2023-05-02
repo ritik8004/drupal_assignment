@@ -37,9 +37,11 @@ exports.invokeGraphqlApi = async function (query, method = 'GET', variables = {}
     success: function (response) {
       mainApiResponse = response;
     },
-    error: function () {
-    // If graphQl API is returning Error.
-    Drupal.alshayaLogger('error', 'Failed to process the GraphQL query.');
+    error: function (xhr, textStatus, error) {
+      // If graphQl API is returning Error.
+      Drupal.alshayaLogger('error', 'Failed to process the GraphQL query: @error', {
+        '@error': error
+      });
     }
   });
 
