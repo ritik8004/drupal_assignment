@@ -68,7 +68,8 @@ function storeClickedItem(event, pageType) {
   // is 'undefined'.
   if (productList !== null) {
     storageDetails.grid_type = productList.classList.contains('product-large')
-      ? 'large' : 'small';
+      ? 'large'
+      : 'small';
   }
 
   if (pageType === 'plp') {
