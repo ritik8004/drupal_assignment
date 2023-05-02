@@ -8,6 +8,7 @@ import {
 } from '../../utils';
 import { getFacetStorage, asyncFacetValuesRequest } from '../../utils/requests';
 import { productListIndexStatus } from '../../utils/indexUtils';
+import { isConfigurableFiltersEnabled } from '../../../../../js/utilities/helper';
 
 const history = createBrowserHistory();
 
@@ -185,8 +186,13 @@ const withPlpUrlAliasSync = (
     // Update the state based on url for selected filters / sort.
     showLoader();
 
-    document.addEventListener('userDataReceived', this.applyFilters);
-    window.addEventListener('popstate', this.onPopState);
+    if (isConfigurableFiltersEnabled()) {
+      // Wait till userData is received then apply filters.
+      document.addEventListener('userDataReceived', this.applyFilters);
+    } else {
+      // apply filters from drupal settings data.
+      await this.applyFilters();
+    }
   }
 
   componentWillUnmount() {
@@ -200,13 +206,14 @@ const withPlpUrlAliasSync = (
 
   applyFilters = async () => {
     const { filters } = getBaseRouteAndFilters();
-    console.log(filters);
     if (filters.length > 0) {
       const decodedFilters = await this.getRefinementListForFilters(filters);
       this.setState({
         searchState: decodedFilters,
       });
     }
+
+    window.addEventListener('popstate', this.onPopState);
   }
 
   onPopState = async (event) => {

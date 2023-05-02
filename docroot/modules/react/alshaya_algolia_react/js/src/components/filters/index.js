@@ -28,6 +28,10 @@ const Filters = ({ indexName, pageType, ...props }) => {
           element.classList.remove('hide-facet-block');
         }
       });
+
+      if (!isConfigurableFiltersEnabled()) {
+        props.callback({ activeFilters, filterCounts, ...props });
+      }
     }
   };
 
@@ -298,8 +302,16 @@ const Filters = ({ indexName, pageType, ...props }) => {
   // Dynamic widgets component. Dynamic widgets component uses renderingContent
   // from algolia search result which has the facet display configuration.
   if (isConfigurableFiltersEnabled()) {
+    // Request all facets to avoid additional network request.
+    // https://www.algolia.com/doc/api-reference/widgets/dynamic-facets/react/?client=custom+widget#widget-param-facets
+    // Set maxValuesPerFacet to highest value as all pinned items.
+    // https://www.algolia.com/doc/api-reference/widgets/dynamic-facets/react/?client=custom+widget#widget-param-maxvaluesperfacet
     facetsList = (
-      <DynamicWidgets buildFacets={buildFacets}>
+      <DynamicWidgets
+        buildFacets={buildFacets}
+        facets={['*']}
+        maxValuesPerFacet={1000}
+      >
         {facetsList}
       </DynamicWidgets>
     );
