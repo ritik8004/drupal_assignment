@@ -333,7 +333,7 @@ const Teaser = ({
               sku={sku}
               title={title && Parser(title)}
               format="icon"
-              setWishListButtonRef={ref}
+              setWishListButtonRef={ref.current}
             />
           </ConditionalView>
           {pageType === 'plp' && activateShoeAI === true ? (
