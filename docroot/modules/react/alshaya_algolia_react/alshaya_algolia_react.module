@@ -57,7 +57,6 @@ function alshaya_algolia_react_page_attachments(array &$attachments) {
   // user.
   $attachments['#attached']['drupalSettings']['user']['isCustomer'] = _alshaya_seo_process_gtm();
   $attachments['#attached']['drupalSettings']['reactTeaserView']['isPriceModeFromTo'] = _alshaya_acm_product_get_price_helper()->isPriceModeFromTo();
-
 }
 
 /**
