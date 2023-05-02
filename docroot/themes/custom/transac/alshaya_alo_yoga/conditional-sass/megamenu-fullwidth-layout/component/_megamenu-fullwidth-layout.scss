@@ -1,7 +1,7 @@
 @include breakpoint($desktop) {
   .block-alshaya-main-menu.megamenu-fullwidth-layout {
     ul.menu--one__list {
-      padding-#{$left}: rem(48);
+      margin-#{$left}: rem(48);
 
       li.menu--one__list-item {
         ul.menu--two__list {
