@@ -90,7 +90,7 @@
     }
     dataLayer.push(benefitGtmData);
   }
-  
+
   /**
    * Function to push the benefits cart data to gtm when benefits added to cart.
    *
@@ -109,7 +109,25 @@
     }
     dataLayer.push(benefitGtmData);
   }
-  
+
+  /**
+   * Function to push the button data to gtm when button on
+   * Benefit landing page is clicked.
+   *
+   * @param {object} benefitsData
+   *  Object containing benefits offer data that is clicked.
+   */
+  Drupal.alshayaSeoGtmPushBenefitButton = function (benefitsData) {
+    // Prepare the benefit button data.
+    var benefitGtmData = {
+      eventCategory : 'my accounts interaction',
+      eventAction: 'benefits - ' + benefitsData.buttonName,
+      eventLabel: benefitsData.myBenefit.name,
+      event: "myaccount",
+    }
+    dataLayer.push(benefitGtmData);
+  }
+
   /**
    * Function to push the benefit show more click to gtm.
    *
@@ -128,7 +146,7 @@
     }
     dataLayer.push(benefitShowMoreData);
   }
-  
+
   /**
    * Function to push the benefits qr code click to gtm.
    *
