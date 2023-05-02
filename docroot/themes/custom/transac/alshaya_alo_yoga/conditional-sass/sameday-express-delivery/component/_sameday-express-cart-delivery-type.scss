@@ -1,5 +1,9 @@
 .alias--cart {
   #delivery-area-select {
+    @include breakpoint($desktop) {
+      margin-#{$right}: rem(10);
+    }
+
     .delivery-area-label {
       @include breakpoint($only-mobile) {
         #{$left}: rem(15);
