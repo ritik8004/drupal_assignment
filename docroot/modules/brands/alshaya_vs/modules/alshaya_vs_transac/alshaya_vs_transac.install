@@ -13,15 +13,22 @@ use Drupal\Component\Utility\Unicode;
  * Update algolia react with default value for render_single_result_facets.
  *
  * And also for exclude_render_single_result_facets.
- * Adds 'bra_type' field in the sku base field existing config.
  */
-function alshaya_vs_transac_update_9405() {
+function alshaya_vs_transac_update_9406() {
   $config = \Drupal::configFactory()->getEditable('alshaya_algolia_react.settings');
   if ($config) {
     $config->set('render_single_result_facets', FALSE);
     $config->set('exclude_render_single_result_facets', 'final_price,attr_bv_rating,field_acq_promotion_label,attr_product_collection');
     $config->save();
   }
+}
+
+/**
+ * Implements hook_update_N().
+ *
+ * Adds 'bra_type' field in the sku base field existing config.
+ */
+function alshaya_vs_transac_update_9405() {
   $manager = \Drupal::service('alshaya_config.manager');
   $manager->updateConfigs(
     ['alshaya_acm_product.sku_base_fields'],
