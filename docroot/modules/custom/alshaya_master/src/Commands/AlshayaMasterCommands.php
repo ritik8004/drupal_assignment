@@ -519,6 +519,12 @@ class AlshayaMasterCommands extends DrushCommands implements SiteAliasManagerAwa
   /**
    * Utility command to fix module update version.
    *
+   * We try to reduce the update hooks by merging before we release code
+   * on production. Since those update hook numbers are already executed on
+   * non-prod it creates issue when we add them back in future. To avoid the
+   * issue this command is created which should be executed post deployment
+   * every-time.
+   *
    * @command alshaya_master:fix-update-version
    *
    * @aliases fix-update-version
