@@ -156,18 +156,18 @@ class AlshayaMasterCommands extends DrushCommands implements SiteAliasManagerAwa
    *   Update Hook Registery.
    */
   public function __construct(StateInterface $state,
-                              ConfigFactoryInterface $configFactory,
-                              ModuleInstallerInterface $moduleInstaller,
-                              ModuleHandlerInterface $moduleHandler,
-                              CachedStorage $configStorage,
-                              LanguageManagerInterface $languageManager,
-                              EntityTypeManagerInterface $entityTypeManager,
-                              ModuleExtensionList $module_extension_list,
-                              DateFormatter $date_formatter,
-                              $install_profile,
-                              LocaleConfigManager $locale_config_manager,
-                              LoggerChannelFactory $logger_factory,
-                              UpdateHookRegistry $update_hook_registry) {
+    ConfigFactoryInterface $configFactory,
+    ModuleInstallerInterface $moduleInstaller,
+    ModuleHandlerInterface $moduleHandler,
+    CachedStorage $configStorage,
+    LanguageManagerInterface $languageManager,
+    EntityTypeManagerInterface $entityTypeManager,
+    ModuleExtensionList $module_extension_list,
+    DateFormatter $date_formatter,
+    $install_profile,
+    LocaleConfigManager $locale_config_manager,
+    LoggerChannelFactory $logger_factory,
+    UpdateHookRegistry $update_hook_registry) {
     $this->state = $state;
     $this->configFactory = $configFactory;
     $this->moduleInstaller = $moduleInstaller;
@@ -523,7 +523,7 @@ class AlshayaMasterCommands extends DrushCommands implements SiteAliasManagerAwa
    *
    * @aliases fix-update-version
    */
-  public function fixUpdateVersion() {
+  public function fixUpdateVersion(array $options = ['dry-run' => FALSE]) {
     foreach ($this->moduleExtensionList->getList() as $module) {
       $module_name = $module->getName();
 
@@ -537,14 +537,28 @@ class AlshayaMasterCommands extends DrushCommands implements SiteAliasManagerAwa
 
       while (TRUE) {
         if (function_exists("{$module_name}_update_{$version}")) {
-          if ($installed_version !== $version) {
+          if ($installed_version === $version) {
+            break;
+          }
+
+          if (empty($options['dry-run'])) {
             $this->updateHookRegistery->setInstalledVersion($module_name, $version);
+
             $this->drupalLogger->warning('Installed Update Version updated for module: @module, to version: @version_to, from version: @version_from.', [
               '@module' => $module_name,
               '@version_from' => $installed_version,
               '@version_to' => $version,
             ]);
+
+            break;
           }
+
+          $this->drupalLogger->warning('Update Version for module @module is @version_from while as per code last version available is @version_to.', [
+            '@module' => $module_name,
+            '@version_from' => $installed_version,
+            '@version_to' => $version,
+          ]);
+
           break;
         }
 
