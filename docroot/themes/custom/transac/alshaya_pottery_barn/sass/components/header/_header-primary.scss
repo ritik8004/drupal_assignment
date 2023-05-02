@@ -117,6 +117,14 @@ header {
       }
     }
 
+    .acq-mini-cart {
+      html[lang="en"] & {
+        @include breakpoint($tablet) {
+          padding-right: rem(12);
+        }
+      }
+    }
+
     .site-brand-home {
       html[lang="ar"] & {
         @include breakpoint($only-tablet) {
