@@ -1,0 +1,21 @@
+.acq-content-product {
+  .basic-details-wrapper .field--name-field-skus {
+    @include breakpoint($desktop) {
+      .form-item-quantity {
+        width: auto;
+
+        &::after {
+          content: none;
+        }
+      }
+
+      .sku-base-form button[type="submit"] {
+        min-width: unset;
+
+        body.nodetype--acq_product:not(.magazine-layout):not(.magazine-layout-v2) & {
+          width: calc(100% - #{rem(90)});
+        }
+      }
+    }
+  }
+}

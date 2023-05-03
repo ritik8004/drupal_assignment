@@ -33,8 +33,8 @@
   setTimeout(function () {
     var sprChatId = document.getElementById('spr-live-chat-frame');
     var winWidth = window.innerWidth;
-    if (sprChatId !== null && winWidth < 768) {
-      var backToTop = document.getElementById('backtotop')
+    var backToTop = document.getElementById('backtotop');
+    if (sprChatId !== null && backToTop !== null) {
       backToTop.classList.add('sprinklr-enabled');
     }
   }, 2000);

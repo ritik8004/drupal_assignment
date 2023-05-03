@@ -8,6 +8,7 @@ import TierProgress from './tier-progress';
 import logger from '../../../../../../js/utilities/logger';
 import dispatchCustomEvent from '../../../../../../js/utilities/events';
 import { getHelloMemberCustomerData, displayErrorMessage } from '../../../../../../js/utilities/helloMemberHelper';
+import { clmErrorCode } from '../../../../../../js/utilities/error';
 
 class MyMembership extends React.Component {
   constructor(props) {
@@ -28,7 +29,9 @@ class MyMembership extends React.Component {
           myMembershipData = response.data;
           // Dispatch event when hello member points are loaded on my account points block.
           dispatchCustomEvent('helloMemberPointsLoaded', response.data.extension_attributes);
-        } else if (hasValue(response.error)) {
+        } else if (hasValue(response.error) && response.error_code === clmErrorCode) {
+          // Set response.error_message only
+          // if response.error_code is equal to clmErrorCode (i.e) 503
           this.setState({
             wait: false,
             errorMessage: response.error_message,

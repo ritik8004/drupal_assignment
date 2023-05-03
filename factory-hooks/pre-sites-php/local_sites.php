@@ -19,9 +19,13 @@ if (!(getenv('AH_SITE_ENVIRONMENT'))) {
   foreach ($data['sites'] as $site_code => $site_info) {
     $sites['local.alshaya-' . $site_code . '.com'] = 'g';
 
-    if (getenv('LANDO')) {
+    if (getenv('LANDO') || getenv('IS_DDEV_PROJECT')) {
       $sites[$site_code . '.alshaya.lndo.site'] = 'g';
       $sites[$site_code . '.varnish.alshaya.lndo.site'] = 'g';
+    }
+
+    if (getenv('IS_DDEV_PROJECT')) {
+      $sites[$site_code . '.alshaya.ddev.site'] = 'g';
     }
   }
 
@@ -37,7 +41,7 @@ if (!(getenv('AH_SITE_ENVIRONMENT'))) {
       if (strpos($arg, '--uri') > -1) {
         $url = str_replace('--uri=', '', $arg);
       }
-      elseif (strpos($arg, 'local.alshaya-') > -1 || strpos($arg, 'lndo.site') > -1) {
+      elseif (strpos($arg, 'local.alshaya-') > -1 || strpos($arg, '.site') > -1) {
         $url = $arg;
       }
 
@@ -58,7 +62,7 @@ if (!(getenv('AH_SITE_ENVIRONMENT'))) {
 
   // Support LANDO and Vagrant both.
   if (isset($hostname_parts)) {
-    $host_site_code = getenv('LANDO')
+    $host_site_code = in_array('site', $hostname_parts)
       ? $hostname_parts[0]
       : str_replace('alshaya-', '', $hostname_parts[1]);
   }

@@ -43,11 +43,10 @@ class AlshayaShoeaiSettingsForm extends ConfigFormBase {
     ];
     $form['shop_id'] = [
       '#type' => 'textfield',
-      '#title' => $this
-        ->t('Shop Id'),
+      '#title' => $this->t('Shop Id'),
       '#default_value' => $config->get('shop_id') ?: '',
-      '#size' => 60,
-      '#maxlength' => 128,
+      '#size' => 15,
+      '#maxlength' => 15,
       '#required' => TRUE,
       '#description' => $this->t('shopID config provided by ShoeAI for this site.'),
     ];

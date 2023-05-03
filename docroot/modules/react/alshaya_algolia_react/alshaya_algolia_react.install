@@ -26,18 +26,24 @@ function alshaya_algolia_react_update_9409() {
 /**
  * Implements hook_update_N().
  *
- * Update algolia react with default value for render_single_result_facets.
+ * Update algolia react with default value for render_single_result_facets
+ * and predictive search.
  * Add the new alshaya_algolia_react.swipe_image.config.
+ * Add the new predictive search configurations.
  */
 function alshaya_algolia_react_update_9408() {
   /** @var \Drupal\alshaya_config\AlshayaConfigManager $manager */
   $manager = \Drupal::service('alshaya_config.manager');
-  $manager->updateConfigs([
-    'alshaya_algolia_react.swipe_image',
-  ],
+  $manager->updateConfigs(
+    [
+      'alshaya_algolia_react.swipe_image',
+      'alshaya_algolia_react.predictive_search',
+      'alshaya_algolia_react.settings',
+    ],
     'alshaya_algolia_react',
+    'install',
+    AlshayaConfigManager::MODE_ADD_MISSING
   );
-
   $config_factory = \Drupal::configFactory();
   // Get Old Value image_slide_timing.
   $display_settings = $config_factory->get('alshaya_acm_product.display_settings');
@@ -49,16 +55,6 @@ function alshaya_algolia_react_update_9408() {
     // Delete image_slide_timing Key.
     $config_factory->getEditable('alshaya_acm_product.display_settings')->clear('image_slide_timing')->save();
   }
-
-  // And also for exclude_render_single_result_facets.
-  /** @var \Drupal\alshaya_config\AlshayaConfigManager $manager */
-  $manager = \Drupal::service('alshaya_config.manager');
-  $manager->updateConfigs(
-    ['alshaya_algolia_react.settings'],
-    'alshaya_algolia_react',
-    'install',
-    AlshayaConfigManager::MODE_ADD_MISSING
-  );
 }
 
 /**

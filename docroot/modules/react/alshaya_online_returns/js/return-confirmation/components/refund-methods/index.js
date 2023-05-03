@@ -10,13 +10,13 @@ const RefundMethods = ({
   paymentInfo,
 }) => {
   const [cardList, setCardList] = useState(null);
+  // Variable to check whether the new eGift option needs
+  // to be given to the user or not in the refund form.
+  const [showNewEgiftCardOption, setNewEgiftCardOption] = useState(false);
   if (!hasValue(paymentInfo)) {
     return null;
   }
 
-  // Variable to check whether the new eGift option needs
-  // to be given to the user or not in the refund form.
-  let showNewEgiftCardOption = false;
   // Checking whether the eGift refund feature is enabled or not and the user is authenticated.
   if (isUserAuthenticated() && isEgiftRefundEnabled() && !hasValue(paymentInfo.aura)) {
     // Call to get customer linked eGift card details.
@@ -31,10 +31,12 @@ const RefundMethods = ({
           // eGift cards having same email address as of the current user.
           const unlinkedResult = callEgiftApi('unlinkedEiftCardList', 'GET', {});
           unlinkedResult.then((unlinkresponse) => {
-            if (!hasValue(unlinkresponse.data.card_list)
-              || (hasValue(paymentInfo.cashondelivery.payment_type)
+            if (typeof unlinkresponse.data === 'undefined'
+              || !hasValue(unlinkresponse.data.card_number)
+              || (typeof paymentInfo.cashondelivery !== 'undefined'
+                && hasValue(paymentInfo.cashondelivery.payment_type)
                 && paymentInfo.cashondelivery.payment_type === 'cashondelivery')) {
-              showNewEgiftCardOption = true;
+              setNewEgiftCardOption(true);
             }
           });
         }
@@ -42,18 +44,19 @@ const RefundMethods = ({
     }
   }
 
+  // Variable to check whether the payment made through multiple methods i.e. hybrid or not.
+  const isHybrid = isHybridPayment(paymentInfo);
   // If the eGift refund feature is not enabled, there is no eGift card details API called
   // and the payment is not made through AURA (as for AURA we don't used to call the API)
   // we will not render any egift components.
-  if (isEgiftRefundEnabled() && !cardList && !hasValue(paymentInfo.aura)) {
+  if (isEgiftRefundEnabled() && !isHybrid && !cardList && !hasValue(paymentInfo.aura)
+    && !showNewEgiftCardOption) {
     return null;
   }
 
   // Fetching the value from local storage to know whether
   // eGift card was selected or not in refund form.
   const isEgiftCardSelected = Drupal.getItemFromLocalStorage('is_egift_selected');
-  // Variable to check whether the payment made through multiple methods i.e. hybrid or not.
-  const isHybrid = isHybridPayment(paymentInfo);
   // Assigning payment data to a different variable to make the change on that conditionally,
   // otherwise it will throw the "no-param-reassign" lint error.
   const paymentData = paymentInfo;
@@ -90,8 +93,7 @@ const RefundMethods = ({
     ));
 
   // Components for eGift card hybrid payment method.
-  const HybridPaymentMethods = () => (isEgiftRefundEnabled() && (cardList || showNewEgiftCardOption)
-  && !hasValue(paymentInfo.aura)
+  const HybridPaymentMethods = () => (isEgiftRefundEnabled() && !hasValue(paymentInfo.aura)
     ? (
       <>
         <EgiftCardDetails

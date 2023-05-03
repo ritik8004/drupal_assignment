@@ -226,8 +226,8 @@ class AlshayaAlgoliaReactConfig implements AlshayaAlgoliaReactConfigInterface {
       'defaultColgrid' => $alshaya_algolia_react_setting_values->get('default_col_grid'),
       'defaultColGridMobile' => $alshaya_algolia_react_setting_values->get('default_col_grid_mobile'),
       'hitsPerPage' => $alshaya_algolia_react_setting_values->get('enable_hits_per_page'),
-      'render_single_result_facets' => $alshaya_algolia_react_setting_values->get('render_single_result_facets'),
-      'exclude_render_single_result_facets' => $alshaya_algolia_react_setting_values->get('exclude_render_single_result_facets'),
+      'renderSingleResultFacets' => $alshaya_algolia_react_setting_values->get('render_single_result_facets'),
+      'excludeRenderSingleResultFacets' => $alshaya_algolia_react_setting_values->get('exclude_render_single_result_facets'),
       'facetListExpiry' => $alshaya_algolia_react_setting_values->get('algolia_facets_local_storage_expiry'),
       'enableConfigurableFilters' => $alshaya_algolia_react_setting_values->get('algolia_enable_configurable_filter'),
     ];
@@ -258,6 +258,9 @@ class AlshayaAlgoliaReactConfig implements AlshayaAlgoliaReactConfigInterface {
       'max_category_tree_depth' => $alshaya_algolia_react_setting_values->get('max_category_tree_depth'),
     ];
     $show_color_swatch_slider = (bool) $algolia_color_swatches_settings->get('enable_listing_page_color_swatch_slider');
+    $swatch_plp_limit = $show_color_swatch_slider
+      ? $algolia_color_swatches_settings->get('no_of_swatches_desktop')
+      : $display_settings->get('swatch_plp_limit');
     $response['commonReactTeaserView'] = [
       'price' => [
         'currency' => $currency->get('currency_code'),
@@ -277,20 +280,18 @@ class AlshayaAlgoliaReactConfig implements AlshayaAlgoliaReactConfigInterface {
         'showVariantsThumbnail' => $display_settings->get('show_variants_thumbnail_plp_gallery'),
         'showSwatches' => $display_settings->get('color_swatches'),
         'showSliderSwatch' => $display_settings->get('show_variants_thumbnail_plp_gallery2'),
-        'swatchPlpLimit' => $show_color_swatch_slider
-        ? $algolia_color_swatches_settings->get('no_of_swatches_desktop')
-        : $display_settings->get('swatch_plp_limit'),
+        'swatchPlpLimit' => $swatch_plp_limit,
         'swatchPlpLimitMobileView' => $algolia_color_swatches_settings->get('no_of_swatches_mobile'),
         'showArticleSwatches' => $alshaya_algolia_react_setting_values->get('show_article_swatches'),
         'articleSwatchType' => $algolia_color_swatches_settings->get('swatch_type'),
         'showColorSwatchSlider' => $show_color_swatch_slider,
       ],
       'showBrandName' => $display_settings->get('show_brand_name_plp'),
-      'swipe_image' => [
-        'enable_swipe_image_mobile' => $algolia_swipe_image_settings->get('enable_swipe_image_mobile'),
-        'no_of_image_scroll' => $algolia_swipe_image_settings->get('no_of_image_scroll'),
-        'slide_effect' => $algolia_swipe_image_settings->get('slide_effect'),
-        'image_slide_timing' => $algolia_swipe_image_settings->get('image_slide_timing'),
+      'swipeImage' => [
+        'enableSwipeImageMobile' => $algolia_swipe_image_settings->get('enable_swipe_image_mobile'),
+        'noOfImageScroll' => $algolia_swipe_image_settings->get('no_of_image_scroll'),
+        'slideEffect' => $algolia_swipe_image_settings->get('slide_effect'),
+        'imageSlideTiming' => $algolia_swipe_image_settings->get('image_slide_timing'),
       ],
     ];
     // Allow other modules to alter or add extra configs
