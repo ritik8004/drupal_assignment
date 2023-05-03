@@ -259,6 +259,7 @@ class AlshayaFeedSkuInfoHelper {
         'currency' => $this->currencyCode[$lang],
         'keywords' => $keywords,
         'categoryCollection' => $this->skuInfoHelper->getProductCategories($node, $lang),
+        'attr_fixed_price' => $sku->hasField('attr_fixed_price') ? $sku->get('attr_fixed_price')->getString() : NULL,
         'attributes' => $this->skuInfoHelper->getAttributes($sku, [
           'description',
           'short_description',
@@ -322,6 +323,7 @@ class AlshayaFeedSkuInfoHelper {
             ]),
             'original_price' => $this->skuInfoHelper->formatPriceDisplay((float) $prices['price']),
             'final_price' => $this->skuInfoHelper->formatPriceDisplay((float) $prices['final_price']),
+            'attr_fixed_price' => $child->hasField('attr_fixed_price') ? $child->get('attr_fixed_price')->getString() : NULL,
             'url' => $this->skuInfoHelper->getEntityUrl($node) . '?selected=' . $child->id(),
           ];
           // Addition of brand info for child products as well.
