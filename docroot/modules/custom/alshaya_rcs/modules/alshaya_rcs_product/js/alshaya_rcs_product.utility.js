@@ -282,7 +282,7 @@ window.commerceBackend = window.commerceBackend || {};
         });
       }
 
-      if (attributeCode === sizeGroupAttribute) {
+      if (Drupal.hasValue(sizeGroupAttribute) && attributeCode === sizeGroupAttribute) {
         let sizeGroup = '';
         Object.keys(sizeGroupAlternates).forEach(function (key) {
           const valueLabel = window.commerceBackend.getAttributeValueLabel(key, variant.product[key]);
