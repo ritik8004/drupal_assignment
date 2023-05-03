@@ -7,6 +7,7 @@ use Drupal\Core\File\FileSystemInterface;
 use Drush\Commands\DrushCommands;
 use Drupal\node\NodeInterface;
 use Drupal\Core\Language\LanguageManagerInterface;
+use Drupal\Core\Logger\LoggerChannelFactoryInterface;
 
 /**
  * A Drush commandfile for exporting product data.
@@ -42,6 +43,13 @@ class ProductExportCommands extends DrushCommands {
   protected $entityQuery;
 
   /**
+   * The logger service.
+   *
+   * @var \Drupal\Core\Logger\LoggerChannelInterface
+   */
+  protected $drupalLogger;
+
+  /**
    * The export directory path.
    *
    * @var string
@@ -64,15 +72,19 @@ class ProductExportCommands extends DrushCommands {
    *   The language manager.
    * @param \Drupal\Core\File\FileSystemInterface $file_system
    *   The file system.
+   * @param \Drupal\Core\Logger\LoggerChannelFactoryInterface $logger_factory
+   *   LoggerFactory object.
    */
   public function __construct(
     EntityTypeManagerInterface $entity_type_manager,
     LanguageManagerInterface $language_manager,
-    FileSystemInterface $file_system
+    FileSystemInterface $file_system,
+    LoggerChannelFactoryInterface $logger_factory
   ) {
     $this->entityQuery = $entity_type_manager->getStorage('node')->getQuery();
     $this->languageManager = $language_manager;
     $this->fileSystem = $file_system;
+    $this->drupalLogger = $logger_factory->get('alshaya_acm_product');
   }
 
   /**
@@ -91,7 +103,7 @@ class ProductExportCommands extends DrushCommands {
     $output_directory = $this->fileSystem->prepareDirectory($path, FileSystemInterface::CREATE_DIRECTORY);
 
     if (!$output_directory) {
-      $this->logger->notice('Could not read/create the directory to export the data.');
+      $this->drupalLogger->notice('Could not read/create the directory to export the data.');
       return;
     }
 
@@ -102,12 +114,12 @@ class ProductExportCommands extends DrushCommands {
       try {
         $location = $this->fileSystem->getDestinationFilename($path . self::FILE_NAME_PREFIX . '-' . $langcode . '.csv', FileSystemInterface::EXISTS_REPLACE);
         if ($location === FALSE) {
-          $this->logger->warning('Could not create the file to export the data.');
+          $this->drupalLogger->warning('Could not create the file to export the data.');
           return;
         }
         else {
           $file_url = file_create_url($location);
-          $this->logger->notice('Langcode: ' . $langcode . '. File: ' . "$file_url?$query_string");
+          $this->drupalLogger->notice('Langcode: ' . $langcode . '. File: ' . "$file_url?$query_string");
         }
 
         // Make the file empty.
@@ -115,7 +127,7 @@ class ProductExportCommands extends DrushCommands {
         fclose($file);
       }
       catch (\Exception $e) {
-        $this->logger->warning(dt('Could not create the file to export the data. Message: @message.', [
+        $this->drupalLogger->warning(dt('Could not create the file to export the data. Message: @message.', [
           '@message' => $e->getMessage(),
         ]));
         return;
