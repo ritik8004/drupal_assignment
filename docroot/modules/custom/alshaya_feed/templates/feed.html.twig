@@ -11,6 +11,17 @@
   <final_price>{{ product.final_price }}</final_price>
   <price_range>{{ product.price_range }}</price_range>
   <currency>{{ product.currency }}</currency>
+  <fixed_prices>
+  {% for fixed_price in product.fixed_prices %}
+  {% if fixed_price.price is not empty %}
+  <{{ fixed_price.code|lower }}>
+    <currency>{{ fixed_price.currency_code }}</currency>
+    <price>{{ fixed_price.price }}</price>
+    <special_price>{{ fixed_price.special_price }}<special_price>
+  </{{ fixed_price.code|lower }}>
+  {% endif %}
+  {% endfor %}
+  </fixed_prices>
   <keywords>{{ product.keywords }}</keywords>
   <promotion_label>{{ product.promotion_label }}</promotion_label>
   <categories>
