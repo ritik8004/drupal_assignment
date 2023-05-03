@@ -255,6 +255,12 @@ window.commerceBackend = window.commerceBackend || {};
     const productConfigurables = getConfigurables(product);
     const variantConfigurableOptions = [];
 
+    const sizeGroupAttribute = Drupal.hasValue(drupalSettings.alshaya_spc.sizeGroupAttribute)
+      ? Drupal.hasValue(drupalSettings.alshaya_spc.sizeGroupAttribute)
+      : null;
+    const sizeGroupAlternates = Drupal.hasValue(drupalSettings.alshaya_spc.sizeGroupAlternates)
+      ? drupalSettings.alshaya_spc.sizeGroupAlternates
+      : [];
     Object.keys(productConfigurables).forEach(function (attributeCode) {
       let label = productConfigurables[attributeCode].label;
       const optionId = productConfigurables[attributeCode].attribute_id;
@@ -276,13 +282,10 @@ window.commerceBackend = window.commerceBackend || {};
         });
       }
 
-      if (Drupal.hasValue(drupalSettings.alshaya_spc.sizeGroupAttribute)
-        && attributeCode === drupalSettings.alshaya_spc.sizeGroupAttribute) {
+      if (attributeCode === sizeGroupAttribute) {
         let sizeGroup = '';
-        const sizeGroupAlternates = drupalSettings.alshaya_spc.sizeGroupAlternates;
         Object.keys(sizeGroupAlternates).forEach(function (key) {
-          const value = variant.product[key];
-          const valueLabel = window.commerceBackend.getAttributeValueLabel(key, value);
+          const valueLabel = window.commerceBackend.getAttributeValueLabel(key, variant.product[key]);
           sizeGroup += `${valueLabel}(${sizeGroupAlternates[key]}) `;
         });
         value = sizeGroup;
