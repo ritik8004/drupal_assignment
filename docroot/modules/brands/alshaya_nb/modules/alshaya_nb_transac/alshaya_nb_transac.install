@@ -16,7 +16,7 @@ function alshaya_nb_transac_update_9408() {
   $strings = [
     'Move to basket' => [
       'en' => 'Move to Cart',
-      'ar' => '',
+      'ar' => 'انقل لعربة التسوق',
     ],
     'Bag' => [
       'en' => 'Cart',
@@ -28,19 +28,19 @@ function alshaya_nb_transac_update_9408() {
     ],
     'add to cart' => [
       'en' => 'Add to Cart',
-      'ar' => '',
+      'ar' => 'أضف لعربة التسوق',
     ],
     'my shopping bag' => [
       'en' => 'my shopping cart',
-      'ar' => '',
+      'ar' => 'عربة التسوق الخاصة بي',
     ],
     'Shopping Bag' => [
       'en' => 'Shopping Cart',
-      'ar' => '',
+      'ar' => 'عربة التسوق',
     ],
     'view cart' => [
       'en' => 'view cart',
-      'ar' => '',
+      'ar' => 'عرض عربة التسوق',
     ],
   ];
 
