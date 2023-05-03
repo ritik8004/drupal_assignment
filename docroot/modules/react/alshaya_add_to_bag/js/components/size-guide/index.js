@@ -15,6 +15,7 @@ const SizeGuide = ({ sizeGuideData }) => {
       linkClass={sizeGuideLink.props.className}
       dialogDisplay="fullscreen"
       dialogType="dialog"
+      isSizeGuideLink
     />
   );
 };

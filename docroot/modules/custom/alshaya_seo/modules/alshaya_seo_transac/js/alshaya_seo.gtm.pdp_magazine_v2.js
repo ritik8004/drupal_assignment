@@ -27,6 +27,12 @@
     Drupal.alshaya_seo_gtm_push_product_clicks($(this), drupalSettings.gtm.currency, subListName, position);
   });
 
+  // Push size guide click event to GTM.
+  // For the products which have size guide available.
+  $('.size-guide-link').once('product-size-guide-click').on('click', function() {
+    Drupal.alshayaSeoGtmPushSizeGuideEvents('open', 'pdp');
+  });
+
   // Push home delivery click event to GTM.
   // Trigger only when accordion header is clicked.
   $(document).once('home-delivery-click').on('click', '.pdp-express-delivery-wrapper .express-delivery-title-wrapper', function () {

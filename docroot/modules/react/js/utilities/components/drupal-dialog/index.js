@@ -5,8 +5,10 @@ import React from 'react';
  *
  * @param e
  *   The event object.
+ * @param {object} options
+ *   Configurable options.
  */
-const openDrupalDialog = (e) => {
+const openDrupalDialog = (e, options) => {
   e.preventDefault();
 
   const {
@@ -15,6 +17,10 @@ const openDrupalDialog = (e) => {
     dialogClass,
     dialogDisplay,
   } = e.target.dataset;
+
+  if (options.isSizeGuideLink) {
+    Drupal.alshayaSeoGtmPushSizeGuideEvents('open', 'quick-view');
+  }
 
   // Open Drupal modal.
   Drupal.ajax({
@@ -36,6 +42,7 @@ const DrupalDialog = ({
   dialogClass,
   dialogDisplay,
   dialogType,
+  isSizeGuideLink,
 }) => (
   <a
     className={linkClass}
@@ -45,7 +52,7 @@ const DrupalDialog = ({
     data-url={url}
     data-dialog-class={dialogClass}
     data-dialog-display={dialogDisplay}
-    onClick={(e) => openDrupalDialog(e)}
+    onClick={(e) => openDrupalDialog(e, { isSizeGuideLink })}
   >
     {linkText}
   </a>

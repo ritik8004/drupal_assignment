@@ -67,7 +67,7 @@
       // Push product size guide click event to GTM.
       // For the products which have size guide available.
       $('.size-guide-link').once('product-size-guide-click').on('click', function () {
-        Drupal.alshayaSeoGtmPushSizeGuideEvents('open');
+        Drupal.alshayaSeoGtmPushSizeGuideEvents('open', 'pdp');
       });
 
       // Push product color click event to GTM.

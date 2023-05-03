@@ -1335,12 +1335,14 @@
    * Helper function to push sizeguide events to GTM.
    *
    * @param eventAction
+   * @param product_view_type
    */
-  Drupal.alshayaSeoGtmPushSizeGuideEvents = function (eventAction) {
+  Drupal.alshayaSeoGtmPushSizeGuideEvents = function (eventAction, product_view_type) {
     var data = {
       event: 'sizeguide',
       eventCategory: 'sizeGuide',
-      eventAction
+      eventAction,
+      product_view_type,
     };
     dataLayer.push(data)
   };
