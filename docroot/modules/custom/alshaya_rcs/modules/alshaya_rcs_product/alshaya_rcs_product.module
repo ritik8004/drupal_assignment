@@ -245,6 +245,7 @@ function alshaya_rcs_product_node_view(array &$build, EntityInterface $entity, E
   // Attach required drupalSettings.
   $cart_config = \Drupal::config('alshaya_acm.cart_config');
   $build['#attached']['drupalSettings']['alshaya_spc']['cart_config']['max_cart_qty'] = $cart_config->get('max_cart_qty');
+  $build['#cache']['tags'] = array_merge($build['#cache']['tags'], $cart_config->getCacheTags());
 
   $product_settings = \Drupal::config('alshaya_acm_product.settings');
   $build['#attached']['drupalSettings']['vat_text'] = $product_settings->get('vat_text');
@@ -277,6 +278,7 @@ function alshaya_rcs_product_node_view(array &$build, EntityInterface $entity, E
 
   $configurable_form_settings = \Drupal::config('acq_sku.configurable_form_settings');
   $build['#attached']['drupalSettings']['alshayaRcs']['showQuantity'] = $configurable_form_settings->get('show_quantity');
+  $build['#cache']['tags'] = array_merge($build['#cache']['tags'], $configurable_form_settings->getCacheTags());
 
   $cnc_settings = _get_cnc_settings();
   $build['#attached']['drupalSettings'] = array_merge($build['#attached']['drupalSettings'], $cnc_settings['drupalSettings']);
@@ -299,6 +301,7 @@ function alshaya_rcs_product_node_view(array &$build, EntityInterface $entity, E
   // Expose error messages for field labels.
   $field_label_errors = \Drupal::config('alshaya_acm_product.fields_labels_n_error');
   $build['#attached']['drupalSettings']['alshayaRcs']['fieldLabelErrorMessages'] = $field_label_errors->get();
+  $build['#cache']['tags'] = array_merge($build['#cache']['tags'], $field_label_errors->getCacheTags());
 
   // Invoke hook_alshaya_rcs_product_build_alter.
   $entity_info = [
