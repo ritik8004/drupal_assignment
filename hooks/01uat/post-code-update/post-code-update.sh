@@ -27,4 +27,7 @@ if echo $(cat ../git-diff.txt) | grep "\.scss\|\.js\|\.twig\|\.theme"; then
   drush acsf-tools-ml crf
 fi
 
+# Fix the update version for all the modules.
+drush acsf-tools-ml fix-update-version
+
 echo -e "\n"
