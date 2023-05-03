@@ -13,5 +13,7 @@ services:
       - '@date.formatter'
       - '%install_profile%'
       - '@locale.config_manager'
+      - '@logger.factory'
+      - '@update.update_hook_registry'
     tags:
       - { name: drush.command }
