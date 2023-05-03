@@ -100,6 +100,19 @@ const ArticleSwatches = ({
     }
   };
 
+  // Article swatch swipe event handler.
+  const onSwipe = (e) => {
+    // Prepare data for GTM.
+    const gtmData = {
+      event: 'swatches_colourswipe',
+      eventCategory: 'swatches_colourswipe',
+      eventAction: 'swatches_colourswipe',
+      eventLabel: hasValue(e) ? e : '',
+    };
+    // Push article swatch swipe data in GTM.
+    window.dataLayer.push(gtmData);
+  };
+
   const renderArticleSwatches = articleSwatches.slice(0, swatchesLimit).map(
     (swatch) => (
       <ArticleSwatch
@@ -116,7 +129,11 @@ const ArticleSwatches = ({
     <div className="article-swatch-wrapper">
       { showColorSwatchSlider
         ? (
-          <Slider {...sliderSettings} className={`swatches swatch-slider ${swatchTypeClass} swatch-limit-${Math.floor(sliderSettings.slidesToShow)}`}>
+          <Slider
+            {...sliderSettings}
+            className={`swatches swatch-slider ${swatchTypeClass} swatch-limit-${Math.floor(sliderSettings.slidesToShow)}`}
+            onSwipe={onSwipe}
+          >
             { renderArticleSwatches }
           </Slider>
         )
