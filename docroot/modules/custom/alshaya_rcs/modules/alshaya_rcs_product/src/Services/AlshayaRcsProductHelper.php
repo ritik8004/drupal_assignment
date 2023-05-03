@@ -806,12 +806,9 @@ class AlshayaRcsProductHelper {
 
     $attachments['#cache']['tags'] = Cache::mergeTags(
       $attachments['#cache']['tags'],
-      $this->configFactory->get('alshaya_acm.cart_config')->getCacheTags(),
       $product_settings->getCacheTags(),
       $product_display_settings->getCacheTags(),
-      $this->configFactory->get('acq_sku.configurable_form_settings')->getCacheTags(),
       $alshaya_master_settings->getCacheTags(),
-      $this->configFactory->get('alshaya_acm_product.fields_labels_n_error')->getCacheTags()
     );
   }
 
