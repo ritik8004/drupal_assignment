@@ -156,7 +156,7 @@ const PdpLayout = ({ productInfo, configurableCombinations }) => {
 
   // Calculate width of gallery and sidebar.
   const setCSSVariable = () => {
-    if (!Drupal.hasValue(drupalSettings.show_full_width)) {
+    if (!Drupal.hasValue(drupalSettings.showFullWidth)) {
       return;
     }
 

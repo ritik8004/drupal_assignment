@@ -209,7 +209,7 @@ function alshaya_white_label_preprocess_page(&$variables) {
       'alshaya_spc.checkout.confirmation',
     ];
 
-    $variables['#attached']['drupalSettings']['show_full_width'] = TRUE;
+    $variables['#attached']['drupalSettings']['showFullWidth'] = TRUE;
 
     // Add common library on home page.
     if (\Drupal::service('path.matcher')->isFrontPage()) {
