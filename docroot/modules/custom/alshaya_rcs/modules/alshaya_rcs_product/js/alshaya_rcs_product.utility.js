@@ -256,7 +256,7 @@ window.commerceBackend = window.commerceBackend || {};
     const variantConfigurableOptions = [];
 
     const sizeGroupAttribute = Drupal.hasValue(drupalSettings.alshaya_spc.sizeGroupAttribute)
-      ? Drupal.hasValue(drupalSettings.alshaya_spc.sizeGroupAttribute)
+      ? drupalSettings.alshaya_spc.sizeGroupAttribute
       : null;
     const sizeGroupAlternates = Drupal.hasValue(drupalSettings.alshaya_spc.sizeGroupAlternates)
       ? drupalSettings.alshaya_spc.sizeGroupAlternates
