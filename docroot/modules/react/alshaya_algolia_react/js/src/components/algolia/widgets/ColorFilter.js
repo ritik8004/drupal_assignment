@@ -35,7 +35,9 @@ const ColorFilter = ({
   const { facetValues } = props;
   // Do not show facets that have a single value if the render_single_result_facets is false.
   if (!drupalSettings.algoliaSearch.renderSingleResultFacets) {
-    const exclude = drupalSettings.algoliaSearch.excludeRenderSingleResultFacets ? drupalSettings.algoliaSearch.excludeRenderSingleResultFacets.trim().split(',') : '';
+    const exclude = drupalSettings.algoliaSearch.excludeRenderSingleResultFacets
+      ? drupalSettings.algoliaSearch.excludeRenderSingleResultFacets.trim().split(',')
+      : '';
     // Hide color filter if only one filter value available and not part of excluded list.
     if (exclude.length > 0) {
       if ((!exclude.includes(attribute) && items.length <= 1)) {
