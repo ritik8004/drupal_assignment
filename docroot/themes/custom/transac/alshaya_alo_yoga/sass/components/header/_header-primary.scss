@@ -37,8 +37,6 @@ header {
         margin: 0;
 
         li.menu--one__list-item {
-          margin-#{$right}: rem(10);
-
           html[lang="ar"] & {
             float: right;
           }
@@ -456,15 +454,19 @@ header {
 
 @include breakpoint($desktop) {
   .block-alshaya-main-menu {
-    &:hover {
-      li.menu--one__list-item {
-        .menu--one__link {
-          color: $mm_l1_link_inactive_hover;
-        }
+    ul.menu--one__list {
+      width: auto;
 
-        &:hover {
+      &:hover {
+        li.menu--one__list-item {
           .menu--one__link {
-            color: $mm_l1_link_hover;
+            color: $mm_l1_link_inactive_hover;
+          }
+
+          &:hover {
+            .menu--one__link {
+              color: $mm_l1_link_hover;
+            }
           }
         }
       }
@@ -475,6 +477,14 @@ header {
 
       .menu--one__link {
         margin-top: initial;
+
+        @include sideSpaces(rem(15));
+      }
+
+      &:last-of-type {
+        .menu--one__link {
+          padding-#{$right}: 0;
+        }
       }
     }
   }

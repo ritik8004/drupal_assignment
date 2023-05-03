@@ -1,14 +1,13 @@
 #backtotop {
+  &.sprinklr-enabled {
+    bottom: rem(82);
+  }
+
   @include breakpoint($only-mobile) {
     #{$right}: 0;
 
     .path--cart & {
       bottom: 3.25rem;
-    }
-
-    &.sprinklr-enabled {
-      bottom: rem(82);
-      #{$right}: rem(-7);
     }
   }
 

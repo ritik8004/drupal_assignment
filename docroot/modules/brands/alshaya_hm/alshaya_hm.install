@@ -52,7 +52,6 @@ function alshaya_hm_update_9406() {
   /** @var \Drupal\acq_sku\SKUFieldsManager $fieldsManager */
   $fieldsManager = \Drupal::service('acq_sku.fields_manager');
   $fieldsManager->resetBaseFields();
-
 }
 
 /**

@@ -4,6 +4,7 @@ import ImageElement from '../imageHelper/ImageElement';
 import { hasValue } from '../../../../../../js/utilities/conditionsUtility';
 import Lozenges
   from '../../../../common/components/lozenges';
+import { isDesktop } from '../../../../../../js/utilities/display';
 
 const SliderElement = ({
   src, title,
@@ -14,40 +15,66 @@ const SliderElement = ({
   />
 );
 
-const slickEffect = hasValue(drupalSettings.reactTeaserView.swipe_image.slide_effect)
-  ? drupalSettings.reactTeaserView.swipe_image.slide_effect : null;
+const slickEffect = hasValue(drupalSettings.reactTeaserView.swipeImage.slideEffect)
+  ? drupalSettings.reactTeaserView.swipeImage.slideEffect
+  : null;
 
+// Common slider configurations for all viewports.
 const sliderSettings = {
-  dots: true,
-  fade: slickEffect === 'fade',
   infinite: true,
   slidesToShow: 1,
   slidesToScroll: 1,
   arrows: false,
   touchThreshold: 1750,
   variableWidth: false,
-  autoplaySpeed: hasValue(drupalSettings.reactTeaserView.swipe_image.image_slide_timing)
-    ? drupalSettings.reactTeaserView.swipe_image.image_slide_timing * 1000
-    : 2000,
-  autoplay: true,
   pauseOnHover: false,
 };
 
+// Slider configurations for desktop devices.
+const sliderHoverSettings = {
+  ...sliderSettings,
+  fade: slickEffect === 'fade',
+  dots: true,
+  autoplaySpeed: hasValue(drupalSettings.reactTeaserView.swipeImage.imageSlideTiming)
+    ? drupalSettings.reactTeaserView.swipeImage.imageSlideTiming * 1000
+    : 2000,
+  autoplay: true,
+};
+
+// Slider configurations for mobile devices.
+const swipeSettings = {
+  ...sliderSettings,
+  dots: false,
+  autoplay: false,
+  initialSlide: 1,
+  swipe: true,
+  touchThreshold: 40,
+};
+
+// Slider configurations based on device.
+const slideSettings = !isDesktop() ? swipeSettings : sliderHoverSettings;
+let slickClassName = 'search-lightSlider';
+
+if (!isDesktop()) {
+  slickClassName += ' search-lightSliderSwipe';
+}
+
+if (isDesktop() && slickEffect) {
+  slickClassName += ` slick-effect-${slickEffect}`;
+}
 class SearchGallery extends React.PureComponent {
   constructor(props) {
     super(props);
     this.mainImageRef = React.createRef();
-    this.onHoverAppendMarkup = this.onHoverAppendMarkup.bind(this);
+    this.slideAppendMarkup = this.slideAppendMarkup.bind(this);
   }
 
-  onHoverAppendMarkup = (thumbnails) => (
+
+  // Function for slick carousel initialization.
+  slideAppendMarkup = (thumbnails) => (
     <div className="alshaya_search_slider">
-      <Slider
-        {...sliderSettings}
-        className={`search-lightSlider ${slickEffect ? `slick-effect-${slickEffect}` : ''}`}
-        ref={this.getref}
-      >
-        { thumbnails }
+      <Slider {...slideSettings} className={slickClassName} ref={this.getref}>
+        {thumbnails}
       </Slider>
     </div>
   )
@@ -59,7 +86,7 @@ class SearchGallery extends React.PureComponent {
 
   render() {
     // Get no Of Slides To Show in Desktop view.
-    const noOfSlidesToShowDesktop = drupalSettings.reactTeaserView.swipe_image.no_of_image_scroll;
+    const noOfSlidesToShowDesktop = drupalSettings.reactTeaserView.swipeImage.noOfImageScroll;
     const {
       media, title, labels, sku, initSlider,
     } = this.props;
@@ -78,7 +105,9 @@ class SearchGallery extends React.PureComponent {
     });
 
     // Set no Of Slides in thumbnails object.
-    thumbnails = thumbnails.slice(0, noOfSlidesToShowDesktop);
+    if (isDesktop()) {
+      thumbnails = thumbnails.slice(0, noOfSlidesToShowDesktop);
+    }
     const sliderStatus = thumbnails.length > sliderSettings.slidesToShow;
     let classWrapper = 'img-wrapper';
     if (sliderStatus) {
@@ -94,7 +123,7 @@ class SearchGallery extends React.PureComponent {
               title={title}
               loading="lazy"
             />
-            {(sliderStatus && initSlider) ? this.onHoverAppendMarkup(thumbnails) : ''}
+            {(sliderStatus && initSlider) ? this.slideAppendMarkup(thumbnails) : ''}
           </div>
           <Lozenges labels={labels} sku={sku} />
         </div>

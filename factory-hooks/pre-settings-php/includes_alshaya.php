@@ -28,6 +28,9 @@ if ($settings['env'] === 'local') {
   if (getenv('LANDO')) {
     $settings['alshaya_home_dir'] = '/app/local_home';
   }
+  elseif (getenv('IS_DDEV_PROJECT')) {
+    $settings['alshaya_home_dir'] = '/var/www/html/local_home';
+  }
 }
 
 // Make sure environment name used to load settings is not pointing to update

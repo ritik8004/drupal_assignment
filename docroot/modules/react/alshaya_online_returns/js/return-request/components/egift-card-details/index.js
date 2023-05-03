@@ -5,7 +5,7 @@ import CardTypeSVG from '../../../../../alshaya_spc/js/svg-component/card-type-s
 const EgiftCardDetails = ({
   cardList, selectedOption, egiftCardType, paymentDetails, isHybridPayment, setSelectedOption,
 }) => {
-  let selected = cardList ? cardList.card_number : 'newegift';
+  let selected = cardList && hasValue(cardList.card_number) ? cardList.card_number : 'newegift';
   // Assigning the variable with the current selected element value.
   if (hasValue(selectedOption)) {
     selected = selectedOption;
@@ -29,7 +29,7 @@ const EgiftCardDetails = ({
 
   // Assigning the radio button values for linked and new eGift card.
   let egiftRefundName = '';
-  if (hasValue(selected) && !egiftCardType) {
+  if (hasValue(selected) && cardList && hasValue(cardList.card_number) && !egiftCardType) {
     // For existing linked eGift card.
     egiftRefundName = cardList.card_number;
   } else if (egiftCardType) {
@@ -71,7 +71,7 @@ const EgiftCardDetails = ({
           </label>
         </div>
       </div>
-      {egiftCardType && (isReturnConfPage === -1)
+      {!isHybridPayment && egiftCardType && (isReturnConfPage === -1)
         ? (
           <>
             <div className="refund-method-listing email-text">

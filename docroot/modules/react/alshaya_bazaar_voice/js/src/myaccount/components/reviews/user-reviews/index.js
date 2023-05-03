@@ -39,9 +39,9 @@ export default class UserReviews extends React.Component {
 
     this.setState({
       initialLimit: bazaarVoiceSettings.reviews.bazaar_voice.reviews_initial_load,
+    }, () => {
+      this.getUserReviews();
     });
-
-    this.getUserReviews();
   }
 
   getUserReviews() {

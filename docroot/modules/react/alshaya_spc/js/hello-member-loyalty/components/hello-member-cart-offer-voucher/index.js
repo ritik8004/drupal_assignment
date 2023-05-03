@@ -15,7 +15,7 @@ import { removeFullScreenLoader, showFullScreenLoader } from '../../../../../js/
 import { isUserAuthenticated } from '../../../../../js/utilities/helper';
 import BecomeHelloMember from '../../../../../js/utilities/components/become-hello-member';
 import dispatchCustomEvent from '../../../../../js/utilities/events';
-import { getDefaultErrorMessage } from '../../../../../js/utilities/error';
+import { clmErrorCode, getDefaultErrorMessage } from '../../../../../js/utilities/error';
 import resetBenefitOptions from './offer_voucher_helper';
 
 class HelloMemberCartOffersVouchers extends React.Component {
@@ -86,7 +86,8 @@ class HelloMemberCartOffersVouchers extends React.Component {
           Offers.push(coupon);
         }
       });
-    } else {
+    } else if (hasValue(couponResponse.data.error)
+      && couponResponse.data.error_code === clmErrorCode) {
       // If coupons API is returning Error.
       errorMessage = couponResponse.data.error_message;
       logger.error('Error while calling the coupons Api  @message', {
@@ -98,7 +99,8 @@ class HelloMemberCartOffersVouchers extends React.Component {
     const offerResponse = await callHelloMemberApi('helloMemberOffersList', 'GET');
     if (hasValue(offerResponse.data) && !hasValue(offerResponse.data.error)) {
       Offers.push(...offerResponse.data.offers);
-    } else {
+    } else if (hasValue(offerResponse.data.error)
+      && offerResponse.data.error_code === clmErrorCode) {
       // If offers API is returning Error.
       errorMessage = offerResponse.data.error_message;
       logger.error('Error while calling the offers Api @message', {

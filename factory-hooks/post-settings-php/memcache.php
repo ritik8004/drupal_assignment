@@ -136,6 +136,11 @@ if ($memcache_module_is_present && ($memcache_exists || $memcached_exists)) {
           'memcache:11211' => 'default',
         ];
       }
+      elseif (getenv('IS_DDEV_PROJECT')) {
+        $settings['memcache']['servers'] = [
+          'memcached:11211' => 'default',
+        ];
+      }
     }
   }
 }

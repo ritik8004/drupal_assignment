@@ -49,6 +49,11 @@ window.commerceBackend = window.commerceBackend || {};
           // for that invalid free gift sku.
           // Check fetchValidFreeGift() for more details on invalid sku.
           delete giftItemList[i];
+          // Log error as well for further investigation from MDC for invalid data in API response.
+          Drupal.logJavascriptError(
+            'invalid-free-gift-sku-promotion',
+            'Invalid free gift sku ' + giftItemList[i].sku + ' added in MDC api response for Promotion Rule ID: ' + freeGiftPromotion[0].rule_id
+          );
         }
       }
 

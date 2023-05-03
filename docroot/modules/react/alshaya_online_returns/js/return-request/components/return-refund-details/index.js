@@ -81,10 +81,11 @@ class ReturnRefundDetails extends React.Component {
               this.setState({
                 cardList: response.data ? response.data : null,
               });
-            } else if (typeof response.data === 'undefined' || !hasValue(response.data.card_number)
+            } else if (!isHybridPayment(paymentInfo)
+              && (typeof response.data === 'undefined' || !hasValue(response.data.card_number)
               || (typeof paymentInfo.cashondelivery !== 'undefined'
               && hasValue(paymentInfo.cashondelivery.payment_type)
-              && paymentInfo.cashondelivery.payment_type === 'cashondelivery')) {
+              && paymentInfo.cashondelivery.payment_type === 'cashondelivery'))) {
               this.setState({
                 egiftCardType: true,
               });
