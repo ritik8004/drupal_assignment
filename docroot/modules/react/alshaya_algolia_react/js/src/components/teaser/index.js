@@ -27,6 +27,7 @@ import { isAddToBagHoverEnabled } from '../../../../../js/utilities/addToBagHelp
 import ArticleSwatches from '../article_swatch';
 import SliderSwatch from '../slider-swatch';
 import { getShoeAiStatus } from '../../../../../js/utilities/util';
+import ProductCategory from '../product-category';
 
 const Teaser = ({
   hit, gtmContainer = null, pageType, extraInfo, indexName,
@@ -271,6 +272,19 @@ const Teaser = ({
   if (pageType === 'search') {
     dataVmode = { 'data-vmode': 'search_result' };
   }
+
+  // check if we need to display the productInfo in below the product title.
+  const showProductCategory = hasValue(drupalSettings.showProductCategory)
+    ? drupalSettings.showProductCategory
+    : false;
+
+  // Gender Identification.
+  const genderText = hasValue(updatedAttribute.attr_gender)
+    ? updatedAttribute.attr_gender : attribute.attr_gender;
+  // Product type Identification.
+  const productType = hasValue(updatedAttribute.attr_nb_product_type)
+    ? updatedAttribute.attr_nb_product_type : attribute.attr_nb_product_type;
+
   return (
     <div className={teaserClass}>
       <article
@@ -419,6 +433,12 @@ const Teaser = ({
             {/* Render price based on range/single price conditionals */}
             {hasValue(updatedAttribute.renderProductPrice)
               ? updatedAttribute.renderProductPrice : renderPrice}
+            {/* Show product category. */}
+            <ProductCategory
+              showProductCategory={showProductCategory}
+              genderText={genderText}
+              productType={productType}
+            />
             <ConditionalView condition={isPromotionFrameEnabled()}>
               <PromotionsFrame promotions={attribute.promotions} />
             </ConditionalView>
