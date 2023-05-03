@@ -423,7 +423,8 @@ const Teaser = ({
             <ConditionalView condition={!isPromotionFrameEnabled()}>
               <Promotions promotions={attribute.promotions} />
             </ConditionalView>
-            {showSwatches ? (
+            {/* Render the Article color swatches when showColorSwatchSlider is TRUE */}
+            {showSwatches && !showColorSwatchSlider ? (
               <Swatches
                 swatches={attribute.swatches}
                 url={url}
