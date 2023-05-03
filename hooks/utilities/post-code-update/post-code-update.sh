@@ -61,6 +61,9 @@ else
   fi
 fi
 
+# Fix the update version for all the modules.
+drush acsf-tools-ml fix-update-version
+
 echo -e "\n"
 
 # Commenting this as we do not do it on production.
