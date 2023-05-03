@@ -214,7 +214,7 @@ class AlshayaAcmProductCategoryDrushCommands extends DrushCommands {
         }
         else {
           $file_url = file_create_url($location);
-          $this->logger->notice('Langcode: ' . $langcode . '. File: ' . "$file_url?$query_string");
+          $this->drupalLogger->notice('Langcode: ' . $langcode . '. File: ' . "$file_url?$query_string");
         }
 
         // Make the file empty.
