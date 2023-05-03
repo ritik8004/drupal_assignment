@@ -207,7 +207,7 @@
         var productGtmData = {
           "name": product.ProductName,
           "id": product.ProductGroupCode,
-          "price": product.ProductPrices.CustomerTransactionInMerchantCurrency.CustomerDiscountedPriceInMerchantCurrency.toString(),
+          "price": product.ProductPrices.MerchantTransaction.TotalPrice,
           "brand": Drupal.hasValue(product.Brand) ? product.Brand : geSiteName,
           "category": Drupal.getProductMetadata(product, 'category'),
           "variant": product.SKU,
@@ -278,7 +278,7 @@
           "actionField": {
             "id": geData.OrderId,
             "affiliation": "Online Store",
-            "revenue": geData.details.OrderPrices.CustomerTransactionInMerchantCurrency.CustomerTotalPriceInMerchantCurrency,
+            "revenue": geData.details.OrderPrices.CustomerTransactionInMerchantCurrency.CustomerTotalDiscountedProductsPriceInMerchantCurrency,
             "tax": geData.details.OrderPrices.CustomerTransactionInMerchantCurrency.CustomerDutiesAndTaxesInMerchantCurrency,
             "shipping": geData.details.OrderPrices.CustomerTransactionInMerchantCurrency.CustomerShippingPriceInMerchantCurrency,
             "coupon": Drupal.hasValue(geData.details.Discounts) ? geData.details.Discounts[0].coupon : '',
