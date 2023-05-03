@@ -5,6 +5,11 @@ product:
   dependencies:
     - rcs_placeholders/helpers
 
+product.block.name:
+  version: 1.x
+  js:
+    handlebars/product.block.name.handlebars: {}
+
 product.block.description:
   version: 1.x
   js:
