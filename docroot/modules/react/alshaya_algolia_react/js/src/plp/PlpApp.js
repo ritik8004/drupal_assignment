@@ -1,14 +1,11 @@
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useEffect, useRef } from 'react';
 import {
   Configure,
   InstantSearch,
   Stats,
 } from 'react-instantsearch-dom';
 
-import {
-  algoliaSearchClient,
-  getFacetListFromAlgolia,
-} from '../../../../js/utilities/algoliaHelper';
+import { algoliaSearchClient } from '../../../../js/utilities/algoliaHelper';
 
 import { productListIndexStatus } from '../utils/indexUtils';
 import { getSuperCategoryOptionalFilter } from '../utils';
@@ -26,10 +23,7 @@ import PLPNoResults from '../components/algolia/PLPNoResults';
 import SubCategoryContent from '../components/subcategory';
 import ConditionalView from '../../common/components/conditional-view';
 import isHelloMemberEnabled from '../../../../js/utilities/helloMemberHelper';
-import {
-  isConfigurableFiltersEnabled,
-  isUserAuthenticated,
-} from '../../../../js/utilities/helper';
+import { isUserAuthenticated } from '../../../../js/utilities/helper';
 import BecomeHelloMember from '../../../../js/utilities/components/become-hello-member';
 import { getExpressDeliveryStatus } from '../../../../js/utilities/expressDeliveryHelper';
 import { hasValue } from '../../../../js/utilities/conditionsUtility';
@@ -62,19 +56,10 @@ const PlpApp = ({
   promotionNodeId,
 }) => {
   let subCategories = {};
-  const [facets, setFacets] = useState([]);
   useEffect(() => {
     getExpressDeliveryStatus().then((status) => {
       window.sddEdStatus = status;
     });
-
-    // Check if configurable filter is enabled then request
-    // index settings to get facet list used in config for facets param.
-    if (isConfigurableFiltersEnabled()) {
-      getFacetListFromAlgolia('listing').then((facetsList) => {
-        setFacets(facetsList);
-      });
-    }
   }, []);
 
   const plpCategoryRef = useRef();
@@ -209,7 +194,6 @@ const PlpApp = ({
         filters={finalFilter}
         ruleContexts={context}
         optionalFilters={optionalFilter}
-        facets={facets}
       />
       <PlpStickyFilter
         pageType={pageType}
