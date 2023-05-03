@@ -1,0 +1,27 @@
+#alshaya-algolia-plp,
+#alshaya-algolia-search {
+  .c-products__item {
+    .express_delivery {
+      padding-top: 0;
+    }
+
+    &.product-element-alignment {
+      .express_delivery {
+        html[lang="ar"] & {
+          padding-top: 0;
+        }
+      }
+    }
+  }
+}
+
+@include breakpoint($only-mobile) {
+  #alshaya-algolia-plp,
+  #alshaya-algolia-search,
+  #my-wishlist,
+  .block-alshaya-algolia-react-autocomplete {
+    .c-products__item.product-element-alignment .express_delivery {
+      margin-top: rem(10);
+    }
+  }
+}
