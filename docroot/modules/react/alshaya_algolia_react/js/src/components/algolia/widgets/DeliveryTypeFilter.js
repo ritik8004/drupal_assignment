@@ -62,7 +62,9 @@ const DeliveryTypeFilter = ({
   }
   // Do not show facets that have a single value if the render_single_result_facets is false.
   if (!drupalSettings.algoliaSearch.renderSingleResultFacets) {
-    const exclude = drupalSettings.algoliaSearch.excludeRenderSingleResultFacets ? drupalSettings.algoliaSearch.excludeRenderSingleResultFacets.trim().split(',') : '';
+    const exclude = drupalSettings.algoliaSearch.excludeRenderSingleResultFacets
+      ? drupalSettings.algoliaSearch.excludeRenderSingleResultFacets.trim().split(',')
+      : '';
     const show = checkSameDayDeliveryStatus() && checkExpressDeliveryStatus() ? 1 : 0;
     if (exclude.length > 0) {
       // If delivery attribute is part of the excluded list then always show.
