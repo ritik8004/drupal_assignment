@@ -12,6 +12,7 @@ import { validateElementValueByType } from './validation_helper';
 import getStringMessage from '../../../../../js/utilities/strings';
 import { getAuraConfig } from '../../../../../alshaya_aura_react/js/utilities/helper';
 import { hasValue } from '../../../../../js/utilities/conditionsUtility';
+import { setLoyaltyCard } from '../../../../../alshaya_aura_react/js/backend/v2/customer_helper';
 
 /**
  * Utility function to get user input value.
@@ -68,42 +69,51 @@ function processCheckoutCart(data) {
         });
       }
       if (result.data !== undefined && result.data.error === undefined) {
-        if (result.data.status) {
-          // For remove action.
-          if (data.action !== undefined && data.action === 'remove') {
-            stateValues = {
-              ...getAuraDetailsDefaultState(),
-            };
-
+        // Get cart id from session.
+        const cartId = window.commerceBackend.getCartId();
+        const identifierNo = result.data.data.apc_identifier_number || '';
+        let response = '';
+        if (hasValue(cartId)) {
+          response = setLoyaltyCard(identifierNo, cartId);
+          if (hasValue(response.error)) {
+            return { data: response };
+          }
+        }
+        // For remove action.
+        if (data.action !== undefined && data.action === 'remove') {
+          stateValues = {
+            ...getAuraDetailsDefaultState(),
+          };
+          if (hasValue(cartId)) {
             dispatchCustomEvent('loyaltyCardRemovedFromCart', { stateValues });
             removeFullScreenLoader();
-            return;
+            return null;
           }
+        }
 
-          // For add action.
-          stateValues = {
-            loyaltyStatus: result.data.data.apc_link || 0,
-            points: result.data.data.apc_points || 0,
-            cardNumber: result.data.data.apc_identifier_number || '',
-            tier: result.data.data.tier_code || '',
-            email: result.data.data.email || '',
-            isFullyEnrolled: result.data.data.is_fully_enrolled || false,
-          };
+        // For add action.
+        stateValues = {
+          loyaltyStatus: result.data.data.apc_link || 0,
+          points: result.data.data.apc_points || 0,
+          cardNumber: identifierNo,
+          tier: result.data.data.tier_code || '',
+          email: result.data.data.email || '',
+          isFullyEnrolled: result.data.data.is_fully_enrolled || false,
+        };
 
-          if (data.type === 'phone') {
-            stateValues.mobile = data.value;
-            stateValues.userCountryCode = data.countryCode;
-          }
+        if (data.type === 'phone') {
+          stateValues.mobile = data.value;
+          stateValues.userCountryCode = data.countryCode;
+        }
 
-          if (hasValue(data.gtmLinkCardOption)) {
-            // Update localstorage with the latest aura details before pushing success event.
-            Drupal.alshayaSeoGtmPushAuraCommonData(stateValues, stateValues.loyaltyStatus, false);
-            // Push success event.
-            Drupal.alshayaSeoGtmPushAuraEventData({
-              action: actionType,
-              label: 'success',
-            });
-          }
+        if (hasValue(data.gtmLinkCardOption)) {
+          // Update localstorage with the latest aura details before pushing success event.
+          Drupal.alshayaSeoGtmPushAuraCommonData(stateValues, stateValues.loyaltyStatus, false);
+          // Push success event.
+          Drupal.alshayaSeoGtmPushAuraEventData({
+            action: actionType,
+            label: 'success',
+          });
         }
       } else {
         if (hasValue(data.gtmLinkCardOption)) {
@@ -113,6 +123,7 @@ function processCheckoutCart(data) {
       }
       dispatchCustomEvent('loyaltyDetailsSearchComplete', { stateValues, searchData: data });
       removeFullScreenLoader();
+      return null;
     });
   }
 }

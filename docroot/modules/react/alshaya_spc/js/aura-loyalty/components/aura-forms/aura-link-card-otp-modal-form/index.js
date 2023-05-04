@@ -33,6 +33,7 @@ import { processCheckoutCart } from '../../utilities/checkout_helper';
 import dispatchCustomEvent from '../../../../../../js/utilities/events';
 import { isUserAuthenticated } from '../../../../../../js/utilities/helper';
 import { getAllAuraStatus } from '../../../../../../alshaya_aura_react/js/utilities/helper';
+import { hasValue } from '../../../../../../js/utilities/conditionsUtility';
 
 class AuraFormLinkCardOTPModal extends React.Component {
   constructor(props) {
@@ -105,15 +106,13 @@ class AuraFormLinkCardOTPModal extends React.Component {
       const cartId = Drupal.getItemFromLocalStorage('cart_id');
 
       // Don't process further if no cart id is available.
-      if (!cartId) {
-        return;
+      if (hasValue(cartId)) {
+        // Set aura checkout local storage.
+        Drupal.addItemInLocalStorage(
+          getAuraCheckoutLocalStorageKey(),
+          { cartId, ...searchData },
+        );
       }
-
-      // Set aura checkout local storage.
-      Drupal.addItemInLocalStorage(
-        getAuraCheckoutLocalStorageKey(),
-        { cartId, ...searchData },
-      );
 
       // Set available data into current state.
       this.setState({
