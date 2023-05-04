@@ -255,12 +255,8 @@ window.commerceBackend = window.commerceBackend || {};
     const productConfigurables = getConfigurables(product);
     const variantConfigurableOptions = [];
 
-    const sizeGroupAttribute = Drupal.hasValue(drupalSettings.alshaya_spc.sizeGroupAttribute)
-      ? drupalSettings.alshaya_spc.sizeGroupAttribute
-      : null;
-    const sizeGroupAlternates = Drupal.hasValue(drupalSettings.alshaya_spc.sizeGroupAlternates)
-      ? drupalSettings.alshaya_spc.sizeGroupAlternates
-      : [];
+    const sizeGroupAttribute = drupalSettings.alshaya_spc.sizeGroupAttribute;
+    const sizeGroupAlternates = drupalSettings.alshaya_spc.sizeGroupAlternates;
     Object.keys(productConfigurables).forEach(function (attributeCode) {
       let label = productConfigurables[attributeCode].label;
       const optionId = productConfigurables[attributeCode].attribute_id;
@@ -282,7 +278,7 @@ window.commerceBackend = window.commerceBackend || {};
         });
       }
 
-      if (Drupal.hasValue(sizeGroupAttribute) && attributeCode === sizeGroupAttribute) {
+      if (Drupal.hasValue(sizeGroupAttribute) && Drupal.hasValue(sizeGroupAlternates) && attributeCode === sizeGroupAttribute) {
         let sizeGroup = '';
         Object.keys(sizeGroupAlternates).forEach(function (key) {
           const valueLabel = window.commerceBackend.getAttributeValueLabel(key, variant.product[key]);
