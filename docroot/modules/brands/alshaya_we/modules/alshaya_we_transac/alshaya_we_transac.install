@@ -10,19 +10,6 @@ use Drupal\Core\Site\Settings;
 /**
  * Implements hook_update_N().
  *
- * Set image_thumb_gallery => true to use image gallery on
- * listing pages.
- */
-function alshaya_we_transac_update_9402() {
-  $config = \Drupal::configFactory()->getEditable('alshaya_acm_product.display_settings');
-  $config->set('image_thumb_gallery', TRUE);
-  $config->set('gallery_show_hover_image', FALSE);
-  $config->save();
-}
-
-/**
- * Implements hook_update_N().
- *
  * Provides default setting for `show_full_width` for theme.
  */
 function alshaya_we_transac_update_9401() {
