@@ -91,7 +91,7 @@ export const getApiEndpoint = (action, params = {}, postParams) => {
       endpoint = `/V1/customers/apcDicData/${endPointParams.type}`; // endpoint to get hello member dictonary data.
       break;
     case 'helloMemberGetPointsEarned':
-      endpoint = `/V1/apc/${postParams.identifierNo}/sales`; // endpoint to get hello member points earned data.
+      endpoint = `/V1/apc/${postParams.identifierNo}/simulate/sales`; // endpoint to get hello member points earned data.
       break;
     case 'helloMemberSetLoyaltyCard':
       endpoint = '/V1/customers/mine/set-loyalty-card'; // endpoint to set hello member loyalty card details.
@@ -231,8 +231,6 @@ export const getPriceToHelloMemberPoint = (price, dictionaryData) => {
  *   Return hello member points to earn.
  */
 export const getHelloMemberPointsToEarn = async (items, identifierNo) => {
-  const { currencyCode } = drupalSettings.helloMember;
-
   if (!hasValue(items)) {
     logger.warning('Error while trying to get hello member points to earn. Product details is required.');
     return getErrorResponse('Product details is required.', 404);
@@ -266,22 +264,17 @@ export const getHelloMemberPointsToEarn = async (items, identifierNo) => {
     }
   }
 
-  // Prepare request data.
-  const products = [];
+  // Get cart id from session.
+  const cartId = window.commerceBackend.getCartId();
 
-  Object.entries(items).forEach(([, item]) => {
-    const itemDetails = {
-      code: item.sku,
-      quantity: item.qty,
-      amount: item.qty * item.finalPrice,
-    };
-    products.push(itemDetails);
-  });
+  if (!hasValue(cartId)) {
+    logger.error('Error while trying to set loyalty card in cart. Cart id not available.');
+    return { data: getErrorResponse('Cart id not available.', 404) };
+  }
 
   const requestData = {
     sales: {
-      currencyCode,
-      products,
+      quote_id: cartId,
     },
     programCode: 'hello_member',
   };
