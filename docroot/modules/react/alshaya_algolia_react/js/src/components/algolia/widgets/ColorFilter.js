@@ -40,7 +40,8 @@ const ColorFilter = ({
       : '';
     // Hide color filter if only one filter value available and not part of excluded list.
     if (exclude.length > 0) {
-      if ((!exclude.includes(attribute) && items.length <= 1)) {
+      // Split attribute because attribute contain language suffix on PLP.
+      if ((!exclude.includes(attribute.split('.')[0]) && items.length <= 1)) {
         return null;
       }
     } else if (items.length <= 1) {
