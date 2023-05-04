@@ -837,6 +837,11 @@ $conductors = [
     'hmac_secret' => 'N2RjZjM1NDUtYzYxYS00',
     'site_id' => 653,
   ],
+  'vsxb_dev2' => [
+    'hmac_id' => 'ec523c6073f84401b295081086607eed',
+    'hmac_secret' => 'NzY0OGE0YTYtMzg4ZS00',
+    'site_id' => 658,
+  ],
   'vsxb_dev3' => [
     'hmac_id' => '7d5de94cfc6e452b8e6b9d071a522444',
     'hmac_secret' => 'ZWZjMmUwMzktYzBkMS00',
