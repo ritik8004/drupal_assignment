@@ -34,4 +34,8 @@
       }
     }
   }
+
+  @include breakpoint($only-mobile) {
+    margin: rem(16) auto;
+  }
 }
