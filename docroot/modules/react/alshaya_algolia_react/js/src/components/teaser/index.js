@@ -27,6 +27,7 @@ import { isAddToBagHoverEnabled } from '../../../../../js/utilities/addToBagHelp
 import ArticleSwatches from '../article_swatch';
 import SliderSwatch from '../slider-swatch';
 import { getShoeAiStatus } from '../../../../../js/utilities/util';
+import ProductTeaserAttributes from '../product-teaser-attributes';
 
 const Teaser = ({
   hit, gtmContainer = null, pageType, extraInfo, indexName,
@@ -271,6 +272,15 @@ const Teaser = ({
   if (pageType === 'search') {
     dataVmode = { 'data-vmode': 'search_result' };
   }
+
+  const productTeaserAttributes = {};
+  if (hasValue(drupalSettings.algoliaSearch.product_teaser_attributes)) {
+    const attributeArr = drupalSettings.algoliaSearch.product_teaser_attributes.split(',');
+    attributeArr.forEach((attr) => {
+      productTeaserAttributes[attr] = hit[attr];
+    });
+  }
+
   return (
     <div className={teaserClass}>
       <article
@@ -419,6 +429,12 @@ const Teaser = ({
             {/* Render price based on range/single price conditionals */}
             {hasValue(updatedAttribute.renderProductPrice)
               ? updatedAttribute.renderProductPrice : renderPrice}
+            {/* Show product category. */}
+            {hasValue(productTeaserAttributes) ? (
+              <ProductTeaserAttributes
+                productTeaserAttributes={productTeaserAttributes}
+              />
+            ) : null}
             <ConditionalView condition={isPromotionFrameEnabled()}>
               <PromotionsFrame promotions={attribute.promotions} />
             </ConditionalView>

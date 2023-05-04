@@ -1,1 +1,8 @@
-<span>{{ name }}</span>
+{{#if titleAttributes }}
+  <span class="prod-categories-yes">
+  {{#each titleAttributes}}
+    {{{ this}}}
+  {{/each}}
+  </span>
+{{/if}}
+<h1><span>{{ name }}</span></h1>

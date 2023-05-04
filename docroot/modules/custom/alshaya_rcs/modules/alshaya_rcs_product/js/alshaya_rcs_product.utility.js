@@ -1409,5 +1409,14 @@ window.commerceBackend.getSortedAttributeValues = function getSortedAttributeVal
     }
 
     product.promotions = promotionVal;
+
+    // Add title attributes to product.
+    if (Drupal.hasValue(drupalSettings.alshayaRcs.pdpTitleAttributes)) {
+      product.titleAttributes = {};
+      drupalSettings.alshayaRcs.pdpTitleAttributes.forEach(function processTitleAttribute(titleAttribute) {
+        product.titleAttributes[titleAttribute] = window.commerceBackend.getAttributeValueLabel(titleAttribute, product[titleAttribute]);
+      });
+    }
+
   });
 })(Drupal, drupalSettings, jQuery);
