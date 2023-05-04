@@ -68,6 +68,7 @@ const DeliveryTypeFilter = ({
     const show = checkSameDayDeliveryStatus() && checkExpressDeliveryStatus() ? 1 : 0;
     if (exclude.length > 0) {
       // If delivery attribute is part of the excluded list then always show.
+      // Split attribute because attribute contain language suffix on PLP.
       if ((!exclude.includes(attribute.split('.')[0]) && !show)) {
         return null;
       }

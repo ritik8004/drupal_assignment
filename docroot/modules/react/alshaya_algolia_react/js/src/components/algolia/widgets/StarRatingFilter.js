@@ -61,6 +61,7 @@ function StarRatingFilter(props) {
     // Certain factes should always be rendered irrespective of render_single_result_facets.
     // So we only consider the attributes not part of the exclude_render_single_result_facets.
     if (exclude.length > 0) {
+      // Split attribute because attribute contain language suffix on PLP.
       if ((!exclude.includes(attribute.split('.')[0]) && ratingItems.length <= 1)) {
         return null;
       }
