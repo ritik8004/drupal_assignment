@@ -132,12 +132,14 @@ const Teaser = ({
   const handleSwatchSelect = (productData) => {
     setSkuCode(productData.sku);
     setSkuMedia(productData.media);
-    const renderSkuPrice = (
-      <Price
-        price={productData.priceData.price}
-        finalPrice={productData.priceData.finalPrice}
-      />
-    );
+    const renderSkuPrice = hasValue(productData.priceData)
+      ? (
+        <Price
+          price={productData.priceData.price}
+          finalPrice={productData.priceData.finalPrice}
+        />
+      )
+      : null;
     setSwatchAttributeData({
       ...updatedAttribute,
       title: productData.name,
@@ -423,11 +425,13 @@ const Teaser = ({
             <ConditionalView condition={!isPromotionFrameEnabled()}>
               <Promotions promotions={attribute.promotions} />
             </ConditionalView>
-            {showSwatches ? (
+            {/* Render the Article color swatches when showColorSwatchSlider is TRUE */}
+            {showSwatches && !showColorSwatchSlider ? (
               <Swatches
                 swatches={attribute.swatches}
                 url={url}
                 title={title}
+                handleSwatchSelect={handleSwatchSelect}
               />
             ) : null}
             {showSliderSwatch ? (
@@ -435,6 +439,7 @@ const Teaser = ({
                 swatches={attribute.swatches}
                 url={url}
                 title={title}
+                handleSwatchSelect={handleSwatchSelect}
               />
             ) : null}
             {/* Render color swatches based on article/sku id */}

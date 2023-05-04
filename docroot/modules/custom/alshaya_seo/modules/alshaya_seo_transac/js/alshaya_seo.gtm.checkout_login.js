@@ -20,6 +20,16 @@
     $('[gtm-type="checkout-signin"]', $(this)).on('mousedown', function () {
       Drupal.alshaya_seo_gtm_push_checkout_option('New Login', 1);
     });
+
+    // Tracking Social media login.
+    $('.social-signup-form .auth-link', $(this)).on('click', function () {
+      var gtmTypeAttribute = $(this).attr('gtm-social-type');
+
+      if(gtmTypeAttribute) {
+        var socialType = gtmTypeAttribute.replace('checkout-', '');
+        Drupal.alshaya_seo_gtm_push_checkout_option(`${socialType} Login`, 1);
+      }
+    })
   });
 
 })(jQuery, Drupal, dataLayer);

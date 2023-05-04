@@ -15,3 +15,15 @@
     }
   }
 }
+
+.large-grid {
+  .c-plp {
+    .c-products__item article {
+      &:hover {
+        .quick-add {
+          top: rem(-6);
+        }
+      }
+    }
+  }
+}

@@ -9,11 +9,12 @@
     {% for key, social_network in social_networks %}
       {# If route info available for the social network.#}
       {% if social_network.route is not empty %}
+      {% set gtm_social_type = "checkout-" ~ key|split('_')|last|title %}
         <div class="{{ module }}">
           {% if destination %}
-            <a class="{{ key }} auth-link" href="#" social-auth-link="{{ path(social_network.route, {}, {'query': {'destination': destination}}) }}">
+            <a class="{{ key }} auth-link" href="#" social-auth-link="{{ path(social_network.route, {}, {'query': {'destination': destination}}) }}" gtm-social-type="{{ gtm_social_type }}">
           {% else %}
-            <a class="{{ key }} auth-link" href="#" social-auth-link="{{ path(social_network.route) }}">
+            <a class="{{ key }} auth-link" href="#" social-auth-link="{{ path(social_network.route) }}" gtm-social-type="{{ gtm_social_type }}">
           {% endif %}
             {% if social_network.text_link is defined %}
               <span class="social-network-text">{{ social_network.text_link }}</span>
