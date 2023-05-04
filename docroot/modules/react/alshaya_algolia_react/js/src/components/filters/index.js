@@ -1,4 +1,4 @@
-import React, { useState, useRef } from 'react';
+import React, { useState, useRef, useEffect } from 'react';
 import WidgetManager from '../widget-manager';
 import DynamicWidgets from '../algolia/widgets/DynamicWidgets';
 import { hasValue } from '../../../../../js/utilities/conditionsUtility';
@@ -10,6 +10,12 @@ const Filters = ({ indexName, pageType, ...props }) => {
   const [filterCounts, setfilters] = useState([]);
   const [facets, setFacets] = useState([]);
   const ref = useRef();
+
+  useEffect(() => {
+    // Every time the component re-renders, we need to re-attach the event
+    // handlers.
+    Drupal.algoliaReact.processFacets(pageType);
+  });
 
   // Loop through all the filters given in config and prepare an array of filters.
   const updateFilterResult = (itm) => {
