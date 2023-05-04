@@ -34,10 +34,14 @@ import {
 import { isDesktop } from '../../utils/QueryStringUtils';
 import { createConfigurableDrawer } from '../../../../../js/utilities/addToBagHelper';
 import isHelloMemberEnabled from '../../../../../js/utilities/helloMemberHelper';
-import { isUserAuthenticated } from '../../../../../js/utilities/helper';
+import {
+  isConfigurableFiltersEnabled,
+  isUserAuthenticated,
+} from '../../../../../js/utilities/helper';
 import BecomeHelloMember from '../../../../../js/utilities/components/become-hello-member';
 import { hasValue } from '../../../../../js/utilities/conditionsUtility';
 import { isMobile } from '../../../../../js/utilities/display';
+import SideBarDynamicWidgets from '../algolia/widgets/SideBarDynamicWidgets';
 
 /**
  * Render search results elements facets, filters and sorting etc.
@@ -95,6 +99,30 @@ const SearchResultsComponent = ({
   // For enabling/disabling hitsPerPage key in algolia calls.
   const enableHitsPerPage = drupalSettings.algoliaSearch.hitsPerPage;
 
+  const superCategoryComponent = (hasSuperCategoryFilter() || isConfigurableFiltersEnabled())
+    ? (
+      <Menu
+        transformItems={(items) => getSortedItems(items, 'supercategory')}
+        attribute="super_category"
+      />
+    )
+    : null;
+
+  const fieldCategoryComponent = (hasSuperCategoryFilter() || isConfigurableFiltersEnabled())
+    ? (
+      <HierarchicalMenu
+        transformItems={(items) => getSortedItems(items, 'category')}
+        attributes={attributes}
+        facetLevel={1}
+        showParentLevel
+      />
+    )
+    : null;
+
+  const SideBarWrapper = (showSidebar && !isConfigurableFiltersEnabled())
+    ? SideBar
+    : SideBarDynamicWidgets;
+
   return (
     <InstantSearch
       searchClient={algoliaSearchClient}
@@ -117,24 +145,13 @@ const SearchResultsComponent = ({
           userToken={Drupal.getAlgoliaUserToken()}
         />
       ) : null}
-      {showSidebar && (
-        <SideBar>
-          {hasSuperCategoryFilter() && isDesktop() && (
-            <Menu
-              transformItems={(items) => getSortedItems(items, 'supercategory')}
-              attribute="super_category"
-            />
+      {isDesktop()
+          && (
+          <SideBarWrapper>
+            {superCategoryComponent}
+            {fieldCategoryComponent}
+          </SideBarWrapper>
           )}
-          {hasCategoryFilter() && isDesktop() && (
-            <HierarchicalMenu
-              transformItems={(items) => getSortedItems(items, 'category')}
-              attributes={attributes}
-              facetLevel={1}
-              showParentLevel
-            />
-          )}
-        </SideBar>
-      )}
       <MainContent>
         <StickyFilter>
           {(callback) => (
@@ -145,7 +162,7 @@ const SearchResultsComponent = ({
                 callback={(callerProps) => callback(callerProps)}
                 pageType="search"
               />
-              {!isDesktop() && (
+              {!isDesktop() && !isConfigurableFiltersEnabled() && (
                 <div className="block-facet-blockcategory-facet-search c-facet c-accordion c-collapse-item non-desktop" ref={parentRef}>
                   {(drupalSettings.algoliaSearch.search.filters.super_category !== undefined
                     && showBrandFilter) && (
@@ -193,6 +210,20 @@ const SearchResultsComponent = ({
                   )}
                 </div>
               )}
+              {!isDesktop() && isConfigurableFiltersEnabled()
+                  && (
+                    <div className="block-facet-blockcategory-facet-search c-facet c-accordion c-collapse-item non-desktop" ref={parentRef}>
+                      <div>
+                        <h3 className="c-facet__title c-accordion__title c-collapse__title" onClick={showCategoryFacets}>
+                          {Drupal.t('Brands/Category')}
+                        </h3>
+                        <SideBarDynamicWidgets showCategoryFacets={showCategoryFacets}>
+                          {superCategoryComponent}
+                          {fieldCategoryComponent}
+                        </SideBarDynamicWidgets>
+                      </div>
+                    </div>
+                  )}
               <div className={`show-all-filters-algolia hide-for-desktop ${!hasCategoryFilter() ? 'empty-category' : ''}`}>
                 <span className="desktop">{Drupal.t('all filters')}</span>
                 <span className="upto-desktop">{Drupal.t('filter & sort')}</span>

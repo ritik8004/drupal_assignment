@@ -1,4 +1,5 @@
 import { hasValue } from '../../../../js/utilities/conditionsUtility';
+import { isConfigurableFiltersEnabled } from '../../../../js/utilities/helper';
 
 const _ = require('lodash');
 
@@ -85,7 +86,7 @@ function sortItemsByMegaMenu(items, selector, label) {
 }
 
 function getSortedItems(items, element) {
-  if (items === null || items.length === 0) {
+  if (items === null || items.length === 0 || isConfigurableFiltersEnabled()) {
     return items;
   }
 
