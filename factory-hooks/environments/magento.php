@@ -18,25 +18,25 @@ $magentos = [
       'access_token_secret' => 'iekq1ibgrdlalh5devb73ue7ei48v57i',
     ],
     'kw' => [
-      'store_id' => ['en' => 1, 'ar' => 40],
+      'store_id' => ['en' => 1, 'ar' => 6],
     ],
     'sa' => [
-      'store_id' => ['en' => 28, 'ar' => 31],
+      'store_id' => ['en' => 2, 'ar' => 3],
     ],
     'ae' => [
-      'store_id' => ['en' => 34, 'ar' => 37],
+      'store_id' => ['en' => 4, 'ar' => 5],
     ],
     'eg' => [
-      'store_id' => ['en' => 7, 'ar' => 4],
+      'store_id' => ['en' => 8, 'ar' => 7],
     ],
     'bh' => [
-      'store_id' => ['en' => 13, 'ar' => 10],
+      'store_id' => ['en' => 10, 'ar' => 9],
     ],
     'qa' => [
-      'store_id' => ['en' => 19, 'ar' => 16],
+      'store_id' => ['en' => 12, 'ar' => 11],
     ],
     'jo' => [
-      'store_id' => ['en' => 25, 'ar' => 22],
+      'store_id' => ['en' => 14, 'ar' => 13],
     ],
   ],
   'dh_uat' => [
