@@ -1,13 +1,12 @@
 # Alshaya
 
-ACSF D8 commerce project with Magento integration done via Acquia Conductor.
+ACSF commerce project with Magento integration done via Acquia Conductor (ACM).
 Multi brands and multi countries solution for selling Alshaya products online.
 
 ## Build status for main branches:
 * Develop: [![Develop](https://github.com/acquia-pso/alshaya/actions/workflows/deploy.yml/badge.svg?branch=develop)](https://github.com/acquia-pso/alshaya/actions/workflows/deploy.yml)
-* Test (QA): [![Develop](https://github.com/acquia-pso/alshaya/actions/workflows/deploy.yml/badge.svg?branch=qa)](https://github.com/acquia-pso/alshaya/actions/workflows/deploy.yml)
-* UAT: [![Develop](https://github.com/acquia-pso/alshaya/actions/workflows/deploy.yml/badge.svg?branch=uat)](https://github.com/acquia-pso/alshaya/actions/workflows/deploy.yml)
-* Master: <img src="https://api.travis-ci.com/acquia-pso/alshaya.svg?token=4JaqUUFo3VuBYCWd867z&branch=master" alt="master build status" />
+* Test (QA): [![QA](https://github.com/acquia-pso/alshaya/actions/workflows/deploy.yml/badge.svg?branch=qa)](https://github.com/acquia-pso/alshaya/actions/workflows/deploy.yml)
+* UAT: [![UAT](https://github.com/acquia-pso/alshaya/actions/workflows/deploy.yml/badge.svg?branch=uat)](https://github.com/acquia-pso/alshaya/actions/workflows/deploy.yml)
 
 ## BLT
 
@@ -18,7 +17,7 @@ See the [BLT documentation](http://blt.readthedocs.io/en/latest/) for informatio
 * [JIRA](https://alshayagroup.atlassian.net/secure/RapidBoard.jspa?rapidView=353)
 * [GitHub](https://github.com/acquia-pso/alshaya)
 * [Acquia Cloud subscription](https://cloud.acquia.com/app/develop/applications/5ce588f5-ce9b-4a46-9b5b-a0c74e47feb2)
-* [TravisCI](https://travis-ci.com/acquia-pso/alshaya)
+* [CI](https://github.com/acquia-pso/alshaya/actions)
 
 ## Onboarding
 
@@ -60,8 +59,8 @@ changes and create PRs.
 
 ### Local dev environment
 
-We have a **lando** setup available.
-To setup lando, follow the instructions mentioned here https://github.com/acquia-pso/alshaya/blob/develop/README.lando.md.
+We have a **ddev** setup available.
+To setup lando, follow the instructions mentioned here https://github.com/acquia-pso/alshaya/blob/develop/README.ddev.md.
 
 ### React Modules.
 
@@ -96,6 +95,19 @@ Notes:
 * In case, updates done to default settings.php don't reflect in sites/g/settings/local.settigns.php:
   * `rm -rf docroot/sites/g/settings/local.settings.php` to make sure refresh local or local reset settings updates the file with new settings.
   * `blt local:reset-settings-file` to reset local settings file.
+
+#### Merging Update Hooks
+
+We use update hooks to manage all the configuration changes and most of the manual steps. If there is feedback on an update hook and we need to modify the code inside it is difficult to re-run the hook again on the non-prod environment where it is already executed.
+
+To achieve this we have created a utility drush command `reset-update-hook`.
+
+Whenever required to run an update hook again, simply run below from your local machine:
+`blt cloud:drush [ENV] reset-update-hook [MODULE] [UPDATE HOOK VERSION NUMBER]`
+
+Example: `blt cloud:drush dev reset-update-hook alshaya_master 9403`
+
+Post execution of above command, run drush updb as usual and check for the messages. 
 
 ### Create a new site
 
@@ -177,11 +189,11 @@ above need to be run from inside of lando and they reach remote cloud instance.
 
 In order to perform the private key forwarding, do following:
 
-* Edit ​`~/.ssh/config` ​file on your host machine and add following two lines:
+* Edit `~/.ssh/config` file on your host machine and add following two lines:
   * Host 127.0.0.1
   * ForwardAgent yes
-* `​ssh-add ~/.ssh/your_private_key​` (this adds your key to the ssh agent, the path to your private key your connecting to Acquia Cloud with - by default ​~/.ssh/id_rsa​)
-* `​ssh-add -L`​ (ensure your private key is listed between the keys displayed on ssh agent) 4. ​vagrant ssh​ (connects to you guest machine)
+* `ssh-add ~/.ssh/your_private_key` (this adds your key to the ssh agent, the path to your private key your connecting to Acquia Cloud with - by default ~/.ssh/id_rsa)
+* `ssh-add -L` (ensure your private key is listed between the keys displayed on ssh agent) 4. vagrant ssh (connects to you guest machine)
 
 ### Drush aliases
 
