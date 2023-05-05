@@ -103,8 +103,11 @@ class SearchApp extends React.PureComponent {
     // For enabling/disabling hitsPerPage key in algolia calls.
     const enableHitsPerPage = drupalSettings.algoliaSearch.hitsPerPage;
 
+    // For checking state of predictiveSearch.
+    const { predictiveSearchEnabled } = drupalSettings.algoliaSearch;
+
     return (
-      <div>
+      <div className={predictiveSearchEnabled ? 'predictive-search' : null}>
         <InstantSearch indexName={`${indexName}_query`} searchClient={algoliaSearchClient}>
           <Configure
             {...(enableHitsPerPage && { hitsPerPage: drupalSettings.autocomplete.hits })}

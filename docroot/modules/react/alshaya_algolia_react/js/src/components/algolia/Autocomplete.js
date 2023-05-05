@@ -11,6 +11,9 @@ import {
 } from '../../utils';
 import Portal from '../portal';
 
+// For checking state of predictiveSearch.
+const { predictiveSearchEnabled } = drupalSettings.algoliaSearch;
+const clearText = predictiveSearchEnabled ? Drupal.t('Clear') : null;
 const InputButtons = React.memo((props) => (
   <>
     <Portal
@@ -23,10 +26,18 @@ const InputButtons = React.memo((props) => (
     <Portal
       key="clear-button"
       onclick={(event) => props.clearCallback(event)}
-      className="algolia-search-cleartext-icon"
+      className={`algolia-search-cleartext-icon ${predictiveSearchEnabled ? 'predictive-search__btn-clear' : ''}`}
       id="react-algolia-searchbar-clear-button"
       query=""
+      innerHTML={clearText}
     />
+    { predictiveSearchEnabled ? (
+      <Portal
+        key="predictive-close-button"
+        className="predictive-search__btn-close"
+        onclick={(event) => props.closeCallback(event)}
+      />
+    ) : null}
   </>
 ));
 
@@ -107,7 +118,12 @@ class Autocomplete extends React.Component {
   addFocus = () => {
     const { value } = this.state;
     this.reactSearchBlock[0].classList.add('focused');
+    // Toggle clear-icon & show-algolia-search-bar(mobile) class on enter and not on change event.
     this.showMobileElements(value);
+    const searchComponent = document.getElementsByClassName('predictive-search');
+    if (searchComponent.length !== 0) {
+      searchComponent[0].classList.add('predictive-search--open');
+    }
   };
 
   onSuggestionsFetchRequested = ({ value }) => {
@@ -171,7 +187,10 @@ class Autocomplete extends React.Component {
       if (window.innerWidth < 768) {
         refine(newValue);
       }
-      onChange(newValue, inputTag);
+      // Search results to be shown on formSubmit in case on predictiveSearch.
+      if (!predictiveSearchEnabled) {
+        onChange(newValue, inputTag);
+      }
     }, 100);
 
     this.setState({
@@ -184,6 +203,12 @@ class Autocomplete extends React.Component {
     event.preventDefault();
     event.stopPropagation();
     this.autosuggest.current.input.blur();
+    if (predictiveSearchEnabled) {
+      const { value } = this.state;
+      const { onChange } = this.props;
+      const inputTag = this.autosuggest.current.input;
+      onChange(value, inputTag);
+    }
     return false;
   }
 
@@ -215,6 +240,14 @@ class Autocomplete extends React.Component {
     // Set query to empty to hide the search results and update the browser hash.
     onChange('');
     this.reactSearchBlock[0].classList.remove('focused');
+  };
+
+  // Removing "predictive-search--open" on click of close button only for predictive search.
+  closePredictiveSearchEvent = () => {
+    const predictiveSearchComponent = document.getElementsByClassName('predictive-search');
+    if (predictiveSearchComponent.length !== 0) {
+      predictiveSearchComponent[0].classList.remove('predictive-search--open');
+    }
   };
 
   renderSuggestionsContainer = ({ containerProps, children }) => (
@@ -256,6 +289,7 @@ class Autocomplete extends React.Component {
         <InputButtons
           backCallback={this.backIconClickEvent}
           clearCallback={this.clearSearchFieldInput}
+          closeCallback={this.closePredictiveSearchEvent}
         />
       </>
     );
