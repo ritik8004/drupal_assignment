@@ -172,12 +172,12 @@ function addShoeSizePurchaseConfirmationScript() {
         ssm_sid: sid
       };
       // Order confirmation script.
-      var conirmationScript = document.createElement('script');
-      conirmationScript.type = 'text/javascript';
-      conirmationScript.src = 'https://shoesize.me/plugin/confirm.js?'+
+      var confirmationScript = document.createElement('script');
+      confirmationScript.type = 'text/javascript';
+      confirmationScript.src = 'https://shoesize.me/plugin/confirm.js?'+
         'shopid='+encodeURIComponent(shoeAi.shopId)+'&id='+orderNumber+
         '&sid='+sid;
-      (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(conirmationScript);
+      (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(confirmationScript);
     };
   }
 }
