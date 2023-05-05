@@ -105,9 +105,8 @@ class AuraFormLinkCardOTPModal extends React.Component {
       // Below code never gets called for authenticated user.
       const cartId = Drupal.getItemFromLocalStorage('cart_id');
 
-      // Don't process further if no cart id is available.
       if (hasValue(cartId)) {
-        // Set aura checkout local storage.
+        // Set aura checkout local storage, if cartId is available.
         Drupal.addItemInLocalStorage(
           getAuraCheckoutLocalStorageKey(),
           { cartId, ...searchData },
