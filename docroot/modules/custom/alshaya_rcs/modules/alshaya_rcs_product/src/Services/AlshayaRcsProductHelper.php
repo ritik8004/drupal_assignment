@@ -596,6 +596,7 @@ class AlshayaRcsProductHelper {
         'entity_type' => 4,
       ], $options);
     }
+
     return $options;
   }
 
