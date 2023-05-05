@@ -96,18 +96,20 @@ Notes:
   * `rm -rf docroot/sites/g/settings/local.settings.php` to make sure refresh local or local reset settings updates the file with new settings.
   * `blt local:reset-settings-file` to reset local settings file.
 
-#### Merging Update Hooks
+#### Re-running Update Hooks
 
 We use update hooks to manage all the configuration changes and most of the manual steps. If there is feedback on an update hook and we need to modify the code inside it is difficult to re-run the hook again on the non-prod environment where it is already executed.
 
 To achieve this we have created a utility drush command `reset-update-hook`.
 
-Whenever required to run an update hook again, simply run below from your local machine:
-`blt cloud:drush [ENV] reset-update-hook [MODULE] [UPDATE HOOK VERSION NUMBER]`
+Whenever required to run an update hook again, simply run below:
+`vendor/bin/blt cloud:drush [ENV] 'reset-update-hook [MODULE] [UPDATE HOOK VERSION NUMBER]'`
 
-Example: `blt cloud:drush dev reset-update-hook alshaya_master 9403`
+Example: `vendor/bin/blt cloud:drush dev 'reset-update-hook alshaya_master 9403'`
 
-Post execution of above command, run drush updb as usual and check for the messages. 
+Post execution of above command, run drush updb as usual and check for the messages.
+
+Note: Please execute this directly (not via ddev or lando) as arguments with quotes are not supported. You can login to ddev or lando web (ssh) if required.
 
 ### Create a new site
 

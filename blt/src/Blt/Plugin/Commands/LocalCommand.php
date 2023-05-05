@@ -457,10 +457,8 @@ class LocalCommand extends BltTasks {
         $task->interactive(FALSE);
         $task->drush($drush_command)
           ->uri("${site}-${env}.factory.alshaya.com")
-          ->alias($stack . $env)
-          ->printOutput(FALSE);
-        $result = $task->run();
-        $this->io()->writeln($result->getMessage());
+          ->alias($stack . $env);
+        $task->run();
       }
     }
   }
