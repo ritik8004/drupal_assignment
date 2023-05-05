@@ -11,6 +11,7 @@ import {
   getCustomerPoints,
   getCustomerTier,
   getCustomerProgressTracker,
+  setLoyaltyCard,
   prepareAuraUserStatusUpdateData,
   getCustomerRewardActivity,
 } from './customer_helper';
@@ -409,6 +410,7 @@ window.auraBackend.updateLoyaltyCard = async (action, type, value, context) => {
     return { data: getErrorResponse(error, 'MISSING_DATA') };
   }
 
+  let identifierNo = '';
   let searchResponse = {};
   if (action === 'add') {
     searchResponse = await searchUserDetails(inputData.type, inputData.value, context);
@@ -419,11 +421,25 @@ window.auraBackend.updateLoyaltyCard = async (action, type, value, context) => {
       });
       return { data: searchResponse };
     }
+    identifierNo = searchResponse.data.apc_identifier_number;
   }
 
   responseData = {
     data: hasValue(searchResponse.data) ? searchResponse.data : {},
   };
+  // Get cart id from session.
+  const cartId = window.commerceBackend.getCartId();
+
+  if (hasValue(cartId)) {
+    const response = await setLoyaltyCard(identifierNo, cartId);
+    if (hasValue(response.error)) {
+      return { data: response };
+    }
+    responseData = {
+      status: response,
+      data: hasValue(searchResponse.data) ? searchResponse.data : {},
+    };
+  }
 
   return { data: responseData };
 };
