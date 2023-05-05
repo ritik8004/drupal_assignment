@@ -13,8 +13,7 @@
  */
 function alshaya_furnitures_update_9403() {
   $config = \Drupal::configFactory()->getEditable('alshaya_acm_product.display_settings');
-  $config->set('image_thumb_gallery', TRUE);
-  $config->set('gallery_show_hover_image', FALSE);
+  $config->set('image_thumb_gallery', FALSE);
   $config->save();
 }
 
