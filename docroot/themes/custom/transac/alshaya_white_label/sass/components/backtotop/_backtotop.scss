@@ -69,7 +69,7 @@
 }
 
 .language-switcher-enabled {
-  #backtotop {
+  #backtotop:not(.sprinklr-enabled) {
     &.backtotop-nofooter,
     &.backtotop-withfooter {
       @include breakpoint($upto-desktop) {
