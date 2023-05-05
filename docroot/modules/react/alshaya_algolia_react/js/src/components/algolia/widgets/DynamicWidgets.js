@@ -36,7 +36,7 @@ function DynamicWidgets({
   fallbackComponent,
   buildFacets,
 }) {
-  if (hasValue(userData) && !hasValue(children)) {
+  if (hasValue(userData) && !hasValue(children) && hasValue(buildFacets)) {
     // Get userData from algolia result and if children prop is empty
     // then call buildFacets from props to pass userData.
     buildFacets(userData);
