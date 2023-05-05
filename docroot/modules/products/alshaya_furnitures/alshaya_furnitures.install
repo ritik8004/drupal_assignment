@@ -8,18 +8,6 @@
 /**
  * Implements hook_update_N().
  *
- * Set image_thumb_gallery => true to use image gallery on
- * listing pages.
- */
-function alshaya_furnitures_update_9403() {
-  $config = \Drupal::configFactory()->getEditable('alshaya_acm_product.display_settings');
-  $config->set('image_thumb_gallery', FALSE);
-  $config->save();
-}
-
-/**
- * Implements hook_update_N().
- *
  * Set show_pre_selected_variant_on_pdp to false so that
  * no variant is pre selected on PDP page load.
  */
