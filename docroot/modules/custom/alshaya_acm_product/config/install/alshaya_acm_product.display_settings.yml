@@ -50,4 +50,5 @@ display_mobile_matchback_add_to_bag_button: false
 # Setting it to 'false' means no product variant will be selected
 # by default and parent product image gallery will be displayed.
 show_pre_selected_variant_on_pdp: true
+# Attrbitutes to be displayed on PDP title.
 pdp_title_attributes: ''

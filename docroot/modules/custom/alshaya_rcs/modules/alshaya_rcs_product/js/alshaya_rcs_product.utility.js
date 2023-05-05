@@ -1410,7 +1410,7 @@ window.commerceBackend.getSortedAttributeValues = function getSortedAttributeVal
 
     product.promotions = promotionVal;
 
-    // Add title attributes to product.
+    // Attributes to be shown near title on PDP.
     if (Drupal.hasValue(drupalSettings.alshayaRcs.pdpTitleAttributes)) {
       product.titleAttributes = {};
       drupalSettings.alshayaRcs.pdpTitleAttributes.forEach(function processTitleAttribute(titleAttribute) {

@@ -65,3 +65,6 @@ alshaya_acm_product.display_settings:
     show_pre_selected_variant_on_pdp:
       type: boolean
       label: 'Show a pre selected variant on PDP page load'
+    pdp_title_attributes:
+      type: string
+      label: 'Attributes to be displayed on PDP title.'

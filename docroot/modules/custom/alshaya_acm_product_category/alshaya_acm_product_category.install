@@ -17,22 +17,6 @@ use Drupal\field\Entity\FieldStorageConfig;
 /**
  * Implements hook_update_N().
  *
- * Adding new field `product_teaser_attributes`.
- */
-function alshaya_acm_product_category_update_9404() {
-  /** @var \Drupal\alshaya_config\AlshayaConfigManager $manager */
-  $manager = \Drupal::service('alshaya_config.manager');
-  $manager->updateConfigs(
-    ['alshaya_acm_product_category.settings'],
-    'alshaya_acm_product_category',
-    'install',
-    AlshayaConfigManager::MODE_ADD_MISSING
-  );
-}
-
-/**
- * Implements hook_update_N().
- *
  * Update cardinality for promo block in main menu.
  */
 function alshaya_acm_product_category_update_9402() {

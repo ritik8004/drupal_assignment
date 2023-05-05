@@ -36,7 +36,7 @@ const Teaser = ({
 }) => {
   const { showSwatches, showSliderSwatch } = drupalSettings.reactTeaserView.swatches;
   const { showColorSwatchSlider } = drupalSettings.reactTeaserView.swatches;
-  const { showReviewsRating } = drupalSettings.algoliaSearch;
+  const { showReviewsRating, plpTeaserAttributes } = drupalSettings.algoliaSearch;
   const collectionLabel = [];
   const [initSlider, setInitiateSlider] = useState(false);
   const [touchStart, setTouchStart] = useState(null);
@@ -273,11 +273,12 @@ const Teaser = ({
     dataVmode = { 'data-vmode': 'search_result' };
   }
 
-  const productTeaserAttributes = {};
-  if (hasValue(drupalSettings.algoliaSearch.product_teaser_attributes)) {
-    const attributeArr = drupalSettings.algoliaSearch.product_teaser_attributes.split(',');
+  // Show attributes on PLP product teaser.
+  const plpProductCategoryAttributes = {};
+  if (hasValue(plpTeaserAttributes)) {
+    const attributeArr = plpTeaserAttributes.split(',');
     attributeArr.forEach((attr) => {
-      productTeaserAttributes[attr] = hit[attr];
+      plpProductCategoryAttributes[attr] = hit[attr];
     });
   }
 
@@ -429,10 +430,10 @@ const Teaser = ({
             {/* Render price based on range/single price conditionals */}
             {hasValue(updatedAttribute.renderProductPrice)
               ? updatedAttribute.renderProductPrice : renderPrice}
-            {/* Show product category. */}
-            {hasValue(productTeaserAttributes) ? (
+            {/* Render attributes on PLP product teaser.. */}
+            {hasValue(plpProductCategoryAttributes) ? (
               <ProductTeaserAttributes
-                productTeaserAttributes={productTeaserAttributes}
+                plpProductCategoryAttributes={plpProductCategoryAttributes}
               />
             ) : null}
             <ConditionalView condition={isPromotionFrameEnabled()}>

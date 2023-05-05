@@ -1,11 +1,15 @@
 import React from 'react';
+import { hasValue } from '../../../../../js/utilities/conditionsUtility';
 
-const ProductTeaserAttributes = ({ productTeaserAttributes }) => {
+const ProductTeaserAttributes = ({ plpProductCategoryAttributes }) => {
+  if (!hasValue(plpProductCategoryAttributes)) {
+    return null;
+  }
   // Display teaser attributes, if attribute is an array
   // then show it as comma separated values.
   let attributes = '';
-  Object.keys(productTeaserAttributes).forEach((key) => {
-    let attrValue = productTeaserAttributes[key];
+  Object.keys(plpProductCategoryAttributes).forEach((key) => {
+    let attrValue = plpProductCategoryAttributes[key];
     attrValue = Array.isArray(attrValue)
       ? attrValue.join(', ')
       : attrValue;

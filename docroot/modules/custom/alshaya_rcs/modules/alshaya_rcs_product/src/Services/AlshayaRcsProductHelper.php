@@ -501,11 +501,10 @@ class AlshayaRcsProductHelper {
       ],
     ];
 
-    // Add title attributes to the query.
+    // Add attributes to be displayed on PDP title to the query.
     $title_attributes = $this->configFactory->get('alshaya_acm_product.display_settings')->get('pdp_title_attributes');
     if ($title_attributes) {
-      $title_attributes_arr = explode(',', $title_attributes);
-      foreach ($title_attributes_arr as $attribute) {
+      foreach (explode(',', $title_attributes) as $attribute) {
         array_push(
           $fields['items'],
           $attribute
