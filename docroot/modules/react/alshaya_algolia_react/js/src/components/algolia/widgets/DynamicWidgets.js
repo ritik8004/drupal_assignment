@@ -6,6 +6,7 @@ import React, { Fragment } from 'react';
 import { getDisplayName } from '../../../utils/FilterUtils';
 import { hasValue } from '../../../../../../js/utilities/conditionsUtility';
 import connectDynamicWidgets from '../connectors/connectDynamicWidgets';
+import { isDesktop } from '../../../utils/QueryStringUtils';
 
 function isReactElement(element) {
   return typeof element === 'object' && element.props;
@@ -35,6 +36,7 @@ function DynamicWidgets({
   userData,
   fallbackComponent,
   buildFacets,
+  lhn = false,
 }) {
   if (hasValue(userData) && !hasValue(children) && hasValue(buildFacets)) {
     // Get userData from algolia result and if children prop is empty
@@ -47,6 +49,8 @@ function DynamicWidgets({
     : function fallback() { return null; };
 
   const widgets = new Map();
+  const labels = {};
+  const { filters } = drupalSettings.algoliaSearch.search;
 
   React.Children.forEach(children, (child) => {
     const attribute = getAttribute(child);
@@ -56,10 +60,61 @@ function DynamicWidgets({
       );
     }
     widgets.set(attribute, child);
+
+    // Set facet labels.
+    const attributeCode = (attribute.indexOf('.') > -1) ? attribute.split('.')[0] : attribute;
+    labels[attribute] = hasValue(filters[attributeCode]) ? filters[attributeCode].label : '';
   });
 
   // on initial render this will be empty, but React InstantSearch keeps
   // search state for unmounted components in place, so routing works.
+  // on initial render this will be empty, but React InstantSearch keeps
+  // search state for unmounted components in place, so routing works.
+  if (isDesktop() && lhn) {
+    return (
+      <aside className="c-sidebar-first">
+        <div className="c-sidebar-first__region">
+          <div className="region region__sidebar-first clearfix">
+            { drupalSettings.algoliaSearch.enable_lhn_tree_search > 0
+              && (
+                <div className="c-facet__blocks">
+                  {attributesToRender.map((attribute) => (
+                    <Fragment key={attribute}>
+                      {widgets.get(attribute)
+                        && (
+                          <div className="c-facet__blocks c-facet block-facet-blockcategory-facet-search supercategory-facet c-accordion">
+                            <h3 className="c-facet__title c-accordion__title c-collapse__title">{labels[attribute]}</h3>
+                            {widgets.get(attribute) || <Fallback attribute={attribute} />}
+                          </div>
+                        )}
+                    </Fragment>
+                  ))}
+                </div>
+              )}
+          </div>
+        </div>
+      </aside>
+    );
+  }
+
+  if (!isDesktop() && lhn) {
+    return (
+      <div className="category-facet-wrapper">
+        {attributesToRender.map((attribute) => (
+          <Fragment key={attribute}>
+            {widgets.get(attribute)
+              && (
+                <div className="supercategory-facet c-accordion" attribute="super_category">
+                  <h3 className="c-facet__title c-accordion__title c-collapse__title">{labels[attribute]}</h3>
+                  {widgets.get(attribute) || <Fallback attribute={attribute} />}
+                </div>
+              )}
+          </Fragment>
+        ))}
+      </div>
+    );
+  }
+
   return (
     <>
       {attributesToRender.map((attribute) => (

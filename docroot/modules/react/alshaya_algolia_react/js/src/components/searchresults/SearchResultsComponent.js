@@ -41,7 +41,7 @@ import {
 import BecomeHelloMember from '../../../../../js/utilities/components/become-hello-member';
 import { hasValue } from '../../../../../js/utilities/conditionsUtility';
 import { isMobile } from '../../../../../js/utilities/display';
-import SideBarDynamicWidgets from '../algolia/widgets/SideBarDynamicWidgets';
+import DynamicWidgets from '../algolia/widgets/DynamicWidgets';
 
 /**
  * Render search results elements facets, filters and sorting etc.
@@ -121,7 +121,7 @@ const SearchResultsComponent = ({
 
   const SideBarWrapper = (showSidebar && !isConfigurableFiltersEnabled())
     ? SideBar
-    : SideBarDynamicWidgets;
+    : DynamicWidgets;
 
   return (
     <InstantSearch
@@ -147,7 +147,7 @@ const SearchResultsComponent = ({
       ) : null}
       {isDesktop()
           && (
-          <SideBarWrapper>
+          <SideBarWrapper lhn>
             {superCategoryComponent}
             {fieldCategoryComponent}
           </SideBarWrapper>
@@ -217,10 +217,10 @@ const SearchResultsComponent = ({
                         <h3 className="c-facet__title c-accordion__title c-collapse__title" onClick={showCategoryFacets}>
                           {Drupal.t('Brands/Category')}
                         </h3>
-                        <SideBarDynamicWidgets showCategoryFacets={showCategoryFacets}>
+                        <DynamicWidgets lhn>
                           {superCategoryComponent}
                           {fieldCategoryComponent}
-                        </SideBarDynamicWidgets>
+                        </DynamicWidgets>
                       </div>
                     </div>
                   )}
