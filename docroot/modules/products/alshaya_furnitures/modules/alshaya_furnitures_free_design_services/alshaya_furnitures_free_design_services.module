@@ -49,7 +49,7 @@ function alshaya_furnitures_free_design_services_webform_submission_form_alter(a
     $storeFinderUtility = \Drupal::service('alshaya_stores_finder_transac.utility');
     $form['elements']['preferred_store']['#type'] = 'select';
     $form['elements']['preferred_store']['#empty_option'] = t('Select @title', ['@title' => $form['elements']['preferred_store']['#title']]);
-    $form['elements']['preferred_store']['#options'] = $storeFinderUtility->getAllStoresAsOptions();
+    $form['elements']['preferred_store']['#options'] = $storeFinderUtility->getStores(TRUE);
 
     $form['#validate'][] = 'alshaya_furnitures_free_design_services_form_webform_submission_free_design_services_validate';
   }
