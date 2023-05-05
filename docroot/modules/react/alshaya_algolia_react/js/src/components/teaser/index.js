@@ -430,7 +430,7 @@ const Teaser = ({
             {/* Render price based on range/single price conditionals */}
             {hasValue(updatedAttribute.renderProductPrice)
               ? updatedAttribute.renderProductPrice : renderPrice}
-            {/* Render attributes on PLP product teaser.. */}
+            {/* Render attributes on PLP product teaser. */}
             {hasValue(plpProductCategoryAttributes) ? (
               <ProductTeaserAttributes
                 plpProductCategoryAttributes={plpProductCategoryAttributes}
