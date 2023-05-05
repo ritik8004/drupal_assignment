@@ -1,18 +1,8 @@
 diff --git a/core/lib/Drupal/Core/DrupalKernel.php b/core/lib/Drupal/Core/DrupalKernel.php
-index 69972b1cce..6a847086af 100644
+index 98a1969e39..32929b2ee5 100644
 --- a/core/lib/Drupal/Core/DrupalKernel.php
 +++ b/core/lib/Drupal/Core/DrupalKernel.php
-@@ -701,6 +701,9 @@ public function handle(Request $request, $type = self::MASTER_REQUEST, $catch =
-       // installed yet (i.e., if no $databases array has been defined in the
-       // settings.php file) and we are not already installing.
-       if (!Database::getConnectionInfo() && !InstallerKernel::installationAttempted() && PHP_SAPI !== 'cli') {
-+        if (Settings::get('alshaya_installer_redirection_log', FALSE)) {
-+          error_log(sprintf('The user is redirected to "core/install.php". Error: %s Requested from %s', $e->getMessage(), json_encode(debug_backtrace(DEBUG_BACKTRACE_IGNORE_ARGS, 10))));
-+        }
-         $response = new RedirectResponse($request->getBasePath() . '/core/install.php', 302, ['Cache-Control' => 'no-cache']);
-       }
-       else {
-@@ -741,6 +744,9 @@ public function handle(Request $request, $type = self::MASTER_REQUEST, $catch =
+@@ -750,6 +750,9 @@ class DrupalKernel implements DrupalKernelInterface, TerminableInterface {
     */
    protected function handleException(\Exception $e, $request, $type) {
      if ($this->shouldRedirectToInstaller($e, $this->container ? $this->container->get('database') : NULL)) {
@@ -21,20 +11,20 @@ index 69972b1cce..6a847086af 100644
 +      }
        return new RedirectResponse($request->getBasePath() . '/core/install.php', 302, ['Cache-Control' => 'no-cache']);
      }
- 
+
 diff --git a/core/lib/Drupal/Core/EventSubscriber/ExceptionDetectNeedsInstallSubscriber.php b/core/lib/Drupal/Core/EventSubscriber/ExceptionDetectNeedsInstallSubscriber.php
-index 9b974f28e3..e0ec156a70 100644
+index ae0fcbebdb..400c75913a 100644
 --- a/core/lib/Drupal/Core/EventSubscriber/ExceptionDetectNeedsInstallSubscriber.php
 +++ b/core/lib/Drupal/Core/EventSubscriber/ExceptionDetectNeedsInstallSubscriber.php
-@@ -4,6 +4,7 @@
- 
+@@ -4,6 +4,7 @@ namespace Drupal\Core\EventSubscriber;
+
  use Drupal\Core\Database\Connection;
  use Drupal\Core\Installer\InstallerRedirectTrait;
 +use Drupal\Core\Site\Settings;
  use Symfony\Component\EventDispatcher\EventSubscriberInterface;
  use Symfony\Component\HttpFoundation\RedirectResponse;
- use Symfony\Component\HttpKernel\Event\GetResponseForExceptionEvent;
-@@ -46,6 +47,9 @@ public function onException(GetResponseForExceptionEvent $event) {
+ use Symfony\Component\HttpKernel\Event\ExceptionEvent;
+@@ -46,6 +47,9 @@ class ExceptionDetectNeedsInstallSubscriber implements EventSubscriberInterface
        $request = $event->getRequest();
        $format = $request->query->get(MainContentViewSubscriber::WRAPPER_FORMAT, $request->getRequestFormat());
        if ($format == 'html') {
