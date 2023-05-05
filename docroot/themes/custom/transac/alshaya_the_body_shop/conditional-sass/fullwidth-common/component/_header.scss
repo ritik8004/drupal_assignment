@@ -19,8 +19,12 @@ header {
         margin-#{$right}: 0;
       }
 
-      @include breakpoint($only-tablet) {
-        margin-#{$right}: rem(-4);
+      @include breakpoint($tablet) {
+        margin-#{$right}: rem(10);
+      }
+
+      @include breakpoint($desktop) {
+        margin-#{$right}: rem(19);
       }
     }
   }
@@ -34,7 +38,7 @@ body.wishlist-enabled {
       }
 
       @include breakpoint($only-tablet) {
-        padding-#{$right}: rem(14);
+        padding-#{$right}: rem(24);
       }
 
       @include breakpoint($desktop) {
