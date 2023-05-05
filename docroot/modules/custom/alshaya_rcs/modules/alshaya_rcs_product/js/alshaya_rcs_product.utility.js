@@ -1412,9 +1412,11 @@ window.commerceBackend.getSortedAttributeValues = function getSortedAttributeVal
 
     // Attributes to be shown near title on PDP.
     if (Drupal.hasValue(drupalSettings.alshayaRcs.pdpTitleAttributes)) {
-      product.titleAttributes = {};
+      product.titleAttributes = [];
       drupalSettings.alshayaRcs.pdpTitleAttributes.forEach(function processTitleAttribute(titleAttribute) {
-        product.titleAttributes[titleAttribute] = window.commerceBackend.getAttributeValueLabel(titleAttribute, product[titleAttribute]);
+        product.titleAttributes.push({
+          attr : window.commerceBackend.getAttributeValueLabel(titleAttribute, product[titleAttribute]),
+        });
       });
     }
 
