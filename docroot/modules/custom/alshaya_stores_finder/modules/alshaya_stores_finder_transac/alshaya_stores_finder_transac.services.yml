@@ -19,6 +19,8 @@ services:
       - '@cache.data'
       - '@config.factory'
       - '@entity.repository'
+      - '@alshaya_api.api'
+      - '@alshaya_api.mdc_helper'
   alshaya_stores_finder_transac.route_subscriber:
     class: Drupal\alshaya_stores_finder_transac\Routing\RouteSubscriber
     tags:
