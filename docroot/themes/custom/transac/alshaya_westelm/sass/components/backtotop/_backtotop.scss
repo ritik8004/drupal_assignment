@@ -30,4 +30,9 @@
       background-image: url("#{$brand_theme_img_directory_path}/icons/back-to-top-hover.svg");
     }
   }
+
+  &.sprinklr-enabled {
+    // unset row-gap if font-size is 0.
+    row-gap: unset;
+  }
 }
