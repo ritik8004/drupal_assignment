@@ -16,7 +16,7 @@ use Drupal\facets\Entity\Facet;
 /**
  * Implements hook_update_N().
  *
- * Add configuration to show pre selected variant on PDP page load.
+ * Added attributes to be displayed on PDP title.
  */
 function alshaya_acm_product_update_9406() {
   $manager = \Drupal::service('alshaya_config.manager');

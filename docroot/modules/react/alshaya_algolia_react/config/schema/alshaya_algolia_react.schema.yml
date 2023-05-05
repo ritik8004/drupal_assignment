@@ -55,7 +55,7 @@ alshaya_algolia_react.settings:
       label: 'Exclude the filters from single results facets.'
     product_teaser_attributes:
       type: string
-      label: 'Exclude the filters from single results facets.'
+      label: 'Attributes to be displayed on PLP teaser.'
 
 alshaya_algolia_react.product_frames:
   type: config_object
