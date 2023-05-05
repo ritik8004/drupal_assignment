@@ -16,7 +16,8 @@
 
   &::after {
     content: "";
-    background: url("../imgs/icons/back-to-top.svg") no-repeat;
+    background: url("#{$brand_theme_img_directory_path}/icons/back-to-top.svg") no-repeat;
+    background-position: center;
     background-size: contain;
     border-radius: 0;
     top: 0;
@@ -26,7 +27,7 @@
 
   &:hover {
     &::after {
-      background: url("../imgs/icons/back-to-top-hover.svg") no-repeat;
+      background-image: url("#{$brand_theme_img_directory_path}/icons/back-to-top-hover.svg");
     }
   }
 }
