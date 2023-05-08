@@ -1,8 +1,4 @@
 #backtotop {
-  &.sprinklr-enabled {
-    bottom: rem(82);
-  }
-
   @include breakpoint($only-mobile) {
     #{$right}: 0;
 
@@ -52,10 +48,28 @@
       display: none !important;
     }
   }
+
+  &.sprinklr-enabled {
+    // screen bottom 20px + sprinklr height 60px + 10px margin.
+    bottom: rem(90);
+    #{$right}: rem(20);
+    width: rem(60);
+    height: auto;
+    white-space: nowrap;
+    line-height: unset;
+    display: flex;
+    flex-direction: column-reverse;
+    row-gap: rem(8);
+    align-items: center;
+
+    &::after {
+      position: unset;
+    }
+  }
 }
 
 .language-switcher-enabled {
-  #backtotop {
+  #backtotop:not(.sprinklr-enabled) {
     &.backtotop-nofooter,
     &.backtotop-withfooter {
       @include breakpoint($upto-desktop) {
