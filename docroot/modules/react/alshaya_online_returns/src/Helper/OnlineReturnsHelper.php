@@ -175,9 +175,12 @@ class OnlineReturnsHelper {
       : NULL;
     // New field `big_ticket` introduced in MDC orders API at item level
     // under extensions attributes, helps in determining whether the ordered
-    // item is big ticket or not.
-    // See CORE-55974 for reference.
-    return $attribute_options['big_ticket'] ?? FALSE;
+    // item is big ticket or not. If `big_ticket` attribute is missing
+    // or "0" it is considered as FALSE else TRUE.
+    // @see CORE-55974 for reference.
+    return isset($attribute_options['big_ticket'])
+      ? (bool) $attribute_options['big_ticket']
+      : FALSE;
   }
 
   /**
