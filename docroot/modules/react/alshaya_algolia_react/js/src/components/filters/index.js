@@ -198,6 +198,7 @@ const Filters = ({ indexName, pageType, ...props }) => {
 
     // Initialize facets data to get facets from userData.
     const facetsObject = {};
+    const lhnFilters = {};
     const filterAlias = {};
 
     // Initialize indentifier prefix.
@@ -240,14 +241,19 @@ const Filters = ({ indexName, pageType, ...props }) => {
         filter.facets_value = value.facets_value;
       }
 
-      facetsObject[key] = filter;
+      if (hasValue(value.lhn)) {
+        lhnFilters[key] = filter;
+      } else {
+        facetsObject[key] = filter;
+      }
+
       filterAlias[filter.alias] = filter.identifier;
     });
 
     // Set filter data in settings for use with helper methods.
-    drupalSettings.algoliaSearch.search.filters = facetsObject;
+    drupalSettings.algoliaSearch.search.filters = { ...facetsObject, ...lhnFilters };
     if (pageType !== 'search') {
-      drupalSettings.algoliaSearch.listing.filters = facetsObject;
+      drupalSettings.algoliaSearch.listing.filters = { ...facetsObject, ...lhnFilters };
     }
     drupalSettings.algoliaSearch.filters_alias = filterAlias;
 
