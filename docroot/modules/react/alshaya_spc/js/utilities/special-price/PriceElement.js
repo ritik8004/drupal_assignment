@@ -32,12 +32,23 @@ const PriceElement = ({
   priceParts.amount = (<span key="amount" style={{ display: 'inline-block' }} className="price-amount">{ parseFloat(priceParts.amount).toLocaleString(undefined, { minimumFractionDigits: currencyConfig.decimal_points, maximumFractionDigits: currencyConfig.decimal_points }) }</span>);
   priceParts.currency = (<span key="currency" style={{ display: 'inline-block' }} className="price-currency suffix">{priceParts.currency}</span>);
 
+  // If we have fixed price then return the updated price markup.
+  if (fixedPrice) {
+    return (
+      <div className={`price ${hasValue(currency) ? currency.toLowerCase() : ''}`} dir="ltr" data-fp={fixedPrice}>
+        <span className="price-wrapper">
+          {Object.values(priceParts)}
+        </span>
+      </div>
+    );
+  }
+
   return (
-    <div className={`price ${hasValue(currency) ? currency.toLowerCase() : ''}`} dir="ltr" data-fp={fixedPrice}>
-      <span className="price-wrapper">
+    <span className="price-wrapper">
+      <div className={`price ${hasValue(currency) ? currency.toLowerCase() : ''}`} dir="ltr" data-fp={fixedPrice}>
         {Object.values(priceParts)}
-      </span>
-    </div>
+      </div>
+    </span>
   );
 };
 
