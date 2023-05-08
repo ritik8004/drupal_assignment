@@ -175,6 +175,7 @@ docroot/modules/development
 docroot/.gitignore
 docroot/.ht.router.php
 docroot/.htaccess.orig
+docroot/web.config
 docroot/modules/.gitignore
 docroot/profiles/.gitignore
 /.editorconfig
