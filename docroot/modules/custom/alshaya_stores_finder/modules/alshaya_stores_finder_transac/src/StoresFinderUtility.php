@@ -627,14 +627,14 @@ class StoresFinderUtility {
   /**
    * Stores list for the brand transac site.
    *
-   * @param bool $is_design_service
-   *   If false return complete store details, else return an array with store
+   * @param bool $full_stores_data
+   *   If true return complete store details, else return an array with store
    *   code as key and title as value.
    *
    * @return mixed|array
    *   Stored details from the MDC API.
    */
-  public function getStores($is_design_service = FALSE) {
+  public function getStores($full_stores_data = TRUE) {
     $request_options = [
       'timeout' => $this->mdcHelper->getPhpTimeout('store_search'),
     ];
@@ -644,7 +644,7 @@ class StoresFinderUtility {
     $stores = json_decode($result, TRUE);
 
     // Return if we need complete store details.
-    if (!$is_design_service) {
+    if ($full_stores_data) {
       return $stores;
     }
 
