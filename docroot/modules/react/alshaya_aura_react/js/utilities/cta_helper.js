@@ -39,7 +39,7 @@ function handleSignUp(auraUserDetails) {
         : auraStatus,
       points: auraUserDetails.data.apc_points || 0,
       cardNumber: auraUserDetails.data.apc_identifier_number || '',
-      tier: auraUserDetails.data.tier_info || '',
+      tier: auraUserDetails.data.tier_code || '',
       email: auraUserDetails.data.email || '',
       mobile: auraUserDetails.data.mobile || '',
     };
