@@ -33,7 +33,7 @@ const PriceElement = ({
 
   return (
     <span className="price-wrapper">
-      <div className={`price ${hasValue(currency) ? currency.toLowerCase() : ''}`} data-fp={fixedPrice}>
+      <div className={`price ${hasValue(currency) ? currency.toLowerCase() : ''}`}>
         {drupalSettings.reactTeaserView.price.currencyPosition === 'before' ? priceParts : priceParts.reverse()}
       </div>
     </span>
