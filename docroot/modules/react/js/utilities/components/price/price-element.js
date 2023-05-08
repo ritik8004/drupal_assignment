@@ -21,7 +21,7 @@ const PriceElement = ({
   ];
 
   // If we have fixed price then return the updated price markup.
-  if (fixedPrice) {
+  if (hasValue(fixedPrice)) {
     return (
       <div className={`price ${hasValue(currency) ? currency.toLowerCase() : ''}`} data-fp={fixedPrice}>
         <span className="price-wrapper">
