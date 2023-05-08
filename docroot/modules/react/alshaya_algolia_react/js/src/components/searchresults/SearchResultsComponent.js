@@ -99,7 +99,9 @@ const SearchResultsComponent = ({
   // For enabling/disabling hitsPerPage key in algolia calls.
   const enableHitsPerPage = drupalSettings.algoliaSearch.hitsPerPage;
 
-  const superCategoryComponent = (hasSuperCategoryFilter() || isConfigurableFiltersEnabled())
+  const isConfigurableFilters = isConfigurableFiltersEnabled() || false;
+
+  const superCategoryComponent = (hasSuperCategoryFilter() || isConfigurableFilters)
     ? (
       <Menu
         transformItems={(items) => getSortedItems(items, 'supercategory')}
@@ -108,7 +110,7 @@ const SearchResultsComponent = ({
     )
     : null;
 
-  const fieldCategoryComponent = (hasSuperCategoryFilter() || isConfigurableFiltersEnabled())
+  const fieldCategoryComponent = (hasCategoryFilter() || isConfigurableFilters)
     ? (
       <HierarchicalMenu
         transformItems={(items) => getSortedItems(items, 'category')}
@@ -119,7 +121,7 @@ const SearchResultsComponent = ({
     )
     : null;
 
-  const SideBarWrapper = (showSidebar && !isConfigurableFiltersEnabled())
+  const SideBarWrapper = (showSidebar && !isConfigurableFilters)
     ? SideBar
     : DynamicWidgets;
 
@@ -162,7 +164,7 @@ const SearchResultsComponent = ({
                 callback={(callerProps) => callback(callerProps)}
                 pageType="search"
               />
-              {!isDesktop() && !isConfigurableFiltersEnabled() && (
+              {!isDesktop() && !isConfigurableFilters && (
                 <div className="block-facet-blockcategory-facet-search c-facet c-accordion c-collapse-item non-desktop" ref={parentRef}>
                   {(drupalSettings.algoliaSearch.search.filters.super_category !== undefined
                     && showBrandFilter) && (
@@ -210,7 +212,7 @@ const SearchResultsComponent = ({
                   )}
                 </div>
               )}
-              {!isDesktop() && isConfigurableFiltersEnabled()
+              {!isDesktop() && isConfigurableFilters
                   && (
                     <div className="block-facet-blockcategory-facet-search c-facet c-accordion c-collapse-item non-desktop" ref={parentRef}>
                       <div>

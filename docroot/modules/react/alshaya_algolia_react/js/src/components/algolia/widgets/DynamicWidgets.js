@@ -6,7 +6,7 @@ import React, { Fragment } from 'react';
 import { getDisplayName } from '../../../utils/FilterUtils';
 import { hasValue } from '../../../../../../js/utilities/conditionsUtility';
 import connectDynamicWidgets from '../connectors/connectDynamicWidgets';
-import { isDesktop } from '../../../utils/QueryStringUtils';
+import { isDesktop } from '../../../../../../js/utilities/display';
 
 function isReactElement(element) {
   return typeof element === 'object' && element.props;
@@ -68,8 +68,7 @@ function DynamicWidgets({
 
   // on initial render this will be empty, but React InstantSearch keeps
   // search state for unmounted components in place, so routing works.
-  // on initial render this will be empty, but React InstantSearch keeps
-  // search state for unmounted components in place, so routing works.
+  // If lhn is set then render category facets in the sidebar.
   if (isDesktop() && lhn) {
     return (
       <aside className="c-sidebar-first">
@@ -97,6 +96,7 @@ function DynamicWidgets({
     );
   }
 
+  // If lhn is set then render category facets for mobile view.
   if (!isDesktop() && lhn) {
     return (
       <div className="category-facet-wrapper">
@@ -115,6 +115,7 @@ function DynamicWidgets({
     );
   }
 
+  // Render facets above SRP / PLP listings.
   return (
     <>
       {attributesToRender.map((attribute) => (
