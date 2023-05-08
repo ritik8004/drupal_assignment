@@ -320,7 +320,7 @@ Drupal.alshayaSpc = Drupal.alshayaSpc || {};
       'isNonRefundable': data.isNonRefundable,
       'stock': data.stock,
       'cncEnabled': data.cncEnabled,
-      'extraInfo': Drupal.hasValue(data.extraInfo) ? data.extraInfo : null,
+      'extraInfo': Drupal.hasValue(data.extraInfo) ? data.extraInfo : {},
     };
 
     // Add product data in local storage with expiration time.
@@ -408,6 +408,7 @@ Drupal.alshayaSpc = Drupal.alshayaSpc || {};
     var productImage = productInfo.cart_image;
     var stock = productInfo.stock;
     var cncEnabled = productInfo.click_collect;
+    var extraInfo = Drupal.hasValue(productInfo.extraInfo) ? productInfo.extraInfo : {};
 
     if (productInfo.type === 'configurable') {
       var productVariantInfo = productInfo['variants'][variantSku];
@@ -429,6 +430,7 @@ Drupal.alshayaSpc = Drupal.alshayaSpc || {};
       gtmAttributes.price = productVariantInfo.gtm_price || price;
       stock = Drupal.hasValue(productVariantInfo.stock) ? productVariantInfo.stock : stock;
       cncEnabled = Drupal.hasValue(productVariantInfo.click_collect) ? productVariantInfo.click_collect : cncEnabled;
+      extraInfo = Drupal.hasValue(productVariantInfo.extraInfo) ? productVariantInfo.extraInfo : {};
     }
     else if (typeof productInfo.group !== 'undefined') {
       var productVariantInfo = productInfo.group[parentSku];
@@ -470,6 +472,7 @@ Drupal.alshayaSpc = Drupal.alshayaSpc || {};
       isNonRefundable: isNonRefundable,
       stock: stock,
       cncEnabled,
+      extraInfo,
     });
   }
 
