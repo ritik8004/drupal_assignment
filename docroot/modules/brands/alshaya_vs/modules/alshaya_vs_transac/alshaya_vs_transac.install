@@ -29,8 +29,6 @@ function alshaya_vs_transac_update_9407() {
   alshaya_config_install_configs(['search_api.index.product'], 'alshaya_product');
   alshaya_config_install_configs(['search_api.index.acquia_search_index'], 'alshaya_search');
 
-  $fieldsManager->resetBaseFields();
-
   \Drupal::service('alshaya_acm_product.product_queue_utility')->queueAllProducts();
 }
 
