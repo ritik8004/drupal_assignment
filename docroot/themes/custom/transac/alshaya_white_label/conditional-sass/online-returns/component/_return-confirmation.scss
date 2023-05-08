@@ -208,6 +208,12 @@ body[class*="return-confirmation"] {
         .method-wrapper {
           margin-bottom: rem(4);
 
+          .card-icon {
+            svg {
+              max-width: fit-content;
+            }
+          }
+
           &:last-child {
             margin-bottom: 0;
           }
