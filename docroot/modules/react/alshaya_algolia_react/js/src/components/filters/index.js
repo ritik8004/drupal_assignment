@@ -75,7 +75,7 @@ const Filters = ({ indexName, pageType, ...props }) => {
    * Check overrides and update default context data for sort config.
    *
    * @param {Object} data
-   *   userData with context from algolia result.
+   *   userData with context from Algolia result.
    * @param {Object} sortdata
    *   Sort config from algolia result.
    * @returns {*}
