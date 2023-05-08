@@ -2,6 +2,7 @@ import React from 'react';
 import FilterPanel from '../panels/FilterPanel';
 import SortByList from '../algolia/widgets/SortByList';
 import ColorFilter from '../algolia/widgets/ColorFilter';
+import MultiLevelFilter from '../algolia/widgets/MultiLevelFilter';
 import SizeGroupFilter from '../algolia/widgets/SizeGroupFilter';
 import RefinementList from '../algolia/widgets/RefinementList';
 import PriceFilter from '../algolia/widgets/PriceFilter';
@@ -43,6 +44,18 @@ const WidgetManager = React.memo((props) => {
           name={name}
           facetValues={filter.facet_values}
           attribute={`${filter.identifier}.value`}
+          searchable={false}
+          itemCount={itemCount}
+        />
+      );
+      break;
+    case 'multi_level_widget':
+      className = 'block-facet--bra-size';
+      currentWidget = (
+        <MultiLevelFilter
+          name={name}
+          facetValues={filter.facet_values}
+          attribute={filter.identifier}
           searchable={false}
           itemCount={itemCount}
         />
