@@ -180,6 +180,9 @@ export default createConnector({
       facetValues = hasValue(props.filterConfig) && hasValue(props.filterConfig.facet_values)
         ? props.filterConfig.facet_values
         : facetValues;
+
+      // Assign facet values from props if passed directly.
+      facetValues = hasValue(props.facet_values) ? props.facet_values : facetValues;
     }
 
     const canRefine = Boolean(results) && Boolean(results.getFacetByName(attribute));
