@@ -2,7 +2,6 @@
 
 namespace Drupal\alshaya_product_options\Plugin\facets\widget;
 
-use Drupal\facets\FacetInterface;
 use Drupal\facets\Plugin\facets\widget\LinksWidget;
 
 /**
@@ -15,22 +14,5 @@ use Drupal\facets\Plugin\facets\widget\LinksWidget;
  * )
  */
 class MultiLevelWidget extends LinksWidget {
-
-  /**
-   * {@inheritdoc}
-   */
-  public function defaultConfiguration() {
-    return [
-      'granularity' => 20,
-    ] + parent::defaultConfiguration();
-  }
-
-  /**
-   * {@inheritdoc}
-   */
-  public function build(FacetInterface $facet) {
-    $build = parent::build($facet);
-    return $build;
-  }
 
 }
