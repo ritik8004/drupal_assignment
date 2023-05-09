@@ -96,9 +96,12 @@ const HelloMemberCartPopupMemberOfferList = (props) => {
         <div className="hello-member-promo-tab-content-list radio-btn-list">
           <div id="offer-err-msg" className="offer-err-msg" />
           {offers.map((offer, index) => (
-            // List offers excluding In-store offers on Discounts & Vouchers popup on cart page.
-            hasValue(offer.tag)
-              && (offer.tag === 'E' || offer.tag === 'O')
+            // List offers excluding In-store, Info type, Competition, External
+            // offers on Discounts & Vouchers popup on cart page.
+            hasValue(offer.tag) && offer.tag !== 'S'
+              && offer.tag !== 'I' && offer.tag !== 'C'
+              && offer.tag !== 'ER' && offer.tag !== 'ES'
+              && offer.tag !== 'EB' && offer.tag !== 'T'
               && (
               <div key={offer.code} className="hello-member-promo-tab-cont-item">
                 <input
