@@ -35,9 +35,7 @@ const Filters = ({ indexName, pageType, ...props }) => {
         }
       });
 
-      if (!isConfigurableFiltersEnabled()) {
-        props.callback({ activeFilters, filterCounts, ...props });
-      }
+      props.callback({ activeFilters, filterCounts, ...props });
     }
   };
 
