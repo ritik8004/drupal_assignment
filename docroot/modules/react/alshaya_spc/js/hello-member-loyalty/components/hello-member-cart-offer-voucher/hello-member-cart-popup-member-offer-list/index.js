@@ -97,7 +97,8 @@ const HelloMemberCartPopupMemberOfferList = (props) => {
           <div id="offer-err-msg" className="offer-err-msg" />
           {offers.map((offer, index) => (
             // List offers excluding In-store offers on Discounts & Vouchers popup on cart page.
-            hasValue(offer.tag) && offer.tag !== 'S'
+            hasValue(offer.tag)
+              && (offer.tag === 'E' || offer.tag === 'O')
               && (
               <div key={offer.code} className="hello-member-promo-tab-cont-item">
                 <input
