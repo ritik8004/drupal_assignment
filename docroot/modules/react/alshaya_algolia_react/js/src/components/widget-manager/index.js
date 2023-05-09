@@ -22,6 +22,7 @@ const WidgetManager = React.memo((props) => {
   let currentWidget = '';
   let className = '';
   let plpSortIndex = null;
+  const seprator = ' ';
   switch (filter.widget.type) {
     case 'sort_by':
       // If page type is search then default sort index is taken from filter.
@@ -50,7 +51,7 @@ const WidgetManager = React.memo((props) => {
       );
       break;
     case 'multi_level_widget':
-      className = 'block-facet--bra-size';
+      className = 'block-facet--multi-level-widget';
       currentWidget = (
         <MultiLevelFilter
           name={name}
@@ -58,6 +59,7 @@ const WidgetManager = React.memo((props) => {
           attribute={filter.identifier}
           searchable={false}
           itemCount={itemCount}
+          seprator={seprator}
         />
       );
       break;

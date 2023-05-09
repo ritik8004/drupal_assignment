@@ -2,6 +2,8 @@ import React from 'react';
 import connectRefinementList from '../connectors/connectRefinementList';
 
 // Seprate a string by space to get the attributes that were grouped.
+// eg: we have brasize(32 A) = Bandsize(32), Cupsize(A) seprated by space.
+// We will group all the cup sizes according to the bandsize to create a multilevel filter.
 const MultiLevelFilter = ({
   items, itemCount, refine, searchForItems, isFromSearch, attribute, ...props
 }) => {
@@ -24,38 +26,38 @@ const MultiLevelFilter = ({
     const exclude = drupalSettings.algoliaSearch.excludeRenderSingleResultFacets
       ? drupalSettings.algoliaSearch.excludeRenderSingleResultFacets.trim().split(',')
       : '';
-    // Hide bra_size filter if only one filter value available and not part of excluded list.
+    // Hide the filter if only one filter value available and not part of excluded list.
     if (exclude.length > 0) {
       if ((!exclude.includes(attribute.split('.')[0]) && items.length <= 1)) {
         return null;
       }
     } else if (items.length <= 1) {
-      // Always hide bra_size filter if attribute has single value
+      // Always hide the filter if attribute has single value
       // and exclude field doesn't have val.
       return null;
     }
   }
   // Create a multilevel array for grouping attr2 by attr1.
   // Eg: Cupsizes grouped by Bandsize.
-  const sizeGroup = {};
+  const attributesGroup = {};
   items.forEach((item) => {
     // eg: break Bra Size into Band and Cup Size (30 A => [30,A])
-    const [attr1] = item.label.split(' ');
-    if (sizeGroup[attr1] === undefined) {
-      sizeGroup[attr1] = [];
+    const [attr1] = item.label.split(props.seprator);
+    if (attributesGroup[attr1] === undefined) {
+      attributesGroup[attr1] = [];
     }
-    sizeGroup[attr1].push(item);
-    sizeGroup[attr1].sort();
+    attributesGroup[attr1].push(item);
+    attributesGroup[attr1].sort();
   });
 
   return (
     // Creating a multilevel dropdown.
     <ul>
-      {Object.keys(sizeGroup).map((attr1) => (
+      {Object.keys(attributesGroup).map((attr1) => (
         <li className="bra-size-group-title" key={attr1}>
           {attr1}
           <ul>
-            {sizeGroup[attr1].map((item) => (
+            {attributesGroup[attr1].map((item) => (
               <li
                 key={item.label}
                 className={`facet-item ${item.isRefined ? 'is-active' : ''}`}
@@ -69,7 +71,7 @@ const MultiLevelFilter = ({
                   }}
                 >
                   <span className="facet-item__value" data-drupal-facet-item-value={item.value}>
-                    <span className="facet-item__label">{item.label.split(' ')[1]}</span>
+                    <span className="facet-item__label">{item.label.split(props.seprator)[1]}</span>
                     <span className="facet-item__count">
                       (
                       {item.count}

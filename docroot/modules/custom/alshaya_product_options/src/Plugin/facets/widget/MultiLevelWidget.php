@@ -5,7 +5,10 @@ namespace Drupal\alshaya_product_options\Plugin\facets\widget;
 use Drupal\facets\Plugin\facets\widget\LinksWidget;
 
 /**
- * The Size group list widget.
+ * The attributes group list widget.
+ *
+ * For combining two attributes and showing as multilevel dropdown.
+ * eg: Brasize(32 A) = combination of Bandsize(32) and Cupsize(A).
  *
  * @FacetsWidget(
  *   id = "multi_level_widget",
