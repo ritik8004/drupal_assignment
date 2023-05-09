@@ -282,7 +282,9 @@ window.commerceBackend = window.commerceBackend || {};
         let sizeGroup = '';
         Object.keys(sizeGroupAlternates).forEach(function (key) {
           const valueLabel = window.commerceBackend.getAttributeValueLabel(key, variant.product[key]);
-          sizeGroup += `${valueLabel}(${sizeGroupAlternates[key]}) `;
+          if (Drupal.hasValue(valueLabel)) {
+            sizeGroup += `${valueLabel}(${sizeGroupAlternates[key]}) `;
+          }
         });
         value = sizeGroup;
       }
