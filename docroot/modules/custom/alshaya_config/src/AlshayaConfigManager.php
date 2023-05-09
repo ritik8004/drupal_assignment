@@ -238,9 +238,6 @@ class AlshayaConfigManager {
       else {
         $existing = $config->getRawData();
         $existing = is_array($existing) ? $existing : [];
-        // Adding this check to avoid updb failure
-        // on using alshaya_config_install_configs.
-        $data = is_array($data) ? $data : [];
         $updated = $this->getUpdatedData($existing, $data, $mode, $options);
         $config->setData($updated)->save(TRUE);
         $this->configFactory->reset($config_id);
@@ -394,6 +391,11 @@ class AlshayaConfigManager {
     $file = drupal_get_path('module', $module_name) . '/config/' . $path . '/' . $config_id . '.yml';
 
     if (!file_exists($file)) {
+      $this->logger->warning('Config file:@config for module:@module does not exist in directory:@path', [
+        '@config' => $config_id,
+        '@module' => $module_name,
+        '@path' => $path,
+      ]);
       return '';
     }
 

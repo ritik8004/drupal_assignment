@@ -54,7 +54,7 @@ const MultiLevelFilter = ({
     // Creating a multilevel dropdown.
     <ul>
       {Object.keys(attributesGroup).map((attr1) => (
-        <li className="bra-size-group-title" key={attr1}>
+        <li className="attr-group-title" key={attr1}>
           {attr1}
           <ul>
             {attributesGroup[attr1].map((item) => (
