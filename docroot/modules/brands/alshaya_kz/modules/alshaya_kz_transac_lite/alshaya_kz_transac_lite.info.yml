@@ -7,7 +7,6 @@ core_version_requirement: ^8 || ^9
 dependencies:
   - alshaya_kz:alshaya_kz
   - telephone:telephone
-  - sms_textanywhere:sms_textanywhere
   - endroid_qr_code:endroid_qr_code
   - alshaya_knet:alshaya_knet
   - date_popup:date_popup
