@@ -2,6 +2,7 @@
 
 namespace Drupal\alshaya_rcs_product\Services;
 
+use Drupal\alshaya_acm_product\SkuManager;
 use Drupal\alshaya_spc\Helper\AlshayaSpcOrderHelper;
 
 /**
@@ -23,7 +24,7 @@ class AlshayaRcsOrderHelper extends AlshayaSpcOrderHelper {
       'sku' => $item['sku'],
       'parentSKU' => $parent_sku,
       'product_type' => $item['product_type'],
-      'freeItem' => ($item['price_incl_tax'] == 0),
+      'freeItem' => ($item['price_incl_tax'] == 0) || ($item['price_incl_tax'] == SkuManager::FREE_GIFT_PRICE),
       'title' => $item['name'],
       'finalPrice' => $this->skuInfoHelper->formatPriceDisplay((float) $item['price']),
       'id' => $item['item_id'],

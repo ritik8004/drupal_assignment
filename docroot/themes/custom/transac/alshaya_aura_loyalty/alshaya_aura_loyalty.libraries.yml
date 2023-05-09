@@ -1,0 +1,9 @@
+ltr_styles:
+  css:
+    theme:
+      css/ltr.css: {}
+
+rtl_styles:
+  css:
+    theme:
+      css/rtl.css: {}

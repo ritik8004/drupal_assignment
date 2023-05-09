@@ -1,0 +1,14 @@
+@include breakpoint($only-mobile) {
+  .region__footer-secondary,
+  .footer_primary-right-block {
+    @include sideSpaces(0);
+  }
+}
+
+@include breakpoint($desktop) {
+  .c-footer-secondary {
+    .c-footer__copy {
+      margin-#{$right}: 0;
+    }
+  }
+}

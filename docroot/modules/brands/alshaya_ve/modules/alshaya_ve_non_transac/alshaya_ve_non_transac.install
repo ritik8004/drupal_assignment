@@ -11,6 +11,23 @@ use Drupal\Core\Site\Settings;
 /**
  * Implements hook_update_N().
  *
+ * Enable pagination for the search view.
+ */
+function alshaya_ve_non_transac_update_9401() {
+  $manager = \Drupal::service('alshaya_config.manager');
+  $manager->updateConfigs(
+    [
+      'views.view.non_transac_acquia_index_search',
+    ],
+    'alshaya_ve_non_transac',
+    'optional',
+    AlshayaConfigManager::MODE_REPLACE
+  );
+}
+
+/**
+ * Implements hook_update_N().
+ *
  * Updating search view for Drupal upgrade fixes.
  */
 function alshaya_ve_non_transac_update_8005() {

@@ -96,4 +96,27 @@
       opacity: 0.2;
     }
   }
+
+  @include breakpoint($only-mobile) {
+    .spc-checkout-section-title {
+      margin: 0;
+      padding: 0;
+      height: rem(36);
+      background-color: $checkout_secure_payment_bg;
+      color: $checkout_secure_payment_title;
+      font-size: rem(18);
+      text-align: $left;
+      display: flex;
+      align-items: center;
+
+      &::before {
+        content: "";
+        width: rem(10);
+        height: rem(13);
+        background: url("#{$base_theme_img_directory_path}/icons/lock-white.svg") center/contain no-repeat;
+        margin-#{$left}: rem(16);
+        margin-#{$right}: rem(8);
+      }
+    }
+  }
 }

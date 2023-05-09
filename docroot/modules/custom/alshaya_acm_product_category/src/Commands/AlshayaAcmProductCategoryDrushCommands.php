@@ -73,7 +73,7 @@ class AlshayaAcmProductCategoryDrushCommands extends DrushCommands {
    *
    * @var \Drupal\Core\Language\LanguageManagerInterface
    */
-  protected $langugageManager;
+  protected $languageManager;
 
   /**
    * Config factory service.
@@ -202,6 +202,8 @@ class AlshayaAcmProductCategoryDrushCommands extends DrushCommands {
       return;
     }
 
+    // Query string for the output files.
+    $query_string = \time();
     // Check if it is possible to create the output files.
     foreach ($this->languageManager->getLanguages() as $langcode => $language) {
       try {
@@ -211,7 +213,8 @@ class AlshayaAcmProductCategoryDrushCommands extends DrushCommands {
           return;
         }
         else {
-          $this->drupalLogger->notice('Lancode: ' . $langcode . '. File: ' . file_create_url($location));
+          $file_url = file_create_url($location);
+          $this->drupalLogger->notice('Langcode: ' . $langcode . '. File: ' . "$file_url?$query_string");
         }
 
         // Make the file empty.

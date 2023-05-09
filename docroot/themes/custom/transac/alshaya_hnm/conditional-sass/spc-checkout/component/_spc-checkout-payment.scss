@@ -1,0 +1,7 @@
+.spc-checkout-payment-options {
+  .spc-checkout-section-title {
+    @include breakpoint($only-mobile) {
+      padding-bottom: rem(2);
+    }
+  }
+}

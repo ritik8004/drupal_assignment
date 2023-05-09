@@ -1,0 +1,40 @@
+.c-plp {
+  @include breakpoint($only-mobile) {
+    .c-products-list {
+      &.view-algolia-plp,
+      &.view-search {
+        @include sideSpaces(0);
+      }
+
+      .qty-text,
+      .addtobag-button {
+        white-space: nowrap;
+      }
+    }
+  }
+}
+
+#hits,
+#plp-hits,
+.view-alshaya-product-list {
+  .c-products__item {
+    .alshaya_search_mainimage {
+      & > img,
+      .img-wrapper img {
+        aspect-ratio: 2/3;
+        object-fit: contain;
+      }
+    }
+  }
+}
+
+#my-wishlist {
+  .c-products-list {
+    &.product-large,
+    &.product-small {
+      .alshaya_search_gallery {
+        height: auto;
+      }
+    }
+  }
+}

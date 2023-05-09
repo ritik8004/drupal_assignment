@@ -21,6 +21,9 @@ alshaya_online_returns.return_confirmation:
       label: 'Whats next row'
       sequence:
         - type: return_whats_next_row
+    customer_service_number:
+      type: string
+      label: 'Config to show the customer service number'
 
 return_whats_next_row:
   type: mapping
@@ -38,3 +41,22 @@ return_whats_next_row:
     hide_this_row:
       type: boolean
       label: 'Hide This Row'
+
+alshaya_online_returns.egift_card_refund:
+  type: config_object
+  label: 'Return confirmation settings'
+  mapping:
+    egift_card_refund_enabled:
+      type: boolean
+      label: 'Config to enable/disable egift card during refund'
+    not_supported_refund_payment_methods:
+      label: 'Not supported payment methods for eGift card refund.'
+      type: sequence
+      sequence:
+        type: string
+    egift_refund_text:
+      type: string
+      label: 'Config to show the message under the eGift card refund option'
+    egift_card_icon:
+      type: file
+      label: 'Config to upload the eGift card icon in refund option'

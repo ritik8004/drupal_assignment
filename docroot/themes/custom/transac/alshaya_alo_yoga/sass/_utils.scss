@@ -206,24 +206,13 @@ $brand_theme_img_directory_path: "/themes/custom/transac/alshaya_alo_yoga/imgs";
   }
 }
 
-// dual color tone for circle UI.
-// This can't be used in facet UI.
-@mixin dual-tone-color() {
-  display: flex;
-  transform: rotate(90deg);
+@mixin color-picker ($picker-diminision, $br-radius: false) {
+  height: $picker-diminision;
+  width: $picker-diminision;
 
-  div,
-  a {
-    width: 50%;
-
-    &:first-child {
-      border-top-#{$left}-radius: rem(50);
-      border-bottom-#{$left}-radius: rem(50);
-    }
-
-    &:last-child {
-      border-top-#{$right}-radius: rem(50);
-      border-bottom-#{$right}-radius: rem(50);
-    }
+  @if $br-radius {
+    border-radius: $br-radius;
   }
+
+  @content;
 }

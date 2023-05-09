@@ -845,6 +845,10 @@
 }
 
 .delivery-options-wrapper {
+  &.field--name-field-promo-block-accordion-delivery-options {
+    border-top: rem(1) solid $pdp_title_section_border;
+  }
+
   .ui-accordion-header-active {
     .title-price {
       display: none;
@@ -2137,10 +2141,6 @@ html[lang="ar"] {
 }
 
 .content--dimensions-and-care {
-  .dimensions-and-care {
-    border-bottom: 1px solid $pdp_title_section_border;
-  }
-
   .c-accordion__title {
     color: $pdp_accordion_title;
     display: flex;
@@ -2149,6 +2149,7 @@ html[lang="ar"] {
     border-bottom: none;
     font-size: 0.875rem;
     font-weight: 600;
+    padding-#{$left}: 0;
   }
 
   .c-accordion_content {

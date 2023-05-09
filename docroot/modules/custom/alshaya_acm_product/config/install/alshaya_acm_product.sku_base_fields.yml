@@ -132,3 +132,9 @@ fields:
     translatable: 0
     widget:
       type: delivery_ways
+
+  article_swatches:
+    label: 'Article Swatches'
+    description: 'Stores Swatches info of all SKUs with same style_code in JSON format.'
+    type: 'text_long'
+    index: 1

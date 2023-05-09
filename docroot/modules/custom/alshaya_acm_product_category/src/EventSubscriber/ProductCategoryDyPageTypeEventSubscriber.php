@@ -5,6 +5,8 @@ namespace Drupal\alshaya_acm_product_category\EventSubscriber;
 use Drupal\alshaya_acm_product_category\ProductCategoryTreeInterface;
 use Drupal\Core\Entity\EntityRepositoryInterface;
 use Drupal\Core\Entity\EntityTypeManagerInterface;
+use Drupal\Core\Routing\RouteMatchInterface;
+use Drupal\taxonomy\TermInterface;
 use Symfony\Component\EventDispatcher\Event;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 
@@ -37,6 +39,13 @@ class ProductCategoryDyPageTypeEventSubscriber implements EventSubscriberInterfa
   protected $entityRepository;
 
   /**
+   * Route match.
+   *
+   * @var \Drupal\Core\Routing\RouteMatchInterface
+   */
+  protected $routeMatch;
+
+  /**
    * ProductCategoryDyPageTypeEventSubscriber constructor.
    *
    * @param \Drupal\alshaya_acm_product_category\ProductCategoryTreeInterface $categoryTree
@@ -45,15 +54,19 @@ class ProductCategoryDyPageTypeEventSubscriber implements EventSubscriberInterfa
    *   Entity Type Manager.
    * @param \Drupal\Core\Entity\EntityRepositoryInterface $entityRepository
    *   Entity Repository.
+   * @param \Drupal\Core\Routing\RouteMatchInterface $route_match
+   *   Route Match Object.
    */
   public function __construct(
     ProductCategoryTreeInterface $categoryTree,
     EntityTypeManagerInterface $entityTypeManager,
-    EntityRepositoryInterface $entityRepository
+    EntityRepositoryInterface $entityRepository,
+    RouteMatchInterface $route_match
   ) {
     $this->categoryTree = $categoryTree;
     $this->entityTypeManager = $entityTypeManager;
     $this->entityRepository = $entityRepository;
+    $this->routeMatch = $route_match;
   }
 
   /**
@@ -72,6 +85,13 @@ class ProductCategoryDyPageTypeEventSubscriber implements EventSubscriberInterfa
    *   Dispatched Event.
    */
   public function setContextCategory(Event $event) {
+    $term = $this->routeMatch->getParameter('taxonomy_term');
+    if ($term instanceof TermInterface && $term->bundle() === 'rcs_category') {
+      // We only have PLP `type`, don't have `data` for V3. It is handled in
+      // 'alshaya_rcs_listing_dy.js' file.
+      $event->setDyContext('CATEGORY');
+      return;
+    }
     $term = $this->categoryTree->getCategoryTermFromRoute();
     if ($term) {
       $event->setDyContext('CATEGORY');

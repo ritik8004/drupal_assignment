@@ -11,6 +11,17 @@ use Drupal\facets\Entity\Facet;
 /**
  * Implements hook_update_N().
  *
+ * Provides default setting for `show_full_width` for theme.
+ */
+function alshaya_dh_transac_update_9402() {
+  $config = \Drupal::configFactory()->getEditable('alshaya_debenhams.settings');
+  $config->set('show_full_width', FALSE);
+  $config->save();
+}
+
+/**
+ * Implements hook_update_N().
+ *
  * Update the translation store list link label if not present.
  */
 function alshaya_dh_transac_update_9401() {

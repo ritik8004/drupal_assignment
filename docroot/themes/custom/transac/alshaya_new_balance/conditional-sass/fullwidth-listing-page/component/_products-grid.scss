@@ -1,0 +1,33 @@
+@include breakpoint($only-mobile) {
+  .c-plp {
+    .c-products-list.product-small {
+      .c-products__item {
+        width: calc(50% - #{rem(6)});
+        margin: 0;
+      }
+    }
+  }
+
+  #alshaya-algolia-plp,
+  #alshaya-algolia-search {
+    .c-products-list {
+      &.view-algolia-plp,
+      &.view-search {
+        .view-content {
+          margin: 0;
+          column-gap: rem(12);
+        }
+      }
+    }
+  }
+}
+
+@include breakpoint($desktop) {
+  body.hide-srp-sidebar {
+    #alshaya-algolia-search {
+      .c-page-title {
+        margin-#{$left}: 0;
+      }
+    }
+  }
+}

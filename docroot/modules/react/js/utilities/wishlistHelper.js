@@ -619,11 +619,18 @@ export const pushWishlistSeoGtmData = (productData, action = 'add') => {
 
     // Set the product quantity.
     product.quantity = 1;
-    // Only for configurable products.
-    // Triggered on configurable-drawer.
-    if (typeof productData.context !== 'undefined'
-      && productData.context === 'productDrawer') {
-      product.product_view_type = 'quick_view';
+
+    // Create an object to store mapping of context and
+    // GTM product view type value.
+    const contextViewTypeMap = {
+      productDrawer: 'quick_view',
+      modal: 'recommendations_popup',
+    };
+    // Add product view type field for quick view and
+    // recommendations popup/modal view.
+    if (hasValue(productData.context)
+      && hasValue(contextViewTypeMap[productData.context])) {
+      product.product_view_type = contextViewTypeMap[productData.context];
     }
 
     // Set product variant to the selected variant.

@@ -2,7 +2,6 @@
   .payment-method-tamara {
     .payment-method-top-panel {
       img {
-        height: rem(32);
         width: auto;
         align-self: flex-start;
         margin-top: rem(12);
@@ -43,6 +42,15 @@
       }
     }
 
+    .payment-method-bottom-panel {
+      .tamara-widget-payment-plan--horizontally {
+        .tamara-logo {
+          max-width: rem(50);
+          height: rem(21) !important;
+        }
+      }
+    }
+
     .tamara-installment-plan-widget {
       padding-top: 0 !important;
       padding-#{$left}: rem(48) !important;
@@ -55,10 +63,6 @@
   .spc-checkout-payment-options {
     .payment-method-tamara {
       .payment-method-top-panel {
-        img {
-          height: rem(34);
-        }
-
         .payment-method-label-wrapper {
           .spc-payment-method-desc {
             font-size: rem(10);
@@ -76,12 +80,12 @@
   }
 }
 
-@include breakpoint($tablet) {
+@include breakpoint($mobile) {
   .spc-checkout-payment-options {
     .payment-method-tamara {
       .payment-method-top-panel {
         img {
-          margin-top: rem(16);
+          margin-top: rem(19);
         }
       }
     }

@@ -1,0 +1,17 @@
+.c-menu-primary {
+  .mobile--menu {
+    margin-#{$left}: rem(-6);
+
+    html[lang="ar"] & {
+      margin-right: 0;
+    }
+  }
+}
+
+@include breakpoint($tablet) {
+  .c-menu-primary {
+    .mobile--menu {
+      margin-#{$left}: rem(-8);
+    }
+  }
+}

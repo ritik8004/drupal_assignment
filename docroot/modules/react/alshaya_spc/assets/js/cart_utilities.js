@@ -320,7 +320,7 @@ Drupal.alshayaSpc = Drupal.alshayaSpc || {};
       'isNonRefundable': data.isNonRefundable,
       'stock': data.stock,
       'cncEnabled': data.cncEnabled,
-      'extraInfo': Drupal.hasValue(data.extraInfo) ? data.extraInfo : null,
+      'extraInfo': Drupal.hasValue(data.extraInfo) ? data.extraInfo : {},
     };
 
     // Add product data in local storage with expiration time.
@@ -382,8 +382,17 @@ Drupal.alshayaSpc = Drupal.alshayaSpc || {};
    * @param {object} productData
    *   An object containing some processed product data.
    */
-  window.commerceBackend.processAndStoreProductData = function (parentSku, variantSku, viewMode) {
+  window.commerceBackend.processAndStoreProductData = async function (parentSku, variantSku, viewMode) {
     var productInfo = window.commerceBackend.getProductData(parentSku, viewMode);
+    // Process free gift response from graphQl if rcs enabled.
+    if (Drupal.hasValue(productInfo.freeGiftPromotion)
+      && Drupal.hasValue(window.commerceBackend.processFreeGiftDataReactRender)) {
+      productInfo = await window.commerceBackend.processFreeGiftDataReactRender(
+        { [parentSku]: productInfo },
+        parentSku,
+      );
+      productInfo = productInfo[parentSku];
+    }
     var options = [];
     var productUrl = productInfo.url;
     var price = productInfo.priceRaw;
@@ -399,6 +408,7 @@ Drupal.alshayaSpc = Drupal.alshayaSpc || {};
     var productImage = productInfo.cart_image;
     var stock = productInfo.stock;
     var cncEnabled = productInfo.click_collect;
+    var extraInfo = Drupal.hasValue(productInfo.extraInfo) ? productInfo.extraInfo : {};
 
     if (productInfo.type === 'configurable') {
       var productVariantInfo = productInfo['variants'][variantSku];
@@ -420,6 +430,7 @@ Drupal.alshayaSpc = Drupal.alshayaSpc || {};
       gtmAttributes.price = productVariantInfo.gtm_price || price;
       stock = Drupal.hasValue(productVariantInfo.stock) ? productVariantInfo.stock : stock;
       cncEnabled = Drupal.hasValue(productVariantInfo.click_collect) ? productVariantInfo.click_collect : cncEnabled;
+      extraInfo = Drupal.hasValue(productVariantInfo.extraInfo) ? productVariantInfo.extraInfo : {};
     }
     else if (typeof productInfo.group !== 'undefined') {
       var productVariantInfo = productInfo.group[parentSku];
@@ -461,6 +472,7 @@ Drupal.alshayaSpc = Drupal.alshayaSpc || {};
       isNonRefundable: isNonRefundable,
       stock: stock,
       cncEnabled,
+      extraInfo,
     });
   }
 

@@ -1,0 +1,96 @@
+@include breakpoint($desktop) {
+  .block-alshaya-main-menu.megamenu-fullwidth-layout {
+    ul.menu--one__list {
+      padding-#{$left}: rem(48);
+
+      li.menu--one__list-item {
+        ul.menu--two__list {
+          // Aliging the menu so that it covers the entire viewport.
+          #{$left}: rem(-89);
+          width: 100vw;
+          min-width: unset;
+          justify-content: flex-start;
+          padding-top: rem(18);
+
+          .menu__links__wrapper {
+            width: auto;
+            max-width: 100vw;
+            padding-top: rem(32);
+
+            .column {
+              .menu--two__list-item {
+                padding-#{$left}: rem(40);
+              }
+
+              &:nth-child(2) {
+                .menu--two__list-item {
+                  // Giving megamenu the same side spacing as the site.
+                  padding-#{$left}: $full_width_padding_desktop;
+                }
+              }
+
+              // Aligning the vertical separtor line for fullwidth megamenu.
+              &:not(:nth-child(2)) {
+                &::before {
+                  #{$left}: 0;
+                }
+              }
+
+              &:not(:last-child) {
+                margin-#{$right}: rem(50);
+              }
+            }
+          }
+        }
+      }
+    }
+
+    .term-image__wrapper {
+      width: 100%;
+
+      .highlights {
+        display: flex;
+
+        // Aligning the vertical separtor line for fullwidth megamenu.
+        &::before {
+          #{$left}: rem(10);
+        }
+
+        .highlighted {
+          margin-#{$left}: rem(50);
+          // Reversing the order of image and title.
+          display: flex;
+          flex-direction: column-reverse;
+          justify-content: flex-end;
+          flex-grow: 1;
+
+          .title {
+            line-height: rem(20);
+          }
+        }
+      }
+    }
+  }
+}
+
+@include breakpoint($desktop-wide-1680) {
+  .block-alshaya-main-menu.megamenu-fullwidth-layout {
+    ul.menu--one__list {
+      li.menu--one__list-item {
+        ul.menu--two__list {
+          // Aliging the menu so that it covers the entire viewport.
+          #{$left}: rem(-105);
+
+          .menu__links__wrapper {
+            .column:nth-child(2) {
+              .menu--two__list-item {
+                // Giving megamenu the same side spacing as the site.
+                padding-#{$left}: $full_width_padding_desktop_wide;
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}

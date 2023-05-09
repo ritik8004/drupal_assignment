@@ -1,0 +1,17 @@
+@include breakpoint($only-mobile) {
+  .path--wishlist {
+    #my-wishlist {
+      .login-message {
+        margin-bottom: rem(20);
+      }
+    }
+  }
+
+  #my-wishlist {
+    #plp-hits {
+      .view-content {
+        margin: 0;
+      }
+    }
+  }
+}

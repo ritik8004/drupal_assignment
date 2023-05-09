@@ -9,8 +9,7 @@ var config = {
     pdp: './js/pdp',
     // This is dynamically added in alshaya_rcs_product_library_info_alter().
     pdpRcs: './js/PdpRcs',
-    aura_backend_v1: './js/backend/v1/',
-    aura_backend_v2: './js/backend/v2/',
+    aura_backend: './js/backend/v2/',
   },
   output: {
     path: path.resolve(__dirname, 'dist'),

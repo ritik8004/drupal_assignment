@@ -11,7 +11,7 @@ import CartPromoBlock from '../cart-promo-block';
 import EmptyResult from '../../../utilities/empty-result';
 import Loading from '../../../utilities/loading';
 import VatFooterText from '../../../utilities/vat-footer';
-import { stickyMobileCartPreview, stickySidebar } from '../../../utilities/stickyElements/stickyElements';
+import { stickyMobileCartPreview } from '../../../utilities/stickyElements/stickyElements';
 import { checkCartCustomer } from '../../../utilities/cart_customer_util';
 import { smoothScrollTo } from '../../../utilities/smoothScroll';
 import { fetchCartData } from '../../../utilities/api/requests';
@@ -116,9 +116,6 @@ export default class Cart extends React.Component {
             wait: false,
           });
         }
-
-        // Make side bar sticky.
-        stickySidebar();
 
         // We will not trigger window.dynamicPromotion.apply on cart page
         // if exclusive coupon is applied.
@@ -499,7 +496,7 @@ export default class Cart extends React.Component {
           {postPayData.postpayEligibilityMessage}
           {/* Displaying tabby widget only if tabby is enabled and
           tamara is enabled */}
-          <ConditionalView condition={Tabby.isTabbyEnabled()}>
+          <ConditionalView condition={Tabby.isTabbyEnabled() && Tabby.showTabbyWidget()}>
             <TabbyWidget
               pageType="cart"
               classNames="spc-tabby-info"
@@ -519,7 +516,7 @@ export default class Cart extends React.Component {
           {postPayData.postpay}
           {/* Displaying tabby widget only if tabby is enabled and
           tamara is disabled */}
-          <ConditionalView condition={Tabby.isTabbyEnabled()}>
+          <ConditionalView condition={Tabby.isTabbyEnabled() && Tabby.showTabbyWidget()}>
             <TabbyWidget
               pageType="cart"
               classNames="spc-tabby-mobile-preview"

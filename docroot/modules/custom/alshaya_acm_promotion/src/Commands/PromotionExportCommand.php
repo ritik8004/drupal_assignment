@@ -7,6 +7,7 @@ use Drupal\Core\File\FileSystemInterface;
 use Drush\Commands\DrushCommands;
 use Drupal\node\NodeInterface;
 use Drupal\Core\Language\LanguageManagerInterface;
+use Drupal\Core\Logger\LoggerChannelFactoryInterface;
 
 /**
  * A Drush commandfile for exporting promotion data.
@@ -25,7 +26,7 @@ class PromotionExportCommand extends DrushCommands {
    *
    * @var \Drupal\Core\Language\LanguageManagerInterface
    */
-  protected $langugageManager;
+  protected $languageManager;
 
   /**
    * File system.
@@ -33,6 +34,20 @@ class PromotionExportCommand extends DrushCommands {
    * @var \Drupal\Core\File\FileSystemInterface
    */
   protected $fileSystem;
+
+  /**
+   * Entity Query.
+   *
+   * @var \Drupal\Core\Entity\Query\QueryInterface
+   */
+  protected $entityQuery;
+
+  /**
+   * The logger service.
+   *
+   * @var \Drupal\Core\Logger\LoggerChannelInterface
+   */
+  protected $drupalLogger;
 
   /**
    * The export directory path.
@@ -57,15 +72,19 @@ class PromotionExportCommand extends DrushCommands {
    *   The language manager.
    * @param \Drupal\Core\File\FileSystemInterface $file_system
    *   The file system.
+   * @param \Drupal\Core\Logger\LoggerChannelFactoryInterface $logger_factory
+   *   LoggerFactory object.
    */
   public function __construct(
     EntityTypeManagerInterface $entity_type_manager,
     LanguageManagerInterface $language_manager,
-    FileSystemInterface $file_system
+    FileSystemInterface $file_system,
+    LoggerChannelFactoryInterface $logger_factory
   ) {
     $this->entityQuery = $entity_type_manager->getStorage('node')->getQuery();
     $this->languageManager = $language_manager;
     $this->fileSystem = $file_system;
+    $this->drupalLogger = $logger_factory->get('alshaya_acm_promotion');
   }
 
   /**
@@ -84,20 +103,23 @@ class PromotionExportCommand extends DrushCommands {
     $output_directory = $this->fileSystem->prepareDirectory($path, FileSystemInterface::CREATE_DIRECTORY);
 
     if (!$output_directory) {
-      $this->logger->notice('Could not read/create the directory to export the data.');
+      $this->drupalLogger->notice('Could not read/create the directory to export the data.');
       return;
     }
 
+    // Query string for the output files.
+    $query_string = \time();
     // Check if it is possible to create the output files.
     foreach ($this->languageManager->getLanguages() as $langcode => $language) {
       try {
         $location = $this->fileSystem->getDestinationFilename($path . self::FILE_NAME_PREFIX . '-' . $langcode . '.csv', FileSystemInterface::EXISTS_REPLACE);
         if ($location === FALSE) {
-          $this->logger->warning('Could not create the file to export the data.');
+          $this->drupalLogger->warning('Could not create the file to export the data.');
           return;
         }
         else {
-          $this->logger->notice('Lancode: ' . $langcode . '. File: ' . file_create_url($location));
+          $file_url = file_create_url($location);
+          $this->drupalLogger->notice('Langcode: ' . $langcode . '. File: ' . "$file_url?$query_string");
         }
 
         // Make the file empty.
@@ -105,7 +127,7 @@ class PromotionExportCommand extends DrushCommands {
         fclose($file);
       }
       catch (\Exception $e) {
-        $this->logger->warning(dt('Could not create the file to export the data. Message: @message.', [
+        $this->drupalLogger->warning(dt('Could not create the file to export the data. Message: @message.', [
           '@message' => $e->getMessage(),
         ]));
         return;

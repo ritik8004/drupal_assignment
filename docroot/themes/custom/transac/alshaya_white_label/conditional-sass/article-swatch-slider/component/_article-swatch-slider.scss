@@ -1,0 +1,150 @@
+#top-results,
+.c-plp {
+  .swatches {
+    display: flex;
+    align-items: center;
+
+    @include breakpoint($only-mobile) {
+      margin-top: rem(16);
+    }
+
+    .article-swatch {
+      position: relative;
+      display: block;
+      width: rem(26);
+      height: rem(26);
+      padding: 0;
+      margin: rem(3);
+      margin-#{$right}: rem(8);
+      flex-shrink: 0;
+      border-radius: 50%;
+      border: rem(1) solid $swatch-border;
+
+      &.active::before,
+      &:hover::before {
+        content: "";
+        border: rem(1) solid $swatch-border-active;
+        position: absolute;
+        display: inline-block;
+        width: rem(32);
+        height: rem(32);
+        top: rem(-4);
+        #{$left}: rem(-4);
+        z-index: 1;
+        border-radius: 50%;
+      }
+
+      &.disabled {
+        pointer-events: none;
+
+        &::before {
+          content: "";
+          height: rem(2);
+          width: rem(19);
+          background-color: $swatch-border;
+          position: absolute;
+          display: inline-block;
+          transform: rotate(45deg);
+          #{$left}: 0;
+          top: rem(8);
+        }
+      }
+
+      &.dual-color-tone {
+        @include dual-tone-color-swatch;
+      }
+    }
+
+    // Article Swatch slider related styles.
+    &.swatch-slider {
+      @include swatchSliderMaxWidth;
+
+      html[lang="ar"] & {
+        transform: scaleX(-1);
+      }
+
+      @include breakpoint($only-mobile) {
+        max-width: rem(162);
+      }
+
+      .slick-list {
+        flex-grow: 1;
+
+        // Compenesating for the absence of next arrow when slide items are less than swatch limit.
+        &:only-child {
+          margin-#{$right}: rem(37);
+        }
+      }
+
+      .slick-track {
+        display: flex;
+      }
+
+      .article-swatch {
+        html[lang="ar"] & {
+          margin-right: rem(8);
+          margin-left: rem(3);
+        }
+      }
+
+      .slick-arrow {
+        height: rem(32);
+        width: rem(38);
+        background: $swatch-button-bg;
+        flex-shrink: 0;
+        transition: opacity 0.1s;
+
+        &::before {
+          content: "";
+          background: url("#{$base_theme_img_directory_path}/icons/ic-chevron-prev.svg") no-repeat center;
+          height: rem(12);
+        }
+
+        &.slick-disabled {
+          opacity: 0;
+          pointer-events: none;
+        }
+
+        &.slick-prev {
+          left: rem(-4);
+
+          @include breakpoint($only-mobile) {
+            // We are not showing the previous button on mobile viewport.
+            opacity: 0;
+            pointer-events: none;
+          }
+        }
+
+        &.slick-next {
+          position: static;
+
+          &::before {
+            transform: rotate(180deg);
+          }
+        }
+      }
+    }
+  }
+
+  .c-products__item .swatches.swatch-slider {
+    margin-top: rem(12);
+  }
+}
+
+#top-results {
+  .swatches.swatch-slider {
+    .slick-arrow {
+      // Fixing wrong background of arrows on top results page.
+      background: $white-five;
+    }
+  }
+}
+
+.c-plp .c-content__region .c-products__item .product-plp-detail-wrapper h2.field--name-name {
+  // Changing the top spacing of product name if article swatches are enabled.
+  margin-top: rem(10);
+
+  @include breakpoint($desktop) {
+    margin-top: rem(8);
+  }
+}

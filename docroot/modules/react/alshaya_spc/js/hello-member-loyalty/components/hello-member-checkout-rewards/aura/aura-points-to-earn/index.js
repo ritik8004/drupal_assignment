@@ -17,25 +17,19 @@ class AuraPointsToEarn extends React.Component {
 
   componentDidMount() {
     document.addEventListener('onLinkCardSuccessful', this.updateEarnPointsData, false);
-    const {
-      cart: { cart: { items } },
-    } = this.props;
-    this.setAuraPointsToEarn(items);
+    this.setAuraPointsToEarn();
   }
 
   updateEarnPointsData = (e) => {
     if (e.detail) {
-      const {
-        cart: { cart: { items } },
-      } = this.props;
       const cardNumber = e.detail;
-      this.setAuraPointsToEarn(items, cardNumber);
+      this.setAuraPointsToEarn(cardNumber);
     }
   }
 
-  setAuraPointsToEarn = (items, cardNumber = null) => {
+  setAuraPointsToEarn = (cardNumber = null) => {
     showFullScreenLoader();
-    const apiData = window.auraBackend.getAuraPointsToEarn(items, cardNumber);
+    const apiData = window.auraBackend.getAuraPointsToEarn(cardNumber);
     let auraPointsToEarn = 0;
     if (apiData instanceof Promise) {
       apiData.then((result) => {

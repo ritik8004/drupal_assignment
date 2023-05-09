@@ -10,10 +10,8 @@ var config = {
     checkout: './js/checkout',
     order_details: './js/order-details',
     checkout_confirmation: './js/checkout-confirmation',
-    backend_cart_v1: './js/backend/v1/cart.js',
-    backend_cart_v2: './js/backend/v2/cart.js',
-    backend_checkout_v1: './js/backend/v1/checkout.js',
-    backend_checkout_v2: './js/backend/v2/checkout.js',
+    backend_cart: './js/backend/v2/cart.js',
+    backend_checkout: './js/backend/v2/checkout.js',
     dynamic_promotion_label: './js/promotions-dynamic-labels.js',
     // This is dynamically added in alshaya_rcs_product_library_info_alter().
     PdpRcsExpressDelivery: './js/PdpRcsExpressDelivery',

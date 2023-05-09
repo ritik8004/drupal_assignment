@@ -36,3 +36,11 @@ alshaya_online_returns.alshaya_return_confirmation_settings:
     _title: 'Alshaya Return Confirmation Configuration'
   requirements:
     _permission: 'administer site configuration'
+
+alshaya_online_returns.egift_card_refund:
+  path: '/admin/config/alshaya/egift-card-refund'
+  defaults:
+    _form: '\Drupal\alshaya_online_returns\Form\AlshayaEgiftCardRefundSettingsForm'
+    _title: 'Alshaya Egift Card Refund Configurations'
+  requirements:
+    _permission: 'administer site configuration'

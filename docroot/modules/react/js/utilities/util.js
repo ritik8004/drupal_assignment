@@ -29,6 +29,42 @@ export const isEgiftCardEnabled = () => {
   return egiftCardStatus;
 };
 
+/**
+ * Helper function to check if egift card refund is enabled.
+ */
+export const isEgiftRefundEnabled = () => {
+  if (hasValue(drupalSettings.egiftCardRefund)
+    && hasValue(drupalSettings.egiftCardRefund.enabled)) {
+    return drupalSettings.egiftCardRefund.enabled;
+  }
+
+  return false;
+};
+
+/**
+ * Helper function to check if the order is made through multiple
+ * payment methods (for ex. visa + eGift) i.e. hybrid or not.
+ */
+export const isHybridPayment = (paymentDetails) => {
+  if (hasValue(paymentDetails) && Object.keys(paymentDetails).length > 1) {
+    return true;
+  }
+
+  return false;
+};
+
+/**
+ * Helper function to get list of not supported payment methods for eGift card refund.
+ */
+export const getNotSupportedEgiftMethodsForOnlineReturns = () => {
+  if (hasValue(drupalSettings.egiftCardRefund)
+    && hasValue(drupalSettings.egiftCardRefund.notSupportedEgiftRefundPaymentMethods)) {
+    return drupalSettings.egiftCardRefund.notSupportedEgiftRefundPaymentMethods;
+  }
+
+  return [];
+};
+
 /*
  * Checks if full payment is done by egift and Aura.
  *
@@ -56,5 +92,39 @@ export const isFullPaymentDoneByPseudoPaymentMedthods = (cart) => {
     return true;
   }
 
+  return false;
+};
+
+/*
+ * Creates required array of shoe sizes.
+ *
+ * @param {object} configurables
+ *   The configurables object.
+ *
+ * @return {array}
+ *   Returns array of shoe sizes ex."36.5,37.5,38,38.5,39,39.5,40" or an empty array.
+ */
+export const getShoeSize = (configurables) => {
+  let shoeSizes = [];
+  (shoeSizes) = configurables.map((el) => Object.values(Object.fromEntries(
+    Object.entries(el).map(([k, v]) => [k, Object.values(v)[0]]),
+  )).toString());
+  return shoeSizes;
+};
+
+/*
+ * Helper function for check status of shoeai.
+ *
+ * @param array shoeai
+ *   The array of shoeai drupalSettings.
+ *
+ * @return boolean
+ *   Returns true or false.
+ */
+export const getShoeAiStatus = () => {
+  const shoeAi = drupalSettings.shoeai;
+  if (shoeAi && shoeAi.status !== null && shoeAi.status === 1) {
+    return true;
+  }
   return false;
 };

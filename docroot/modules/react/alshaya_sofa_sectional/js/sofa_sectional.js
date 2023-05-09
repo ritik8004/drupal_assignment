@@ -10,17 +10,18 @@ import SofaSectionalForm from './components/sofa-sectional';
  *  Element selector for rendering form.
  */
 const renderSofaSectionalForm = (elementSelector) => {
-  const selectedFormEelement = document.querySelector(elementSelector);
-  if (selectedFormEelement) {
+  const selectedFormElement = document.querySelector(elementSelector);
+  if (selectedFormElement) {
     // Get sku from forms data-sku attribute.
-    const { sku } = selectedFormEelement.dataset;
+    const { sku } = selectedFormElement.dataset;
 
     // Render Sofa and Sectional form for selected form element.
     if (typeof sku !== 'undefined') {
       ReactDOM.render(
         <SofaSectionalForm sku={sku} elementSelector={elementSelector} />,
-        selectedFormEelement,
+        selectedFormElement,
       );
+      selectedFormElement.classList.add('sofa-sectional-form');
     }
   }
 };

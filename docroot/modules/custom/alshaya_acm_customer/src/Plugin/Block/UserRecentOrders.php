@@ -4,6 +4,7 @@ namespace Drupal\alshaya_acm_customer\Plugin\Block;
 
 use Drupal\alshaya_acm_customer\OrdersManager;
 use Drupal\alshaya_acm_product\SkuImagesHelper;
+use Drupal\alshaya_acm_product\SkuManager;
 use Drupal\Core\Block\BlockBase;
 use Drupal\Core\Cache\Cache;
 use Drupal\Core\Config\ConfigFactoryInterface;
@@ -255,9 +256,9 @@ class UserRecentOrders extends BlockBase implements ContainerFactoryPluginInterf
                 '#currency_format' => $order['order_currency_code'] ?? '',
               ];
 
-              // If 'applied_rule_ids' is set and price is 0, set the free gift
-              // label.
-              if (isset($item['applied_rule_ids']) && (int) $item['price'] == 0) {
+              // If 'applied_rule_ids' is set and price is 0 or 0.01,
+              // set the free gift label.
+              if (isset($item['applied_rule_ids']) && ($item['price'] == 0 || $item['price'] == SkuManager::FREE_GIFT_PRICE)) {
                 $order['items'][$key]['free_gift_label'] = [
                   '#markup' => $this->t('Free Gift with Purchase'),
                 ];

@@ -51,7 +51,7 @@
             <div class="postpay mobile-only-hide {{ content.postpay_mode_class }}"> {{ content.postpay }} </div>
           {% endif %}
 
-          {% if content.tabby %}
+          {% if content.tabby and show_tabby_widget %}
             <div class="tabby mobile-only-hide"> {{ content.tabby }} </div>
           {% endif %}
 
@@ -99,7 +99,7 @@
           <div class="postpay mobile-only-show"> {{ content.postpay }} </div>
         {% endif %}
 
-        {% if content.tabby %}
+        {% if content.tabby and show_tabby_widget %}
           <div class="tabby mobile-only-show">
             <div class="tabby-widget" id="tabby-promo-pdp-mobile"></div>
           </div>

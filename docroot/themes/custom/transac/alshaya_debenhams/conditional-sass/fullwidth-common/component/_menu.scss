@@ -1,0 +1,55 @@
+.c-menu-secondary li,
+.menu__list-item,
+.menu--two__list .back--link,
+.menu--two__list.menu__list--active .menu--three__list.menu__list--active .menu--four__list-item,
+.menu--two__list.menu__list--active .menu--three__list.menu__list--active .menu-two__link-wrapper,
+.menu--two__list-item > .menu-two__link-wrapper .menu-two__link {
+  @include breakpoint($only-mobile) {
+    @include sideSpaces($full_width_padding_mobile);
+  }
+
+  @include breakpoint($only-tablet) {
+    @include sideSpaces($full_width_padding_tablet);
+  }
+}
+
+@include breakpoint($upto-desktop) {
+  .c-menu-primary .mobile--menu,
+  .c-menu-secondary li,
+  .back--link,
+  .menu__back,
+  .menu__list-item,
+  .menu--two__list.menu__list--active .menu--three__list.menu__list--active .menu--four__list-item,
+  .menu--two__list.menu__list--active .menu--three__list.menu__list--active .menu-two__link-wrapper {
+    @include sideSpaces(0, $type: "margin");
+  }
+
+  .menu__back {
+    #{$right}: 0;
+    background-position-x: center;
+
+    html[lang="ar"] & {
+      margin-right: 0;
+    }
+  }
+
+  .menu__in {
+    #{$right}: 0;
+
+    .menu--two__list-item & {
+      margin-#{$right}: rem(14);
+    }
+  }
+
+  .c-menu-secondary {
+    max-width: unset;
+
+    li::after {
+      #{$right}: rem(6);
+    }
+
+    a {
+      @include sideSpaces(0);
+    }
+  }
+}

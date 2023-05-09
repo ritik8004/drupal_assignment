@@ -10,6 +10,28 @@ use Drupal\alshaya_config\AlshayaConfigManager;
 /**
  * Implements hook_update_N().
  *
+ * Update Aura translation strings and
+ * Config added for Aura username default character limit..
+ */
+function alshaya_aura_react_update_9405() {
+  module_load_include('inc', 'alshaya_aura_react', 'alshaya_aura_react.translation');
+  $translations = _alshaya_aura_react_get_translations('v11');
+  if (!empty($translations)) {
+    alshaya_i18n_save_translations($translations);
+  }
+  /** @var \Drupal\alshaya_config\AlshayaConfigManager $manager */
+  $manager = \Drupal::service('alshaya_config.manager');
+  $manager->updateConfigs(
+    ['alshaya_aura_react.settings'],
+    'alshaya_aura_react',
+    'install',
+    AlshayaConfigManager::MODE_ADD_MISSING,
+  );
+}
+
+/**
+ * Implements hook_update_N().
+ *
  * Update Aura translation strings and loyalty_benefits config.
  */
 function alshaya_aura_react_update_9404() {

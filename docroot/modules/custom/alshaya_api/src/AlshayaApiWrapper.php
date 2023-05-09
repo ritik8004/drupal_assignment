@@ -24,6 +24,7 @@ use GuzzleHttp\Client;
 use GuzzleHttp\HandlerStack;
 use GuzzleHttp\Subscriber\Oauth\Oauth1;
 use GuzzleHttp\TransferStats;
+use Drupal\acq_commerce\I18nHelper;
 
 /**
  * Class Alshaya Api Wrapper.
@@ -73,6 +74,13 @@ class AlshayaApiWrapper {
    * @var \Drupal\Core\Logger\LoggerChannelInterface
    */
   protected $logger;
+
+  /**
+   * I18n Helper.
+   *
+   * @var \Drupal\acq_commerce\I18nHelper
+   */
+  private $i18nHelper;
 
   /**
    * The state factory.
@@ -127,6 +135,8 @@ class AlshayaApiWrapper {
    *   Cache Backend object for "cache.data".
    * @param \Drupal\Core\Logger\LoggerChannelFactoryInterface $logger_factory
    *   LoggerFactory object.
+   * @param \Drupal\acq_commerce\I18nHelper $i18n_helper
+   *   I18nHelper object.
    * @param \Drupal\Core\State\StateInterface $state
    *   The state factory.
    * @param \Drupal\Core\File\FileSystemInterface $fileSystem
@@ -145,6 +155,7 @@ class AlshayaApiWrapper {
     TimeInterface $date_time,
     CacheBackendInterface $cache,
     LoggerChannelFactoryInterface $logger_factory,
+    I18nHelper $i18n_helper,
     StateInterface $state,
     FileSystemInterface $fileSystem,
     MagentoApiHelper $mdc_helper,
@@ -157,6 +168,7 @@ class AlshayaApiWrapper {
     $this->dateTime = $date_time;
     $this->cache = $cache;
     $this->logger = $logger_factory->get('alshaya_api');
+    $this->i18nHelper = $i18n_helper;
     $this->state = $state;
     $this->fileSystem = $fileSystem;
     $this->mdcHelper = $mdc_helper;
@@ -200,11 +212,13 @@ class AlshayaApiWrapper {
    *
    * @param string $url
    *   Base URL.
+   * @param string $channel
+   *   GET channel key i.e: assist-app, web etc.
    *
    * @return \GuzzleHttp\Client
    *   Client object.
    */
-  private function getClient($url) {
+  private function getClient($url, $channel = NULL) {
     $config = $this->configFactory->get('alshaya_api.settings');
     $stack = HandlerStack::create();
     $middleware = new Oauth1([
@@ -216,13 +230,22 @@ class AlshayaApiWrapper {
     ]);
     $stack->push($middleware);
 
+    // Set default header.
+    $headers = [
+      'Content-Type' => 'application/json',
+    ];
+
+    // Referring channel params and set header in case of assist app or web.
+    if ($channel) {
+      $headers += [
+        'Alshaya-Channel' => $channel,
+      ];
+    }
     return new Client([
       'base_uri' => $url,
       'handler' => $stack,
       'auth' => 'oauth',
-      'headers' => [
-        'Content-Type' => 'application/json',
-      ],
+      'headers' => $headers,
     ]);
   }
 
@@ -241,19 +264,20 @@ class AlshayaApiWrapper {
    *   Flag to specifiy if exception should be thrown or handled.
    * @param array $options
    *   Options to send to the request.
+   * @param string $channel
+   *   GET channel key i.e: assist-app, web etc.
    *
    * @return mixed
    *   Response from the API.
    */
-  public function invokeApi($endpoint, array $data = [], $method = 'POST', bool $throw_exception = FALSE, array $options = []) {
+  public function invokeApi($endpoint, array $data = [], $method = 'POST', bool $throw_exception = FALSE, array $options = [], string $channel = NULL) {
     $settings = $this->configFactory->get('alshaya_api.settings');
 
     try {
       $url = $settings->get('magento_host');
       $url .= '/' . $this->getMagentoLangPrefix();
       $url .= '/' . $settings->get('magento_api_base');
-
-      $client = $this->getClient($url);
+      $client = $this->getClient($url, $channel);
       $url .= '/' . $endpoint;
 
       if ($method == 'POST') {
@@ -290,7 +314,6 @@ class AlshayaApiWrapper {
 
       $response = $client->request($method, $url, $options);
       $result = $response->getBody()->getContents();
-
       // Magento sends 401 response due to se error.
       if ($response->getStatusCode() == 401) {
         throw new \Exception('Magento send 401 response', 401);
@@ -355,7 +378,7 @@ class AlshayaApiWrapper {
 
     $filters[] = [
       'field' => 'store_id',
-      'value' => Settings::get('store_id')[$langcode],
+      'value' => $this->i18nHelper->getStoreIdFromLangcode($langcode),
       'condition_type' => 'eq',
       'group_id' => 1,
     ];
@@ -1408,11 +1431,13 @@ class AlshayaApiWrapper {
    *
    * @param string $data
    *   Encrypted data.
+   * @param string $channel
+   *   GET channel key i.e: assist-app, web etc.
    *
    * @return array
    *   Decrypted processed data.
    */
-  public function getDecryptedSmartAgentData(string $data) {
+  public function getDecryptedSmartAgentData(string $data, string $channel = NULL) {
     $request_options = [
       'timeout' => $this->mdcHelper->getPhpTimeout('smart_agent_resume'),
     ];
@@ -1422,7 +1447,8 @@ class AlshayaApiWrapper {
       ['data' => $data],
       'JSON',
       FALSE,
-      $request_options
+      $request_options,
+      $channel
     );
 
     if ($response && is_string($response)) {

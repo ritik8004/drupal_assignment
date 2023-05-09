@@ -88,7 +88,7 @@ class HelloMemberPDP extends React.Component {
     return (
       <>
         <div className="hello-member-points">
-          <p>{Drupal.t('Members Earn @pointValue points.', { '@pointValue': productPoints }, { context: 'hello_member' })}</p>
+          <p>{Drupal.t('Members earn @pointValue point(s)', { '@pointValue': productPoints }, { context: 'hello_member' })}</p>
         </div>
       </>
     );

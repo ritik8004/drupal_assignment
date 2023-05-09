@@ -259,6 +259,7 @@ class AlshayaFeedSkuInfoHelper {
         'currency' => $this->currencyCode[$lang],
         'keywords' => $keywords,
         'categoryCollection' => $this->skuInfoHelper->getProductCategories($node, $lang),
+        'attr_fixed_price' => $sku->hasField('attr_fixed_price') ? $sku->get('attr_fixed_price')->getString() : NULL,
         'attributes' => $this->skuInfoHelper->getAttributes($sku, [
           'description',
           'short_description',
@@ -271,7 +272,7 @@ class AlshayaFeedSkuInfoHelper {
         $linked_skus = $this->skuInfoHelper->getLinkedSkus($sku, $linked_type);
         $parentProduct['linked_skus'][$linked_type] = array_keys($linked_skus);
       }
-      if ($sku->hasField('attr_product_brand') && $sku->get('attr_product_brand')->getString() != NULL) {
+      if ($sku->hasField('attr_product_brand') && $sku->get('attr_product_brand')->getString() !== NULL) {
         $extra_row['key'] = 'brand';
         $extra_row['value'] = $sku->get('attr_product_brand')->getString();
         $parentProduct['attributes'][] = $extra_row;
@@ -322,8 +323,15 @@ class AlshayaFeedSkuInfoHelper {
             ]),
             'original_price' => $this->skuInfoHelper->formatPriceDisplay((float) $prices['price']),
             'final_price' => $this->skuInfoHelper->formatPriceDisplay((float) $prices['final_price']),
+            'attr_fixed_price' => $child->hasField('attr_fixed_price') ? $child->get('attr_fixed_price')->getString() : NULL,
             'url' => $this->skuInfoHelper->getEntityUrl($node) . '?selected=' . $child->id(),
           ];
+          // Addition of brand info for child products as well.
+          if ($child->hasField('attr_product_brand') && $child->get('attr_product_brand')->getString() !== NULL) {
+            $extra_row['key'] = 'brand';
+            $extra_row['value'] = $child->get('attr_product_brand')->getString();
+            $variant['attributes'][] = $extra_row;
+          }
           // Allow other modules to add/alter variant info.
           $this->moduleHandler->alter('alshaya_feed_variant_info', $variant, $child);
 

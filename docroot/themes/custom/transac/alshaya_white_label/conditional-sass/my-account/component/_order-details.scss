@@ -241,6 +241,7 @@
     .order-item-row:not(.online-returns-eligibility-message):not(.delivered-items):not(.cancelled-items):not(.cancelled-refund-text),
     .sub-total-row,
     .delivery-charge-row,
+    .duties-taxes-row,
     .surcharge-row,
     .discount-row,
     .total-row {
@@ -371,6 +372,7 @@
 
   .sub-total-row,
   .delivery-charge-row,
+  .duties-taxes-row,
   .total-row,
   .discount-row,
   .surcharge-row {
@@ -403,7 +405,16 @@
     }
   }
 
-  .discount-row {
+  .total-row {
+    .right--align {
+      @include breakpoint($only-mobile) {
+        padding-top: rem(0);
+      }
+    }
+  }
+
+  .discount-row,
+  .duties-taxes-row {
     > div {
       &:nth-child(3) {
         background: $order_detail_total_tr_row;

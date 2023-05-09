@@ -11,7 +11,6 @@ product.promotion_free_gift:
     handlebars/product.promotion_free_gift.handlebars: {}
   dependencies:
     - alshaya_white_label/free_gifts
-    - alshaya_rcs_free_gift/rcs_free_gift
 
 product.promotion_free_gift_list:
   version: 1.x
@@ -19,7 +18,6 @@ product.promotion_free_gift_list:
     handlebars/product.promotion_free_gift_list.handlebars: {}
   dependencies:
     - alshaya_white_label/free_gifts
-    - alshaya_rcs_free_gift/rcs_free_gift
 
 product.promotion_free_gift_modal:
   version: 1.x
@@ -28,7 +26,6 @@ product.promotion_free_gift_modal:
   dependencies:
     - alshaya_white_label/attribute
     - alshaya_white_label/free_gifts
-    - alshaya_rcs_free_gift/rcs_free_gift
 
 product.promotion_free_gift_item:
   version: 1.x
@@ -36,7 +33,6 @@ product.promotion_free_gift_item:
     handlebars/product.promotion_free_gift_item.handlebars: {}
   dependencies:
     - alshaya_white_label/free_gifts
-    - alshaya_rcs_free_gift/rcs_free_gift
 
 product.promotion_free_gift_items:
   version: 1.x
@@ -44,15 +40,70 @@ product.promotion_free_gift_items:
     handlebars/product.promotion_free_gift_items.handlebars: {}
   dependencies:
     - alshaya_white_label/free_gifts
-    - alshaya_rcs_free_gift/rcs_free_gift
 
-rcs_free_gift:
+product.promotion_free_gift_message_coupon_code:
   version: 1.x
   js:
-    js/alshaya_rcs_free_gift.js: {}
+    handlebars/product.promotion_free_gift_message_coupon_code.handlebars: {}
+
+product.promotion_free_gift_message_sub_type_all_sku:
+  version: 1.x
+  js:
+    handlebars/product.promotion_free_gift_message_sub_type_all_sku.handlebars: {}
+
+product.promotion_free_gift_message_sub_type_one_sku:
+  version: 1.x
+  js:
+    handlebars/product.promotion_free_gift_message_sub_type_one_sku.handlebars: {}
+
+rcs_free_gift_common:
+  version: 1.x
+  js:
+    js/alshaya_rcs_free_gift_common.js: {}
   dependencies:
     - core/jquery
-    - alshaya_spc/add_to_cart
+    - core/drupal
+    - core/drupalSettings
     - alshaya_acm_cart_notification/cart_notification_js
+    - alshaya_acm_product/product_detail
     - alshaya_rcs_product/rcs_product_info
     - alshaya_rcs_free_gift/free_gift_main
+    - alshaya_rcs_free_gift/product.promotion_free_gift
+    - alshaya_rcs_free_gift/product.promotion_free_gift_list
+    - alshaya_rcs_free_gift/product.promotion_free_gift_modal
+    - alshaya_rcs_free_gift/product.promotion_free_gift_item
+    - alshaya_rcs_free_gift/product.promotion_free_gift_items
+    - alshaya_rcs_free_gift/product.promotion_free_gift_message_coupon_code
+    - alshaya_rcs_free_gift/product.promotion_free_gift_message_sub_type_all_sku
+    - alshaya_rcs_free_gift/product.promotion_free_gift_message_sub_type_one_sku
+
+rcs_free_gift_pdp:
+  version: 1.x
+  js:
+    js/alshaya_rcs_free_gift_pdp.js: {}
+  dependencies:
+    - alshaya_rcs_free_gift/rcs_free_gift_common
+
+rcs_free_gift_pdp_classic_and_magazine_layout:
+  version: 1.x
+  js:
+    js/alshaya_rcs_free_gift_pdp_classic_and_magazine_layout.js: {}
+  dependencies:
+    - alshaya_spc/add_to_cart
+    - alshaya_rcs_free_gift/rcs_free_gift_common
+
+rcs_free_gift_cart:
+  version: 1.x
+  js:
+    js/alshaya_rcs_free_gift_cart.js: {}
+  dependencies:
+    - alshaya_rcs_free_gift/rcs_free_gift_common
+    - alshaya_rcs_product/gallery.product.product_zoom
+    - alshaya_rcs_product/gallery.product.block.product_zoom_default_gallery
+    - alshaya_rcs_product/gallery.product.block.product_zoom_mobile_gallery
+    - alshaya_rcs_product/gallery.product.block.product_zoom_magazine_gallery
+    - alshaya_rcs_product/gallery.product.block.product_zoom_modal_gallery
+    - alshaya_rcs_product/gallery.product.product_labels
+    - alshaya_rcs_product/product.free_gift_sku_base_form
+    - alshaya_rcs_product/product_attributes
+    - alshaya_acm_product/add_free_gift_promotions

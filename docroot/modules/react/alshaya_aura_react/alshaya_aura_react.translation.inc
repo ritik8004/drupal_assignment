@@ -646,6 +646,12 @@ function _alshaya_aura_react_translations() {
         'context' => 'aura',
       ],
     ],
+    'v11' => [
+      'To use your points online, please download the Aura MENA app available both on <strong>App Store</strong> and <strong>Play Store</strong>.' => [
+        'ar' => 'لاستخدام النقاط أونلاين، يرجى تحميل تطبيق أورا مينا المتوفر عبر <strong>آب ستور </strong>و <strong>بلاي ستور </strong>',
+        'context' => 'aura',
+      ],
+    ],
   ];
 }
 

@@ -2,7 +2,6 @@
 
 namespace Drupal\alshaya_checkout_by_agent\Plugin\rest\resource;
 
-use Drupal\alshaya_spc\Helper\AlshayaSpcHelper;
 use Drupal\alshaya_spc\Helper\SecureText;
 use Drupal\Core\Config\ConfigFactoryInterface;
 use Drupal\Core\Language\LanguageManagerInterface;
@@ -117,13 +116,6 @@ class ShareCart extends ResourceBase {
   protected $flood;
 
   /**
-   * Alshaya SPC Version Helper.
-   *
-   * @var \Drupal\alshaya_spc\Helper\AlshayaSpcHelper
-   */
-  protected $spcHelper;
-
-  /**
    * ShareCart constructor.
    *
    * @param array $configuration
@@ -158,8 +150,6 @@ class ShareCart extends ResourceBase {
    *   Token service.
    * @param \Drupal\Core\Flood\FloodInterface $flood
    *   The flood service.
-   * @param \Drupal\alshaya_spc\Helper\AlshayaSpcHelper $spc_helper
-   *   Alshaya SPC Version Helper.
    */
   public function __construct(
     array $configuration,
@@ -177,8 +167,7 @@ class ShareCart extends ResourceBase {
     ConfigFactoryInterface $config_factory,
     Time $time,
     TokenInterface $token,
-    FloodInterface $flood,
-    AlshayaSpcHelper $spc_helper
+    FloodInterface $flood
   ) {
     parent::__construct($configuration, $plugin_id, $plugin_definition, $serializer_formats, $logger);
     $this->messageApiAdapter = $message_api_adapter;
@@ -192,7 +181,6 @@ class ShareCart extends ResourceBase {
     $this->time = $time;
     $this->token = $token;
     $this->flood = $flood;
-    $this->spcHelper = $spc_helper;
   }
 
   /**
@@ -216,7 +204,6 @@ class ShareCart extends ResourceBase {
       $container->get('datetime.time'),
       $container->get('token'),
       $container->get('flood'),
-      $container->get('alshaya_spc.helper')
     );
   }
 
@@ -302,10 +289,7 @@ class ShareCart extends ResourceBase {
     $key = $this->configFactory->get('alshaya_api.settings');
     $encryptedData = SecureText::encrypt(json_encode($data), $key->get('consumer_secret'));
 
-    $cart_url = '';
-    if ($this->spcHelper->getCommerceBackendVersion() == 2) {
-      $cart_url = Url::fromRoute('alshaya_checkout_by_agent.resume', [], ['absolute' => TRUE])->toString();
-    }
+    $cart_url = Url::fromRoute('alshaya_checkout_by_agent.resume', [], ['absolute' => TRUE])->toString();
 
     // Add the encrypted data in query string.
     $cart_url .= '?data=' . $encryptedData;

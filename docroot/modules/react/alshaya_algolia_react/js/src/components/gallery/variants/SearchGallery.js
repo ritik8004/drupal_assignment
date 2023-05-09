@@ -33,7 +33,6 @@ class SearchGallery extends React.PureComponent {
   constructor(props) {
     super(props);
     this.mainImageRef = React.createRef();
-    this.mainImage = props.media.length > 0 ? props.media[0] : {};
     this.onHoverAppendMarkup = this.onHoverAppendMarkup.bind(this);
   }
 
@@ -54,7 +53,8 @@ class SearchGallery extends React.PureComponent {
     const {
       media, title, labels, sku, initSlider,
     } = this.props;
-    const mainImageUrl = typeof this.mainImage.url !== 'undefined' ? this.mainImage.url : '';
+    const mainImage = media.length ? media[0] : {};
+    const mainImageUrl = hasValue(mainImage.url) ? mainImage.url : '';
     const thumbnails = [];
 
     media.forEach((element) => {

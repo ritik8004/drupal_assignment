@@ -38,6 +38,8 @@ import {
 } from '../../../utilities/egift_util';
 import { isAuraIntegrationEnabled } from '../../../../../js/utilities/helloMemberHelper';
 import Tamara from '../../../../../js/tamara/utilities/tamara';
+import { isMobile } from '../../../../../js/utilities/display';
+
 
 export default class PaymentMethods extends React.Component {
   constructor(props) {
@@ -442,10 +444,11 @@ export default class PaymentMethods extends React.Component {
 
     // Change the payment wrapper active class based on the egift full payment.
     const wrapperActiveClass = isEgiftCardEnabled() && isFullPaymentDoneByEgift(cart.cart) ? 'active' : activeClass;
+    const sectionTitle = isMobile() ? Drupal.t('Secure Payment Methods') : Drupal.t('Payment Methods');
 
     return (
       <div id="spc-payment-methods" className={`spc-checkout-payment-options fadeInUp ${wrapperActiveClass}`} style={{ animationDelay: '0.4s' }}>
-        <SectionTitle>{Drupal.t('Payment Methods')}</SectionTitle>
+        <SectionTitle>{sectionTitle}</SectionTitle>
         <ConditionalView condition={isEgiftCardEnabled() && isUserAuthenticated()}>
           <PaymentMethodLinkedEgiftCard
             cart={cart}

@@ -18,25 +18,25 @@ $magentos = [
       'access_token_secret' => 'iekq1ibgrdlalh5devb73ue7ei48v57i',
     ],
     'kw' => [
-      'store_id' => ['en' => 1, 'ar' => 40],
+      'store_id' => ['en' => 1, 'ar' => 6],
     ],
     'sa' => [
-      'store_id' => ['en' => 28, 'ar' => 31],
+      'store_id' => ['en' => 2, 'ar' => 3],
     ],
     'ae' => [
-      'store_id' => ['en' => 34, 'ar' => 37],
+      'store_id' => ['en' => 4, 'ar' => 5],
     ],
     'eg' => [
-      'store_id' => ['en' => 7, 'ar' => 4],
+      'store_id' => ['en' => 8, 'ar' => 7],
     ],
     'bh' => [
-      'store_id' => ['en' => 13, 'ar' => 10],
+      'store_id' => ['en' => 10, 'ar' => 9],
     ],
     'qa' => [
-      'store_id' => ['en' => 19, 'ar' => 16],
+      'store_id' => ['en' => 12, 'ar' => 11],
     ],
     'jo' => [
-      'store_id' => ['en' => 25, 'ar' => 22],
+      'store_id' => ['en' => 14, 'ar' => 13],
     ],
   ],
   'dh_uat' => [
@@ -952,10 +952,10 @@ $magentos = [
       'store_id' => ['en' => 42, 'ar' => 39],
     ],
     'magento_secrets' => [
-      'consumer_key' => '8str6aieegm7mkzkfeikltzjco3b4ul8',
-      'consumer_secret' => '6tiqcouxag7s8d1j2f83zpmgp10rhqih',
-      'access_token' => 'vtg7uxp0xy7y28z91ol7gq6jxpbkb7l8',
-      'access_token_secret' => 'udlde3j3ury4d3kqpzm8ipffa3ygd1zf',
+      'consumer_key' => 'm5mabaf4mf6zngfikkdemn1vheihg9zy',
+      'consumer_secret' => 'ayxgq9w63432ksed0um17p7aqie9wdql',
+      'access_token' => 'qr0myih9ld92dgiye713hhie2ypqlzuk',
+      'access_token_secret' => 'cedhw4qaeyh2mketzkot7zgyizq1m6sl',
     ],
   ],
   'hm_uat' => [

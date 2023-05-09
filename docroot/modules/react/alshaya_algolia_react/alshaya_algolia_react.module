@@ -82,3 +82,55 @@ function alshaya_algolia_react_alshaya_super_category_status_update($status, $de
     }
   }
 }
+
+/**
+ * Implements hook_alshaya_graphql_query().
+ */
+function alshaya_algolia_react_alshaya_graphql_query() {
+  // Build the graphql color swatches query if the feature is enabled.
+  if (!\Drupal::config('alshaya_algolia_react.color_swatches')->get('enable_listing_page_color_swatch_slider')) {
+    return;
+  }
+
+  $query_fields = [];
+  // Color Swatches Graphql query.
+  $query_fields['color_swatches'] = [
+    'query' => [
+      'query($sku: String, $type: String)' => [
+        'products(filter: {sku: {eq: $sku}})' => [
+          'items' => [
+            'id',
+            'name',
+            'url_key',
+            'price_range' => [
+              'maximum_price' => [
+                'regular_price' => [
+                  'value',
+                ],
+                'final_price' => [
+                  'value',
+                ],
+                'discount' => [
+                  'percent_off',
+                ],
+              ],
+            ],
+            'article_media_gallery(type: $type)' => [
+              'url',
+              'image_type',
+            ],
+            'end_user_url',
+            'gtm_attributes' => [
+              'name',
+            ],
+          ],
+        ],
+      ],
+    ],
+    'variables' => [
+      'sku' => NULL,
+      'type' => "plp,plp_hover",
+    ],
+  ];
+  return $query_fields;
+}

@@ -8,27 +8,29 @@
     {{/if}}
     {{{ render 'gallery.product.block.product_zoom_modal_gallery' }}}
   </div>
-  <div class="product-desc-wrapper no--mobile">
-    <div class="product-details">{{t 'Product Details' }}</div>
-    <div class="product-details-desc">
-        {{#if description.article_number }}
-          <div class="product-sku-title">{{t 'Style' }}</div>
-          <div class="product-sku-id">
-            {{ description.article_number }}
+  {{#if (ne context 'free_gift') }}
+    <div class="product-desc-wrapper no--mobile">
+      <div class="product-details">{{t 'Product Details' }}</div>
+      <div class="product-details-desc">
+          {{#if description.article_number }}
+            <div class="product-sku-title">{{t 'Style' }}</div>
+            <div class="product-sku-id">
+              {{ description.article_number }}
+            </div>
+          {{/if}}
+          <div class="product-desc-value">
+            {{#if description.feature_bullets }}
+            <div class="product-features">{{t 'Features' }}</div>
+              {{{ description.feature_bullets }}}
+            {{/if}}
+            {{#if description.weight }}
+              <div class="product-weight">{{t 'Weight' }}</div>
+              <ul class="additional-desc">
+              <li>{{ description.weight }}</li>
+              </ul>
+            {{/if}}
           </div>
-        {{/if}}
-        <div class="product-desc-value">
-          {{#if description.feature_bullets }}
-          <div class="product-features">{{t 'Features' }}</div>
-            {{{ description.feature_bullets }}}
-          {{/if}}
-          {{#if description.weight }}
-            <div class="product-weight">{{t 'Weight' }}</div>
-            <ul class="additional-desc">
-            <li>{{ description.weight }}</li>
-            </ul>
-          {{/if}}
-        </div>
+      </div>
     </div>
-  </div>
+  {{/if}}
 </div>

@@ -12,6 +12,7 @@ import SizeGuide from '../size-guide';
 import ConditionalView from '../../../../../../js/utilities/components/conditional-view';
 import QuickFitAttribute from '../quick-fit-attribute';
 import { hasValue } from '../../../../../../js/utilities/conditionsUtility';
+import { getShoeSize, getShoeAiStatus } from '../../../../../../js/utilities/util';
 
 class ConfigurableProductForm extends React.Component {
   constructor(props) {
@@ -236,6 +237,12 @@ class ConfigurableProductForm extends React.Component {
 
     const { configurables } = configurableCombinations[skuCode];
     const { byAttribute } = configurableCombinations[skuCode];
+    const activateShoeAI = getShoeAiStatus();
+    let shoeSize = [];
+    // value of shoe_size_eu only used for shoeai.
+    if (activateShoeAI && configurables.size_shoe_eu && configurables.size_shoe_eu.values) {
+      shoeSize = getShoeSize(configurables.size_shoe_eu.values);
+    }
 
     const {
       nextCode, nextValues, variant, attributeAvailable,
@@ -245,7 +252,6 @@ class ConfigurableProductForm extends React.Component {
     const cartUnavailability = (
       <CartUnavailability />
     );
-
     const id = `add-to-cart-${context}`;
     return (
       <form action="#" className="sku-base-form" method="post" id={`pdp-add-to-cart-form-${context}`} parentsku={skuCode} variantselected={variantSelected} data-sku={skuCode}>
@@ -272,6 +278,15 @@ class ConfigurableProductForm extends React.Component {
             />
           </div>
         ))}
+        {activateShoeAI === true ? (
+          <div
+            className="ShoeSizeMe ssm_pdp"
+            data-shoeid={skuCode}
+            data-availability={shoeSize}
+            data-sizerun={shoeSize}
+          />
+        ) : null}
+
         <ConditionalView condition={this.showSizeGuideOnPdpPage()}>
           <div className="size-guide-on-pdp">
             {Object.keys(configurables).map((key) => {

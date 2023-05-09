@@ -1,0 +1,21 @@
+@include fullwidth-footer-style-1;
+
+@include breakpoint($only-mobile) {
+  .c-footer-primary {
+    .c-footer-is-accordion {
+      .accordion--body {
+        .c-footer-menu__link {
+          @include sideSpaces(0);
+        }
+      }
+    }
+  }
+
+  .footer--social,
+  .block-alshaya-seo-transac-country-switcher,
+  .c-footer__copy,
+  .c-footer__logos,
+  .language--switcher {
+    @include sideSpaces($full_width_padding_mobile);
+  }
+}

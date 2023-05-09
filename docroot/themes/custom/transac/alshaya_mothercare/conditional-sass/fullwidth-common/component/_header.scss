@@ -1,0 +1,31 @@
+.block-alshaya-algolia-react-autocomplete {
+  #alshaya-algolia-autocomplete {
+    @include breakpoint($desktop) {
+      // Center aligning the search block.
+      margin: 0 auto;
+    }
+  }
+}
+
+#block-cartminiblock,
+.block-alshaya-react-mini-cart,
+.static-minicart-wrapper {
+  .quantity {
+    @include breakpoint($desktop) {
+      #{$left}: rem(-8);
+      top: rem(24);
+    }
+  }
+}
+
+.c-menu-secondary {
+  .language-switcher-language-url {
+    .language-link {
+      @include fullWidthSideSpaces(
+        $is_desktop: true,
+        $is_desktop_wide: true,
+        $side: $right,
+      );
+    }
+  }
+}

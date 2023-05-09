@@ -148,12 +148,12 @@ class AlshayaLoyaltyController extends ControllerBase {
     if ($static_page_nid) {
       $node = $this->entityTypeManager()->getStorage('node')->load($static_page_nid);
       if ($node instanceof NodeInterface && $node->bundle() === 'static_html') {
-        $loyaltyAsset = [];
+        $loyalty_asset = [];
         // Get CSS from the node field.
         $css = $node->get('field_css')->getString();
         // Validate if CSS data is available.
         if (!empty($css)) {
-          $loyaltyAsset[] = [[
+          $loyalty_asset[] = [[
             '#tag' => 'style',
             '#value' => $css,
           ],
@@ -164,7 +164,7 @@ class AlshayaLoyaltyController extends ControllerBase {
         $js = $node->get('field_javascript')->getString();
         // Validate if JS data is available.
         if (!empty($js)) {
-          $loyaltyAsset[] = [[
+          $loyalty_asset[] = [[
             '#tag' => 'script',
             '#value' => $js,
           ],
@@ -184,32 +184,34 @@ class AlshayaLoyaltyController extends ControllerBase {
     $cache_tags = Cache::mergeTags($cache_tags, $loyalty_benefits_config->getCacheTags());
     $this->moduleHandler->loadInclude('alshaya_aura_react', 'inc', 'alshaya_aura_react.static_strings');
 
-    // Add the required meta tags for the page.
-    $meta = [
-      'description' => $this->t('Download AURA now to get personalized offers and rewards for each purchase you make from [alshaya_seo:brand_name] online or instore in [alshaya_seo:cities] and all of [alshaya_seo:country]', [], [
-        'context' => 'aura',
-      ]),
-      'title' => $this->t('Buy and get rewards and exclusive offers with AURA | [alshaya_seo:brand_name]', [], [
-        'context' => 'aura',
-      ]),
+    // Add the description meta data and title tag for the Aura landing page.
+    $html_head = [
+      [
+        [
+          '#tag' => 'meta',
+          '#attributes' => [
+            'name' => 'description',
+            'content' => $this->token->replace($this->t('Download AURA now to get personalized offers and rewards for each purchase you make from [alshaya_seo:brand_name] online or instore in [alshaya_seo:cities] and all of [alshaya_seo:country]', [], [
+              'context' => 'aura',
+            ])),
+          ],
+        ],
+        'description',
+      ],
+      [
+        [
+          '#tag' => 'title',
+          '#value' => $this->token->replace($this->t('Buy and get rewards and exclusive offers with AURA | [alshaya_seo:brand_name]', [], [
+            'context' => 'aura',
+          ])),
+        ],
+        'title',
+      ],
     ];
 
-    $html_head = [];
-    // Loop through the meta array.
-    foreach ($meta as $tag_name => $tag_value) {
-      $meta_tag = [
-        '#tag' => 'meta',
-        '#attributes' => [
-          'name' => $tag_name,
-          'content' => $this->token->replace($tag_value),
-        ],
-      ];
-      $html_head[] = [$meta_tag, $tag_name];
-    }
-
-    // Merge loyaltyAsset array into If assets are available in Node.
-    if (!empty($loyaltyAsset)) {
-      $html_head = array_merge($html_head, $loyaltyAsset);
+    // Merge loyalty_asset array into If assets are available in Node.
+    if (!empty($loyalty_asset)) {
+      $html_head = array_merge($html_head, $loyalty_asset);
     }
 
     return [

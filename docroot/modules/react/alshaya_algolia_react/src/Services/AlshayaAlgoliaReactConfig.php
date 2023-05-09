@@ -175,6 +175,9 @@ class AlshayaAlgoliaReactConfig implements AlshayaAlgoliaReactConfigInterface {
     // Get Algolia settings for lhn menu.
     $alshaya_algolia_react_setting_values = $this->configFactory->get('alshaya_algolia_react.settings');
 
+    // Get Algolia color swatches settings.
+    $algolia_color_swatches_settings = $this->configFactory->get('alshaya_algolia_react.color_swatches');
+
     // Get listing page frames settings.
     $product_frame_settings = $this->configFactory->get('alshaya_algolia_react.product_frames');
 
@@ -244,7 +247,10 @@ class AlshayaAlgoliaReactConfig implements AlshayaAlgoliaReactConfigInterface {
       'local_storage_expire' => $alshaya_algolia_react_setting_values->get('local_storage_expire'),
       'max_category_tree_depth' => $alshaya_algolia_react_setting_values->get('max_category_tree_depth'),
     ];
-
+    $show_color_swatch_slider = (bool) $algolia_color_swatches_settings->get('enable_listing_page_color_swatch_slider');
+    $swatch_plp_limit = $show_color_swatch_slider
+      ? $algolia_color_swatches_settings->get('no_of_swatches_desktop')
+      : $display_settings->get('swatch_plp_limit');
     $response['commonReactTeaserView'] = [
       'price' => [
         'currency' => $currency->get('currency_code'),
@@ -265,9 +271,11 @@ class AlshayaAlgoliaReactConfig implements AlshayaAlgoliaReactConfigInterface {
         'showVariantsThumbnail' => $display_settings->get('show_variants_thumbnail_plp_gallery'),
         'showSwatches' => $display_settings->get('color_swatches'),
         'showSliderSwatch' => $display_settings->get('show_variants_thumbnail_plp_gallery2'),
-        'swatchPlpLimit' => $display_settings->get('swatch_plp_limit'),
-        'swatchPlpLimitMobileView' => $display_settings->get('swatch_plp_limit_mobile_view'),
+        'swatchPlpLimit' => $swatch_plp_limit,
+        'swatchPlpLimitMobileView' => $algolia_color_swatches_settings->get('no_of_swatches_mobile'),
         'showArticleSwatches' => $alshaya_algolia_react_setting_values->get('show_article_swatches'),
+        'articleSwatchType' => $algolia_color_swatches_settings->get('swatch_type'),
+        'showColorSwatchSlider' => $show_color_swatch_slider,
       ],
       'showBrandName' => $display_settings->get('show_brand_name_plp'),
     ];

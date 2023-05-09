@@ -12,6 +12,32 @@ use Drupal\Component\Utility\Unicode;
 /**
  * Implements hook_update_N().
  *
+ * Adds 'bra_type' field in the sku base field existing config.
+ */
+function alshaya_vs_transac_update_9405() {
+  $manager = \Drupal::service('alshaya_config.manager');
+  $manager->updateConfigs(
+    ['alshaya_acm_product.sku_base_fields'],
+    'alshaya_acm_product'
+  );
+  \Drupal::service('acq_sku.fields_manager')->addFields();
+
+  // Queue all products for re-indexing.
+  \Drupal::service('alshaya_acm_product.product_queue_utility')->queueAllProducts();
+}
+
+/**
+ * Implements hook_update_N().
+ *
+ * Queue all products for re-index because of swatches field addition.
+ */
+function alshaya_vs_transac_update_9404() {
+  \Drupal::service('alshaya_acm_product.product_queue_utility')->queueAllProducts();
+}
+
+/**
+ * Implements hook_update_N().
+ *
  * Provides default setting for `show_full_width` for theme.
  */
 function alshaya_vs_transac_update_9403() {

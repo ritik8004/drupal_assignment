@@ -455,6 +455,11 @@ class AlshayaAlgoliaIndexHelper {
     if ($attr_barcode) {
       $object['attr_aims_barcode'] = $attr_barcode;
     }
+    // Index the color swatches data.
+    $attr_article_swatches = $sku->get('attr_article_swatches')->getString();
+    if ($attr_article_swatches) {
+      $object['attr_article_swatches'] = json_decode($attr_article_swatches, TRUE);
+    }
 
     $object['url'] = $this->skuInfoHelper->getEntityUrl($node, FALSE);
     // Convert to array to always send key to index event with empty array.
@@ -496,7 +501,7 @@ class AlshayaAlgoliaIndexHelper {
     $object['is_new'] = $sku->get('attr_is_new')->getString();
     $object['is_buyable'] = (bool) $sku->get('attr_is_buyable')->getString();
     // Used for new arrivals.
-    $object['new_arrivals'] = $sku->get('created')->getString();
+    $object['new_arrivals'] = (int) $sku->get('created')->getString();
     $this->updatePrettyPathAlias($object);
     unset($object['field_category_aliases']);
 

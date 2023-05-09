@@ -1,0 +1,23 @@
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.node.field_quiz_see_more_url
+    - node.type.answer
+  module:
+    - link
+id: node.answer.field_quiz_see_more_url
+field_name: field_quiz_see_more_url
+entity_type: node
+bundle: answer
+label: 'See more Url'
+description: 'Add url path for see more link.'
+required: false
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings:
+  title: 0
+  link_type: 1
+field_type: link
+skip_translation_check: 1

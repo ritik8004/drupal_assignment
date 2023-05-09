@@ -127,6 +127,9 @@ window.commerceBackend = window.commerceBackend || {};
             mainProduct = JSON.parse(JSON.stringify(styleProduct));
           }
         });
+        if (!Drupal.hasValue(mainProduct)) {
+          mainProduct = product;
+        }
       }
       else {
         mainProduct = product;
@@ -229,11 +232,15 @@ window.commerceBackend = window.commerceBackend || {};
     });
     // Process and set the media data for the product.
     window.commerceBackend.setMediaData(mainProduct);
-    // Set the processed product to storage.
-    window.commerceBackend.setRcsProductToStorage(mainProduct, mainProduct.context);
-    // Reset static cache of product data as we have updated product data here
-    // now.
-    window.commerceBackend.resetStaticStoragePostProductUpdate();
+    // We will handle static storage caching for free gift
+    // products from alshaya_rcs_free_gift module.
+    if (product.context !== 'free_gift') {
+      // Set the processed product to storage.
+      window.commerceBackend.setRcsProductToStorage(mainProduct, mainProduct.context);
+      // Reset static cache of product data as we have updated product data here
+      // now.
+      window.commerceBackend.resetStaticStoragePostProductUpdate();
+    }
     return mainProduct;
   }
 
@@ -263,5 +270,5 @@ window.commerceBackend = window.commerceBackend || {};
     }
 
     return getProcessedStyleProducts(product, styleProducts);
-  }
+  };
 })(Drupal, drupalSettings);

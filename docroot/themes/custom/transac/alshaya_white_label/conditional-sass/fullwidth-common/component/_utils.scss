@@ -28,12 +28,12 @@
     }
   }
 
-  .c-footer-primary,
-  .c-footer-secondary {
-    @include fullWidthSideSpaces(
-      $is_tablet: true,
-      $is_desktop: true,
-      $is_desktop_wide: true
-    );
+  @include breakpoint($only-tablet) {
+    .c-footer-primary,
+    .c-footer-secondary {
+      @include fullWidthSideSpaces(
+        $is_tablet: true,
+      );
+    }
   }
 }

@@ -8,6 +8,7 @@ on:
       - master
       - develop-adyen
       - develop-egift-return
+      - develop-freegift-v3
   create:
 
 concurrency: deploy-${{ github.ref }}
@@ -102,6 +103,10 @@ jobs:
 
       - name: Checkout
         uses: actions/checkout@v3
+
+      - name: Mark Github Workspace Directories Safe
+        run: |
+          git config --global --add safe.directory '*'
 
       - name: Run Composer install
         run: |

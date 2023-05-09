@@ -172,6 +172,16 @@ field_settings:
         - field.storage.node.field_skus
       module:
         - acq_sku
+  attr_article_swatches:
+    label: Article Swatches
+    datasource_id: 'entity:node'
+    property_path: 'field_skus:entity:attr_article_swatches'
+    type: text
+    dependencies:
+      config:
+        - field.storage.node.field_skus
+      module:
+        - acq_sku
   attr_delivery_ways:
     label: Delivery Ways
     datasource_id: 'entity:node'

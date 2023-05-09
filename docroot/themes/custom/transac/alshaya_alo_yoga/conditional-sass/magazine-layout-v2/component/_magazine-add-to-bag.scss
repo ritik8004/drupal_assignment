@@ -37,7 +37,7 @@
               border: rem(1) solid $swatch-border;
 
               &.dual-color-tone {
-                @include dual-tone-color;
+                @include dual-tone-color-swatch;
               }
             }
 

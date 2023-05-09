@@ -499,3 +499,14 @@ function whitelabel_preprocess_paragraph(&$variables) {
     }
   }
 }
+
+/**
+ * Implements hook_library_info_alter().
+ */
+function whitelabel_library_info_alter(&$libraries, $extension) {
+  // Attach the 'core/once' library as dependency to the overridden
+  // 'views-infinite-scroll' library.
+  if ($extension === 'views_infinite_scroll' && isset($libraries['views-infinite-scroll'])) {
+    $libraries['views-infinite-scroll']['dependencies'][] = 'core/once';
+  }
+}

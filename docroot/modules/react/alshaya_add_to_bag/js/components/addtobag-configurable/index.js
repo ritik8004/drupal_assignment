@@ -96,6 +96,7 @@ export default class AddToBagConfigurable extends React.Component {
     const drawerOpenEvent = new CustomEvent('drawerOpenEvent', {
       detail: {
         triggerButtonElement: this.buttonContainerRef.current,
+        elementViewMode: this.buttonContainerRef.current.closest('article').getAttribute('gtm-view-mode'),
       },
     });
     document.dispatchEvent(drawerOpenEvent);

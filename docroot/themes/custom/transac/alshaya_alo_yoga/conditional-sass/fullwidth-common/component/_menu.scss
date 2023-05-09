@@ -1,0 +1,33 @@
+.super-category-enabled .c-menu-primary .mobile--menu,
+.super-category-enabled .menu--active .mobile--close,
+.mobile--close {
+  #{$left}: 0;
+  padding-#{$left}: rem(4);
+}
+
+.c-menu-primary .mobile--menu {
+  padding-#{$left}: rem(4);
+}
+
+#aura-mobile-header-shop:not(:empty) .aura-header-popup-wrapper.sign-up-complete,
+#aura-mobile-header-signin-register:not(:empty) .aura-header-popup-wrapper.sign-up-complete {
+  @include fullWidthSideSpaces(
+    $is_mobile: true,
+    $is_tablet: true,
+  );
+}
+
+@include breakpoint($tablet) {
+  .super-category-enabled .c-menu-primary .mobile--menu,
+  .super-category-enabled .menu--active .mobile--close {
+    padding-#{$left}: rem(8);
+  }
+}
+
+@include breakpoint($desktop) {
+  .block-alshaya-main-menu {
+    ul.menu--one__list {
+      padding-#{$left}: rem(48);
+    }
+  }
+}

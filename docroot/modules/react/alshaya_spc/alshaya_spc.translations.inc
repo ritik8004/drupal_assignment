@@ -638,6 +638,12 @@ function _alshaya_spc_translations() {
     ],
   ];
 
+  $strings['v19'] = [
+    'Secure Payment Methods' => [
+      'ar' => 'وسائل دفع آمنة',
+    ],
+  ];
+
   return $strings;
 }
 

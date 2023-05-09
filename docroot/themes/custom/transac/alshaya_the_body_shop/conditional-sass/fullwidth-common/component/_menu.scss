@@ -1,0 +1,33 @@
+.c-menu-secondary {
+  .block-language-blocklanguage-interface.language-switcher-language-url {
+    .language-link {
+      @include fullWidthSideSpaces(
+        $is_desktop: true,
+        $is_desktop_wide: true,
+        $side: $right,
+      );
+    }
+  }
+}
+
+.block-alshaya-main-menu {
+  ul.menu--one__list {
+    .menu--one__list-item {
+      &:first-of-type {
+        @include fullWidthSideSpaces(
+          $is_desktop: true,
+          $is_desktop_wide: true,
+          $side: $left,
+        );
+      }
+
+      &:last-of-type {
+        @include fullWidthSideSpaces(
+          $is_desktop: true,
+          $is_desktop_wide: true,
+          $side: $right,
+        );
+      }
+    }
+  }
+}

@@ -241,10 +241,6 @@ function _alshaya_hello_member_react_translations() {
         'ar' => 'يكمل',
         'context' => 'hello_member',
       ],
-      '<span>Members get</span> <span>free delivery and 10% off on your first purchase.</span>' => [
-        'ar' => '<span>يحصل الأعضاء </span><span>توصيل مجاني وخصم 10٪ على أول عملية شراء.</span>',
-        'context' => 'hello_member',
-      ],
       'Not a member yet? Join now, it’s free!' => [
         'ar' => 'لست عضوا حتى الآن؟ انضم الآن ، إنه مجاني!',
         'context' => 'hello_member',
@@ -499,6 +495,44 @@ function _alshaya_hello_member_react_translations() {
     'v5' => [
       'Not received the code?' => [
         'ar' => 'لم يصلك الرمز؟',
+        'context' => 'hello_member',
+      ],
+    ],
+    'v6' => [
+      'Select Gender' => [
+        'ar' => 'اختر نوع الجنس',
+        'context' => 'hello_member',
+      ],
+      'This Phone number is already in use.' => [
+        'ar' => 'الهاتف المحمول مستخدم بالفعل.',
+        'context' => 'hello_member',
+      ],
+      'Added to your bag.' => [
+        'ar' => 'تم الإضافة إلى حقيبة التسوق',
+        'context' => 'hello_member',
+      ],
+      'Plus Member' => [
+        'ar' => 'عضوية مميزه',
+        'context' => 'hello_member',
+      ],
+      '@hm_icon You’re earning @points points as an H&M member' => [
+        'ar' => '@hm_icon لقد حصلت على @points نقطة لكونك عضو في اتش آند ام',
+        'context' => 'hello_member',
+      ],
+      'Members earn @pointValue point(s)' => [
+        'ar' => 'يكسب الأعضاء @pointValue نقطة/نقاط',
+        'context' => 'hello_member',
+      ],
+      'Your membership will be renewed on @expiry_date and points will be reset every year.' => [
+        'ar' => 'سيتم تجديد عضويتك بنسبة @expiry_date وستتم إعادة تعيين النقاط كل عام.',
+        'context' => 'hello_member',
+      ],
+      'Points History' => [
+        'ar' => 'سجّل النقاط',
+        'context' => 'hello_member',
+      ],
+      '<span>Members get</span> <span>10% off on your first purchase.</span>' => [
+        'ar' => '<span>يحصل الأعضاء </span><span>على خصم %10 عند أول عملية شراء</span>',
         'context' => 'hello_member',
       ],
     ],

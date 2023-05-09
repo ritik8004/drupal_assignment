@@ -558,6 +558,17 @@ exports.getDataSynchronous = function getDataSynchronous(placeholder, params = {
       result = result.data.categories.items;
       break;
 
+    // Get the product data for the given sku.
+    case 'product_by_sku':
+      // Build query.
+      let productBySkuVariables = rcsPhGraphqlQuery.product_by_sku.variables;
+      productBySkuVariables.sku = params.sku;
+      request.data = prepareQuery(rcsPhGraphqlQuery.product_by_sku.query, productBySkuVariables);
+
+      response = rcsCommerceBackend.invokeApiSynchronous(request);
+      result = response.data.products.items[0];
+      break;
+
     default:
       console.log(`Placeholder ${placeholder} not supported for get_data.`);
       break;

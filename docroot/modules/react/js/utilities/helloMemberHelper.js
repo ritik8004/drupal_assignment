@@ -336,3 +336,13 @@ export const setHelloMemberLoyaltyCard = async (identifierNo, quoteId) => {
  * Helper function to display an error message to the customer during CLM downtime.
  */
 export const displayErrorMessage = (message) => <div className="hello-member-points-wrapper"><div className="hello-member-downtime-message">{ message }</div></div>;
+
+/**
+ * Helper function to check benefits channel.
+ */
+export const getBenefitTag = (responseData) => {
+  if (hasValue(responseData) && hasValue(responseData.tag)) {
+    return responseData.tag;
+  }
+  return null;
+};

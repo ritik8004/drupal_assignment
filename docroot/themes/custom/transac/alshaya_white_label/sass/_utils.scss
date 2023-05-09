@@ -771,6 +771,24 @@ $full_width_padding_desktop_wide: rem(40); /* viewport width >= 1680px */
   }
 }
 
+// Common styles for fullwidth sofa-sectional PDP.
+@mixin fullwidth-sofasectional {
+  @include breakpoint($desktop) {
+    body.nodetype--acq_product:not(.magazine-layout):not(.magazine-layout-v2) {
+      .basic-details-wrapper {
+        .field--name-field-skus {
+          .sku-base-form {
+            button[type="submit"].sofa-sectional-addtobag-button {
+              width: 100%;
+              margin-#{$left}: 0;
+            }
+          }
+        }
+      }
+    }
+  }
+}
+
 // Listing pages product hover images.
 @mixin alshayaSearchHoverImage {
   .alshaya_search_gallery {
@@ -828,6 +846,51 @@ $full_width_padding_desktop_wide: rem(40); /* viewport width >= 1680px */
 
       @include breakpoint($desktop) {
         font-size: rem(13);
+      }
+    }
+  }
+}
+
+// dual color tone for circle UI.
+// This can't be used in facet UI.
+@mixin dual-tone-color-swatch() {
+  display: flex;
+  transform: rotate(90deg);
+
+  div,
+  a {
+    width: 50%;
+
+    &:first-child {
+      border-top-#{$left}-radius: rem(50);
+      border-bottom-#{$left}-radius: rem(50);
+    }
+
+    &:last-child {
+      border-top-#{$right}-radius: rem(50);
+      border-bottom-#{$right}-radius: rem(50);
+    }
+  }
+}
+
+// Assigning max-width according to the number of swatches shown in the slider.
+// This is to not stretch slider and retain correct spacing between the items.
+@mixin swatchSliderMaxWidth(
+  $lower_limit: 2,
+  $upper_limit: 6,
+  $swatch_width: rem(37),
+) {
+  @for $i from $lower_limit through $upper_limit {
+    // Adding 1 to the limit to account for next arrow button width.
+    $max-width: calc(#{$swatch_width} * (#{$i} + 1));
+    // Adding 1.5 to the mobile limit to account for the half of next slide.
+    $max-width-mobile: calc(#{$swatch_width} * (#{$i} + 1.5));
+
+    &.swatch-limit-#{$i} {
+      max-width: $max-width;
+
+      @include breakpoint($only-mobile) {
+        max-width: $max-width-mobile;
       }
     }
   }

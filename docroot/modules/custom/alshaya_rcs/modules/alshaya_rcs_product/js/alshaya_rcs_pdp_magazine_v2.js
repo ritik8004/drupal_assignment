@@ -40,6 +40,12 @@
         await window.commerceBackend.getProductLabels(mainProduct.sku));
     }
 
+    // If free gift is enabled, alter product data to support magv2 pdp free gifts.
+    // Check <PdpFreeGift> react component.
+    if (Drupal.hasValue(window.commerceBackend.processFreeGiftDataReactRender)) {
+      processedProduct = await window.commerceBackend.processFreeGiftDataReactRender(processedProduct, mainProduct.sku);
+    }
+
     // Pass product data into pdp layout react component.
     window.alshayaRenderPdpMagV2(processedProduct, configurableCombinations);
   });
@@ -134,7 +140,7 @@
       stockStatus: getProductStockStatus(product),
       title: {'label': product.name},
       rawGallery: updateGallery(product, product.name),
-      additionalAttributes: Object.keys(product.description.additional_attributes).length > 0 ? product.description.additional_attributes : {},
+      additionalAttributes: Drupal.hasValue(product.description.additional_attributes) && Object.keys(product.description.additional_attributes).length ? product.description.additional_attributes : {},
       quickFit: Drupal.hasValue(product.quick_fit) ? product.quick_fit : '',
     }
     if (product.type_id === 'configurable') {

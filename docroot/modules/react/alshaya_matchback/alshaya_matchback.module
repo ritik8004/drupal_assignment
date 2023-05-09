@@ -31,7 +31,6 @@ function alshaya_matchback_node_view(array &$build, EntityInterface $entity, Ent
     $build['#attached']['library'][] = 'alshaya_matchback/alshaya_matchback';
   }
 
-  $build['#attached']['library'][] = 'alshaya_matchback/alshaya_matchback_utility';
   $build['#attached']['library'][] = 'alshaya_matchback/alshaya_matchback.gtm';
 }
 

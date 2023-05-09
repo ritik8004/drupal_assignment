@@ -194,3 +194,23 @@ libraries-override:
     css:
       theme:
         css/conditional-sass/checkout-tracker/checkout-tracker.ltr.css: css/conditional-sass/checkout-tracker/checkout-tracker.ltr.css
+
+  alshaya_white_label/fullwidth-advanced-page:
+    css:
+      theme:
+        css/conditional-sass/fullwidth-advanced-page/fullwidth-advanced-page.ltr.css: css/conditional-sass/fullwidth-advanced-page/fullwidth-advanced-page.ltr.css
+
+  alshaya_white_label/fullwidth-common:
+    css:
+      theme:
+        css/conditional-sass/fullwidth-common/fullwidth-common.ltr.css: css/conditional-sass/fullwidth-common/fullwidth-common.ltr.css
+
+  alshaya_white_label/fullwidth-listing-page:
+    css:
+      theme:
+        css/conditional-sass/fullwidth-listing-page/fullwidth-listing-page.ltr.css: css/conditional-sass/fullwidth-listing-page/fullwidth-listing-page.ltr.css
+
+  alshaya_white_label/fullwidth-pdp:
+    css:
+      theme:
+        css/conditional-sass/fullwidth-pdp/fullwidth-pdp.ltr.css: css/conditional-sass/fullwidth-pdp/fullwidth-pdp.ltr.css

@@ -26,6 +26,7 @@ import PriceRangeElement from '../price/PriceRangeElement';
 import { isAddToBagHoverEnabled } from '../../../../../js/utilities/addToBagHelper';
 import ArticleSwatches from '../article_swatch';
 import SliderSwatch from '../slider-swatch';
+import { getShoeAiStatus } from '../../../../../js/utilities/util';
 
 const Teaser = ({
   hit, gtmContainer = null, pageType, extraInfo, indexName,
@@ -33,6 +34,7 @@ const Teaser = ({
   // we want to use in this component.
 }) => {
   const { showSwatches, showSliderSwatch } = drupalSettings.reactTeaserView.swatches;
+  const { showColorSwatchSlider } = drupalSettings.reactTeaserView.swatches;
   const { showReviewsRating } = drupalSettings.algoliaSearch;
   const collectionLabel = [];
   const [initSlider, setInitiateSlider] = useState(false);
@@ -47,8 +49,7 @@ const Teaser = ({
   const isDesktop = window.innerWidth > 1024;
   const { currentLanguage } = drupalSettings.path;
   const { showBrandName } = drupalSettings.reactTeaserView;
-  const activateShoeAI = (hasValue(drupalSettings.shoeai) && drupalSettings.shoeai.status === true);
-
+  const activateShoeAI = getShoeAiStatus();
   if (drupalSettings.plp_attributes
     && drupalSettings.plp_attributes.length > 0
     && hasValue(hit.collection_labels)
@@ -282,6 +283,14 @@ const Teaser = ({
               setWishListButtonRef={ref}
             />
           </ConditionalView>
+          {pageType === 'plp' && activateShoeAI === true ? (
+            <div
+              className="ShoeSizeMe ssm_plp"
+              data-shoeid={sku}
+              data-availability={attribute.attr_size_shoe_eu}
+              data-sizerun={attribute.attr_size_shoe_eu}
+            />
+          ) : null}
           {isAddToBagHoverEnabled()
             && (
             <div className="quick-add">
@@ -298,6 +307,15 @@ const Teaser = ({
               />
             </div>
             )}
+          {(hasValue(attribute.attr_article_swatches) && showColorSwatchSlider)
+            ? (
+              <ArticleSwatches
+                sku={sku}
+                handleSwatchSelect={handleSwatchSelect}
+                articleSwatches={attribute.attr_article_swatches}
+                url={url}
+              />
+            ) : null}
           <div className="product-plp-detail-wrapper">
             { collectionLabel.length > 0
               && (
@@ -367,8 +385,8 @@ const Teaser = ({
               />
             ) : null}
             {/* Render color swatches based on article/sku id */}
-            {hasValue(attribute.article_swatches)
-              && drupalSettings.reactTeaserView.swatches.showArticleSwatches
+            {(hasValue(attribute.article_swatches)
+              && drupalSettings.reactTeaserView.swatches.showArticleSwatches)
               ? (
                 <ArticleSwatches
                   sku={sku}
@@ -430,14 +448,6 @@ const Teaser = ({
           />
         </ConditionalView>
       </article>
-      {pageType === 'plp' && activateShoeAI === true ? (
-        <div
-          className="ShoeSizeMe ssm_plp"
-          data-shoeid={sku}
-          data-availability={attribute.attr_size_shoe_eu}
-          data-sizerun={attribute.attr_size_shoe_eu}
-        />
-      ) : null}
     </div>
   );
 };

@@ -1,0 +1,43 @@
+<?php
+
+/**
+ * @file
+ * File for shoe AI Implementation.
+ */
+
+use Drupal\Core\Entity\Display\EntityViewDisplayInterface;
+use Drupal\Core\Entity\EntityInterface;
+
+/**
+ * Implements hook_node_view().
+ */
+function alshaya_shoeai_node_view(array &$build, EntityInterface $entity, EntityViewDisplayInterface $display, $view_mode) {
+  $bundle = ['acq_product', 'rcs_product'];
+  if (in_array($entity->bundle(), $bundle) && $view_mode == 'full') {
+    \Drupal::service('alshaya_shoeai.helper')->attachShoeAiLibrary($build);
+  }
+}
+
+/**
+ * Implements hook_taxonomy_term_view().
+ */
+function alshaya_shoeai_taxonomy_term_view(array &$build, EntityInterface $entity, EntityViewDisplayInterface $display, $view_mode) {
+  $vocabularies = ['rcs_category', 'acq_product_category'];
+  if (in_array($entity->bundle(), $vocabularies) && $view_mode == 'full') {
+    \Drupal::service('alshaya_shoeai.helper')->attachShoeAiLibrary($build);
+  }
+}
+
+/**
+ * Implements hook_alshaya_spc_cart_build_alter().
+ */
+function alshaya_shoeai_alshaya_spc_cart_build_alter(array &$build) {
+  \Drupal::service('alshaya_shoeai.helper')->attachShoeAiLibrary($build);
+}
+
+/**
+ * Implements hook_alshaya_spc_checkout_confirmation_order_build_alter().
+ */
+function alshaya_shoeai_alshaya_spc_checkout_confirmation_order_build_alter(array &$build, array $order) {
+  \Drupal::service('alshaya_shoeai.helper')->attachShoeAiLibrary($build);
+}

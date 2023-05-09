@@ -1,9 +1,13 @@
 import React from 'react';
 import Cleave from 'cleave.js/react';
-import { getAllAuraStatus, getAllAuraTier, getUserProfileInfo } from '../../../../utilities/helper';
+import {
+  getAllAuraStatus, getAllAuraTier, getUserProfileInfo, getAuraConfig,
+} from '../../../../utilities/helper';
 import { getTooltipPointsOnHoldMsg } from '../../../../utilities/aura_utils';
 import ToolTip from '../../../../../../alshaya_spc/js/utilities/tooltip';
 import AuraAppDownload from '../../../aura-app-download';
+import TrimString from '../../../../../../js/utilities/components/trim-string';
+import { hasValue } from '../../../../../../js/utilities/conditionsUtility';
 
 const MyAuraBanner = (props) => {
   const {
@@ -16,6 +20,8 @@ const MyAuraBanner = (props) => {
     loyaltyStatusInt,
   } = props;
 
+  // Character length of user name to be shown in AURA banner.
+  const { auraUsernameCharacterLimit } = getAuraConfig();
   const profileInfo = getUserProfileInfo(firstName, lastName);
 
   // Current User tier class so we can change gradient for progress bar.
@@ -24,13 +30,23 @@ const MyAuraBanner = (props) => {
   const allAuraStatus = getAllAuraStatus();
   const auraUserClass = loyaltyStatusInt === allAuraStatus.APC_LINKED_NOT_VERIFIED ? 'aura-not-verified' : 'aura-verified';
 
+  if (!(hasValue(profileInfo) && hasValue(profileInfo.profileName))) {
+    return null;
+  }
+
   return (
     <div className={`aura-card-linked-verified-wrapper fadeInUp aura-level-${tierClass} ${auraUserClass}`}>
       <div className="aura-card-linked-verified-wrapper-content">
         <div className="aura-logo">
           <div className="aura-user-avatar">{profileInfo.avatar}</div>
           <div className="aura-user-name">
-            {profileInfo.profileName}
+            <div title={profileInfo.profileName}>
+              <TrimString
+                stringToTrim={profileInfo.profileName}
+                desktopCharacterLimit={auraUsernameCharacterLimit}
+                showEllipsis
+              />
+            </div>
             <div className="aura-card-number">
               <span>{Drupal.t('Aura membership number', {}, { context: 'aura' })}</span>
               <span>

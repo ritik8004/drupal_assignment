@@ -36,6 +36,10 @@
   @include breakpoint($desktop) {
     width: 21.812rem !important;
     padding: 0;
+
+    &.block-alshaya-algolia-react {
+      flex-grow: 1;
+    }
   }
 
   .algolia-search-cleartext-icon {
@@ -88,6 +92,7 @@
 
     @include breakpoint($desktop) {
       width: 19.875rem;
+      margin: auto;
     }
 
     .react-autosuggest__container {
@@ -97,6 +102,11 @@
       @include breakpoint($upto-desktop) {
         #{$left}: 0;
         top: 0.125rem;
+      }
+
+      @include breakpoint($desktop) {
+        top: 0;
+        #{$left}: 0;
       }
 
       &::before {

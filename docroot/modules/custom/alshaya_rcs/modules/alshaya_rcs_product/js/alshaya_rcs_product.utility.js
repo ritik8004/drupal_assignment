@@ -64,6 +64,26 @@ window.commerceBackend = window.commerceBackend || {};
   }
 
   /**
+   * Checks if a product is free gift or not.
+   *
+   * @param {object} product
+   *   The raw product object.
+   *
+   * @return boolean
+   */
+  window.commerceBackend.isFreeGiftSku = function isFreeGiftSku(product) {
+    var isFreeGift = false;
+    if (Drupal.hasValue(product.price_range)
+      && Drupal.hasValue(product.price_range.maximum_price)
+      && Drupal.hasValue(product.price_range.maximum_price.final_price)
+    ) {
+      var productPrice = parseFloat(product.price_range.maximum_price.final_price.value);
+      isFreeGift = productPrice === 0 || productPrice === 0.01;
+    }
+    return isFreeGift;
+  };
+
+  /**
    * Sets product data to storage.
    *
    * @param {object} product
@@ -838,7 +858,7 @@ window.commerceBackend = window.commerceBackend || {};
         await window.commerceBackend.getProductsInStyle(response, loadStyles);
       }
       window.commerceBackend.setRcsProductToStorage(response, null, mainSKU);
-      window.commerceBackend.processAndStoreProductData(mainSKU, sku, 'productInfo');
+      await window.commerceBackend.processAndStoreProductData(mainSKU, sku, 'productInfo');
     });
 
     return staticDataStore.productDataFromBackend[mainSKU][sku];
@@ -975,7 +995,7 @@ window.commerceBackend = window.commerceBackend || {};
   /**
    * Get the first child with media.
    *
-   * @param {object}
+   * @param {object} product
    *   The raw product object.
    *
    * @return {object|null}
@@ -984,15 +1004,23 @@ window.commerceBackend = window.commerceBackend || {};
    * @see \Drupal\alshaya_acm_product\SkuImagesManager::getFirstChildWithMedia()
    */
   const getFirstChildWithMedia = function (product) {
-    const firstChild = product.variants.find(function (variant) {
-      return Drupal.hasValue(variant.product.hasMedia) ? variant.product : false;
-    });
-
-    if (Drupal.hasValue(firstChild)) {
-      return firstChild.product;
+    var firstChild;
+    // If we have first child sku defined, try to check if the first child variant
+    // has media or not.
+    if (Drupal.hasValue(product.firstChild)) {
+      firstChild = product.variants.find(function findFirstChildWithMedia(variant) {
+        return product.firstChild === variant.product.sku && variant.product.hasMedia ? variant.product : false;
+      });
+    }
+    // If the first child variant does not have media,
+    // look for other variants that does.
+    if (!Drupal.hasValue(firstChild)) {
+      firstChild = product.variants.find(function findAnyChildWithMedia(variant) {
+        return variant.product.hasMedia ? variant.product : false;
+      });
     }
 
-    return null;
+    return Drupal.hasValue(firstChild) ? firstChild.product : null;
   };
 
   /**
@@ -1047,7 +1075,7 @@ window.commerceBackend = window.commerceBackend || {};
    */
   window.commerceBackend.getFirstImage = function (product) {
     const galleryProduct = getSkuForGallery(product);
-    return Drupal.hasValue(galleryProduct.media[0]) ? galleryProduct.media[0] : null;
+    return Drupal.hasValue(galleryProduct.media) ? galleryProduct.media[0] : null;
   };
 
   /**

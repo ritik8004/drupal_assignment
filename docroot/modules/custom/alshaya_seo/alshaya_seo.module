@@ -60,6 +60,10 @@ function _alshaya_seo_process_gtm() {
     || ($current_route_name === 'entity.user.edit_form')) {
     $process = TRUE;
   }
+  // Enable for 404 Pages.
+  elseif (\Drupal::request()->attributes->get('_route') === 'system.404') {
+    $process = TRUE;
+  }
   else {
     // Return false by default.
     $process = FALSE;

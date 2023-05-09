@@ -17,7 +17,6 @@ plp_slider:
   item: 4
   margin: 5
 swatch_plp_limit: 3
-swatch_plp_limit_mobile_view: 3
 swatches:
   pdp: {  }
   plp: {  }

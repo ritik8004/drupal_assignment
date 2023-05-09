@@ -7,6 +7,7 @@ use Drupal\acq_commerce\SKUInterface;
 use Drupal\acq_sku\Entity\SKU;
 use Drupal\alshaya_acm_checkout\CheckoutOptionsManager;
 use Drupal\Core\Entity\EntityTypeManagerInterface;
+use Drupal\file\Entity\File;
 
 /**
  * Helper class for Online Returns.
@@ -77,6 +78,58 @@ class OnlineReturnsHelper {
   }
 
   /**
+   * Helper to check if EgiftCard refund is enabled.
+   *
+   * @return bool
+   *   TRUE/FALSE
+   */
+  public function isEgiftRefundEnabled(): bool {
+    return $this->configFactory->get('alshaya_online_returns.egift_card_refund')->get('egift_card_refund_enabled') ?: FALSE;
+  }
+
+  /**
+   * Helper to get the eGift card refund helper text.
+   *
+   * @return string
+   *   Egift card refund option text.
+   */
+  public function getEgiftRefundText() {
+    if (!$this->isEgiftRefundEnabled()) {
+      return '';
+    }
+    return $this->configFactory->get('alshaya_online_returns.egift_card_refund_config')->get('egift_refund_text') ?: '';
+  }
+
+  /**
+   * Helper to get the eGift card icon.
+   *
+   * @return string
+   *   Egift card icon.
+   */
+  public function getEgiftCardIcon() {
+    if (!$this->isEgiftRefundEnabled()) {
+      return '';
+    }
+
+    $fileUri = '';
+    if ($this->configFactory->get('alshaya_online_returns.egift_card_refund_config')->get('egift_card_icon')) {
+      $cardImage = $this->configFactory->get('alshaya_online_returns.egift_card_refund_config')->get('egift_card_icon');
+      $fileUri = File::load($cardImage[0])->getFileUri();
+    }
+    return $fileUri ?: '';
+  }
+
+  /**
+   * Helper to get list of not supported payment methods for eGift card refund.
+   *
+   * @return array
+   *   An array containting all the payment methods with enable/disable value.
+   */
+  public function getNotSupportedEgiftMethodsForOnlineReturns() {
+    return $this->configFactory->get('alshaya_online_returns.egift_card_refund')->get('not_supported_refund_payment_methods');
+  }
+
+  /**
    * Helper to get Cache Tags for Online Returns Config.
    *
    * @return string[]
@@ -110,10 +163,15 @@ class OnlineReturnsHelper {
    *   SKU is big ticket or not.
    */
   public function isSkuBigTicket(SKUInterface $sku_entity) {
-    $is_big_ticket = $sku_entity->hasField('attr_big_ticket')
-      ? $sku_entity->get('attr_big_ticket')->getString()
-      : FALSE;
-    return !empty($is_big_ticket);
+    if ($sku_entity->hasField('attr_big_ticket')) {
+      return !empty($sku_entity->get('attr_big_ticket')->getString());
+    }
+    // If 'attr_big_ticket' is not available use 'attr_white_glove_delivery'
+    // field to determine if it is big ticket item or not.
+    if ($sku_entity->hasField('attr_white_glove_delivery')) {
+      return !empty($sku_entity->get('attr_white_glove_delivery')->getString());
+    }
+    return FALSE;
   }
 
   /**
@@ -233,6 +291,13 @@ class OnlineReturnsHelper {
       // current time.
       $return_time = strtotime($order_details['#order']['returnExpiration'] . ' 23:59:59');
       if ($return_time < time()) {
+        return FALSE;
+      }
+    }
+
+    // Validate if order contains big ticket items or not.
+    foreach ($order_details['#products'] as $product) {
+      if (isset($product['is_big_ticket']) && $product['is_big_ticket']) {
         return FALSE;
       }
     }

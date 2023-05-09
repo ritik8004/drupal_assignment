@@ -34,6 +34,7 @@ module.exports = {
     axios: true,
     _: true,
     globalThis: true,
+    alshayaGraphqlQuery: true,
   },
   parser: "babel-eslint",
   parserOptions: {

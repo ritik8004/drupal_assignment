@@ -1,0 +1,4 @@
+enable_listing_page_color_swatch_slider: false
+swatch_type: 'circle'
+no_of_swatches_desktop: 6
+no_of_swatches_mobile: 4

@@ -1,0 +1,11 @@
+@include breakpoint($upto-desktop) {
+  .block-alshaya-main-menu {
+    li.menu--one__list-item {
+      @include sideSpaces(0);
+
+      .menu--one__link {
+        @include sideSpaces(0);
+      }
+    }
+  }
+}

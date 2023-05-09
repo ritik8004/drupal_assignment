@@ -59,16 +59,13 @@ class AlshayaSmartAgentController extends ControllerBase {
     $redirect->setMaxAge(0);
     $redirect->headers->set('cache-control', 'must-revalidate, no-cache, no-store, private');
     // Referring channel params and set header in case of assist app or web.
-    $channel = $request->query->get('channel');
-    if ($channel) {
-      $redirect->headers->set('Alshaya-Channel', $channel);
-    }
+    $channel = $request->query->get('channel') ?? NULL;
     $content = $request->query->get('data');
     if (empty($content)) {
       return $redirect;
     }
     // Decrypt the data.
-    $data = $this->apiWrapper->getDecryptedSmartAgentData($content);
+    $data = $this->apiWrapper->getDecryptedSmartAgentData($content, $channel);
 
     // Redirect to cart page if cart id or smart agent details is empty.
     if (empty($data) || empty($data['success'])) {

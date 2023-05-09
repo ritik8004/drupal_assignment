@@ -3,7 +3,6 @@ import Cookies from 'js-cookie';
 import ReactToPrint from 'react-to-print';
 import OrderSummaryBlock from '../../utilities/order-summary-block';
 import OrderSummary from './OrderSummary';
-import { stickySidebar } from '../../utilities/stickyElements/stickyElements';
 import VatFooterText from '../../utilities/vat-footer';
 import ConditionalView from '../../common/components/conditional-view';
 import CheckoutConfirmationPrint from './checkoutConfirmationPrint';
@@ -61,9 +60,6 @@ class CheckoutConfirmation extends React.Component {
   }
 
   componentDidMount() {
-    // Make sidebar sticky.
-    stickySidebar();
-
     // If Aura enabled and logged in user, invoke API to fetch user's loyalty status.
     if ((isAuraEnabled() || isAuraIntegrationEnabled()) && getUserDetails().id) {
       document.addEventListener('customerDetailsFetched', this.updateState, false);

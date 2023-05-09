@@ -1,0 +1,8 @@
+name: Alshaya ShoeAI
+type: module
+description: 'Contains Alshaya specific implementation for Shoeai.'
+package: Alshaya
+core_version_requirement: ^9 || ^10
+dependencies:
+  - drupal:user
+  - alshaya_acm_customer:alshaya_acm_customer

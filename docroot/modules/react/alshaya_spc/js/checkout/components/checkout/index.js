@@ -7,7 +7,6 @@ import Loading from '../../../utilities/loading';
 import OrderSummaryBlock from '../../../utilities/order-summary-block';
 import HDBillingAddress from '../hd-billing-address';
 import CnCBillingAddress from '../cnc-billing-address';
-import { stickySidebar } from '../../../utilities/stickyElements/stickyElements';
 import CompletePurchase from '../complete-purchase';
 import DeliveryInformation from '../delivery-information';
 import DeliveryMethods from '../delivery-methods';
@@ -127,9 +126,6 @@ export default class Checkout extends React.Component {
       // In case of error, do nothing.
       Drupal.logJavascriptError('checkout', error, GTM_CONSTANTS.CHECKOUT_ERRORS);
     }
-
-    // Make sidebar sticky.
-    stickySidebar();
 
     document.addEventListener('spcCheckoutMessageUpdate', this.handleMessageUpdateEvent, false);
     document.addEventListener('alshayaPostpayInit', () => {

@@ -1,0 +1,20 @@
+.c-menu-primary {
+  .region__menu-primary {
+    #block-mobilenavigation {
+      ul {
+        li {
+          a.mobile--menu {
+            @include breakpoint($mobile) {
+              margin-#{$left}: rem(-4);
+            }
+
+            @include breakpoint($tablet) {
+              margin-#{$left}: 0;
+              #{$left}: rem(-6);
+            }
+          }
+        }
+      }
+    }
+  }
+}

@@ -132,9 +132,7 @@ function alshaya_spc_block_access(Block $block, $operation, AccountInterface $ac
 function alshaya_spc_form_sku_base_form_alter(&$form, FormStateInterface $form_state) {
   unset($form['add_to_cart']['#ajax']);
   $form['#attached']['library'][] = 'alshaya_spc/add_to_cart';
-
-  $backend_version = \Drupal::service('alshaya_spc.helper')->getCommerceBackendVersion();
-  $form['#attached']['library'][] = 'alshaya_spc/commerce_backend.cart.v' . $backend_version;
+  $form['#attached']['library'][] = 'alshaya_spc/commerce_backend.cart';
 }
 
 /**
@@ -260,11 +258,6 @@ function _alshaya_spc_global_error_message() {
  * Implements hook_page_attachments_alter().
  */
 function alshaya_spc_page_attachments_alter(&$page) {
-  $cart_version = \Drupal::service('alshaya_spc.helper')->getCommerceBackendVersion();
-  if ($cart_version != 2) {
-    return;
-  }
-
   $api_settings = \Drupal::config('alshaya_api.settings');
   $store_settings = $api_settings->get('magento_lang_prefix');
   $language_manager = \Drupal::languageManager();
@@ -323,36 +316,33 @@ function alshaya_spc_js_settings_alter(&$settings, AttachedAssetsInterface $asse
     $customerId = (int) $user->get('acq_customer_id')->getString();
     $settings['userDetails']['customerId'] = $customerId;
 
-    // For V2, add user token to drupalSettings for direct backend calls.
-    if (\Drupal::service('alshaya_spc.helper')->getCommerceBackendVersion() == 2) {
-      /** @var \Drupal\alshaya_spc\Helper\AlshayaSpcCustomerHelper $customer_helper */
-      $customer_helper = \Drupal::service('alshaya_spc.customer_helper');
+    /** @var \Drupal\alshaya_spc\Helper\AlshayaSpcCustomerHelper $customer_helper */
+    $customer_helper = \Drupal::service('alshaya_spc.customer_helper');
+    $customerToken = $customer_helper->getCustomerToken();
+    // Try to fetch the customer token again if empty.
+    if (empty($customerToken)) {
+      \Drupal::logger('alshaya_spc')
+        ->warning('Fetching token for customerId:@customer_id userId:@user_id using loadCustomerTokenForSocialAccount as token was not available', [
+          '@customer_id' => $customerId,
+          '@user_id' => $current_user->id(),
+        ]);
+      $customer_helper->loadCustomerTokenForSocialAccount($user->getEmail());
       $customerToken = $customer_helper->getCustomerToken();
-      // Try to fetch the customer token again if empty.
+
+      // If the token is still empty, log it and logout the user.
       if (empty($customerToken)) {
-        \Drupal::logger('alshaya_spc')
-          ->warning('Fetching token for customerId:@customer_id userId:@user_id using loadCustomerTokenForSocialAccount as token was not available', [
-            '@customer_id' => $customerId,
-            '@user_id' => $current_user->id(),
-          ]);
-        $customer_helper->loadCustomerTokenForSocialAccount($user->getEmail());
-        $customerToken = $customer_helper->getCustomerToken();
-
-        // If the token is still empty, log it and logout the user.
-        if (empty($customerToken)) {
-          // Adding logger for empty token.
-          \Drupal::logger('alshaya_spc')->error('Customer token is empty for the customerId:@customer_id userId:@user_id', [
-            '@customer_id' => $customerId,
-            '@user_id' => $current_user->id(),
-          ]);
-          $response = new RedirectResponse(Url::fromRoute('user.logout')->toString());
-          $response->send();
-          exit;
-        }
+        // Adding logger for empty token.
+        \Drupal::logger('alshaya_spc')->error('Customer token is empty for the customerId:@customer_id userId:@user_id', [
+          '@customer_id' => $customerId,
+          '@user_id' => $current_user->id(),
+        ]);
+        $response = new RedirectResponse(Url::fromRoute('user.logout')->toString());
+        $response->send();
+        exit;
       }
-
-      $settings['userDetails']['customerToken'] = $customerToken;
     }
+
+    $settings['userDetails']['customerToken'] = $customerToken;
   }
 }
 
@@ -455,7 +445,7 @@ function alshaya_spc_alshaya_acm_product_build_alter(&$build, SKUInterface $sku,
   // New PDP will directly call delivery options component.
   $build['#attached']['library'][] = $product_pdp_layout !== 'magazine_v2'
     ? 'alshaya_spc/express_delivery'
-    : 'alshaya_spc/commerce_backend.cart.v2';
+    : 'alshaya_spc/commerce_backend.cart';
 
   // Attaching library for react component to show PDP express delivery labels.
   $build['#attached']['library'][] = 'alshaya_spc/pdp_express_delivery_labels';

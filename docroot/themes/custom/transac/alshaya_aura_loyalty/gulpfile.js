@@ -1,0 +1,1 @@
+../alshaya_white_label/gulpfile.js

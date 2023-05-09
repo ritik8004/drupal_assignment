@@ -33,3 +33,9 @@ services:
     parent: 'alshaya_acm_product.price_helper'
     calls:
       - [ setDomainConfigOverrides, [ '@alshaya_xb.domain_config_overrides' ] ]
+
+  alshaya_xb.feeds_helper:
+    public: false
+    class: Drupal\alshaya_xb\Service\FeedsXbDecorator
+    decorates: alshaya_feed.generate
+    parent: 'alshaya_feed.generate'

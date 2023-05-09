@@ -1,0 +1,5 @@
+@include breakpoint($only-mobile) {
+  #reviews-rating .rating-wrapper .button-wrapper {
+    padding-#{$left}: $full_width_padding_mobile;
+  }
+}

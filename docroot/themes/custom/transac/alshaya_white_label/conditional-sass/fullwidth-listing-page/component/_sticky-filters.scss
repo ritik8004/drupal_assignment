@@ -14,6 +14,17 @@
   }
 }
 
+#static-minicart-section {
+  // Aligning cart icon when wishlist is disabled and plp-add-to-cart is enabled.
+  @include fullWidthSideSpaces(
+    $is_tablet: true,
+    $is_desktop: true,
+    $is_desktop_wide: true,
+    $type: "position",
+    $side: $right
+  );
+}
+
 .filter-fixed-top {
   .sticky-filter-wrapper {
     .site-brand-home {

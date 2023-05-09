@@ -118,14 +118,10 @@ class AlshayaFitCalculatorBlock extends BlockBase implements ContainerFactoryPlu
     ];
 
     $form['plp_page'] = [
-      '#type' => 'entity_autocomplete',
+      '#type' => 'textfield',
       '#title' => $this->t('Provide PLP page.'),
-      '#description' => $this->t('PLP page for link in calculator result with filter.'),
-      '#target_type' => 'taxonomy_term',
-      '#selection_settings' => [
-        'target_bundles' => ['acq_product_category'],
-      ],
-      '#default_value' => isset($config['plp_page']) ? $this->termStorage->load($config['plp_page']) : '',
+      '#description' => $this->t('PLP page for link in calculator result with filter. eg: /victorias-secret/shop-bras/all-bras/'),
+      '#default_value' => $config['plp_page'] ?? '',
     ];
 
     return $form;
@@ -155,10 +151,9 @@ class AlshayaFitCalculatorBlock extends BlockBase implements ContainerFactoryPlu
       $url = Url::fromRoute('alshaya_fit_calculator.modal_links', ['node' => $config['size_conversion_html']]);
       $sizeConversionChartUrl = $url->toString();
     }
-    $plp_page = NULL;
-    if (isset($config['plp_page']) && !empty($config['size_conversion_html'])) {
-      $url = Url::fromRoute('entity.taxonomy_term.canonical', ['taxonomy_term' => $config['plp_page']]);
-      $plp_page = $url->toString();
+    $plp_page = '';
+    if ($config['plp_page']) {
+      $plp_page = trim($config['plp_page'], '/') . '/';
     }
 
     if (strstr($this->requestStack->getCurrentRequest()->getRequestUri(), 'modal-link-views')) {

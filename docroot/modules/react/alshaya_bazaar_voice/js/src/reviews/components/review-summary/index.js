@@ -499,8 +499,6 @@ export default class ReviewSummary extends React.Component {
               <div key={reviewsSummary[item].Id}>
                 {reviewsSummary[item].ModerationStatus === 'APPROVED'
                   && reviewsSummary[item].AuthorId in reviewsAuthors
-                  && reviewsAuthors[reviewsSummary[item]
-                    .AuthorId].ModerationStatus === 'APPROVED'
                   && (
                   <div className="review-summary" key={reviewsSummary[item].Id}>
                     <ConditionalView condition={(window.innerWidth < 768) || newPdp}>

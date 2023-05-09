@@ -275,6 +275,27 @@
       }
     }
 
+    .refund-method-wrapper {
+      .refund-method-listing {
+        .egift-card {
+          .radio-sim {
+            display: flex;
+
+            .egift-card-detail {
+              padding-#{$left}: rem(7);
+              padding-top: rem(4);
+            }
+          }
+        }
+      }
+
+      .hybrid-payment {
+        .method-wrapper {
+          margin-bottom: rem(22);
+        }
+      }
+    }
+
     .refund-method-wrapper,
     .refund-amount-wrapper,
     .return-collection-wrapper,
@@ -282,6 +303,7 @@
       font-size: 0.875rem;
       padding: 1.5625rem;
       padding-bottom: 0.3125rem;
+      padding-#{$left}: 0;
 
       @include breakpoint($tablet) {
         display: grid;
@@ -291,6 +313,10 @@
 
       @include breakpoint($desktop) {
         grid-template: "a b" / rem(320) rem(448);
+      }
+
+      .refund-method-title {
+        font-size: rem(16);
       }
     }
 
@@ -321,39 +347,104 @@
         margin-bottom: 1.5625rem;
       }
 
+      .refund-method-listing {
+        @include breakpoint($only-mobile) {
+          padding-top: rem(12);
+          padding-#{$left}: rem(0);
+        }
+
+        .hybrid-method-payment-msg {
+          padding-bottom: rem(16);
+        }
+
+        .hybrid-method-list-msg {
+          font-size: rem(12);
+          padding-bottom: rem(20);
+        }
+
+        .method-list-wrapper {
+          .radio-label {
+            .egift-card-detail {
+              padding-top: rem(3);
+              padding-#{$left}: rem(6);
+            }
+
+            display: flex;
+          }
+
+          .refund-message {
+            padding-top: rem(6);
+          }
+        }
+      }
+
+      .email-text {
+        padding-top: rem(6);
+
+        @include breakpoint($only-mobile) {
+          padding-#{$left}: rem(0);
+        }
+      }
+
+      .method-wrapper {
+        margin-bottom: rem(28);
+      }
+
+      @include breakpoint($desktop) {
+        padding-#{$left}: 0;
+      }
+
       .method-wrapper {
         display: flex;
         align-items: center;
-        margin-bottom: rem(24);
+        margin-bottom: rem(0);
 
         &:last-child {
           margin-bottom: 0;
         }
 
         .card-icon {
-          width: rem(35);
-          height: rem(22);
-
           svg {
             max-width: 100%;
             max-height: 100%;
           }
+
+          .spc-card-type {
+            margin-#{$right}: rem(8);
+            top: rem(3);
+            position: relative;
+          }
+
+          .cashondelivery {
+            margin-#{$right}: rem(0);
+          }
         }
 
         .card-detail {
-          margin-#{$left}: 1rem;
+          font-size: rem(14);
+          padding-top: rem(1);
+
+          .bold-text {
+            font-family: $alshaya-thin;
+          }
         }
       }
 
       .refund-message {
         font-size: 0.75rem;
         line-height: 1.25rem;
-        margin-top: 1.5rem;
+        margin-top: rem(8);
+        margin-bottom: rem(20);
         color: $online-return-refund-grey-txt;
+      }
+    }
 
-        @include breakpoint($tablet) {
-          margin-top: 0.75rem;
-        }
+    @include breakpoint($only-mobile) {
+      .refund-method-wrapper,
+      .refund-amount-wrapper,
+      .return-collection-wrapper,
+      .return-address-wrapper {
+        padding-#{$left}: rem(10);
       }
     }
 
@@ -500,5 +591,53 @@
         top: rem(14);
       }
     }
+  }
+}
+
+// radio button for Returns and Refunds
+.method-wrapper {
+  position: relative;
+
+  input[type="radio"] {
+    display: none;
+
+    ~ .radio-sim::before {
+      content: "";
+      position: absolute;
+      #{$left}: rem(-20);
+      text-align: center;
+      font-size: rem(60);
+    }
+
+    ~ .radio-sim {
+      padding-#{$left}: rem(30);
+
+      @include icon(radio-empty, before) {
+        color: $online-return-radio-bg;
+      }
+    }
+
+    &:checked {
+      ~ .radio-sim {
+        @include icon(radio-filled, before) {
+          color: $online-return-checked-radio-bg;
+        }
+      }
+    }
+
+    ~ .radio-label {
+      display: inline-flex;
+      align-items: center;
+
+      .egift-card-detail {
+        padding-#{$left}: rem(7);
+        padding-bottom: rem(4);
+        padding-top: rem(4);
+      }
+    }
+  }
+
+  .radio-sim {
+    padding-#{$left}: rem(0);
   }
 }

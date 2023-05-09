@@ -24,13 +24,6 @@ class RouteSubscriber extends RouteSubscriberBase {
     // Altering the access for profile.user_page.multiple route.
     $route = $collection->get('profile.user_page.multiple');
     $route?->setRequirement('_access', 'FALSE');
-
-    // Altering the access for store_finder routes.
-    $route = $collection->get('alshaya_geolocation.store_finder');
-    $route?->setRequirement('_access', 'FALSE');
-
-    $route = $collection->get('alshaya_geolocation.store_finder_list');
-    $route?->setRequirement('_access', 'FALSE');
   }
 
 }

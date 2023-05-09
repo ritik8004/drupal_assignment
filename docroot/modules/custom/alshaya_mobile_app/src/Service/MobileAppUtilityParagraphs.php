@@ -962,7 +962,7 @@ class MobileAppUtilityParagraphs extends MobileAppUtility {
       }
     }, $items);
     // Return only first result as Block reference has delta limit to 1.
-    return $results[0];
+    return $results[0] ?? [];
   }
 
   /**

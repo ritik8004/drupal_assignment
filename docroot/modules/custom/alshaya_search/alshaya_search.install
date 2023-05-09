@@ -13,6 +13,22 @@ use Drupal\facets\Entity\FacetSource;
 /**
  * Implements hook_update_N().
  *
+ * Add Attr Article Swatches.
+ */
+function alshaya_search_update_9401() {
+  /** @var \Drupal\alshaya_config\AlshayaConfigManager $alshayaConfigManager */
+  $alshayaConfigManager = \Drupal::service('alshaya_config.manager');
+  $alshayaConfigManager->updateConfigs(
+    ['search_api.index.acquia_search_index'],
+    'alshaya_search',
+    'optional',
+    AlshayaConfigManager::MODE_MERGE
+  );
+}
+
+/**
+ * Implements hook_update_N().
+ *
  * Remove unwanted facet config translations.
  */
 function alshaya_search_update_8034() {

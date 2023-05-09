@@ -12,6 +12,18 @@ use Drupal\block\Entity\Block;
 /**
  * Implements hook_update_N().
  *
+ * Remove 404 from the list of excluded status in GTM.
+ */
+function alshaya_seo_transac_update_9404() {
+  $config_factory = \Drupal::configFactory();
+  $config = $config_factory->getEditable('google_tag.container.primary');
+  $config->set('status_list', '403');
+  $config->save();
+}
+
+/**
+ * Implements hook_update_N().
+ *
  * Add new config key for product list expiration time.
  */
 function alshaya_seo_transac_update_9403() {

@@ -18,8 +18,39 @@
   );
 }
 
+.c-footer-secondary {
+  @include breakpoint($desktop-wide-1680) {
+    @include sideSpaces(rem(140));
+  }
+
+  @include breakpoint($desktop) {
+    .l-container {
+      .region__footer-secondary {
+        justify-content: space-between;
+      }
+
+      .block-content--right-logo {
+        flex-basis: 100%;
+      }
+
+      .c-footer__copy {
+        margin: unset;
+      }
+    }
+  }
+}
+
 .language--switcher {
   @include fullWidthSideSpaces(
     $is_mobile: true
   );
+}
+
+@include breakpoint($desktop) {
+  html[lang="en"],
+  html[lang="ar"] {
+    .c-footer-menu--about {
+      margin: 0;
+    }
+  }
 }

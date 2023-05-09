@@ -23,7 +23,6 @@ services:
       - '@alshaya_stores_finder_transac.utility'
       - '@renderer'
       - '@alshaya_acm_product.sku_images_helper'
-      - '@alshaya_spc.helper'
       - '@alshaya_acm_product.delivery_options_helper'
       - '@date.formatter'
       - '@locale.storage'

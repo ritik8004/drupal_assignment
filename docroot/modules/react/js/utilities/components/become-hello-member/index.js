@@ -34,7 +34,7 @@ class BecomeHelloMember extends React.Component {
                   )
                 }
                 <div className="become-hello-member__header">
-                  {parse(Drupal.t('<span>Members get</span> <span>free delivery and 10% off on your first purchase.</span>', {}, { context: 'hello_member' }))}
+                  {parse(Drupal.t('<span>Members get</span> <span>10% off on your first purchase.</span>', {}, { context: 'hello_member' }))}
                 </div>
                 <div className="become-hello-member__join-text">
                   {Drupal.t('Not a member yet? Join now, it’s free!', {}, { context: 'hello_member' })}

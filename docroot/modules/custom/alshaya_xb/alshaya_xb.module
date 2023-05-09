@@ -88,7 +88,7 @@ function alshaya_xb_page_bottom(array &$page_bottom) {
 
   // AED prices are hidden for cross border sites as global-e
   // applies the conversion after the DOM loads.
-  $css = '.price .price-amount, .price .price-currency {
+  $css = '.price.aed .price-amount, .price.aed .price-currency {
     display: none;
   }';
 
@@ -253,6 +253,26 @@ function alshaya_xb_alshaya_acm_customer_orders_details_build_alter(array &$orde
     $build['#order_details']['payment_method'] = $order['extension']['globale']['billing_method'];
   }
 
+  // Set duties taxes.
+  if (!empty($order['extension']['globale']['totals']['duties']['value'])) {
+    $build['#order_details']['duties_taxes'] = alshaya_acm_price_format($order['extension']['globale']['totals']['duties']['value'], [], '', $order['order_currency_code']);
+  }
+
+  // Set delivery charges.
+  if (!empty($order['extension']['globale']['totals']['shipping']['value'])) {
+    $build['#order_details']['delivery_charge'] = alshaya_acm_price_format($order['extension']['globale']['totals']['shipping']['value'], [], '', $order['order_currency_code']);
+  }
+
+  // Set Sub total.
+  if (!empty($order['extension']['globale']['totals']['subtotal']['value'])) {
+    $build['#order_details']['sub_total'] = alshaya_acm_price_format($order['extension']['globale']['totals']['subtotal']['value'], [], '', $order['order_currency_code']);
+  }
+
+  // Set order total.
+  if (!empty($order['extension']['globale']['totals']['grand_total']['value'])) {
+    $build['#order_details']['order_total'] = alshaya_acm_price_format($order['extension']['globale']['totals']['grand_total']['value'], [], '', $order['order_currency_code']);
+  }
+
   if (empty($build["#cancelled_products"])) {
     return;
   }
@@ -274,15 +294,40 @@ function alshaya_xb_alshaya_acm_customer_orders_details_build_alter(array &$orde
  */
 function alshaya_xb_sku_product_info_alter(array &$product_info, SKUInterface $sku) {
   // Get the fixed price info from the SKU.
-  if ($sku->hasField('attr_fixed_price')) {
-    $product_info['extraInfo']['fixedPrice'] = $sku->get('attr_fixed_price')->getString();
-  }
+  $product_info['extraInfo']['fixedPrice'] = _alshaya_xb_get_fixed_price($sku);
+}
+
+/**
+ * Implements hook_sku_variant_info_alter().
+ */
+function alshaya_xb_sku_variant_info_alter(array &$variant, SKUInterface $child, ?SKUInterface $parent) {
+  // Get the fixed price info from the SKU.
+  $variant['extraInfo']['fixedPrice'] = _alshaya_xb_get_fixed_price($child);
 }
 
 /**
  * Implements hook_dynamic_yield_context_alter().
  */
 function alshaya_xb_dynamic_yield_context_alter(&$lng) {
+  // Get config overrides by domain.
+  $configOverrides = \Drupal::service('alshaya_xb.domain_config_overrides')->getConfigByDomain();
   $langcode = \Drupal::languageManager()->getCurrentLanguage()->getId();
-  $lng = $langcode . '_XB';
+  $lng = $langcode . '_' . $configOverrides['code'];
+}
+
+/**
+ * Get the fixed price of the given sku.
+ *
+ * @param \Drupal\acq_commerce\SKUInterface $sku
+ *   SKU Entity.
+ *
+ * @return string
+ *   A string containing the fixed price.
+ */
+function _alshaya_xb_get_fixed_price(SKUInterface $sku) {
+  if ($sku->hasField('attr_fixed_price')) {
+    return $sku->get('attr_fixed_price')->getString();
+  }
+
+  return '';
 }

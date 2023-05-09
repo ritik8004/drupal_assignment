@@ -205,7 +205,7 @@ export default class FitCalculator extends React.Component {
                     .
                   </span>
                   <a
-                    href={`${plpPage}--size-${resultSize.toLowerCase()}`}
+                    href={Drupal.url(`${plpPage}--size-${resultSize.toLowerCase()}`)}
                   >
                     {Drupal.t('shop your size')}
                   </a>

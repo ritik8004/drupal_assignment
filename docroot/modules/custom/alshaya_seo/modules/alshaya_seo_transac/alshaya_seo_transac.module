@@ -365,6 +365,12 @@ function alshaya_seo_transac_datalayer_alter(&$data_layer) {
 
       // We check if we have valid order id.
       if (empty($order)) {
+        $request = \Drupal::requestStack()->getCurrentRequest();
+        \Drupal::logger('alshaya_seo_transac')->warning('Empty order on checkout confirmation for Customer: @customer_id with oid: @oid and id: @id', [
+          '@customer_id' => $data_layer['userUid'] ?? 0,
+          '@oid' => $request->get('oid') ?? NULL,
+          '@id' => $request->get('id') ?? NULL,
+        ]);
         return;
       }
 
@@ -652,7 +658,8 @@ function alshaya_seo_transac_theme($existing, $type, $theme, $path) {
 function alshaya_seo_transac_node_view(array &$build, EntityInterface $entity, EntityViewDisplayInterface $display, $view_mode) {
   $gtm_disabled_vars = \Drupal::config('alshaya_seo.disabled_gtm_vars')
     ->get('disabled_vars');
-  if ($entity->bundle() == 'acq_product' && $view_mode == 'full') {
+  if ($entity->bundle() == 'acq_product'
+    && in_array($view_mode, ['full', 'modal'])) {
     if (!in_array('dimension6', $gtm_disabled_vars)) {
       /** @var \Drupal\alshaya_acm_product\SkuManager $skuManager */
       $skuManager = \Drupal::service('alshaya_acm_product.skumanager');
@@ -676,6 +683,11 @@ function alshaya_seo_transac_node_view(array &$build, EntityInterface $entity, E
     $product_gtm_settings = \Drupal::config('alshaya_seo_transac.settings');
     $build['#cache']['tags'] = Cache::mergeTags($build['#cache']['tags'] ?? [], $product_gtm_settings->getCacheTags());
     $build['#attached']['drupalSettings']['productSizeOptions'] = $product_gtm_settings->get('product_size_options');
+
+    // Attach gtm pdp modal library for modal view mode only.
+    if ($view_mode == 'modal') {
+      $build['#attached']['library'][] = 'alshaya_seo_transac/gtm_pdp_modal';
+    }
   }
 }
 
@@ -986,4 +998,25 @@ function alshaya_seo_transac_alshaya_mobile_app_skus_product_list_data_alter(arr
   else {
     alshaya_seo_transac_alshaya_acm_product_light_product_data_alter($sku, $data, 'full');
   }
+}
+
+/**
+ * Implements hook_library_info_alter().
+ */
+function alshaya_seo_transac_library_info_alter(&$libraries, $extension) {
+  if ($extension !== 'datalayer') {
+    return;
+  }
+  // We have different datapush library for V3.
+  // @todo check for a way to not use rcs here.
+  if (\Drupal::moduleHandler()->moduleExists('alshaya_rcs_seo')) {
+    return;
+  }
+
+  $new_source = '/' . drupal_get_path('module', 'alshaya_seo_transac') . '/js/datapush.js';
+  $options = $libraries['datapush']['js']['js/datapush.js'];
+  unset($libraries['datapush']['js']['js/datapush.js']);
+  $libraries['datapush']['js'][$new_source] = $options;
+  $libraries['datapush']['dependencies'][] = 'alshaya_master/common_functions';
+  $libraries['datapush']['version'] = '1.0.0';
 }

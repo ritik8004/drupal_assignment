@@ -298,7 +298,7 @@ export default class StyleFinder extends React.Component {
         </div>
         <div className="see-more">
           {(seeMoreUrl)
-            ? (<a href={seeMoreUrl} className="see-more-bra">{Drupal.t('See More Styles')}</a>)
+            ? (<a href={Drupal.url(seeMoreUrl)} className="see-more-bra">{Drupal.t('See More Styles')}</a>)
             : (<a href="#" className="see-more-bra">{Drupal.t('See More Styles')}</a>)}
         </div>
       </section>

@@ -14,8 +14,14 @@
   }
 }
 
-.c-footer-menu--category {
-  text-transform: lowercase;
+.c-footer-menu {
+  &--category {
+    text-transform: lowercase;
+  }
+
+  @include breakpoint($desktop) {
+    float: none;
+  }
 }
 
 .c-footer-primary .language-switcher-language-url,

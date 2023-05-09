@@ -33,7 +33,7 @@ const LoyaltySelectOption = ({
     {(currentOption === 'aura' && optionName === 'aura')
     && (
     <div className="aura-earned-points">
-      <AuraPointsToEarn cart={cart} />
+      <AuraPointsToEarn />
     </div>
     )}
   </>

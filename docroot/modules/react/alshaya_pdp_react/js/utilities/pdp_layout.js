@@ -67,7 +67,7 @@ export const getPostData = (skuCode, variantSelected, parentSKU) => {
 /**
  * Triggers add to cart event.
  */
-export const triggerAddToCart = (
+export const triggerAddToCart = async (
   response,
   productDataValue,
   productInfo,
@@ -125,6 +125,15 @@ export const triggerAddToCart = (
           || typeof response.data.items[productData.parentSku] !== 'undefined')) {
       const cartItem = typeof response.data.items[productData.variant] !== 'undefined' ? response.data.items[productData.variant] : response.data.items[productData.parentSku];
       productData.totalQty = cartItem.qty;
+    }
+
+    // Process free gift promotion graphQl response before adding.
+    if (Drupal.hasValue(productInfo[skuCode].freeGiftPromotion)
+      && Drupal.hasValue(window.commerceBackend.processFreeGiftDataReactRender)) {
+      await window.commerceBackend.processFreeGiftDataReactRender(
+        productInfo,
+        skuCode,
+      );
     }
 
     let configurables = [];

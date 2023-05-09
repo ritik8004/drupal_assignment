@@ -6,6 +6,29 @@
  */
 
 /**
+ * Implements hook_update_N().
+ *
+ * Update settings for alshaya fit calculator block.
+ */
+function alshaya_fit_calculator_update_9001() {
+  /** @var \Drupal\block\Entity\Block $block */
+  $block = \Drupal::entityTypeManager()->getStorage('block')->load('alshayafitcalculator');
+  if (empty($block)) {
+    return;
+  }
+  // Get block settings.
+  $settings = $block->get('settings');
+  if (!empty($settings['plp_page'])) {
+    // As the field is updated from entity autocomplete to textfield.
+    // We get url alias from term id and set it back in block settings.
+    $plp_page = \Drupal::service('path_alias.manager')->getAliasByPath('/taxonomy/term/' . $settings['plp_page']);
+    $settings['plp_page'] = $plp_page;
+    $block->set('settings', $settings);
+    $block->save();
+  }
+}
+
+/**
  * Implements hook_install().
  */
 function alshaya_fit_calculator_install() {

@@ -261,11 +261,6 @@ function alshaya_rcs_product_node_view(array &$build, EntityInterface $entity, E
   ];
   $build['#attached']['drupalSettings']['alshayaRcs']['pdpGalleryPagerLimit'] = $product_settings->get('pdp_gallery_pager_limit');
   $build['#attached']['drupalSettings']['alshayaRcs']['isAllProductsBuyable'] = (int) $product_settings->get('all_products_buyable');
-  $build['#attached']['drupalSettings']['alshayaRcs']['pdpGalleryType'] = $product_settings->get('pdp_gallery_type');
-  $build['#attached']['drupalSettings']['alshayaRcs']['pdpGalleryLimit'] = [
-    'modal' => $product_settings->get('pdp_slider_items_settings.pdp_slider_items_number_cs_us'),
-    'others' => $product_settings->get('pdp_gallery_pager_limits'),
-  ];
   // Get store finder link.
   $find_store_url = Url::fromUserInput('/store-finder')->toString();
   $not_buyable_help_text = new FormattableMarkup($product_settings->get('not_buyable_help_text.value'), [
@@ -273,19 +268,6 @@ function alshaya_rcs_product_node_view(array &$build, EntityInterface $entity, E
   ]);
   $build['#attached']['drupalSettings']['alshayaRcs']['not_buyable_message'] = $product_settings->get('not_buyable_message.value');
   $build['#attached']['drupalSettings']['alshayaRcs']['not_buyable_help_text'] = $not_buyable_help_text;
-  $build['#cache']['tags'] = array_merge($build['#cache']['tags'], $product_settings->getCacheTags());
-
-  $product_display_settings = \Drupal::config('alshaya_acm_product.display_settings');
-  $build['#attached']['drupalSettings']['alshayaRcs']['pdpSwatchAttributes'] = $product_display_settings->get('swatches.pdp');
-  $build['#attached']['drupalSettings']['alshayaRcs']['pdpSizeGroupAttribute'] = $product_display_settings->get('size_group.pdp');
-  $build['#attached']['drupalSettings']['alshayaRcs']['pdpSizeGroupAlternates'] = $product_display_settings->get('size_group.alternates');
-  $build['#attached']['drupalSettings']['alshayaRcs']['shortDescLimit'] = $product_display_settings->get('short_desc_characters');
-  $build['#attached']['drupalSettings']['show_configurable_boxes_after'] = $product_display_settings->get('show_configurable_boxes_after');
-  $build['#attached']['drupalSettings']['alshayaRcs']['useParentImages'] = $product_display_settings->get('configurable_use_parent_images');
-  $build['#attached']['drupalSettings']['alshayaRcs']['colorAttributeConfig'] = $product_display_settings->get('color_attribute_config');
-  $build['#attached']['drupalSettings']['alshayaRcs']['priceDisplayMode'] = $product_display_settings->get('price_display_mode') ?? 'simple';
-  $build['#attached']['drupalSettings']['showPreSelectedVariantOnPdp'] = $product_display_settings->get('show_pre_selected_variant_on_pdp');
-  $build['#cache']['tags'] = array_merge($build['#cache']['tags'], $product_display_settings->getCacheTags());
 
   $build['#attached']['drupalSettings']['alshayaRcs']['default_meta_image'] = \Drupal::token()->replace('[alshaya_seo:meta_image]');
 
@@ -297,11 +279,6 @@ function alshaya_rcs_product_node_view(array &$build, EntityInterface $entity, E
   $configurable_form_settings = \Drupal::config('acq_sku.configurable_form_settings');
   $build['#attached']['drupalSettings']['alshayaRcs']['showQuantity'] = $configurable_form_settings->get('show_quantity');
   $build['#cache']['tags'] = array_merge($build['#cache']['tags'], $configurable_form_settings->getCacheTags());
-
-
-  $alshaya_master_settings = \Drupal::config('alshaya_master.settings');
-  $build['#attached']['drupalSettings']['alshayaRcs']['lazyLoadPlaceholder'] = $alshaya_master_settings->get('lazy_load_placeholder');
-  $build['#cache']['tags'] = array_merge($build['#cache']['tags'], $alshaya_master_settings->getCacheTags());
 
   $cnc_settings = _get_cnc_settings();
   $build['#attached']['drupalSettings'] = array_merge($build['#attached']['drupalSettings'], $cnc_settings['drupalSettings']);
@@ -348,6 +325,9 @@ function alshaya_rcs_product_node_view(array &$build, EntityInterface $entity, E
   // Attaching library for react component to show PDP express delivery labels.
   $build['#attached']['library'][] = 'alshaya_spc/pdp_express_delivery_labels';
   $build['#cache']['tags'] = array_merge($build['#cache']['tags'], $express_delivery_config->getCacheTags());
+
+  // Add other common build variables.
+  \Drupal::service('alshaya_rcs_product.helper')->setCommonPdpSettings($build);
 }
 
 /**
@@ -768,6 +748,7 @@ function alshaya_rcs_product_rcs_handlebars_templates(EntityInterface $entity) {
     'product.block.price.item' => 'alshaya_rcs_product',
     'product.promotions' => 'alshaya_rcs_product',
     'product.sku_base_form' => 'alshaya_rcs_product',
+    'product.free_gift_sku_base_form' => 'alshaya_rcs_product',
     'product.sku_base_form_oos' => 'alshaya_rcs_product',
     'product.not_buyable_product' => 'alshaya_rcs_product',
     'product.delivery_info' => 'alshaya_rcs_product',

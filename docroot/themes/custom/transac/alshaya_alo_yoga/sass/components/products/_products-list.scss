@@ -267,7 +267,7 @@
       }
 
       &.dual-color-tone {
-        @include dual-tone-color;
+        @include dual-tone-color-swatch;
       }
     }
 

@@ -6,12 +6,6 @@
       }
     }
 
-    .spc-checkout-payment-options {
-      @include breakpoint($only-mobile) {
-        padding-top: rem(19);
-      }
-    }
-
     .spc-section-billing-address,
     .spc-aura-checkout-rewards-block,
     .spc-hello-member-checkout-rewards-block {

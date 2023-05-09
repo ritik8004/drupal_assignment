@@ -1,4 +1,8 @@
 #backtotop {
+  &.sprinklr-enabled {
+    bottom: rem(82);
+  }
+
   @include breakpoint($only-mobile) {
     #{$right}: 0;
 

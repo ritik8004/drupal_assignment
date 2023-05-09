@@ -33,9 +33,6 @@ alshaya_acm_product.display_settings:
     show_brand_name_plp:
       type: boolean
       label: 'Flag to show brand name on plp/srp teaser view.'
-    swatch_plp_limit_mobile_view:
-      type: integer
-      label: 'Color swatch limit for mobile view in teaser.'
     show_variants_thumbnail_plp_gallery2:
       type: boolean
       label: 'Show swatches in carousel view.'

@@ -1,0 +1,20 @@
+<?php
+
+/**
+ * @file
+ * Install, uninstall, update function for alshaya_al.
+ */
+
+/**
+ * Implements hook_install().
+ */
+function alshaya_al_transac_install() {
+  // Enable and set alshaya_aura_loyalty as default theme and set,
+  // favicon icon and email logo path.
+  _alshaya_master_initialize_brand_theme('alshaya_aura_loyalty');
+
+  // Add the site name.
+  \Drupal::configFactory()->getEditable('system.site')
+    ->set('name', 'Aura Loyalty')
+    ->save();
+}

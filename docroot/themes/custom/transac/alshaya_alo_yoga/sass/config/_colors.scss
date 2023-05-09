@@ -236,6 +236,7 @@ $mm_l1_border: $alto;
 $mm_l1_desktop-border: $white;
 $mm_l1_link: $black;
 $mm_l1_link_hover: $black;
+$mm_l1_link_inactive_hover: $dawn;
 $mm_l1_link_active_border: $black;
 $mm_l2_link: $black;
 $mm_l2_link_hover: $black;
@@ -400,6 +401,10 @@ $pdp_card_bg: $smoke;
 $pdp_secondary_text: $chicago;
 $magazine-pdp-secondary-text: $chicago;
 $pdp_price_text: $black;
+$pdp_size_option_border: $black;
+$pdp_size_option_selected_bg: $black;
+$pdp_size_option_text: $black;
+$pdp_sidebar_label: $black;
 
 // Product Add to cart form.
 $pdp_size_selected_text: $black;
@@ -501,3 +506,12 @@ $magv2-text: $chicago;
 // Messages and Errors
 $default_msg_bg: $green;
 $content_error_msg_bg: $alert-main;
+
+// Free Gift
+$free-gifts-border: $black;
+$magv2-free-gift-modal-item-code: $chicago;
+$free-gifts-title-text: $black;
+$free-gifts-select-button-bg: $black;
+
+//Modal popup
+$modal_close_bg: $black;

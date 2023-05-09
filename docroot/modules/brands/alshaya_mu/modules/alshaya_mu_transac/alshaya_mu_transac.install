@@ -10,6 +10,17 @@ use Drupal\alshaya_config\AlshayaConfigManager;
 /**
  * Implements hook_update_N().
  *
+ * Provides default setting for `show_full_width` for theme.
+ */
+function alshaya_mu_transac_update_9401() {
+  $config = \Drupal::configFactory()->getEditable('alshaya_muji.settings');
+  $config->set('show_full_width', FALSE);
+  $config->save();
+}
+
+/**
+ * Implements hook_update_N().
+ *
  * Configure map marker on checkout for CnC.
  * Override `attribute_weights and sortable_options`.
  */

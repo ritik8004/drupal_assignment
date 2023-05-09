@@ -147,9 +147,9 @@ function alshaya_white_label_preprocess_html(&$variables) {
   // Add class for page PLP.
   if ($current_route->getRouteName() == 'entity.taxonomy_term.canonical') {
     $term = $current_route->getParameter('taxonomy_term');
-    if ($term->bundle() == 'acq_product_category') {
+    if ($term->bundle() == 'acq_product_category' || $term->bundle() == 'rcs_category') {
       $variables['attributes']['class'][] = 'plp-page-only';
-      if (!empty($term->get('field_plp_layout')->value)) {
+      if ($term->hasField('field_plp_layout') && !empty($term->get('field_plp_layout')->value)) {
         $variables['attributes']['class'][] = $term->get('field_plp_layout')->value . '-plp-layout';
       }
       // Add class to hide the sidebar for PLP pages.
@@ -260,6 +260,11 @@ function alshaya_white_label_preprocess_page(&$variables) {
     // Check the site full width enable.
     if ($is_full_width_feature_enabled) {
       $variables['#attached']['library'][] = 'alshaya_white_label/fullwidth-pdp';
+      $skuManager = \Drupal::service('alshaya_acm_product.skumanager');
+      $pdp_layout = $skuManager->getPdpLayout($node, 'pdp');
+      if ($pdp_layout === 'pdp-magazine_v2') {
+        $variables['#attached']['library'][] = 'alshaya_white_label/fullwidth-newpdp';
+      }
     }
   }
 
@@ -344,6 +349,10 @@ function alshaya_white_label_preprocess_page(&$variables) {
         $variables['category_term_name'] = $term->getName();
         $variables['category_term_description'] = $description;
       }
+    }
+
+    if ($term->bundle() == 'acq_product_category' || $term->bundle() == 'rcs_category') {
+
       // Enable/Disable the sidebar on PLP pages.
       if (!$show_sidebar->get('show_plp_sidebar')) {
         unset($variables['page']['sidebar_first']);
@@ -443,6 +452,11 @@ function alshaya_white_label_preprocess_page(&$variables) {
     $variables['#attached']['library'][] = 'alshaya_white_label/hide-sidebar';
   }
   $variables['#attached']['drupalSettings']['show_srp_sidebar'] = $show_srp_sidebar;
+
+  // Add article-swatch-slider library when color swatches feature is enabled.
+  if (\Drupal::config('alshaya_algolia_react.color_swatches')->get('enable_listing_page_color_swatch_slider')) {
+    $variables['#attached']['library'][] = 'alshaya_white_label/article-swatch-slider';
+  }
 }
 
 /**

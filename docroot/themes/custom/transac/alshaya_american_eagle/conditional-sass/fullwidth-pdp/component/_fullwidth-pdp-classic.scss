@@ -11,3 +11,30 @@
     }
   }
 }
+
+// PDP size and quantity width increased from 1441px for fullwidth feature.
+@include breakpoint($desktop-HiDPI) {
+  .acq-content-product {
+    .form-item-configurables-size {
+      .select2-container {
+        width: 75% !important;
+      }
+    }
+
+    .basic-details-wrapper {
+      .field--name-field-skus {
+        .form-item-quantity {
+          width: rem(112);
+
+          .select2-container {
+            width: rem(112) !important;
+
+            .select2-selection {
+              width: rem(112);
+            }
+          }
+        }
+      }
+    }
+  }
+}

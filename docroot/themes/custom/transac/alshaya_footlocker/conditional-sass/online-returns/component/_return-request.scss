@@ -122,9 +122,21 @@
   }
 
   .refund-details-wrapper {
-    .refund-method-wrapper {
+    .refund-method-wrapper,
+    .refund-amount-wrapper,
+    .return-collection-wrapper,
+    .return-address-wrapper {
+      padding-top: rem(20);
+
+      @include breakpoint($desktop) {
+        padding-#{$left}: 0;
+      }
+
+      @include breakpoint($only-mobile) {
+        padding-#{$left}: rem(10);
+      }
+
       .refund-method-title {
-        font-size: rem(18);
         line-height: 1.22;
         font-weight: normal;
         margin-bottom: rem(15);
@@ -136,31 +148,37 @@
       }
 
       .card-detail {
-        font-size: rem(16);
         line-height: 1.13;
-      }
 
-      .refund-message {
-        margin-top: rem(20);
+        .bold-text {
+          font-family: $alshaya-thin;
+        }
       }
 
       .refund-amount-title {
-        font-size: rem(18);
         line-height: 1.22;
       }
     }
 
     .return-collection-wrapper {
       .return-collection-title {
-        font-size: rem(18);
         line-height: 1.22;
         margin-bottom: rem(15);
       }
     }
 
+    div[class$="-title"] {
+      margin-bottom: rem(15);
+    }
+
+    .Collapsible__contentInner {
+      > div:first-child {
+        padding-bottom: rem(0);
+      }
+    }
+
     .return-address-wrapper {
       .return-address-title {
-        font-size: rem(18);
         line-height: 1.22;
       }
 

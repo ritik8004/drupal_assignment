@@ -1,0 +1,40 @@
+@include breakpoint($only-mobile) {
+  .alshaya-newsletter-subscribe {
+    @include sideSpaces($full_width_padding_mobile);
+  }
+}
+
+@include breakpoint($tablet) {
+  .c-footer-primary {
+    @include sideSpaces($full_width_padding_tablet);
+  }
+
+  .c-footer__logos {
+    padding-#{$right}: 0;
+  }
+}
+
+@include breakpoint($desktop) {
+  .c-footer {
+    .alshaya-newsletter-subscribe {
+      form {
+        display: flex;
+        flex-wrap: wrap;
+        align-items: center;
+      }
+
+      .newsletter-block-label {
+        flex-basis: 100%;
+      }
+
+      .form-item {
+        flex-basis: 0;
+        flex-grow: 1;
+      }
+
+      .form-submit {
+        position: relative;
+      }
+    }
+  }
+}

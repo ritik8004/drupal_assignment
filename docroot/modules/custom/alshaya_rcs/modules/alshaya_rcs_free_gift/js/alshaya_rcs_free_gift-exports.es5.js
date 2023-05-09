@@ -9,6 +9,9 @@ exports.computePhFilters = function (input, filter) {
       // We support displaying only one free gift promotion for now.
       if (freeGiftPromotions.length > 0) {
         const freeGiftPromotion = freeGiftPromotions[0];
+        if (freeGiftPromotion.total_items === 0 || freeGiftPromotion.gifts.length === 0) {
+          break;
+        }
         data.freeGiftType = freeGiftPromotion.rule_type;
         data.freeGiftCoupon = freeGiftPromotion.coupon_code;
         data.freeGiftPromoUrl = Drupal.url(freeGiftPromotion.rule_web_url);
@@ -16,21 +19,18 @@ exports.computePhFilters = function (input, filter) {
         data.freeGiftImage = '';
 
         const giftItems = freeGiftPromotion.gifts;
-        // Get the image of first free gift item.
-        if (freeGiftPromotion.total_items > 0) {
-          // Get the free gift sku info.
-          const giftItemProductInfo = window.commerceBackend.getProductData(giftItems[0].sku, null, false);
-          if (giftItemProductInfo) {
-            // Get the first image.
-            const skuImage = window.commerceBackend.getFirstImage(giftItemProductInfo);
-            data.freeGiftImage = Drupal.hasValue(skuImage)
-              ? skuImage.url
-              : drupalSettings.alshayaRcs.default_meta_image;
-            data.styleCode = giftItemProductInfo.style_code;
-          }
-          // Set the first free gift title.
-          data.freeGiftTitle = giftItems[0].name;
+        // Get the free gift sku info.
+        const giftItemProductInfo = window.commerceBackend.getProductData(giftItems[0].sku, null, false);
+        if (giftItemProductInfo) {
+          // Get the first image.
+          const skuImage = window.commerceBackend.getFirstImage(giftItemProductInfo);
+          data.freeGiftImage = Drupal.hasValue(skuImage)
+            ? skuImage.url
+            : drupalSettings.alshayaRcs.default_meta_image;
+          data.styleCode = giftItemProductInfo.style_code;
         }
+        // Set the first free gift title.
+        data.freeGiftTitle = giftItems[0].name;
 
         // Do processing of free gift items.
         // @see Drupal\alshaya_acm_promotion\AlshayaPromoLabelManager::getFreeGiftDisplay().
@@ -46,7 +46,7 @@ exports.computePhFilters = function (input, filter) {
 
           // Render handlebars plugin.
           value = handlebarsRenderer.render(`product.${filter}_list`, data);
-        } else if (freeGiftPromotion.total_items > 0) {
+        } else {
           const freeGift = giftItems[0];
           data.freeGiftSku = freeGift.sku;
 

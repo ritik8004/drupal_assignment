@@ -17,7 +17,7 @@ aura_header_library:
     js/load-header.js: {}
   dependencies:
     - alshaya_react/react
-    - alshaya_aura_react/aura_backend.v2
+    - alshaya_aura_react/aura_backend
     - alshaya_seo_transac/gtm_aura
 
 # Header library for cart page.
@@ -47,14 +47,9 @@ alshaya_aura_pdp:
     - alshaya_acm_product/product_utility
     - alshaya_master/common_functions
 
-# This is compatible with commerce backend version 1.
-aura_backend.v1:
-  js:
-    dist/aura_backend_v1.bundle.js: {}
-
 # This is compatible with commerce backend version 2.
-aura_backend.v2:
+aura_backend:
   js:
-    dist/aura_backend_v2.bundle.js: {}
+    dist/aura_backend.bundle.js: {}
   dependencies:
    - alshaya_spc/cart_utilities

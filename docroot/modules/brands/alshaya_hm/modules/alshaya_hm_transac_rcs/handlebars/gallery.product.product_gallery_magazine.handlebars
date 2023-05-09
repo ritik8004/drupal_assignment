@@ -38,79 +38,82 @@
             </figure>
           {{/if}}
         {{/each}}
-        <div class="magazine-product-description">
-          <div class="magazine-swatch-placeholder"></div>
-            {{! Delivery options will load if express delivery enabled. }}
-            {{#if delivery_options }}
-              <div class="express-delivery mobile {{ express_delivery_class }}">
-                {{#each delivery_options }}
-                  <div class="express-delivery-text {{ key }} {{ this.status }}">
-                    <span>{{ this.label }}</span>
-                  </div>
-                {{/each}}
-              </div>
-            {{/if}}
-          <div class="magazine-desc-wrapper">
-            {{#if product_attribute_labels }}
-              <ul class="collection-labels">
-                {{#each product_attribute_labels }}
-                  <li class="{{ key }}">{{ this }}</li>
-                {{/each}}
-              </ul>
-            {{/if}}
-            <div class="description-first">{{ description.html }}</div>
-            <div class="description-details">
-              {{#if description.title_name }}
-                <div class="title-name-wrapper">
-                  <div class="title-name-label">{{t 'TITLE NAME' }}</div>
-                  <div class="title-name-value">{{ description.title_name }}</div>
-                </div>
-              {{/if}}
-              {{#if description.description_details }}
-                  {{#description.description_details }}
-                  <div class="main-attribute-wrapper">
-                    <div class="main-attribute-label">{{ this.title }}</div>
-                    <div class="main-attribute-value">
-                      <ul>
-                      {{#each this.data }}
-                        <li>{{ this }}</li>
-                      {{/each}}
-                      </ul>
+        {{! We don't need this section in free gift details. }}
+        {{#if (ne context 'free_gift') }}
+          <div class="magazine-product-description">
+            <div class="magazine-swatch-placeholder"></div>
+              {{! Delivery options will load if express delivery enabled. }}
+              {{#if delivery_options }}
+                <div class="express-delivery mobile {{ express_delivery_class }}">
+                  {{#each delivery_options }}
+                    <div class="express-delivery-text {{ key }} {{ this.status }}">
+                      <span>{{ this.label }}</span>
                     </div>
+                  {{/each}}
+                </div>
+              {{/if}}
+            <div class="magazine-desc-wrapper">
+              {{#if product_attribute_labels }}
+                <ul class="collection-labels">
+                  {{#each product_attribute_labels }}
+                    <li class="{{ key }}">{{ this }}</li>
+                  {{/each}}
+                </ul>
+              {{/if}}
+              <div class="description-first">{{ description.html }}</div>
+              <div class="description-details">
+                {{#if description.title_name }}
+                  <div class="title-name-wrapper">
+                    <div class="title-name-label">{{t 'TITLE NAME' }}</div>
+                    <div class="title-name-value">{{ description.title_name }}</div>
                   </div>
-                  {{/description.description_details}}
-              {{/if}}
-              {{#if description.article_warning }}
-              <div class="warning-wrapper">
-                <div class="warning-label">{{t 'safety warning' }}</div>
-                <div class="warning-value">
-                  {{ description.article_warning }}
+                {{/if}}
+                {{#if description.description_details }}
+                    {{#description.description_details }}
+                    <div class="main-attribute-wrapper">
+                      <div class="main-attribute-label">{{ this.title }}</div>
+                      <div class="main-attribute-value">
+                        <ul>
+                        {{#each this.data }}
+                          <li>{{ this }}</li>
+                        {{/each}}
+                        </ul>
+                      </div>
+                    </div>
+                    {{/description.description_details}}
+                {{/if}}
+                {{#if description.article_warning }}
+                <div class="warning-wrapper">
+                  <div class="warning-label">{{t 'safety warning' }}</div>
+                  <div class="warning-value">
+                    {{ description.article_warning }}
+                  </div>
                 </div>
+                {{/if}}
+                {{#if description.sku }}
+                  <div class="item-code-wrapper">
+                    <div class="item-code-label">{{t 'ART NO' }}</div>
+                    <div class="item-code-value">{{ description.sku }}</div>
+                  </div>
+                {{/if}}
               </div>
-              {{/if}}
-              {{#if description.sku }}
-                <div class="item-code-wrapper">
-                  <div class="item-code-label">{{t 'ART NO' }}</div>
-                  <div class="item-code-value">{{ description.sku }}</div>
+              <div class="pdp-overlay-details">{{t "DETAILS" }}</div>
+              <div class="attribute-sliderbar">
+                <div class="attribute-sliderbar__head">
+                  <div class="attribute-sliderbar__title">{{t 'Details' }}</div>
+                  <div class="attribute-sliderbar__close"></div>
                 </div>
-              {{/if}}
-            </div>
-            <div class="pdp-overlay-details">{{t "DETAILS" }}</div>
-            <div class="attribute-sliderbar">
-              <div class="attribute-sliderbar__head">
-                <div class="attribute-sliderbar__title">{{t 'Details' }}</div>
-                <div class="attribute-sliderbar__close"></div>
-              </div>
-              <div class="attribute-sliderbar__content">
-                  {{#if description.composition }}
-                      <h3>{{t 'COMPOSITION' }}</h3>
-                      {{ description.composition }}
-                  {{/if}}
-                  <div class="pdp-overlay-attributes"></div>
+                <div class="attribute-sliderbar__content">
+                    {{#if description.composition }}
+                        <h3>{{t 'COMPOSITION' }}</h3>
+                        {{ description.composition }}
+                    {{/if}}
+                    <div class="pdp-overlay-attributes"></div>
+                </div>
               </div>
             </div>
           </div>
-         </div>
+        {{/if}}
         {{! endblock }}
         {{! block modalGallery }}
           <div id="product-full-screen-gallery-container" style="display: none;">

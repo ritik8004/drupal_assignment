@@ -127,6 +127,8 @@ class GroupByCategoryDataExportCommands extends DrushCommands {
       return;
     }
 
+    // Query string for the output files.
+    $query_string = \time();
     // Check if it is possible to create the output files.
     foreach ($this->languageManager->getLanguages() as $langcode => $language) {
       try {
@@ -136,7 +138,8 @@ class GroupByCategoryDataExportCommands extends DrushCommands {
           return;
         }
         else {
-          $this->logger->notice('Langcode: ' . $langcode . '. File: ' . $this->fileUrlGenerator->generateAbsoluteString($location));
+          $file_url = $this->fileUrlGenerator->generateAbsoluteString($location);
+          $this->logger->notice('Langcode: ' . $langcode . '. File: ' . "$file_url?$query_string");
         }
 
         // Make the file empty.
