@@ -40,7 +40,7 @@ class AlshayGraphqlApiWrapper {
    *
    * @var \Drupal\Core\Language\LanguageManagerInterface
    */
-  private $languageManager;
+  protected $languageManager;
 
   /**
    * AlshayGraphqlApiWrapper constructor.

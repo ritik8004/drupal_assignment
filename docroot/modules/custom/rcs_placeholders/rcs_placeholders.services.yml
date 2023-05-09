@@ -59,3 +59,8 @@ services:
     arguments:
       - '@rcs_placeholders.enrichment_helper'
       - '@config.factory'
+
+  rcs_placeholders.helper:
+    class: \Drupal\rcs_placeholders\Service\RcsPhPlaceholderHelper
+    arguments:
+      - '@module_handler'

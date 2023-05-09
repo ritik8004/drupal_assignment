@@ -58,3 +58,6 @@ services:
       - '@rcs_placeholders.path_processor'
       - '@module_handler'
       - '@logger.factory'
+      - '@config.factory'
+      - '@current_user'
+      - '@rcs_placeholders.helper'

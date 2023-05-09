@@ -6,10 +6,13 @@ use Drupal\alshaya_rcs_listing\Services\AlshayaRcsListingHelper;
 use Drupal\alshaya_rcs_product\Services\AlshayaRcsProductHelper;
 use Drupal\alshaya_rcs_promotion\Services\AlshayaRcsPromotionHelper;
 use Drupal\Component\Render\FormattableMarkup;
+use Drupal\Core\Config\ConfigFactoryInterface;
 use Drupal\Core\Extension\ModuleHandlerInterface;
 use Drupal\Core\Logger\LoggerChannelFactoryInterface;
+use Drupal\Core\Session\AccountProxyInterface;
 use Drupal\Core\Url;
 use Drupal\rcs_placeholders\Service\RcsPhPathProcessor;
+use Drupal\rcs_placeholders\Service\RcsPhPlaceholderHelper;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\RequestStack;
 
@@ -82,6 +85,27 @@ class AlshayaRcsMetatagSsrHelper {
   protected $logger;
 
   /**
+   * The Config Factory service.
+   *
+   * @var \Drupal\Core\Config\ConfigFactoryInterface
+   */
+  protected $rcsSeoConfig;
+
+  /**
+   * The current user making the request.
+   *
+   * @var \Drupal\Core\Session\AccountProxyInterface
+   */
+  protected $currentUser;
+
+  /**
+   * The RCS placeholder helper object.
+   *
+   * @var \Drupal\rcs_placeholders\Service\RcsPhPlaceholderHelper
+   */
+  protected RcsPhPlaceholderHelper $rcsPlaceholderHelper;
+
+  /**
    * Constructs RCS Metatag Helper service.
    *
    * @param \Drupal\alshaya_rcs_product\Services\AlshayaRcsProductHelper $rcs_product_helper
@@ -100,6 +124,12 @@ class AlshayaRcsMetatagSsrHelper {
    *   Module Handler.
    * @param \Drupal\Core\Logger\LoggerChannelFactoryInterface $logger_factory
    *   Logger factory.
+   * @param \Drupal\Core\Config\ConfigFactoryInterface $config_factory
+   *   Config Factory service.
+   * @param \Drupal\Core\Session\AccountProxyInterface $current_user
+   *   The current user.
+   * @param \Drupal\rcs_placeholders\Service\RcsPhPlaceholderHelper $rcs_placeholder_helper
+   *   The RCS placeholder helper.
    */
   public function __construct(
     AlshayaRcsProductHelper $rcs_product_helper,
@@ -110,6 +140,9 @@ class AlshayaRcsMetatagSsrHelper {
     RcsPhPathProcessor $rcs_path_processor,
     ModuleHandlerInterface $module_handler,
     LoggerChannelFactoryInterface $logger_factory,
+    ConfigFactoryInterface $config_factory,
+    AccountProxyInterface $current_user,
+    RcsPhPlaceholderHelper $rcs_placeholder_helper
   ) {
     $this->rcsProductHelper = $rcs_product_helper;
     $this->rcsListingHelper = $rcs_listing_helper;
@@ -118,119 +151,10 @@ class AlshayaRcsMetatagSsrHelper {
     $this->requestStack = $request_stack;
     $this->rcsPathProcessor = $rcs_path_processor;
     $this->moduleHandler = $module_handler;
-    $this->logger = $logger_factory->get('alshaya_rcs_seo');
-  }
-
-  /**
-   * Get product metatags graphQL query in RCS.
-   *
-   * @return array
-   *   GraphQL query params
-   */
-  private function getProductMetatagFields(): array {
-    $url_key = $this->rcsProductHelper->getProductUrlKey();
-    return [
-      'query' => [
-        'query($url: String)' => [
-          'products(filter: { url_key: { eq: $url } })' => [
-            'total_count',
-            'items' => [
-              'sku',
-              'id',
-              'type_id',
-              'name',
-              'url_key',
-              'meta_title',
-              'meta_description',
-              'meta_keyword',
-              'og_meta_title',
-              'og_meta_description',
-              'price_range' => [
-                'maximum_price' => [
-                  'final_price' => [
-                    'value',
-                  ],
-                ],
-              ],
-              '... on ConfigurableProduct' => [
-                'variants' => [
-                  'product' => [
-                    'id',
-                    'sku',
-                    'media_gallery' => [
-                      'url',
-                      '... on ProductImage' => [
-                        'url',
-                      ],
-                    ],
-                  ],
-                ],
-              ],
-            ],
-          ],
-        ],
-      ],
-      'variables' => [
-        'url' => $url_key,
-      ],
-    ];
-  }
-
-  /**
-   * Get listing page metatags graphQL query in RCS.
-   *
-   * @return array
-   *   GraphQL query params
-   */
-  private function getListingMetatagFields(): array {
-    $url_key = $this->rcsListingHelper->getListingUrlKey();
-    return [
-      'query' => [
-        'query($urlKey: [String])' => [
-          'categories(filters: { url_path: { in: $urlKey }})' => [
-            'total_count',
-            'items' => [
-              'id',
-              'name',
-              'level',
-              'url_path',
-              'description',
-              'meta_title',
-              'meta_keyword',
-              'meta_description',
-              'image',
-            ],
-          ],
-        ],
-      ],
-      'variables' => [
-        'urlKey' => [$url_key],
-      ],
-    ];
-  }
-
-  /**
-   * Get promotion metatags graphQL query in RCS.
-   *
-   * @return array
-   *   GraphQL query params
-   */
-  private function getPromotionMetatagFields(): array {
-    $url_key = $this->rcsPromotiontHelper->getPromotionUrlKey();
-    return [
-      'query' => [
-        'query($urlKey: String)' => [
-          'promotionUrlResolver(url_key: $urlKey)' => [
-            'id',
-            'title',
-            'description',
-          ],
-        ],
-      ],
-      'variables' => [
-        'urlKey' => $url_key,
-      ],
-    ];
+    $this->logger = $logger_factory->get('AlshayaRcsMetatagSsrHelper');
+    $this->rcsSeoConfig = $config_factory->get('alshaya_rcs_seo.settings');
+    $this->currentUser = $current_user;
+    $this->rcsPlaceholderHelper = $rcs_placeholder_helper;
   }
 
   /**
@@ -263,32 +187,33 @@ class AlshayaRcsMetatagSsrHelper {
    *   Response with meta details array.
    */
   private function getRcsMetatagFromMagento(string $page_type): mixed {
-    $item_key = NULL;
+    $item_key = $type = NULL;
     $fields = [];
     // Get query fields based on page type.
     switch ($page_type) {
       case 'product':
-        $fields = $this->getProductMetatagFields();
-        // Check if the assets are set for media.
-        if ($this->getProductAssetStatus()) {
-          $query = &$fields['query']['query($url: String)']['products(filter: { url_key: { eq: $url } })'];
-          $query['items']['... on ConfigurableProduct']['variants']['product'][] = 'assets_pdp';
-        }
+        $type = 'pdp_product';
         $item_key = 'products';
         break;
 
       case 'category':
-        $fields = $this->getListingMetatagFields();
+        $type = 'categories';
         $item_key = 'categories';
         break;
 
       case 'promotion':
-        $fields = $this->getPromotionMetatagFields();
+        $type = 'promotions';
         $item_key = 'promotionUrlResolver';
         break;
     }
 
-    if (!empty($fields) && $item_key) {
+    // Get the graphQL query for the type.
+    if (!empty($type)) {
+      $fields = $this->rcsPlaceholderHelper->getRcsPlaceholderGraphqlQueryForType($type);
+    }
+
+    // Check if the fields are available.
+    if (!empty($fields)) {
       $response = $this->graphqlApiWrapper->doGraphqlRequest('GET', $fields);
       return $this->handleRcsResponse($item_key, $response);
     }
@@ -417,11 +342,27 @@ class AlshayaRcsMetatagSsrHelper {
    * for media. ex. HM and COS. As we wanted to keep the SSR related code
    * available in one module, added a check for alshaya_rcs_assets module.
    *
+   * This is the temporary solution, we will refactor once
+   * permanent solution is placed.
+   *
    * @return bool
    *   Return true if applicable otherwise false.
    */
   private function getProductAssetStatus(): bool {
     return $this->moduleHandler->moduleExists('alshaya_rcs_assets');
+  }
+
+  /**
+   * Check if the SSR need to render for metatags.
+   *
+   * @return bool
+   *   Return true if applicable otherwise false.
+   */
+  public function getMetatagSsrEnabled(): bool {
+    if ($this->currentUser->isAuthenticated()) {
+      return FALSE;
+    }
+    return (bool) $this->rcsSeoConfig->get('enable_ssr_metatag');
   }
 
   /**
@@ -512,6 +453,8 @@ class AlshayaRcsMetatagSsrHelper {
       return;
     }
 
+    // Get the SSR CF ttl from config.
+    $cf_cache_ttl = $this->rcsSeoConfig->get('ssr_cf_cache_ttl');
     $rcs_metatags = $rcs_metatags[$page_type];
     switch ($variables['base_plugin_id']) {
       case 'page_title_block':
@@ -532,7 +475,7 @@ class AlshayaRcsMetatagSsrHelper {
           && isset($variables['content']['site_name']['#markup'])
           && strpos($variables['content']['site_name']['#markup'], '#rcs.category.meta_title#') > -1) {
           // Setting max-age to get refresh after 20min with CF settings.
-          $variables['#cache']['max-age'] = 1200;
+          $variables['#cache']['max-age'] = $cf_cache_ttl;
           $variables['content']['site_name']['#markup'] = $variables['site_name'] = $rcs_metatags['name'];
         }
         break;
@@ -541,7 +484,7 @@ class AlshayaRcsMetatagSsrHelper {
         if (isset($variables['content']['#markup'])
           && strpos($variables['content']['#markup'], '#rcs.category.description#') > -1) {
           // Setting max-age to get refresh after 20min with CF settings.
-          $variables['#cache']['max-age'] = 1200;
+          $variables['#cache']['max-age'] = $cf_cache_ttl;
           $variables['content']['#markup'] =
             str_replace('#rcs.category.description#', (string) $rcs_metatags['description'], $variables['content']['#markup']);
         }
@@ -552,7 +495,7 @@ class AlshayaRcsMetatagSsrHelper {
         if (isset($variables['content']['inside']['#children'])
           && strpos($variables['content']['inside']['#children'], '#rcs.promotion.description#') > -1) {
           // Setting max-age to get refresh after 20min with CF settings.
-          $variables['#cache']['max-age'] = 1200;
+          $variables['#cache']['max-age'] = $cf_cache_ttl;
           $variables['content']['inside']['#children'] =
             str_replace('#rcs.promotion.description#', (string) $rcs_metatags['description'], $variables['content']['inside']['#children']);
         }
