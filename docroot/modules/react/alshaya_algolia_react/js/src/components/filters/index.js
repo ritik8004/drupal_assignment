@@ -80,9 +80,9 @@ const Filters = ({ indexName, pageType, ...props }) => {
   /**
    * Check overrides and update default context data for sort config.
    *
-   * @param data
-   *   userData with context from algolia result.
-   * @param sortdata
+   * @param {Object} data
+   *   userData with context from Algolia result.
+   * @param {Object} sortdata
    *   Sort config from algolia result.
    * @returns {*}
    *   Updated userData with overrides.
@@ -97,8 +97,10 @@ const Filters = ({ indexName, pageType, ...props }) => {
         }
       });
     }
-    const { sorting_options: sortOptions } = sortdata;
-    const { sorting_options_config: sortOptionsConfig } = sortdata;
+    const {
+      sorting_options: sortOptions,
+      sorting_options_config: sortOptionsConfig,
+    } = sortdata;
     if (hasValue(sortOptions)) {
       if (hasValue(userData.sorting_options)) {
         userData.sorting_options = sortOptions;
@@ -114,7 +116,7 @@ const Filters = ({ indexName, pageType, ...props }) => {
   };
 
   /**
-   * Fetches userdata from algolia result and process it for facets
+   * Fetches userdata from Algolia result and process it for facets
    * override by contexts eg: women_shirt.
    *
    * @param {array} data
@@ -159,11 +161,11 @@ const Filters = ({ indexName, pageType, ...props }) => {
   /**
    * Returns sortby configuration in the required format from userData.
    *
-   * @param sortOptions
+   * @param {array} sortOptions
    *   Sort options like default, title_asc, final_price_desc etc.
-   * @param sortOptionsConfig
+   * @param {Object} sortOptionsConfig
    *   Sort options config like index, label.
-   * @param langcode
+   * @param {string} langcode
    *   Language code to select english or arabic index, label.
    *
    * @returns {[]}
@@ -204,7 +206,9 @@ const Filters = ({ indexName, pageType, ...props }) => {
     // Initialize indentifier prefix.
     const identifierPrefix = drupalSettings.path.currentLanguage;
     // Process any override rules in userData.
-    const userData = (pageType !== 'search') ? processUserDataWithOverrides(data) : data.find((item) => item.context === 'default');
+    const userData = (pageType !== 'search')
+      ? processUserDataWithOverrides(data)
+      : data.find((item) => item.context === 'default');
     // Get facets config from userData.
     const { facets_config: filters } = userData;
 
