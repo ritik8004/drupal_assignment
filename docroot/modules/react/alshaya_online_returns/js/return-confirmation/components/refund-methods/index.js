@@ -97,6 +97,7 @@ const RefundMethods = ({
 
   // Components for eGift card hybrid payment method.
   const HybridPaymentMethods = () => (isEgiftRefundEnabled()
+  && (!hasValue(paymentInfo.aura) || hasValue(paymentInfo.egift))
     ? (
       <>
         <EgiftCardDetails
