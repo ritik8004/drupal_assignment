@@ -68,8 +68,16 @@ const Filters = ({ indexName, pageType, ...props }) => {
           userData.facets_config[key].slug = value.slug;
         }
 
-        if (hasValue(value.facets_value)) {
-          userData.facets_config[key].facets_value = value.facets_value;
+        if (hasValue(value.facet_values)) {
+          userData.facets_config[key].facet_values = value.facet_values;
+        }
+
+        if (hasValue(value.express_value)) {
+          userData.facets_config[key].express_value = value.express_value;
+        }
+
+        if (hasValue(value.same_value)) {
+          userData.facets_config[key].same_value = value.same_value;
         }
       }
     });
@@ -239,10 +247,17 @@ const Filters = ({ indexName, pageType, ...props }) => {
         filter.widget.config = value.widget.config;
       }
 
-      if (hasValue(value.facets_values)) {
+      if (hasValue(value.facet_values)) {
         // Get facet values if explicitly set in config for some facets
         // like attr_delivery_ways.
-        filter.facets_value = value.facets_value;
+        filter.facet_values = value.facet_values[identifierPrefix];
+      }
+
+      if (key === 'attr_delivery_ways' && hasValue(value.facet_values[identifierPrefix])) {
+        // Get delivery type express key value.
+        filter.express_value = value.facet_values[identifierPrefix].express_day_delivery_available;
+        // Get delivery type same day key value.
+        filter.same_value = value.facet_values[identifierPrefix].same_day_delivery_available;
       }
 
       if (hasValue(value.lhn)) {
