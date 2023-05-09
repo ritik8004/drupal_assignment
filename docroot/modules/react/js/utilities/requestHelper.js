@@ -250,9 +250,15 @@ const handleResponse = (apiResponse) => {
   if (typeof response.data.error === 'undefined') {
     response.data = JSON.parse(JSON.stringify(apiResponse.data));
   } else if (apiResponse.status > 400 && apiResponse.status < 700) {
-    // Format error for specific cases so that in the front end we show user
-    // friendly error messages.
-    response.data.error_message = getDefaultErrorMessage();
+    // Update the error message based on the message received from the apiResponse data object.
+    if (apiResponse.status === 404
+      && hasValue(apiResponse.data)) {
+      response.data.error_message = apiResponse.data.message;
+    } else {
+      // Format error for specific cases so that in the front end we show user
+      // friendly error messages.
+      response.data.error_message = getDefaultErrorMessage();
+    }
   }
 
   return new Promise((resolve) => resolve(response));
