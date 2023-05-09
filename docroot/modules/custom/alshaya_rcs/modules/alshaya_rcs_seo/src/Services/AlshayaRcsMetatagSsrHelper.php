@@ -239,10 +239,19 @@ class AlshayaRcsMetatagSsrHelper {
 
     // Check if the response have count is zero. return 404.
     // Check if the request is for the free gift, return 404.
-    if (empty($response[$item_key]['total_count'])
-      || ($item_key === 'products'
-        && !empty($response['products']['items'][0]['price_range'])
-        && $this->isProductFreeGift($response['products']['items'][0]['price_range']))) {
+    $pdp_category_not_found = $promo_not_found = FALSE;
+    if (in_array($item_key, ['products', 'categories'])) {
+      $pdp_category_not_found = empty($response[$item_key]['total_count'])
+        || ($item_key === 'products'
+          && !empty($response['products']['items'][0]['price_range'])
+          && $this->isProductFreeGift($response['products']['items'][0]['price_range']));
+    }
+    else {
+      // Check if the promo is available.
+      $promo_not_found = ($item_key === 'promotionUrlResolver' && empty($response[$item_key]['id']));
+    }
+
+    if ($pdp_category_not_found || $promo_not_found) {
       $currentRequest = $this->requestStack->getCurrentRequest();
       $this->logger->warning('GraphQL data is empty for request @request or its a free gift page request with price @price_range.', [
         '@request' => $currentRequest->getUri(),
