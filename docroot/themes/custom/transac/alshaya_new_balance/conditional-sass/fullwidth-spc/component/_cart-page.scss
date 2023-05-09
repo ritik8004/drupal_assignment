@@ -1,0 +1,12 @@
+@include breakpoint($desktop) {
+  .alias--cart {
+    .spc-cart-items {
+      .spc-cart-item {
+        .spc-product-tile {
+          grid-template-columns: rem(180) minmax(0, 1fr) rem(77);
+          width: 100%;
+        }
+      }
+    }
+  }
+}
