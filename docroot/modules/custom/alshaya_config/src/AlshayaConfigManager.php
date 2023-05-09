@@ -238,6 +238,9 @@ class AlshayaConfigManager {
       else {
         $existing = $config->getRawData();
         $existing = is_array($existing) ? $existing : [];
+        // Adding this check to avoid updb failure
+        // on using alshaya_config_install_configs.
+        $data = is_array($data) ? $data : [];
         $updated = $this->getUpdatedData($existing, $data, $mode, $options);
         $config->setData($updated)->save(TRUE);
         $this->configFactory->reset($config_id);
