@@ -46,6 +46,7 @@
         "drupal/email_registration": "^1.0",
         "drupal/embed": "^1.6",
         "drupal/endroid_qr_code": "^3.0",
+        "drupal/entity_browser": "^2.9",
         "drupal/entity_embed": "^1.2",
         "drupal/external_hreflang": "^2.0",
         "drupal/facets": "^1.8",
