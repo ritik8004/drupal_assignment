@@ -241,8 +241,8 @@ class AlshayaRcsMetatagSsrHelper {
     // Check if the request is for the free gift, return 404.
     if (empty($response[$item_key]['total_count'])
       || ($item_key === 'products'
-      && !empty($response['products']['items'][0]['price_range'])
-      && $this->isProductFreeGift($response['products']['items'][0]['price_range']))) {
+        && !empty($response['products']['items'][0]['price_range'])
+        && $this->isProductFreeGift($response['products']['items'][0]['price_range']))) {
       $currentRequest = $this->requestStack->getCurrentRequest();
       $this->logger->warning('GraphQL data is empty for request @request or its a free gift page request with price @price_range.', [
         '@request' => $currentRequest->getUri(),
