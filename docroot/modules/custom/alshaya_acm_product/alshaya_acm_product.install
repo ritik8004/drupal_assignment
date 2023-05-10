@@ -16,6 +16,19 @@ use Drupal\facets\Entity\Facet;
 /**
  * Implements hook_update_N().
  *
+ * Added attributes to be displayed on PDP title.
+ */
+function alshaya_acm_product_update_9406() {
+  $manager = \Drupal::service('alshaya_config.manager');
+  $manager->updateConfigs(
+    ['alshaya_acm_product.display_settings'],
+    'alshaya_acm_product',
+  );
+}
+
+/**
+ * Implements hook_update_N().
+ *
  * Add the article_swatches and migrate swatch_plp_limit_mobile_view
  * config to no_of_swatches_mobile.
  */
