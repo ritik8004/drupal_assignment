@@ -242,7 +242,14 @@ class AlshayaAlgoliaReactConfig implements AlshayaAlgoliaReactConfigInterface {
       $response['commonAlgoliaSearch']['productElementAlignmentEnabled'] = TRUE;
     }
 
+    // Set filters array for drupalsettings.
     $response[$page_type]['filters'] = [];
+
+    // If the algolia configurable filters is disabled then
+    // the filters data is passed in drupal settings.
+    // If the algolia configurable filters are enabled then
+    // we pass empty array for filters in drupal settings and prepare
+    // filters data from userData in algolia query response.
     if (!$alshaya_algolia_react_setting_values->get('algolia_enable_configurable_filter')) {
       $response[$page_type]['filters'] = $this->getFilters($index_name, $page_type, $sub_page);
     }
