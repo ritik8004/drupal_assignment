@@ -983,3 +983,10 @@ alshaya-accordion:
     - core/jquery
     - core/jquery.once
     - core/drupal
+
+predictive-search:
+  css:
+    theme:
+      css/conditional-sass/predictive-search/predictive-search.ltr.css: {}
+  dependencies:
+    - alshaya_white_label/algolia_search
