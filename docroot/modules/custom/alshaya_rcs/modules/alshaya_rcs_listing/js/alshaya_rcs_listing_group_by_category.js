@@ -72,7 +72,9 @@ let prepareSubCategoryData = function (data, languageCheck = true) {
     });
     // Merge rule contexts and web rule contexts.
     let ruleContexts = contexts.reverse();
-    const webRuleContexts = ruleContexts.map((ruleContext) => `web__${ruleContext}`);
+    var webRuleContexts = ruleContexts.map(function (ruleContext) {
+      return "web__".concat(ruleContext);
+    });
     // Category hierarchy data.
     subCategoryData[singleCategory.id].category = {
       category_field: 'field_category_name.' + data.filter_field,
