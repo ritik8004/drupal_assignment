@@ -20,8 +20,6 @@ import {
 } from '../utils';
 import { algoliaSearchClient } from '../config/SearchClient';
 import { getExpressDeliveryStatus } from '../../../../js/utilities/expressDeliveryHelper';
-import { getFacetListFromAlgolia } from '../../../../js/utilities/algoliaHelper';
-import { isConfigurableFiltersEnabled } from '../../../../js/utilities/helper';
 
 if (window.NodeList && !NodeList.prototype.forEach) {
   NodeList.prototype.forEach = Array.prototype.forEach;
@@ -33,7 +31,6 @@ class SearchApp extends React.PureComponent {
     this.state = {
       query: getCurrentSearchQuery(),
       sddEdStatus: null,
-      facets: [],
     };
     // Call createSearchResultDiv() in constructor so that when we
     // check for searchResultsDiv in render(),
@@ -50,16 +47,6 @@ class SearchApp extends React.PureComponent {
     // call to fetch SDD/ED status and store it globally.
     if (window.algoliaSearchActivityStarted) {
       this.setSddEdStatus();
-    }
-
-    // Check if configurable filter is enabled then request
-    // index settings to get facet list used in config for facets param.
-    if (isConfigurableFiltersEnabled()) {
-      getFacetListFromAlgolia('search').then((results) => {
-        this.setState({
-          facets: results,
-        });
-      });
     }
   }
 
@@ -104,11 +91,11 @@ class SearchApp extends React.PureComponent {
   };
 
   render() {
-    const { query, facets } = this.state;
+    const { query } = this.state;
     // Display search results when wrapper is present on page.
     const searchWrapper = document.getElementById('alshaya-algolia-search');
     const searchResultsDiv = (typeof searchWrapper !== 'undefined' && searchWrapper != null)
-      ? (<SearchResults query={query} facets={facets} />)
+      ? (<SearchResults query={query} />)
       : '';
     const optionalFilter = getSuperCategoryOptionalFilter();
 
