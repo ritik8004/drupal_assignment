@@ -50,6 +50,8 @@ function DynamicWidgets({
 
   const widgets = new Map();
   const labels = {};
+
+  // This is only required for search lhn.
   const { filters } = drupalSettings.algoliaSearch.search;
 
   React.Children.forEach(children, (child) => {
