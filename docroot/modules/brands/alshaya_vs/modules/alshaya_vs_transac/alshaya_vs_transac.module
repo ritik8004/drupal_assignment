@@ -375,7 +375,9 @@ function alshaya_vs_transac_alshaya_search_algolia_object_alter(array &$object) 
           $cup_size = $child_sku->get('attr_cup_size')->getString();
           if ($band_size && $cup_size) {
             $bra_size = implode(" ", [$band_size, $cup_size]);
-            $bra_sizes[] = $bra_size;
+            if (!in_array($bra_size, $bra_sizes)) {
+              $bra_sizes[] = $bra_size;
+            }
           }
         }
       }
@@ -388,7 +390,7 @@ function alshaya_vs_transac_alshaya_search_algolia_object_alter(array &$object) 
         $bra_sizes[] = $bra_size;
       }
     }
-    $object['attr_bra_size'] = array_unique($bra_sizes);
+    $object['attr_bra_size'] = $bra_sizes;
   }
   $attr_fragrance = $sku->get('attr_fragrance')->getString();
   if ($attr_fragrance) {
