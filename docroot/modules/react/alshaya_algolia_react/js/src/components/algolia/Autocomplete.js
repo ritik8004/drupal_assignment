@@ -123,6 +123,7 @@ class Autocomplete extends React.Component {
     const searchComponent = document.getElementsByClassName('predictive-search');
     if (searchComponent.length !== 0) {
       searchComponent[0].classList.add('predictive-search--open');
+      document.body.classList.add('show-predictive-search');
     }
   };
 
@@ -247,6 +248,7 @@ class Autocomplete extends React.Component {
     const predictiveSearchComponent = document.getElementsByClassName('predictive-search');
     if (predictiveSearchComponent.length !== 0) {
       predictiveSearchComponent[0].classList.remove('predictive-search--open');
+      document.body.classList.remove('show-predictive-search');
     }
   };
 
