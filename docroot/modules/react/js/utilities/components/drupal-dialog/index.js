@@ -19,7 +19,7 @@ const openDrupalDialog = (e, options) => {
   } = e.target.dataset;
 
   if (options.isSizeGuideLink) {
-    Drupal.alshayaSeoGtmPushSizeGuideEvents('open', 'quick-view');
+    Drupal.alshayaSeoGtmPushSizeGuideEvents('open', options.context);
   }
 
   // Open Drupal modal.
@@ -43,6 +43,7 @@ const DrupalDialog = ({
   dialogDisplay,
   dialogType,
   isSizeGuideLink,
+  context,
 }) => (
   <a
     className={linkClass}
@@ -52,7 +53,7 @@ const DrupalDialog = ({
     data-url={url}
     data-dialog-class={dialogClass}
     data-dialog-display={dialogDisplay}
-    onClick={(e) => openDrupalDialog(e, { isSizeGuideLink })}
+    onClick={(e) => openDrupalDialog(e, { isSizeGuideLink, context })}
   >
     {linkText}
   </a>
