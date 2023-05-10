@@ -20,3 +20,4 @@ size_group:
       value: 'european_size'
       label: 'EU'
 swatch_plp_limit: 4
+pdp_title_attributes: 'gender,nb_product_type'

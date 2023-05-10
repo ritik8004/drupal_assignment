@@ -53,6 +53,9 @@ alshaya_algolia_react.settings:
     exclude_render_single_result_facets:
       type: string
       label: 'Exclude the filters from single results facets.'
+    product_teaser_attributes:
+      type: string
+      label: 'Attributes to be displayed on PLP teaser.'
     algolia_facets_local_storage_expiry:
       type: integer
       label: 'Expiry in seconds for getting facets from algolia.'
