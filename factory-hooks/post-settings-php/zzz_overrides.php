@@ -20,6 +20,9 @@ if ($env === 'local') {
   if (getenv('LANDO')) {
     $home = '/app/local_home';
   }
+  elseif (getenv('IS_DDEV_PROJECT')) {
+    $home = '/var/www/html/local_home';
+  }
 
   $site_country_code = alshaya_get_site_country_code($host_site_code);
 }

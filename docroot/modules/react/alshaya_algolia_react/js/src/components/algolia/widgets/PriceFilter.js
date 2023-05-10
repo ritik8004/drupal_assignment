@@ -3,7 +3,9 @@ import connectWithPriceFilter from '../connectors/connectWithPriceFilter';
 import { getPriceRangeLabel } from '../../../utils';
 
 const PriceFilter = (props) => {
-  const { items, itemCount, refine } = props;
+  const {
+    items, itemCount, refine, attribute,
+  } = props;
 
   if (typeof itemCount !== 'undefined') {
     // Initially the count was updated when the filter
@@ -18,7 +20,22 @@ const PriceFilter = (props) => {
       itemCount(props.attribute, items.length);
     }, 1);
   }
-
+  // Do not show facets that have a single value if the render_single_result_facets is false.
+  if (!drupalSettings.algoliaSearch.renderSingleResultFacets) {
+    const exclude = drupalSettings.algoliaSearch.excludeRenderSingleResultFacets
+      ? drupalSettings.algoliaSearch.excludeRenderSingleResultFacets.trim().split(',')
+      : '';
+    // Certain factes should always be rendered irrespective of render_single_result_facets.
+    // So we only consider the attributes not part of the exclude_render_single_result_facets.
+    if (exclude.length > 0) {
+      // Split attribute because attribute contain language suffix on PLP.
+      if ((!exclude.includes(attribute.split('.')[0]) && items.length <= 1)) {
+        return null;
+      }
+    } else if (items.length <= 1) {
+      return null;
+    }
+  }
   return (
     <ul>
       {items.map((item) => (

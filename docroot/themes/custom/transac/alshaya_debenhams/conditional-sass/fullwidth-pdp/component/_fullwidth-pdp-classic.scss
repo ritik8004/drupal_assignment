@@ -1,0 +1,15 @@
+@include breakpoint($desktop) {
+  body.nodetype--acq_product:not(.magazine-layout):not(.magazine-layout-v2) {
+    .sku-base-form {
+      .form-wrapper {
+        .configurable-swatch {
+          .select2Option {
+            .select-buttons {
+              margin-#{$left}: 0;
+            }
+          }
+        }
+      }
+    }
+  }
+}

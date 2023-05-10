@@ -36,6 +36,23 @@ const ReturnRefundMethod = ({
     }
   }
 
+  const HybridCardDetailsComponent = () => (isHybrid
+    ? (
+      <>
+        <div className="method-list-wrapper">
+          <div className="method-wrapper">
+            <CardDetails paymentDetails={paymentDetails} showCardIcon />
+          </div>
+        </div>
+        <div className="refund-message">
+          { Drupal.t('Estimated refund in 3-5 business days after we receive the item', {}, { context: 'online_returns' }) }
+        </div>
+      </>
+    )
+    : (
+      <></>
+    ));
+
   // Custom function for card details component to avoid the nested ternary expressions.
   const CardDetailsComponent = () => (!hasValue(paymentDetails.cashondelivery)
     && !hasValue(paymentDetails.egift) && !differentEgiftCard && !isHybrid
@@ -52,16 +69,7 @@ const ReturnRefundMethod = ({
       </>
     )
     : (
-      <>
-        <div className="method-list-wrapper">
-          <div className="method-wrapper">
-            <CardDetails paymentDetails={paymentDetails} showCardIcon />
-          </div>
-        </div>
-        <div className="refund-message">
-          { Drupal.t('Estimated refund in 3-5 business days after we receive the item', {}, { context: 'online_returns' }) }
-        </div>
-      </>
+      <HybridCardDetailsComponent />
     ));
 
   return (

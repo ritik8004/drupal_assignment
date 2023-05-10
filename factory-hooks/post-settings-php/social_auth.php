@@ -7,7 +7,7 @@
  * @see https://docs.acquia.com/site-factory/tiers/paas/workflow/hooks
  */
 
-if (getenv('LANDO')) {
+if (getenv('LANDO') || getenv('IS_DDEV_PROJECT')) {
   // Keys for Google Auth in LANDO env.
   $config['social_auth_google.settings']['client_id'] = '847720644464-1bqotkjgsovehdtna2d63m706slkjaba.apps.googleusercontent.com';
   $config['social_auth_google.settings']['client_secret'] = 'ERdHm6oEVXWdf_Xwp1-de_rf';

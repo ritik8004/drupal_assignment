@@ -1,7 +1,7 @@
 import React from 'react';
 
 import CheckoutItemImage from '../../../utilities/checkout-item-image';
-import CheckoutConfigurableOption from '../../../utilities/checkout-configurable-option';
+import CheckoutConfigurableOptions from '../../../utilities/checkout-configurable-options';
 import SpecialPrice from '../../../utilities/special-price';
 import CartPromotion from '../../../cart/components/cart-promotion';
 import ProductFlag from '../../../utilities/product-flag';
@@ -66,6 +66,7 @@ class CheckoutCartItem extends React.Component {
         id,
         finalPrice,
         freeItem,
+        sizeGroup = '',
       },
       context,
       couponCode,
@@ -118,7 +119,11 @@ class CheckoutCartItem extends React.Component {
             </div>
           </div>
           <div className="spc-product-attributes">
-            { configurableValues.map((key) => <CheckoutConfigurableOption key={`${key.label}-${id}`} label={key} />) }
+            <CheckoutConfigurableOptions
+              sku={id}
+              options={configurableValues}
+              sizeGroup={sizeGroup}
+            />
           </div>
         </div>
         {context !== 'cart' ? (

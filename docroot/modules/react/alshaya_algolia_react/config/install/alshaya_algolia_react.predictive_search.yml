@@ -1,0 +1,3 @@
+enable_predictive_search: false
+predictive_search_layout: '1-column'
+recent_search_count: 5

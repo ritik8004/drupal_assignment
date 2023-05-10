@@ -1,0 +1,97 @@
+.path--store-finder {
+  .c-page-title {
+    @include breakpoint($tablet) {
+      @include sideSpaces(0);
+    }
+  }
+
+  .current-location {
+    @include breakpoint($tablet) {
+      width: 11.5%;
+    }
+  }
+
+  .store-finder--wrapper {
+    @include breakpoint($tablet) {
+      flex-grow: 1;
+    }
+
+    @include breakpoint($desktop) {
+      margin-#{$right}: rem(24);
+      padding-#{$right}: 0;
+    }
+  }
+
+  #edit-field-latitude-longitude-boundary-geolocation-geocoder-google-places-api,
+  .form-item-geolocation-geocoder-google-places-api {
+    [id^="edit-geolocation-geocoder-google-places-api"] {
+      @include breakpoint($desktop) {
+        max-width: none;
+      }
+    }
+  }
+
+  .label--location {
+    html[lang="ar"] & {
+      @include breakpoint($tablet) {
+        width: 45%;
+      }
+
+      @include breakpoint($desktop) {
+        margin-right: rem(32);
+        width: auto;
+      }
+    }
+  }
+
+  .c-content__region {
+    @include fullWidthSideSpaces(
+      $is_mobile: true,
+      $is_tablet: true,
+      $is_desktop: true,
+      $is_desktop_wide: true
+    );
+
+    .c-content__region {
+      @include sideSpaces(0);
+    }
+
+    .views-exposed-form {
+      >.form--inline {
+        @include breakpoint($tablet) {
+          display: flex;
+          justify-content: space-between;
+
+          &::after {
+            content: none;
+          }
+        }
+      }
+    }
+  }
+
+  .c-content__region,
+  .view-stores-finder {
+    max-width: none;
+  }
+
+  .back-link {
+    a {
+      &::after {
+        @include breakpoint($tablet) {
+          #{$left}: rem(3);
+          padding-#{$left}: 0;
+        }
+      }
+    }
+  }
+
+  @include breakpoint($desktop) {
+    .individual--store {
+      .view-content {
+        padding-#{$left}: 0;
+        padding-#{$right}: 1%;
+      }
+    }
+  }
+}

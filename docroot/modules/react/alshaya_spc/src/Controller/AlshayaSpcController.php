@@ -1055,6 +1055,16 @@ class AlshayaSpcController extends ControllerBase {
 
     $settings['alshaya_spc']['subtotal_after_discount'] = $alshaya_spc_config->get('subtotal_after_discount');
 
+    // Show size alternates on cart and checkout.
+    $product_display_settings = $this->config('alshaya_acm_product.display_settings');
+    $settings['alshaya_spc']['sizeGroupAttribute'] = $product_display_settings->get('size_group.pdp');
+    $settings['alshaya_spc']['sizeGroupAlternates'] = array_reduce($product_display_settings->get('size_group.alternates'), function ($unique_arr, $currentValue) {
+      if (!in_array($currentValue['value'], array_column($unique_arr, 'value'))) {
+        $unique_arr[$currentValue['value']] = $currentValue['label'];
+      }
+      return $unique_arr;
+    }, []);
+
     $build['#attached']['drupalSettings'] = array_merge_recursive($build['#attached']['drupalSettings'], $settings);
 
     // Get shipping methods and attach to Drupal settings.

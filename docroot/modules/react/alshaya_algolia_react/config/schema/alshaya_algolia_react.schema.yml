@@ -46,7 +46,13 @@ alshaya_algolia_react.settings:
       label: 'Enable article swatches on PLP and SRP product teasers.'
     enable_hits_per_page:
       type: boolean
-      label: 'Enable/Disable hitsPerPage key from configuration.'  
+      label: 'Enable/Disable hitsPerPage key from configuration.'
+    render_single_result_facets:
+      type: boolean
+      label: 'Enable/Disable single result facets from configuration.'
+    exclude_render_single_result_facets:
+      type: string
+      label: 'Exclude the filters from single results facets.'     
 
 alshaya_algolia_react.product_frames:
   type: config_object
@@ -78,3 +84,34 @@ alshaya_algolia_react.color_swatches:
     no_of_swatches_mobile:
       type: integer
       label: 'Set the swatch limit for PLP/SRP on mobile view'
+
+alshaya_algolia_react.swipe_image:
+  type: config_object
+  label: 'Alshaya swipe image configurations'
+  mapping:
+    enable_swipe_image_mobile:
+      type: boolean
+      label: 'Enable / Disable swipe image on mobile view.'
+    no_of_image_scroll:
+      type: integer
+      label: 'Set the swipe image scroll limit for PLP/SRP on desktop view'
+    slide_effect:
+      type: string
+      label: 'Set the effect of slide'
+    image_slide_timing:
+      type: float
+      label: 'Auto scroll timer for auto scrolling the product images on listing pages.'
+
+alshaya_algolia_react.predictive_search:
+  type: config_object
+  label: 'Algolia Predictive Search Configuration'
+  mapping:
+    enable_predictive_search:
+      type: boolean
+      label: 'Enable Predictive Search'
+    predictive_search_layout:
+      type: string
+      label: 'Desktop Layout for Predictive Search'
+    recent_search_count:
+      type: integer
+      label: 'Number of recent searches to be displayed'

@@ -939,13 +939,6 @@ fullwidth-pdp:
   dependencies:
     - alshaya_white_label/fullwidth-common
 
-fullwidth-newpdp:
-  js:
-    js/newpdp_sticky_container.js: {}
-  dependencies:
-    - core/jquery
-    - core/drupal
-
 fullwidth-spc:
   css:
     theme:
@@ -972,6 +965,11 @@ hide-sidebar:
   css:
     theme:
       css/conditional-sass/hide-sidebar/hide-sidebar.ltr.css: {}
+
+fullwidth-store-finder:
+  css:
+    theme:
+      css/conditional-sass/fullwidth-store-finder/fullwidth-store-finder.ltr.css: { weight: 1 }
 
 article-swatch-slider:
   css:

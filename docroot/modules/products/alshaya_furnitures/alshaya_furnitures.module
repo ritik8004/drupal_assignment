@@ -131,3 +131,11 @@ function alshaya_furnitures_alshaya_spc_checkout_build_alter(array &$build) {
   $build['#attached']['library'][] = 'alshaya_white_label/online-booking';
   $build['#attached']['library'][] = 'alshaya_white_label/inter-country-transfer';
 }
+
+/**
+ * Implements hook_alshaya_graphql_query_alter().
+ */
+function alshaya_furnitures_alshaya_graphql_query_alter(&$query_fields) {
+  // Pass NULL value to type variable as it is not required for HFD brands.
+  $query_fields['color_swatches']['variables']['type'] = NULL;
+}

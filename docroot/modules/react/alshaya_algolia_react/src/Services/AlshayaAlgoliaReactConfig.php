@@ -181,6 +181,9 @@ class AlshayaAlgoliaReactConfig implements AlshayaAlgoliaReactConfigInterface {
     // Get listing page frames settings.
     $product_frame_settings = $this->configFactory->get('alshaya_algolia_react.product_frames');
 
+    // Get Algolia Swipe image setting.
+    $algolia_swipe_image_settings = $this->configFactory->get('alshaya_algolia_react.swipe_image');
+
     if ($default_image = $this->skuImagesManager->getProductDefaultImage()) {
       $default_image = $this->entityTypeManager
         ->getStorage('image_style')
@@ -223,6 +226,8 @@ class AlshayaAlgoliaReactConfig implements AlshayaAlgoliaReactConfigInterface {
       'defaultColgrid' => $alshaya_algolia_react_setting_values->get('default_col_grid'),
       'defaultColGridMobile' => $alshaya_algolia_react_setting_values->get('default_col_grid_mobile'),
       'hitsPerPage' => $alshaya_algolia_react_setting_values->get('enable_hits_per_page'),
+      'renderSingleResultFacets' => $alshaya_algolia_react_setting_values->get('render_single_result_facets'),
+      'excludeRenderSingleResultFacets' => $alshaya_algolia_react_setting_values->get('exclude_render_single_result_facets'),
     ];
 
     // Set product elements alignment to true only
@@ -263,7 +268,6 @@ class AlshayaAlgoliaReactConfig implements AlshayaAlgoliaReactConfigInterface {
         'showThumbnails' => ($display_settings->get('gallery_show_hover_image') === TRUE) ? FALSE : $display_settings->get('image_thumb_gallery'),
         'defaultImage' => $default_image ?? FALSE,
         'plp_slider' => $display_settings->get('plp_slider'),
-        'image_slide_timing' => $display_settings->get('image_slide_timing'),
       ],
       'swatches' => [
         'showColorImages' => $display_settings->get('show_color_images_on_filter'),
@@ -278,6 +282,12 @@ class AlshayaAlgoliaReactConfig implements AlshayaAlgoliaReactConfigInterface {
         'showColorSwatchSlider' => $show_color_swatch_slider,
       ],
       'showBrandName' => $display_settings->get('show_brand_name_plp'),
+      'swipeImage' => [
+        'enableSwipeImageMobile' => $algolia_swipe_image_settings->get('enable_swipe_image_mobile'),
+        'noOfImageScroll' => $algolia_swipe_image_settings->get('no_of_image_scroll'),
+        'slideEffect' => $algolia_swipe_image_settings->get('slide_effect'),
+        'imageSlideTiming' => $algolia_swipe_image_settings->get('image_slide_timing'),
+      ],
     ];
     // Allow other modules to alter or add extra configs
     // in agolia react common configurations.

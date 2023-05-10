@@ -1,7 +1,4 @@
 image_thumb_gallery: false
-# Auto scroll timer(in sec) for auto scrolling the product images
-# on listing pages.
-image_slide_timing: 2
 gallery_show_hover_image: false
 configurable_use_parent_images: 'always'
 media_roles_to_hide_in_gallery: 'thumbnail,swatch_image'

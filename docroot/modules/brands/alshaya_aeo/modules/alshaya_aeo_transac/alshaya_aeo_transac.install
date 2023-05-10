@@ -9,6 +9,20 @@ use Drupal\block\Entity\Block;
 use Drupal\alshaya_config\AlshayaConfigManager;
 
 /**
+ * Update algolia react with default value for render_single_result_facets.
+ *
+ * And also for exclude_render_single_result_facets.
+ */
+function alshaya_aeo_transac_update_9403() {
+  $config = \Drupal::configFactory()->getEditable('alshaya_algolia_react.settings');
+  if ($config) {
+    $config->set('render_single_result_facets', FALSE);
+    $config->set('exclude_render_single_result_facets', 'final_price,attr_color');
+    $config->save();
+  }
+}
+
+/**
  * Implements hook_update_N().
  *
  * Provides default setting for `show_full_width` for theme.
@@ -219,4 +233,17 @@ function alshaya_aeo_transac_install() {
     // Set arabic config.
     \Drupal::languageManager()->getLanguageConfigOverride('ar', 'webform.webform.alshaya_bv_write_review')->set('elements', $config['ar'])->save();
   }
+}
+
+/**
+ * Implements hook_update_dependencies().
+ */
+function alshaya_aeo_transac_update_dependencies() {
+  return [
+    'alshaya_aeo_transac' => [
+      '9403' => [
+        'alshaya_algolia_react' => '9408',
+      ],
+    ],
+  ];
 }

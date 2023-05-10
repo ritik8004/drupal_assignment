@@ -1,0 +1,27 @@
+@include breakpoint($desktop) {
+  .path--store-finder {
+    .label--location {
+      padding-#{$left}: 0 !important; // Overriding !important styles.
+      padding-#{$right}: 0;
+      margin-#{$left}: rem(32);
+
+      html[lang="ar"] & {
+        padding-right: 0 !important; // Overriding !important styles.
+      }
+    }
+
+    .list-view-link {
+      margin-#{$left}: 0;
+    }
+
+    .store-finder--wrapper {
+      .form-item-geolocation-geocoder-google-places-api {
+        padding-#{$right}: 0;
+
+        html[lang="ar"] & {
+          padding-right: rem(12) !important;
+        }
+      }
+    }
+  }
+}

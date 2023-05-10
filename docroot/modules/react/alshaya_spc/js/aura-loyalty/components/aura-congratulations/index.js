@@ -11,6 +11,7 @@ class AuraCongratulationsModal extends React.Component {
     // By default congratulation popup will remain close.
     this.state = {
       showCongratulations: false,
+      isFullyEnrolled: false,
     };
   }
 
@@ -22,12 +23,19 @@ class AuraCongratulationsModal extends React.Component {
   // Event listener callback to update header states.
   toggleCongPopup = (data) => {
     const { showCongratulationsPopup } = data.detail;
+    const { isFullyEnrolled } = data.detail.stateValues;
     // Show congratulations popup only if showCongratulationsPopup is defined and true.
     if ((typeof showCongratulationsPopup !== 'undefined')
       && showCongratulationsPopup
     ) {
       this.setState({
         showCongratulations: true,
+      });
+    }
+    // Display different confirmation message inside popup for FE customers after signIn.
+    if (isFullyEnrolled) {
+      this.setState({
+        isFullyEnrolled,
       });
     }
   }
@@ -40,12 +48,20 @@ class AuraCongratulationsModal extends React.Component {
   };
 
   render() {
-    const { showCongratulations } = this.state;
+    const { showCongratulations, isFullyEnrolled } = this.state;
 
     // Return null if congratulation popup state is closed.
     if (!showCongratulations) {
       return null;
     }
+
+    // Display confirmation message based on the enrollment status of the customer
+    const congratulationsMessage = (isFullyEnrolled)
+      ? getStringMessage('join_aura_fe_congratulations_text')
+      : getStringMessage('join_aura_congratulations_text');
+    const downloadMessage = (isFullyEnrolled)
+      ? getStringMessage('join_aura_fe_congratulations_fe_download_text')
+      : getStringMessage('join_aura_congratulations_download_text');
 
     return (
       <Popup
@@ -60,8 +76,8 @@ class AuraCongratulationsModal extends React.Component {
             <button type="button" className="close" onClick={() => this.closeCongratulationsModal()} />
           </div>
           <div className="aura-modal-body">
-            <div className="congratulations-text">{getStringMessage('join_aura_congratulations_text')}</div>
-            <div className="download-text">{getStringMessage('join_aura_congratulations_download_text')}</div>
+            <div className="congratulations-text">{congratulationsMessage}</div>
+            <div className="download-text">{downloadMessage}</div>
             <div className="mobile-only"><AuraAppLinks /></div>
           </div>
         </div>

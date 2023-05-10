@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import Parser from 'html-react-parser';
 import Gallery from '../gallery';
 import Price from '../price';
@@ -49,7 +49,24 @@ const Teaser = ({
   const isDesktop = window.innerWidth > 1024;
   const { currentLanguage } = drupalSettings.path;
   const { showBrandName } = drupalSettings.reactTeaserView;
+  const touchEnable = drupalSettings.reactTeaserView.swipeImage.enableSwipeImageMobile;
   const activateShoeAI = getShoeAiStatus();
+
+  // Add GTM events on touch.
+  const onTouchMove = () => {
+    if (!isDesktop) {
+      // Set object data for GTM.
+      const swipeGAData = {
+        event: showColorSwatchSlider ? 'swatches_imageswipe' : 'imageswipe',
+        eventCategory: showColorSwatchSlider ? 'swatches_imageswipe' : 'imageswipe',
+        eventAction: showColorSwatchSlider ? 'swatches_imageswipe' : 'imageswipe',
+      };
+      // Push image swipe data in GTM.
+      window.dataLayer.push(swipeGAData);
+    }
+  };
+
+
   if (drupalSettings.plp_attributes
     && drupalSettings.plp_attributes.length > 0
     && hasValue(hit.collection_labels)
@@ -82,12 +99,14 @@ const Teaser = ({
   const handleSwatchSelect = (productData) => {
     setSkuCode(productData.sku);
     setSkuMedia(productData.media);
-    const renderSkuPrice = (
-      <Price
-        price={productData.priceData.price}
-        finalPrice={productData.priceData.finalPrice}
-      />
-    );
+    const renderSkuPrice = hasValue(productData.priceData)
+      ? (
+        <Price
+          price={productData.priceData.price}
+          finalPrice={productData.priceData.finalPrice}
+        />
+      )
+      : null;
     setSwatchAttributeData({
       ...updatedAttribute,
       title: productData.name,
@@ -218,6 +237,14 @@ const Teaser = ({
   let dataVmode = null;
   if (pageType === 'search') {
     dataVmode = { 'data-vmode': 'search_result' };
+
+    // Initialize slick carousel for touch devices.
+    useEffect(() => {
+      // Check if touch device and Slick is initialized.
+      if (!isDesktop && !initSlider) {
+        setInitiateSlider(true);
+      }
+    }, []);
   }
   return (
     <div className={teaserClass}>
@@ -249,6 +276,7 @@ const Teaser = ({
             slider.slickPause();
           }
         }}
+        onTouchMove={touchEnable ? onTouchMove : null}
       >
         <div className="field field--name-field-skus field--type-sku field--label-hidden field__items">
           <a
@@ -280,7 +308,7 @@ const Teaser = ({
               sku={sku}
               title={title && Parser(title)}
               format="icon"
-              setWishListButtonRef={ref}
+              setWishListButtonRef={ref.current}
             />
           </ConditionalView>
           {pageType === 'plp' && activateShoeAI === true ? (
@@ -370,11 +398,13 @@ const Teaser = ({
             <ConditionalView condition={!isPromotionFrameEnabled()}>
               <Promotions promotions={attribute.promotions} />
             </ConditionalView>
-            {showSwatches ? (
+            {/* Render the Article color swatches when showColorSwatchSlider is TRUE */}
+            {showSwatches && !showColorSwatchSlider ? (
               <Swatches
                 swatches={attribute.swatches}
                 url={url}
                 title={title}
+                handleSwatchSelect={handleSwatchSelect}
               />
             ) : null}
             {showSliderSwatch ? (
@@ -382,6 +412,7 @@ const Teaser = ({
                 swatches={attribute.swatches}
                 url={url}
                 title={title}
+                handleSwatchSelect={handleSwatchSelect}
               />
             ) : null}
             {/* Render color swatches based on article/sku id */}

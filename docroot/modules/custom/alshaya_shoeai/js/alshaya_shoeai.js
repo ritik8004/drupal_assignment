@@ -20,7 +20,7 @@
       shoe_size_add_to_cart(recommendation)
     };
     script.text = '{shopID:"' + shoeAi.shopId + '", locale:"' +
-     language + '", scale: "eu", zeroHash:"' + shoeAi.zeroHash + '", newRecommendation:' + newRecommendation +', inCart:' + inCart + '}';
+     language + '", scale: "eu", kids: true, zeroHash:"' + shoeAi.zeroHash + '", newRecommendation:' + newRecommendation +', inCart:' + inCart + '}';
     document.body.appendChild(script);
     // Initialize shoeai purchase tracking script on cart page.
     document.addEventListener('updateCartItemData', function (e) {
@@ -172,12 +172,12 @@ function addShoeSizePurchaseConfirmationScript() {
         ssm_sid: sid
       };
       // Order confirmation script.
-      var conirmationScript = document.createElement('script');
-      conirmationScript.type = 'text/javascript';
-      conirmationScript.src = 'https://shoesize.me/plugin/confirm.js?'+
+      var confirmationScript = document.createElement('script');
+      confirmationScript.type = 'text/javascript';
+      confirmationScript.src = 'https://shoesize.me/plugin/confirm.js?'+
         'shopid='+encodeURIComponent(shoeAi.shopId)+'&id='+orderNumber+
         '&sid='+sid;
-      (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(conirmationScript);
+      (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(confirmationScript);
     };
   }
 }

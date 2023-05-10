@@ -1316,6 +1316,22 @@
   };
 
   /**
+   * Helper function to push swatch slider next/prev arrow click events to GTM.
+   *
+   * @param eventLabel
+   *  Contains event label for the event.
+   */
+    Drupal.alshayaSeoGtmPushSwatchSliderClick = function (eventLabel) {
+      var data = {
+        event: 'swatches_chevronclick',
+        eventCategory: 'swatches_chevronclick',
+        eventAction: 'swatches_chevronclick',
+        eventLabel: eventLabel,
+      };
+      dataLayer.push(data);
+    };
+
+  /**
    * Helper function to push lead events.
    *
    * @param leadType
