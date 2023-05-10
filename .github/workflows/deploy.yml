@@ -9,6 +9,7 @@ on:
       - develop-adyen
       - develop-egift-return
       - develop-freegift-v3
+      - develop-use-sku-objectid-for-search-index
   create:
 
 concurrency: deploy-${{ github.ref }}
