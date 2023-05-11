@@ -382,3 +382,18 @@ export const getExternalBenefitText = (responseData, returnTranslatable) => {
   }
   return benefitText;
 };
+
+/**
+ * Helper function to return benefitList based on benefit Tag 'I'.
+ *
+ *  @param {array} benefitList
+ *  @returns {array} sorted benefitList.
+ */
+export const sortBenefits = (benefitList) => {
+  for (let index = 0; index < benefitList.length; index++) {
+    if (benefitList[index].tag === 'I') {
+      benefitList.push(benefitList.splice(benefitList.indexOf(benefitList[index]), 1)[0]);
+    }
+  }
+  return benefitList;
+};
