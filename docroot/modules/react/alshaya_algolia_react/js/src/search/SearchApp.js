@@ -129,7 +129,7 @@ class SearchApp extends React.PureComponent {
             {() => null}
           </QueryRuleCustomData>
         </InstantSearch>
-        { isMobile() && (
+        { (isMobile() || predictiveSearchEnabled) && (
           <Portal id="top-results" conditional query={input}>
             <span className="top-suggestions-title">{Drupal.t('top suggestions')}</span>
             <InstantSearch

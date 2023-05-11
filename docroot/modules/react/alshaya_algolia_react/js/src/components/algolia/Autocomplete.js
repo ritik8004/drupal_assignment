@@ -90,8 +90,8 @@ class Autocomplete extends React.Component {
 
   shouldRenderSuggestions = (value) => (
     // Display trending searches for desktop on when searchbox is empty.
-    // otherwise show it only for mobile always.
-    (value.trim() === '') || (window.innerWidth < 768)
+    // otherwise show it only for mobile always and predictive search only.
+    (value.trim() === '') || (window.innerWidth < 768) || predictiveSearchEnabled
   );
 
   blurORFocus() {
@@ -154,7 +154,8 @@ class Autocomplete extends React.Component {
 
     if (valueToCheck !== '') {
       this.reactSearchBlock[0].classList.add('clear-icon');
-      if (isMobile()) {
+      // Add class for mobile and if predictiveSearch.
+      if (isMobile() || predictiveSearchEnabled) {
         this.reactSearchBlock[0].classList.add('show-algolia-search-bar');
       }
     } else if (valueToCheck === '') {
@@ -187,8 +188,8 @@ class Autocomplete extends React.Component {
     this.timerId = setTimeout(() => {
       // Trending searches only appear on Web desktop when the input is focused.
       // We do not need to request the query-index on desktop web when value is changed.
-      // Change should request query-index only for web on mobile.
-      if (window.innerWidth < 768) {
+      // Change should request query-index only for web on mobile and for predictive search.
+      if (window.innerWidth < 768 || predictiveSearchEnabled) {
         refine(newValue);
       }
       // Search results to be shown on formSubmit in case on predictiveSearch.
