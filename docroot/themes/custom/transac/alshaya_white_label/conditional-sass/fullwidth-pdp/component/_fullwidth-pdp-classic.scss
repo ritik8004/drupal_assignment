@@ -50,6 +50,19 @@
     .basic-details-wrapper .field--name-field-skus .sku-base-form button[type="submit"] {
       width: calc(100% - #{rem(106)});
     }
+
+    .sku-base-form {
+      .form-wrapper {
+        .configurable-swatch {
+          .select2Option {
+            .select-buttons {
+              // Applying to fix selected first color swatch getting cut off.
+              margin-#{$left}: rem(3);
+            }
+          }
+        }
+      }
+    }
   }
 
   // Changing description popup width implementation after 1284px viewport.

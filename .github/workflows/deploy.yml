@@ -8,7 +8,6 @@ on:
       - master
       - develop-adyen
       - develop-egift-return
-      - develop-freegift-v3
       - develop-use-sku-objectid-for-search-index
   create:
 
@@ -111,7 +110,7 @@ jobs:
 
       - name: Run Composer install
         run: |
-          composer self-update 2.4.4
+          composer self-update --2
           composer validate --no-check-all --ansi
           composer install --no-interaction || composer install --no-interaction || composer install --no-interaction
 

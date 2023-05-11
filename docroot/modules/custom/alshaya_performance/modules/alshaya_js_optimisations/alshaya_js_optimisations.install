@@ -10,6 +10,27 @@ use Drupal\alshaya_config\AlshayaConfigManager;
 /**
  * Implements hook_update_N().
  *
+ * Update critical JS settings for adding loadJs library.
+ */
+function alshaya_js_optimisations_update_9501() {
+  /** @var \Drupal\alshaya_config\AlshayaConfigManager $manager */
+  $manager = \Drupal::service('alshaya_config.manager');
+  $manager->updateConfigs(
+    ['alshaya_js_optimisations.settings'],
+    'alshaya_js_optimisations',
+    'install',
+    $manager::MODE_REPLACE_KEY,
+    [
+      'replace_keys' => [
+        'critical_js.site_libraries',
+      ],
+    ]
+  );
+}
+
+/**
+ * Implements hook_update_N().
+ *
  * Update critical JS settings and remove version based libraries.
  */
 function alshaya_js_optimisations_update_9401() {

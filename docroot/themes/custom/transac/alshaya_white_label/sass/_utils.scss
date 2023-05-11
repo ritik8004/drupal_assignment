@@ -895,3 +895,21 @@ $full_width_padding_desktop_wide: rem(40); /* viewport width >= 1680px */
     }
   }
 }
+
+// Set an element overlay on screen.
+@mixin fullscreenOverlay($zIndex: 1, $positions: false, $dimensions: false) {
+  position: fixed;
+  top: 0;
+  #{$left}: 0;
+  z-index: $zIndex;
+
+  @if $positions {
+    #{$right}: 0;
+    bottom: 0;
+  }
+
+  @if $dimensions {
+    width: 100%;
+    height: 100%;
+  }
+}

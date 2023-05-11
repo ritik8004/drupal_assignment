@@ -20,12 +20,23 @@ const PriceElement = ({
     (<span key="amount" className={amountClass}>{price}</span>),
   ];
 
+  // If we have fixed price then return the updated price markup.
+  if (hasValue(fixedPrice)) {
+    return (
+      <div className={`price ${hasValue(currency) ? currency.toLowerCase() : ''}`} data-fp={fixedPrice}>
+        <span className="price-wrapper">
+          {drupalSettings.reactTeaserView.price.currencyPosition === 'before' ? priceParts : priceParts.reverse()}
+        </span>
+      </div>
+    );
+  }
+
   return (
-    <div className={`price ${hasValue(currency) ? currency.toLowerCase() : ''}`} data-fp={fixedPrice}>
-      <span className="price-wrapper">
+    <span className="price-wrapper">
+      <div className={`price ${hasValue(currency) ? currency.toLowerCase() : ''}`}>
         {drupalSettings.reactTeaserView.price.currencyPosition === 'before' ? priceParts : priceParts.reverse()}
-      </span>
-    </div>
+      </div>
+    </span>
   );
 };
 

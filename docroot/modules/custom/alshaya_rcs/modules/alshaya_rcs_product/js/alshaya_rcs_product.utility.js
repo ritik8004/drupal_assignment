@@ -282,7 +282,9 @@ window.commerceBackend = window.commerceBackend || {};
         let sizeGroup = '';
         Object.keys(sizeGroupAlternates).forEach(function (key) {
           const valueLabel = window.commerceBackend.getAttributeValueLabel(key, variant.product[key]);
-          sizeGroup += `${valueLabel}(${sizeGroupAlternates[key]}) `;
+          if (Drupal.hasValue(valueLabel)) {
+            sizeGroup += `${valueLabel}(${sizeGroupAlternates[key]}) `;
+          }
         });
         value = sizeGroup;
       }
@@ -1409,5 +1411,16 @@ window.commerceBackend.getSortedAttributeValues = function getSortedAttributeVal
     }
 
     product.promotions = promotionVal;
+
+    // Attributes to be shown near title on PDP.
+    if (Drupal.hasValue(drupalSettings.alshayaRcs.pdpTitleAttributes)) {
+      product.titleAttributes = [];
+      drupalSettings.alshayaRcs.pdpTitleAttributes.forEach(function processTitleAttribute(titleAttribute) {
+        product.titleAttributes.push({
+          attr : window.commerceBackend.getAttributeValueLabel(titleAttribute, product[titleAttribute]),
+        });
+      });
+    }
+
   });
 })(Drupal, drupalSettings, jQuery);

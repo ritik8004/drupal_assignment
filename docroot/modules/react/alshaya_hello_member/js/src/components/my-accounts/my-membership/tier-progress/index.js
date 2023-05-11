@@ -36,8 +36,8 @@ class TierProgress extends React.Component {
         };
         let userProgressWidth = 0;
         if (hasValue(response) && !hasValue(response.error) && hasValue(response.data)) {
-          currentTier = response.data.extension_attributes.current_tier;
-          nextTier = response.data.extension_attributes.next_tier;
+          currentTier = response.data.extension_attributes.current_tier_en;
+          nextTier = response.data.extension_attributes.next_tier_en;
           pointsSummmary = response.data.extension_attributes.points_summary;
           tierWidthData = this.getTierWidthData(response.data);
           userProgressWidth = this.getUserProgressWidth(response.data);
@@ -62,7 +62,7 @@ class TierProgress extends React.Component {
    * Get constant tier width value calculated from api response data.
    */
   getTierWidthData = (tierData) => {
-    if ((tierData.extension_attributes.current_tier === tier1Label)
+    if ((tierData.extension_attributes.current_tier_en === tier1Label)
       && hasValue(tierData.extension_attributes.interval)) {
       const tierObj = tierData.tier_progress_tracker.find((item) => item.code === plusVoucherCode);
       if (hasValue(tierObj)) {
@@ -83,13 +83,13 @@ class TierProgress extends React.Component {
     let tierObj = null;
     // If no interval data, then user has used all his vouchers.
     // So, we return width as 100%;
-    if (hasValue(tierData.extension_attributes.current_tier)
+    if (hasValue(tierData.extension_attributes.current_tier_en)
       && !hasValue(tierData.extension_attributes.interval)) {
       return 100;
     }
     // If user is new hello member, we check how far he is to become plus member.
     // Here, percentage for tier progress is calculated from max and current value.
-    if (tierData.extension_attributes.current_tier === tier1Label) {
+    if (tierData.extension_attributes.current_tier_en === tier1Label) {
       tierObj = tierData.tier_progress_tracker.find((item) => item.code === plusVoucherCode);
       if (hasValue(tierObj)) {
         return (((tierObj.max_value - tierObj.current_value) / tierObj.max_value) * 100);
@@ -98,7 +98,7 @@ class TierProgress extends React.Component {
     // If user is plus member, we check how far he is to get next voucher.
     // Here, percentage for tier progress is calculated by total voucher value and current value.
     // User needs certain points to reach the voucher value.
-    if ((tierData.extension_attributes.current_tier === tier2Label)
+    if ((tierData.extension_attributes.current_tier_en === tier2Label)
       && hasValue(tierData.extension_attributes.interval)) {
       tierObj = tierData.tier_progress_tracker.find((item) => item.code === newVoucherCode);
       if (hasValue(tierObj)) {
