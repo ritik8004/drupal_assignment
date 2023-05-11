@@ -156,6 +156,11 @@ class AlshayaAlgoliaReactAutocomplete extends AlshayaAlgoliaReactBlockBase {
 
       $libraries[] = 'alshaya_white_label/sameday-express-delivery';
     }
+    $algoliaSearch['predictiveSearchEnabled'] = $this->configFactory->get('alshaya_algolia_react.predictive_search')
+      ->get('enable_predictive_search') === TRUE ?: FALSE;
+    if ($algoliaSearch['predictiveSearchEnabled']) {
+      $libraries[] = 'alshaya_white_label/predictive-search';
+    }
 
     return [
       '#type' => 'markup',

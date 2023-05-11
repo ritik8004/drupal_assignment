@@ -577,4 +577,47 @@ class AlshayaMasterCommands extends DrushCommands implements SiteAliasManagerAwa
     }
   }
 
+  /**
+   * Utility command to reset update hook version.
+   *
+   * At times when there is some feedback in update hook code we do not
+   * create a new one till the update hook is executed on prod. This creates
+   * problems at times as we need the hook to be executed again, restoring
+   * database from prod is not possible all the time (especially on UAT).
+   *
+   * @param string $module
+   *   Module name.
+   * @param int $version
+   *   Update Hook Version to re-run.
+   *
+   * @command alshaya_master:reset-update-hook
+   *
+   * @aliases reset-update-hook
+   *
+   * @usage drush reset-update-hook alshaya_master 9403
+   */
+  public function resetUpdateHook(string $module, int $version) {
+    $modules = $this->moduleExtensionList->getList();
+    if (empty($modules[$module])) {
+      throw new \InvalidArgumentException('Module either not available or installed.');
+    }
+
+    $version_installed = (int) $this->updateHookRegistery->getInstalledVersion($module);
+    if ($version_installed >= $version) {
+      $version--;
+      $this->updateHookRegistery->setInstalledVersion($module, $version);
+      $this->drupalLogger->notice('Update Hook Version updated to @version for module @module. Please run updb again.', [
+        '@version' => $version,
+        '@module' => $module,
+      ]);
+
+      return;
+    }
+
+    $this->drupalLogger->warning('Update Hook Version for module @module is @version currently.', [
+      '@version' => $version_installed,
+      '@module' => $module,
+    ]);
+  }
+
 }

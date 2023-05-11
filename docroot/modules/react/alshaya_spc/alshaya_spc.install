@@ -5,10 +5,6 @@
  * Install file.
  */
 
-use Symfony\Component\Lock\Store\PdoStore;
-use Drupal\Core\Database\Database;
-use Doctrine\DBAL\DBALException;
-use Drupal\Core\Utility\UpdateException;
 use Drupal\taxonomy\Entity\Term;
 use Drupal\alshaya_config\AlshayaConfigManager;
 
@@ -630,27 +626,6 @@ function alshaya_spc_update_8003() {
 /**
  * Implements hook_update_N().
  *
- * Install schema for symfony locking component.
- */
-function alshaya_spc_update_8002() {
-  // Get connection details and PDO object.
-  $connection = Database::getConnection();
-  $getConnectionOptions = $connection->getConnectionOptions();
-  $pdo = $connection::open($getConnectionOptions);
-
-  $store = new PdoStore($pdo);
-
-  try {
-    $store->createTable();
-  }
-  catch (DBALException $exception) {
-    throw new UpdateException($exception->getMessage(), $exception->getCode(), $exception);
-  }
-}
-
-/**
- * Implements hook_update_N().
- *
  * Update SPC translation strings.
  */
 function alshaya_spc_update_8001() {
@@ -670,14 +645,6 @@ function alshaya_spc_install() {
   if ($translations = _alshaya_spc_get_translations()) {
     alshaya_i18n_save_translations($translations);
   }
-
-  // Get connection details and PDO object.
-  $connection = Database::getConnection();
-  $getConnectionOptions = $connection->getConnectionOptions();
-  $pdo = $connection::open($getConnectionOptions);
-
-  $store = new PdoStore($pdo);
-  $store->createTable();
 }
 
 /**

@@ -3,6 +3,7 @@
   <sanitized_sku>{{product.sanitized_sku}}</sanitized_sku>
   <group_id>{{ product.group_id }}</group_id>
   <name><![CDATA[{{ product.name|raw }}]]></name>
+  <sku_title>{{ product.sku_title|raw }}</sku_title>
   <url>{{ product.url }}</url>
   <product_type>{{ product.product_type }}</product_type>
   <status>{{ product.status }}</status>
@@ -13,14 +14,14 @@
   <currency>{{ product.currency }}</currency>
   <fixed_prices>
   {% for fixed_price in product.fixed_prices %}
-  {% if fixed_price.price is not empty %}
-  <{{ fixed_price.code|lower }}>
-    <currency>{{ fixed_price.currency_code }}</currency>
-    <price>{{ fixed_price.price }}</price>
-    <special_price>{{ fixed_price.special_price }}<special_price>
-  </{{ fixed_price.code|lower }}>
-  {% endif %}
-  {% endfor %}
+  {% if fixed_price.price is not empty -%}
+    <{{ fixed_price.code|lower }}>
+      <currency>{{ fixed_price.currency_code }}</currency>
+      <price>{{ fixed_price.price }}</price>
+      <special_price>{{ fixed_price.special_price }}</special_price>
+    </{{ fixed_price.code|lower }}>
+  {% endif -%}
+  {% endfor -%}
   </fixed_prices>
   <keywords>{{ product.keywords }}</keywords>
   <promotion_label>{{ product.promotion_label }}</promotion_label>

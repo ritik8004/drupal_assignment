@@ -10,7 +10,9 @@ const Portal = ({
     const createPortalCheck = (conditional === true) ? (query !== '') : true;
     const refElement = el.current;
     if (dynamic && createPortalCheck) {
-      Object.entries(attr).forEach(([property, value]) => { refElement[property] = value; });
+      Object.entries(attr).forEach(([property, value]) => {
+        refElement[property] = value;
+      });
       const autosuggestContainer = document.querySelector('.react-autosuggest__container');
       autosuggestContainer.appendChild(refElement);
     }

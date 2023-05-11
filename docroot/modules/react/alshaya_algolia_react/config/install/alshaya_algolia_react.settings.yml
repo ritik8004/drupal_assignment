@@ -18,3 +18,5 @@ enable_hits_per_page: true
 render_single_result_facets: true
 # For filters that should not get impacted by the render_single_result_facets value.
 exclude_render_single_result_facets: ''
+# Show product attributes on PLP teaser.
+product_teaser_attributes: ''
