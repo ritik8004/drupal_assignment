@@ -1,6 +1,6 @@
 configurable_use_parent_images: 'fallback'
 image_thumb_gallery: true
-color_swatches: true
+color_swatches: false
 swatches:
   pdp:
     - color
