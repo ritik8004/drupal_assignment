@@ -20,6 +20,8 @@
 
       .level-two__dropdown {
         border-bottom: rem(2) solid $multilevel-level-open-accordion-border;
+        max-height: rem(1000);
+        transition: max-height 300ms ease-in-out;
       }
     }
 
@@ -57,6 +59,8 @@
       display: flex;
       flex-wrap: wrap;
       background-color: $multilevel-level-two-bg;
+      max-height: 0;
+      transition: max-height 0.3s cubic-bezier(0, 0, 0.2, 1);
 
       > .facet-item {
         // Overiding !important styles.
