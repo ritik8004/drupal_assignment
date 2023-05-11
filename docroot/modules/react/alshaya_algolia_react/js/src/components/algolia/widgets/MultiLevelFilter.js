@@ -40,6 +40,7 @@ const MultiLevelFilter = ({
   // Create a multilevel array for grouping attr2 by attr1.
   // Eg: Cupsizes grouped by Bandsize.
   const attributesGroup = {};
+  const attrIsActive = [];
   items.forEach((item) => {
     // eg: break Bra Size into Band and Cup Size (30 A => [30,A])
     const [attr1] = item.label.split(props.seprator);
@@ -48,13 +49,23 @@ const MultiLevelFilter = ({
     }
     attributesGroup[attr1].push(item);
     attributesGroup[attr1].sort();
+    if (item.isRefined) {
+      attrIsActive[attr1] = 'is-active';
+    }
   });
+
+  const handleCollapsed = (event) => {
+    event.preventDefault();
+    if (event.target === event.currentTarget) {
+      event.target.classList.toggle('selected-collapsed');
+    }
+  };
 
   return (
     // Creating a multilevel dropdown.
     <ul className="block-facet--multi-level-widget__level-one">
       {Object.keys(attributesGroup).map((attr1) => (
-        <li key={attr1} className="level-two">
+        <li key={attr1} className={`level-two ${attrIsActive[attr1] === 'is-active' ? 'is-active' : ''}`} onClick={handleCollapsed}>
           <h3 className="level-two__title">
             <span>{attr1}</span>
           </h3>
