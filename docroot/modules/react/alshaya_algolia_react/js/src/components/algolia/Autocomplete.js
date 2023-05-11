@@ -171,7 +171,10 @@ class Autocomplete extends React.Component {
 
   // On change send value to parent component to update search results.
   onChange = (event, { newValue }) => {
-    const { onSuggestionCleared, refine, onChange } = this.props;
+    // Store input value for predictiveSearch.
+    const {
+      onSuggestionCleared, refine, onChange, inputSearchValue,
+    } = this.props;
     if (!newValue) {
       onSuggestionCleared();
     }
@@ -197,6 +200,7 @@ class Autocomplete extends React.Component {
     this.setState({
       value: newValue,
     });
+    inputSearchValue(newValue);
     this.showMobileElements(newValue);
   };
 
