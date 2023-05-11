@@ -134,14 +134,15 @@ class AlshayaSearchAlgoliaCommands extends DrushCommands {
     $client = SearchClient::create($app_id, $app_secret_admin);
 
     $index_name = \Drupal::configFactory()->get('search_api.index.alshaya_algolia_index')->get('options.algolia_index_name');
-    // Check if we are using SKU as ObjectID on search page.
-    $index_sku_as_objectid = \Drupal::config('alshaya_search_algolia.settings')->get('index_sku_as_object_id');
     $languages = \Drupal::languageManager()->getLanguages();
     $skuManager = \Drupal::service('alshaya_acm_product.skumanager');
 
     $logger = \Drupal::logger('alshaya_search_algolia');
 
     SkuManager::$colorSplitMergeChildren = FALSE;
+    // Check if we are using SKU as ObjectID on search page.
+    $index_sku_as_objectid = \Drupal::config('alshaya_search_algolia.settings')->get('index_sku_as_object_id');
+    $node_manager = \Drupal::entityTypeManager()->getStorage('node');
     foreach ($languages as $language) {
       $name = $index_name . '_' . $language->getId();
       $index = $client->initIndex($name);
@@ -152,7 +153,7 @@ class AlshayaSearchAlgoliaCommands extends DrushCommands {
       if ($index_sku_as_objectid) {
         $objectIDs = [];
         foreach ($nids as $nid) {
-          $node = \Drupal::entityTypeManager()->getStorage('node')->load($nid);
+          $node = $node_manager->load($nid);
           $objectIDs[] = $node->get('field_skus')->getString();
         }
       }
