@@ -6,6 +6,24 @@
   );
 }
 
+.filter-fixed-top {
+  .static-minicart-wrapper {
+    .quantity {
+      html[lang="en"] & {
+        @include breakpoint($desktop) {
+          left: 0;
+        }
+      }
+
+      html[lang="ar"] & {
+        @include breakpoint($desktop) {
+          right: rem(-10);
+        }
+      }
+    }
+  }
+}
+
 @include breakpoint($desktop) {
   .block-alshaya-algolia-react-autocomplete {
     #alshaya-algolia-autocomplete {
