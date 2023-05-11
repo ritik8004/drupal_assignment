@@ -60,7 +60,10 @@
 
       > .facet-item {
         // Overiding !important styles.
-        padding: rem(17) 0 rem(17) rem(24) !important;
+        padding-top: rem(17) !important;
+        padding-bottom: rem(17) !important;
+        padding-#{$right}: 0 !important;
+        padding-#{$left}: rem(24) !important;
         display: flex;
         align-items: center;
         border-bottom: none;
