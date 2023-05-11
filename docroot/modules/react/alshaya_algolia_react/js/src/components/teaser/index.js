@@ -49,23 +49,7 @@ const Teaser = ({
   const isDesktop = window.innerWidth > 1024;
   const { currentLanguage } = drupalSettings.path;
   const { showBrandName } = drupalSettings.reactTeaserView;
-  const touchEnable = drupalSettings.reactTeaserView.swipeImage.enableSwipeImageMobile;
   const activateShoeAI = getShoeAiStatus();
-
-  // Add GTM events on touch.
-  const onTouchMove = () => {
-    if (!isDesktop) {
-      // Set object data for GTM.
-      const swipeGAData = {
-        event: showColorSwatchSlider ? 'swatches_imageswipe' : 'imageswipe',
-        eventCategory: showColorSwatchSlider ? 'swatches_imageswipe' : 'imageswipe',
-        eventAction: showColorSwatchSlider ? 'swatches_imageswipe' : 'imageswipe',
-      };
-      // Push image swipe data in GTM.
-      window.dataLayer.push(swipeGAData);
-    }
-  };
-
 
   if (drupalSettings.plp_attributes
     && drupalSettings.plp_attributes.length > 0
@@ -276,7 +260,6 @@ const Teaser = ({
             slider.slickPause();
           }
         }}
-        onTouchMove={touchEnable ? onTouchMove : null}
       >
         <div className="field field--name-field-skus field--type-sku field--label-hidden field__items">
           <a

@@ -20,7 +20,7 @@ const Gallery = (props) => {
     return (<AssetGallery {...props} />);
   }
 
-  if (gallery.showThumbnails) {
+  if (isDesktop() && gallery.showThumbnails) {
     return (<SearchGallery {...props} />);
   }
 
