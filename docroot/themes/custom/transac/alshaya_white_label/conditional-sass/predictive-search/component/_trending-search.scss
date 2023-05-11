@@ -1,0 +1,75 @@
+// Existing search selectors override / styles reset.
+.block-alshaya-algolia-react-autocomplete {
+  &:not(.clear-icon) {
+    #alshaya-algolia-autocomplete {
+      .predictive-search--open {
+        .react-autosuggest {
+          &__suggestions-list {
+            display: flex;
+            column-gap: rem(8);
+            overflow: auto;
+          }
+
+          &__suggestion {
+            padding: rem(10);
+            background: #f4eddd;
+            display: flex;
+            align-items: center;
+
+            &::before {
+              content: '';
+              display: inline-block;
+              width: rem(16);
+              height: rem(12);
+              margin-#{$right}: rem(8);
+              background: url("#{$base_theme_img_directory_path}/icons/vector.svg") no-repeat;
+              background-position: bottom;
+            }
+          }
+
+          &__container {
+            .react-autosuggest__suggestions-list {
+              .react-autosuggest__suggestion {
+                .aa-suggestion {
+                  .suggested-text {
+                    padding: 0;
+                    line-height: rem(20);
+                  }
+                }
+              }
+            }
+          }
+        }
+
+        @include breakpoint($only-mobile) {
+          .trending-title {
+            padding: rem(16) rem(12) !important;
+            margin-top: rem(8);
+          }
+
+          .react-autosuggest__suggestions {
+            &-container--open {
+              background: #faf9f8;
+            }
+
+            &-list {
+              background: white;
+              padding: rem(12);
+            }
+          }
+        }
+
+        @include breakpoint($tablet) {
+          .react-autosuggest {
+            &__container {
+              .trending-title {
+                padding: 0 !important;
+                margin-bottom: rem(16);
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}

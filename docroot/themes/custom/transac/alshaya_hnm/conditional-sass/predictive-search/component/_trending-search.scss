@@ -1,0 +1,13 @@
+// Existing search selectors override.
+.block-alshaya-algolia-react-autocomplete {
+  &:not(.clear-icon) {
+    #alshaya-algolia-autocomplete {
+      .predictive-search--open {
+        .trending-title {
+          font-family: $hnm-demibold;
+          font-weight: unset;
+        }
+      }
+    }
+  }
+}

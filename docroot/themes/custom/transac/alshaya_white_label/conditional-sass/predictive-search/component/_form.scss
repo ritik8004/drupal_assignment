@@ -36,6 +36,7 @@
             background: unset;
             padding-#{$left}: rem(32) !important;
             width: 92%;
+            margin-bottom: rem(26);
           }
         }
       }
@@ -77,7 +78,7 @@
       .predictive-search {
         &__btn-clear {
           text-decoration: underline;
-          font-size: rem(14);
+          font-size: rem(13);
           line-height: rem(20);
         }
 

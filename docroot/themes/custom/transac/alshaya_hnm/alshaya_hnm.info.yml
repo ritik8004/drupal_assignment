@@ -394,3 +394,8 @@ libraries-override:
     css:
       theme:
         css/conditional-sass/article-swatch-slider/article-swatch-slider.ltr.css: css/conditional-sass/article-swatch-slider/article-swatch-slider.ltr.css
+
+  alshaya_white_label/predictive-search:
+    css:
+      theme:
+        css/conditional-sass/predictive-search/predictive-search.ltr.css: css/conditional-sass/predictive-search/predictive-search.ltr.css
