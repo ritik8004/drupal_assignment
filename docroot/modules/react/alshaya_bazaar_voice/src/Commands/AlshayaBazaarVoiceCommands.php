@@ -149,6 +149,7 @@ class AlshayaBazaarVoiceCommands extends DrushCommands {
     $languages = \Drupal::languageManager()->getLanguages();
     // Check if we are using SKU as ObjectID on search page.
     $index_sku_as_objectid = \Drupal::config('alshaya_search_algolia.settings')->get('index_sku_as_object_id');
+    $node_manager = \Drupal::entityTypeManager()->getStorage('node');
     foreach ($index_names as $index) {
       $search_api_index = 'search_api.index.' . $index;
       $index_name = \Drupal::configFactory()->get($search_api_index)->get('options.algolia_index_name');
@@ -167,7 +168,7 @@ class AlshayaBazaarVoiceCommands extends DrushCommands {
           if ($index_sku_as_objectid) {
             $objectIDs = [];
             foreach ($nids as $nid) {
-              $node = \Drupal::entityTypeManager()->getStorage('node')->load($nid);
+              $node = $node_manager->load($nid);
               $objectIDs[] = $node->get('field_skus')->getString();
             }
           }

@@ -136,9 +136,9 @@ function alshaya_search_algolia_search_api_algolia_objects_alter(array &$objects
     }
 
     try {
-      $indexSkuAsObjectid = \Drupal::config('alshaya_search_algolia.settings')->get('index_sku_as_object_id');
+      $index_sku_as_objectid = \Drupal::config('alshaya_search_algolia.settings')->get('index_sku_as_object_id');
       // Change objectID to sku in search index if enabled.
-      if ($indexSkuAsObjectid && $index->id() == AlshayaAlgoliaIndexHelper::SEARCH_INDEX) {
+      if ($index_sku_as_objectid && $index->id() == AlshayaAlgoliaIndexHelper::SEARCH_INDEX) {
         $object['objectID'] = $object['sku'];
       }
       // Process index object for product list index.
