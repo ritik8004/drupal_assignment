@@ -71,7 +71,7 @@ class RcsPhPlaceholderHelper {
    * @param array $queries
    *   The query array to set.
    */
-  public function doSet(array $queries): void {
+  protected function doSet(array $queries): void {
     $this->queries = $queries;
   }
 
