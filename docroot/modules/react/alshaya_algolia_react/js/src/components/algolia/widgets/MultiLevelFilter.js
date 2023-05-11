@@ -50,14 +50,17 @@ const MultiLevelFilter = ({
     attributesGroup[attr1].push(item);
     attributesGroup[attr1].sort();
     if (item.isRefined) {
-      attrIsActive[attr1] = 'is-active';
+      attrIsActive[attr1] = 'yes';
     }
   });
 
   const handleCollapsed = (event) => {
     event.preventDefault();
-    if (event.target === event.currentTarget) {
-      event.target.classList.toggle('selected-collapsed');
+    if (event.currentTarget.classList.contains('has-selection')) {
+      event.currentTarget.classList.toggle('selected-collapsed');
+      event.currentTarget.classList.toggle('is-active');
+    } else {
+      event.currentTarget.classList.toggle('is-active');
     }
   };
 
@@ -65,7 +68,7 @@ const MultiLevelFilter = ({
     // Creating a multilevel dropdown.
     <ul className="block-facet--multi-level-widget__level-one">
       {Object.keys(attributesGroup).map((attr1) => (
-        <li key={attr1} className={`level-two ${attrIsActive[attr1] === 'is-active' ? 'is-active' : ''}`} onClick={handleCollapsed}>
+        <li key={attr1} className={`level-two ${attrIsActive[attr1] === 'yes' ? 'has-selection is-active' : ''}`} onClick={handleCollapsed}>
           <h3 className="level-two__title">
             <span>{attr1}</span>
           </h3>
