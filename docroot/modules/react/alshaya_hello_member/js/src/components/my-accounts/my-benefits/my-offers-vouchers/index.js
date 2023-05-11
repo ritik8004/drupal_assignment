@@ -3,6 +3,7 @@ import { hasValue } from '../../../../../../../js/utilities/conditionsUtility';
 import getStringMessage from '../../../../../../../js/utilities/strings';
 import { isMobile } from '../../../../../../../js/utilities/display';
 import { formatDate } from '../../../../utilities';
+import { sortBenefits } from '../../../../../../../js/utilities/helloMemberHelper';
 
 const { showMoreLimit } = drupalSettings.helloMember;
 class MyOffersAndVouchers extends React.Component {
@@ -48,10 +49,22 @@ class MyOffersAndVouchers extends React.Component {
     return '';
   };
 
+  /**
+   * Function to return true or false based on the availability of 'I' tag from the list.
+   *
+   * @param {array} myBenefitsList
+   * @param {string} tag
+   * @returns {boolean} true if the tag is available
+   */
+  isInfoTagAvailable = (myBenefitsList, tag) => myBenefitsList.some((el) => el.tag === tag);
+
   render() {
     const { myBenefitsList } = this.props;
+    // Check if the list has 'I' tag available.
+    const isInfoTypeAvailable = this.isInfoTagAvailable(myBenefitsList, 'I');
+    const benefitList = isInfoTypeAvailable ? sortBenefits(myBenefitsList) : myBenefitsList;
     const { expanded } = this.state;
-    const dataForDisplay = expanded ? myBenefitsList : myBenefitsList.slice(0, showMoreLimit);
+    const dataForDisplay = expanded ? benefitList : benefitList.slice(0, showMoreLimit);
     const { uid } = drupalSettings.user;
     return (
       <div className="my-benefits-wrapper">
