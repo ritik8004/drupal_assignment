@@ -1,0 +1,98 @@
+#attr_bra_size {
+  .block-facet--multi-level-widget {
+    &__title {
+      margin: 0;
+      line-height: rem(14);
+      padding: rem(21) rem(24);
+      font-size: rem(12);
+      color: $multilevel-filter-title-txt;
+      background-color: $multilevel-filter-title-bg;
+      position: relative;
+      border-bottom: rem(1) solid $multilevel-filter-title-border;
+
+      @include icon(chevrondown, after) {
+        color: $multilevel-arrow;
+        font-size: 1.5rem;
+        cursor: pointer;
+        pointer-events: none;
+        position: absolute;
+        #{$right}: rem(24);
+        top: 50%;
+        transform: translateY(-50%);
+        transition: transform 0.4s ease-in-out;
+      }
+
+      &.is-active {
+        font-family: $alshaya-bold;
+        border-bottom: none;
+
+        &::after {
+          transform: translateY(-50%) rotate(180deg);
+        }
+      }
+
+      &.selected-collapsed {
+        font-family: $alshaya-bold;
+        background-color: $multilevel-level-selected-collapsed-title-bg;
+      }
+    }
+
+    &__level-one {
+      > li {
+        margin-bottom: 0;
+      }
+    }
+
+    &__level-two {
+      display: flex;
+      flex-wrap: wrap;
+      background-color: $multilevel-level-two-bg;
+
+      > .facet-item {
+        // Overiding !important styles.
+        padding: rem(17) 0 rem(17) rem(24) !important;
+        display: flex;
+        align-items: center;
+        border-bottom: none;
+        width: 50%;
+
+        > a {
+          margin-top: 0;
+
+          .facet-item__value {
+            &::before {
+              margin-#{$right}: rem(15);
+            }
+
+            .facet-item__label {
+              color: $multilevel-filter-band-txt;
+              line-height: 1;
+            }
+
+            .facet-item__count {
+              line-height: 1;
+              padding-#{$left}: rem(4);
+              color: $multilevel-filter-band-txt;
+            }
+          }
+        }
+
+        &.is-active {
+          background: none;
+
+          .facet-item__value {
+            font-family: $alshaya-bold;
+          }
+
+          &::after {
+            content: none;
+          }
+        }
+      }
+
+      &.is-active {
+        border-bottom: rem(2) solid $multilevel-level-open-accordion-border;
+      }
+    }
+  }
+}

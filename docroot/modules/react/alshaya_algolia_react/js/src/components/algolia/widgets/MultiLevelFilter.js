@@ -52,11 +52,13 @@ const MultiLevelFilter = ({
 
   return (
     // Creating a multilevel dropdown.
-    <ul>
+    <ul className="block-facet--multi-level-widget__level-one">
       {Object.keys(attributesGroup).map((attr1) => (
-        <li className="attr-group-title" key={attr1}>
-          {attr1}
-          <ul>
+        <li key={attr1}>
+          <h3 className="block-facet--multi-level-widget__title">
+            <span>{attr1}</span>
+          </h3>
+          <ul className="block-facet--multi-level-widget__level-two">
             {attributesGroup[attr1].map((item) => (
               <li
                 key={item.label}
