@@ -11,3 +11,24 @@
     }
   }
 }
+
+.path--wishlist {
+  .c-plp.lhn-without-sidebar {
+    .c-products-list.product-small {
+      .alshaya_search_gallery {
+        @include breakpoint($desktop) {
+          height: 100%;
+        }
+
+        .img-wrapper,
+        .alshaya_search_mainimage {
+          height: auto;
+        }
+
+        img {
+          height: 100%;
+        }
+      }
+    }
+  }
+}
