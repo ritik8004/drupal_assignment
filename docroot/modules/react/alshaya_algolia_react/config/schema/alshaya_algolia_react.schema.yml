@@ -56,9 +56,6 @@ alshaya_algolia_react.settings:
     product_teaser_attributes:
       type: string
       label: 'Attributes to be displayed on PLP teaser.'
-    algolia_facets_local_storage_expiry:
-      type: integer
-      label: 'Expiry in seconds for getting facets from algolia.'
     algolia_enable_configurable_filter:
       type: boolean
       label: 'Enable or disable configurable filters.'

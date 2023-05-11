@@ -193,7 +193,7 @@ class AlshayaProductListHelper {
     return [
       'option_key' => $node->get('field_attribute_name')->first()->getString(),
       'option_val' => $node->get('field_attribute_value')->first()->getString(),
-      'ruleContext' => [$rule_context, "web_$rule_context"],
+      'ruleContext' => [$rule_context, "web__$rule_context"],
     ];
   }
 
