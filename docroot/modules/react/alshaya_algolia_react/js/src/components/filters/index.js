@@ -136,10 +136,11 @@ const Filters = ({ indexName, pageType, ...props }) => {
     const { ruleContexts } = props;
 
     if (hasValue(ruleContexts)) {
-      // Add default context to the list of contexts.
-      ruleContexts.unshift('default');
-      // Sort userData array by context.
-      data.sort((a, b) => ruleContexts.indexOf(a.context) - ruleContexts.indexOf(b.context));
+      const ruleContextsArr = [...ruleContexts];
+      // Add default context to the top of the contexts list.
+      ruleContextsArr.unshift('default');
+      // Sort userData array by contexts.
+      data.sort((a, b) => ruleContextsArr.indexOf(a.context) - ruleContextsArr.indexOf(b.context));
     }
 
     data.forEach((filterData) => {
