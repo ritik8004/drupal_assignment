@@ -67,12 +67,9 @@ class HelloMemberLoyaltyOptions extends React.Component {
    *  Customer identifier number.
    */
   updateHelloMemberPoints = async (identifierNo) => {
-    const {
-      cart: { cart: { items } },
-    } = this.props;
     let hmPoints = null;
     let error = false;
-    const response = await getHelloMemberPointsToEarn(items, identifierNo);
+    const response = await getHelloMemberPointsToEarn(identifierNo);
     if (hasValue(response) && !hasValue(response.error) && hasValue(response.data)) {
       if (hasValue(response.data.hm_points)) {
         hmPoints = response.data.hm_points;

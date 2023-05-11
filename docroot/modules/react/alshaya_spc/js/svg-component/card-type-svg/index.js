@@ -246,7 +246,7 @@ const CardTypeSVG = (props) => {
   if (type === 'qpay') {
     return (
       <span className={`spc-card-type ${classValue}`}>
-        <svg width="35" height="22" viewBox="0 0 35 22" xmlns="http://www.w3.org/2000/svg" xmlnsXlink="http://www.w3.org/1999/xlink">
+        <svg width="39" height="25" viewBox="0 0 35 22" xmlns="http://www.w3.org/2000/svg" xmlnsXlink="http://www.w3.org/1999/xlink">
           <defs>
             <rect id="zglsyx5sua" x="0" y="0" width="35" height="22" rx="2.258"/>
           </defs>
@@ -266,7 +266,7 @@ const CardTypeSVG = (props) => {
   if (type === 'postpay') {
     return (
       <span className={`spc-card-type ${classValue}`}>
-        <svg width="37" height="24" viewBox="0 0 37 24" xmlns="http://www.w3.org/2000/svg">
+        <svg width="39" height="25" viewBox="0 0 37 24" xmlns="http://www.w3.org/2000/svg">
           <g transform="translate(1 1)" fill-rule="nonzero" fill="none">
             <rect stroke="#333" fill="#FFF" width="35" height="22" rx="1"/>
             <text transform="translate(3 6)" fill="#333" font-family="Helvetica" font-size="8">
@@ -280,7 +280,7 @@ const CardTypeSVG = (props) => {
   if (type === 'tabby') {
     return (
       <span className={`spc-card-type ${classValue}`}>
-        <svg width="35" height="22" viewBox="0 0 35 22" xmlns="http://www.w3.org/2000/svg" xmlnsXlink="http://www.w3.org/1999/xlink">
+        <svg width="39" height="25" viewBox="0 0 35 22" xmlns="http://www.w3.org/2000/svg" xmlnsXlink="http://www.w3.org/1999/xlink">
           <defs>
             <linearGradient x1="0%" y1="49.996%" x2="100.001%" y2="49.996%" id="mejoj7fydc">
               <stop stop-color="#3BFF9D" offset="0%"/>
@@ -311,7 +311,7 @@ const CardTypeSVG = (props) => {
   if (type === 'aura') {
     return (
       <span className={`spc-card-type ${classValue}`}>
-        <svg width="35" height="22" viewBox="0 0 35 22" xmlns="http://www.w3.org/2000/svg" xmlnsXlink="http://www.w3.org/1999/xlink">
+        <svg width="39" height="25" viewBox="0 0 35 22" xmlns="http://www.w3.org/2000/svg" xmlnsXlink="http://www.w3.org/1999/xlink">
           <defs>
             <linearGradient x1="0%" y1="36.915%" x2="100%" y2="69.755%" id="0w7a84l6la">
               <stop stopColor="#EFC06E" offset="0%"/>
@@ -348,7 +348,7 @@ const CardTypeSVG = (props) => {
   if (type === 'benefit_pay') {
     return (
       <span className={`spc-card-type ${classValue}`}>
-        <svg width="35px" height="22px" viewBox="0 0 35 22" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlnsXlink="http://www.w3.org/1999/xlink">
+        <svg width="39px" height="25px" viewBox="0 0 35 22" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlnsXlink="http://www.w3.org/1999/xlink">
           <title>1AF39BCD-E51A-427F-BB06-477D3D022059</title>
           <defs>
             <rect id="path-1" x="0" y="0" width="35" height="22" rx="4"></rect>
@@ -390,7 +390,7 @@ const CardTypeSVG = (props) => {
   if (type === 'fawry') {
     return (
       <span className={`spc-card-type ${classValue}`}>
-        <svg width="35" height="22" viewBox="0 0 35 22" xmlns="http://www.w3.org/2000/svg" xmlnsXlink="http://www.w3.org/1999/xlink">
+        <svg width="39" height="25" viewBox="0 0 35 22" xmlns="http://www.w3.org/2000/svg" xmlnsXlink="http://www.w3.org/1999/xlink">
           <defs>
             <rect id="fbpv8e3bpa" x="0" y="0" width="35" height="22" rx="4"/>
           </defs>

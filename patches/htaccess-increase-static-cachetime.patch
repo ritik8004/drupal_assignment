@@ -4,10 +4,10 @@ index 9eb12cb796..82f3f9f861 100644
 +++ b/.htaccess
 @@ -45,7 +45,7 @@ AddEncoding gzip svgz
    ExpiresActive On
- 
-   # Cache all files for 2 weeks after access (A).
+
+   # Cache all files and redirects for 2 weeks after access (A).
 -  ExpiresDefault A1209600
 +  ExpiresDefault A31557600
- 
+
    <FilesMatch \.php$>
      # Do not allow PHP scripts to be cached unless they explicitly send cache

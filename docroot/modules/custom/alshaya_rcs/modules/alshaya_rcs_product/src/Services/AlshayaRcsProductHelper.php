@@ -501,6 +501,17 @@ class AlshayaRcsProductHelper {
       ],
     ];
 
+    // Add attributes to be displayed on PDP title to the query.
+    $title_attributes = $this->configFactory->get('alshaya_acm_product.display_settings')->get('pdp_title_attributes');
+    if ($title_attributes) {
+      foreach (explode(',', $title_attributes) as $attribute) {
+        array_push(
+          $fields['items'],
+          $attribute
+        );
+      }
+    }
+
     $this->moduleHandler->alter('alshaya_rcs_product_query_fields', $fields);
 
     // Add the configurable product attributes dynamically.
@@ -563,6 +574,12 @@ class AlshayaRcsProductHelper {
 
     // Fetch the attributes provided by other modules.
     $options = $this->moduleHandler->invokeAll('alshaya_rcs_product_product_options_to_query');
+
+    $title_attributes_options = $this->configFactory->get('alshaya_acm_product.display_settings')->get('pdp_title_attributes');
+    if (!empty($title_attributes_options)) {
+      $options = array_merge($options, explode(',', $title_attributes_options));
+    }
+
     $attributes = $this->getConfigurableAttributes();
     // Add the configurable attributes.
     $options = array_merge($options, $attributes);
@@ -803,6 +820,9 @@ class AlshayaRcsProductHelper {
     $attachments['#attached']['drupalSettings']['alshayaRcs']['colorAttributeConfig'] = $product_display_settings->get('color_attribute_config');
     $attachments['#attached']['drupalSettings']['alshayaRcs']['priceDisplayMode'] = $product_display_settings->get('price_display_mode') ?? 'simple';
     $attachments['#attached']['drupalSettings']['showPreSelectedVariantOnPdp'] = $product_display_settings->get('show_pre_selected_variant_on_pdp');
+    $attachments['#attached']['drupalSettings']['alshayaRcs']['pdpTitleAttributes'] = !empty($product_display_settings->get('pdp_title_attributes'))
+      ? explode(',', $product_display_settings->get('pdp_title_attributes'))
+      : [];
 
     $attachments['#cache']['tags'] = Cache::mergeTags(
       $attachments['#cache']['tags'],

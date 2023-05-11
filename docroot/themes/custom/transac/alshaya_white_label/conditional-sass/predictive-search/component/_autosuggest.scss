@@ -1,0 +1,12 @@
+@include breakpoint($tablet) {
+  // Existing search styles reset.
+  .block-alshaya-algolia-react-autocomplete {
+    #alshaya-algolia-autocomplete {
+      .predictive-search--open {
+        .react-autosuggest__suggestions-container {
+          position: unset;
+        }
+      }
+    }
+  }
+}
