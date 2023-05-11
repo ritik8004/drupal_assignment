@@ -9,14 +9,12 @@
 .filter-fixed-top {
   .static-minicart-wrapper {
     .quantity {
-      html[lang="en"] & {
-        @include breakpoint($desktop) {
+      @include breakpoint($desktop) {
+        html[lang="en"] & {
           left: 0;
         }
-      }
 
-      html[lang="ar"] & {
-        @include breakpoint($desktop) {
+        html[lang="ar"] & {
           right: rem(-10);
         }
       }

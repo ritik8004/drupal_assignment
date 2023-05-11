@@ -16,6 +16,7 @@ import { checkCartCustomer } from '../../../utilities/cart_customer_util';
 import { smoothScrollTo } from '../../../utilities/smoothScroll';
 import { fetchCartData } from '../../../utilities/api/requests';
 import DynamicPromotionBanner from '../dynamic-promotion-banner';
+import DeliveryInOnlyCity from '../../../utilities/delivery-in-only-city';
 import AuraCartContainer from '../../../aura-loyalty/components/aura-cart-rewards/aura-cart-container';
 import isAuraEnabled, { isCheckoutTracker } from '../../../../../js/utilities/helper';
 import { openFreeGiftModal, selectFreeGiftModal } from '../../../utilities/free_gift_util';
@@ -545,6 +546,7 @@ export default class Cart extends React.Component {
                 />
               </ConditionalView>
             </div>
+            <DeliveryInOnlyCity />
             {isOnlineReturnsCartBannerEnabled() && (
               <OnlineReturnsCartBanner />
             )}
