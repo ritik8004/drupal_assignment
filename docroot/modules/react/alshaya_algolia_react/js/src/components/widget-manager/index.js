@@ -11,6 +11,8 @@ import DeliveryTypeFilter from '../algolia/widgets/DeliveryTypeFilter';
 import ConditionalView from '../../../common/components/conditional-view';
 import { isExpressDeliveryEnabled } from '../../../../../js/utilities/expressDeliveryHelper';
 import { getBackToPlpPageIndex } from '../../utils/indexUtils';
+import { hasValue } from '../../../../../js/utilities/conditionsUtility';
+import { isConfigurableFiltersEnabled } from '../../../../../js/utilities/helper';
 
 const WidgetManager = React.memo((props) => {
   const
@@ -84,7 +86,21 @@ const WidgetManager = React.memo((props) => {
         />
       );
       break;
-    case 'delivery_ways':
+    case 'delivery_ways': {
+      let sameDayValue = hasValue(filter.same_value) ? filter.same_value : '';
+      let expressDeliveryValue = hasValue(filter.express_value) ? filter.express_value : '';
+
+      // If configurable filters is enabled then prepare label values from
+      // facet values.
+      if (isConfigurableFiltersEnabled()) {
+        const {
+          same_day_delivery_available: sameValue,
+          express_day_delivery_available: expressValue,
+        } = filter.facet_values;
+        sameDayValue = sameValue;
+        expressDeliveryValue = expressValue;
+      }
+
       currentWidget = (
         <ConditionalView condition={
           isExpressDeliveryEnabled()
@@ -95,12 +111,13 @@ const WidgetManager = React.memo((props) => {
             facetValues={filter.facet_values}
             attribute={filter.identifier}
             itemCount={itemCount}
-            sameDayValue={filter.same_value}
-            expressDeliveryValue={filter.express_value}
+            sameDayValue={sameDayValue}
+            expressDeliveryValue={expressDeliveryValue}
           />
         </ConditionalView>
       );
       break;
+    }
     case 'checkbox':
     default:
       currentWidget = (

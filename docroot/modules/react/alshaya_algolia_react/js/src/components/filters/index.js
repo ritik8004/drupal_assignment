@@ -251,13 +251,6 @@ const Filters = ({ indexName, pageType, ...props }) => {
         filter.facet_values = value.facet_values[identifierPrefix];
       }
 
-      if (key === 'attr_delivery_ways' && hasValue(value.facet_values[identifierPrefix])) {
-        // Get delivery type express key value.
-        filter.express_value = value.facet_values[identifierPrefix].express_day_delivery_available;
-        // Get delivery type same day key value.
-        filter.same_value = value.facet_values[identifierPrefix].same_day_delivery_available;
-      }
-
       if (hasValue(value.lhn)) {
         lhnFilters[key] = filter;
       } else {
