@@ -55,7 +55,6 @@ const WidgetManager = React.memo((props) => {
       currentWidget = (
         <MultiLevelFilter
           name={name}
-          facetValues={filter.facet_values}
           attribute={filter.identifier}
           searchable={false}
           itemCount={itemCount}
