@@ -18,7 +18,8 @@ const openDrupalDialog = (e, options) => {
     dialogDisplay,
   } = e.target.dataset;
 
-  if (options.isSizeGuideLink) {
+  // Pushing a GTM event if the dialog is for size guide and context is provided.
+  if (options.isSizeGuideLink && options.context) {
     Drupal.alshayaSeoGtmPushSizeGuideEvents('open', options.context);
   }
 
