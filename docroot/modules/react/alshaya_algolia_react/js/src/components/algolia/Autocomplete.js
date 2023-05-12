@@ -19,7 +19,7 @@ const InputButtons = React.memo((props) => (
     {(predictiveSearchEnabled && props.hits.length < 1 && props.value.trim() !== '') ? (
       <Portal
         key="no-result"
-        className="predictive-search__msg-no-result hidden"
+        className="predictive-search__msg-no-result"
         innerHTML={`${Drupal.t('Nothing found for "')}<span class="bold">${props.value}"</span>`}
       />
     ) : null}
