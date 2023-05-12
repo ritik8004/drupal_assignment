@@ -22,6 +22,7 @@ const WidgetManager = React.memo((props) => {
   let currentWidget = '';
   let className = '';
   let plpSortIndex = null;
+  let filterId = filter.identifier;
   const seprator = ' ';
   switch (filter.widget.type) {
     case 'sort_by':
@@ -52,6 +53,7 @@ const WidgetManager = React.memo((props) => {
       break;
     case 'multi_level_widget':
       className = 'block-facet--multi-level-widget';
+      filterId = 'multi-attr-group';
       currentWidget = (
         <MultiLevelFilter
           name={name}
@@ -126,7 +128,12 @@ const WidgetManager = React.memo((props) => {
   }
 
   return (
-    <FilterPanel header={filter.label} id={filter.identifier} className={className}>
+    <FilterPanel
+      header={filter.label}
+      id={filterId}
+      dataId={filter.identifier}
+      className={className}
+    >
       {currentWidget}
     </FilterPanel>
   );
