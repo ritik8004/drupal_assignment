@@ -3,7 +3,6 @@
 // The connector collects userData from results and return to
 // calling component i.e Filters in callback.
 import React, { Fragment } from 'react';
-import { getDisplayName } from '../../../utils/FilterUtils';
 import { hasValue } from '../../../../../../js/utilities/conditionsUtility';
 import connectDynamicWidgets from '../connectors/connectDynamicWidgets';
 import { isDesktop } from '../../../../../../js/utilities/display';
@@ -29,6 +28,17 @@ function getAttribute(element) {
 
   return undefined;
 }
+
+/**
+ * Provides component display name for error message.
+ *
+ * @param Component
+ *   React component.
+ *
+ * @returns {*|string}
+ *   Display name or unkown component.
+ */
+const getDisplayName = (Component) => Component.displayName || Component.name || 'UnknownComponent';
 
 function DynamicWidgets({
   children,
