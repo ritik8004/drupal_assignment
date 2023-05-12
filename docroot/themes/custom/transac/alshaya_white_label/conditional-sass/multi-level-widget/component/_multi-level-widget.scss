@@ -109,3 +109,22 @@
     }
   }
 }
+
+@include breakpoint($desktop) {
+  // Unsetting inherited style for top filters
+  .sticky-filter-wrapper #multi-attr-group {
+    .block-facet--multi-level-widget__level-one {
+      top: unset;
+      padding-top: 0;
+      padding-bottom: 0;
+    }
+
+    .level-two__dropdown {
+      top: unset;
+      padding: 0;
+      position: relative;
+      width: unset;
+      border-bottom: 0;
+    }
+  }
+}
