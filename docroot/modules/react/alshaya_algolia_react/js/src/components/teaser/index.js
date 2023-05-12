@@ -49,7 +49,7 @@ const Teaser = ({
   });
   const isDesktop = window.innerWidth > 1024;
   const { currentLanguage } = drupalSettings.path;
-  const { showBrandName } = drupalSettings.reactTeaserView;
+  const { showBrandName, swipeImage } = drupalSettings.reactTeaserView;
   const activateShoeAI = getShoeAiStatus();
 
   if (drupalSettings.plp_attributes
@@ -235,8 +235,8 @@ const Teaser = ({
 
   // Initialize slick carousel for touch devices.
   useEffect(() => {
-    // Check if touch device and Slick is initialized.
-    if (!isDesktop && !initSlider) {
+    // Check if touch device, swipe Image is enabled, and Slick is initialized.
+    if (!isDesktop && swipeImage.enableSwipeImageMobile && !initSlider) {
       setInitiateSlider(true);
     }
   }, []);
