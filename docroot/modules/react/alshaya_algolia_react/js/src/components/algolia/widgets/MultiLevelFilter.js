@@ -41,6 +41,17 @@ const MultiLevelFilter = ({
   // Eg: Cupsizes grouped by Bandsize.
   const attributesGroup = {};
   const attrIsActive = [];
+  function compare(a, b) {
+    if (a.label < b.label) {
+      return -1;
+    }
+    if (a.label > b.label) {
+      return 1;
+    }
+    return 0;
+  }
+
+  items.sort(compare);
   items.forEach((item) => {
     // eg: break Bra Size into Band and Cup Size (30 A => [30,A])
     const [attr1] = item.label.split(props.seprator);
@@ -48,12 +59,10 @@ const MultiLevelFilter = ({
       attributesGroup[attr1] = [];
     }
     attributesGroup[attr1].push(item);
-    attributesGroup[attr1].sort();
     if (item.isRefined) {
       attrIsActive[attr1] = 'yes';
     }
   });
-
   const handleCollapsed = (event) => {
     event.preventDefault();
     if (event.currentTarget.closest('li').classList.contains('has-selection')) {
