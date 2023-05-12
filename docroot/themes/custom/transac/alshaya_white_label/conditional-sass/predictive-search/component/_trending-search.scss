@@ -1,4 +1,4 @@
-// Existing search selectors override / styles reset.
+// Existing selectors override / styles reset.
 .block-alshaya-algolia-react-autocomplete {
   &:not(.clear-icon) {
     #alshaya-algolia-autocomplete {
@@ -12,7 +12,7 @@
 
           &__suggestion {
             padding: rem(10);
-            background: #f4eddd;
+            background: $predictive-search-trending;
             display: flex;
             align-items: center;
 
@@ -49,11 +49,11 @@
 
           .react-autosuggest__suggestions {
             &-container--open {
-              background: #faf9f8;
+              background: $predictive-search-tinted-bg;
             }
 
             &-list {
-              background: white;
+              background: $predictive-search-default-bg;
               padding: rem(12);
             }
           }

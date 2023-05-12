@@ -1,5 +1,18 @@
-// New predictive search styles.
+@include breakpoint($only-tablet) {
+  // Existing selectors override / styles reset.
+  .show-predictive-search {
+    .block-alshaya-algolia-react-autocomplete {
+      position: unset;
+      transform: unset;
+    }
+  }
+}
+
 @include breakpoint($tablet) {
+  .show-predictive-search {
+    overflow: hidden;
+  }
+
   .predictive-search {
     .ais-InstantSearch__root {
       position: unset;
@@ -15,22 +28,8 @@
 
         bottom: unset;
         min-height: rem(262);
-        background: $predictive-search-panel-bg;
+        background: $predictive-search-default-bg;
       }
-    }
-  }
-
-  .show-predictive-search {
-    overflow: hidden;
-  }
-}
-
-// Existing search styles reset.
-@include breakpoint($only-tablet) {
-  .show-predictive-search {
-    .block-alshaya-algolia-react-autocomplete {
-      position: unset;
-      transform: unset;
     }
   }
 }
