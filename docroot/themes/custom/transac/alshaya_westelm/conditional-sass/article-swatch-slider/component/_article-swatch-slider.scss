@@ -7,7 +7,7 @@
         width: rem(30);
         height: rem(30);
         top: rem(-3);
-        left: rem(-3);
+        #{$left}: rem(-3);
       }
     }
 
