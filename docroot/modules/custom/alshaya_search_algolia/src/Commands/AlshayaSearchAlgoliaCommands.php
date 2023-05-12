@@ -154,7 +154,9 @@ class AlshayaSearchAlgoliaCommands extends DrushCommands {
         $objectIDs = [];
         foreach ($nids as $nid) {
           $node = $node_manager->load($nid);
-          $objectIDs[] = $node->get('field_skus')->getString();
+          if ($node) {
+            $objectIDs[] = $node->get('field_skus')->getString();
+          }
         }
       }
       try {
