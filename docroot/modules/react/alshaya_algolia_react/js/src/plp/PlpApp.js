@@ -229,7 +229,7 @@ const PlpApp = ({
             <ConditionalView condition={categoryFieldAttributes.length > 0}>
               <div className="c-facet c-accordion block-facet-blockcategory-facet-plp algolia-plp-category-facet">
                 <h3 className="c-facet__title c-accordion__title c-collapse__title plp-category-facet-title">{drupalSettings.algoliaSearch.category_facet_label}</h3>
-                <MobileFilterWrapper>
+                <MobileFilterWrapper maxValuesPerFacet={1000}>
                   <PLPHierarchicalMenu
                     attributes={categoryFieldAttributes}
                     rootPath={lhnCategoryFilter}

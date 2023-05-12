@@ -147,7 +147,7 @@ const SearchResultsComponent = ({
       ) : null}
       {isDesktop()
           && (
-          <SideBarWrapper lhn>
+          <SideBarWrapper lhn maxValuesPerFacet={1000}>
             {superCategoryComponent}
             {fieldCategoryComponent}
           </SideBarWrapper>
@@ -217,7 +217,7 @@ const SearchResultsComponent = ({
                         <h3 className="c-facet__title c-accordion__title c-collapse__title" onClick={showCategoryFacets}>
                           {Drupal.t('Brands/Category')}
                         </h3>
-                        <DynamicWidgets lhn>
+                        <DynamicWidgets lhn maxValuesPerFacet={1000}>
                           {superCategoryComponent}
                           {fieldCategoryComponent}
                         </DynamicWidgets>
