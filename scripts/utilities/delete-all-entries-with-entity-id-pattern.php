@@ -57,9 +57,9 @@ $objectids_to_delete = $query->execute()->fetchCol();
 $logger->notice('@count products found.', [
   '@count' => count($objectids_to_delete),
 ]);
-foreach (array_chunk($objectids_to_delete, '100') as $smaller_chunk) {
+foreach (array_chunk($objectids_to_delete, '500') as $smaller_chunk) {
   $obj_id = [];
-  $logger->warning('Removing chunk of 100 records.');
+  $logger->warning('Removing chunk of 500 records.');
   foreach ($smaller_chunk as $object_id) {
     $obj_id[] = $index_sku_as_object_id ? "entity:node/$object_id:$lang" : $object_id;
   }
