@@ -222,14 +222,6 @@ const Teaser = ({
   let dataVmode = null;
   if (pageType === 'search') {
     dataVmode = { 'data-vmode': 'search_result' };
-
-    // Initialize slick carousel for touch devices.
-    useEffect(() => {
-      // Check if touch device and Slick is initialized.
-      if (!isDesktop && !initSlider) {
-        setInitiateSlider(true);
-      }
-    }, []);
   }
 
   // Show attributes on PLP product teaser.
@@ -240,6 +232,14 @@ const Teaser = ({
       plpProductCategoryAttributes[attr] = hit[attr];
     });
   }
+
+  // Initialize slick carousel for touch devices.
+  useEffect(() => {
+    // Check if touch device and Slick is initialized.
+    if (!isDesktop && !initSlider) {
+      setInitiateSlider(true);
+    }
+  }, []);
 
   return (
     <div className={teaserClass}>
