@@ -1,7 +1,12 @@
 import React from 'react';
 import parse from 'html-react-parser';
 import { connectStateResults } from 'react-instantsearch-dom';
-import { toggleSearchResultsContainer, toggleSortByFilter, toggleBlockCategoryFilter } from '../../utils';
+import {
+  toggleSearchResultsContainer,
+  toggleSortByFilter,
+  toggleBlockCategoryFilter,
+  updatePredictiveSearchContainer,
+} from '../../utils';
 
 const NoResults = ({
   searchResults, isSearchStalled, searching, searchingForFacetValues,
@@ -10,6 +15,8 @@ const NoResults = ({
     return null;
   }
 
+  // For checking state of predictiveSearch.
+  const { predictiveSearchEnabled } = drupalSettings.algoliaSearch;
   if (!searching && !isSearchStalled && !searchingForFacetValues) {
     toggleSearchResultsContainer();
     toggleSortByFilter('hide');
@@ -18,10 +25,14 @@ const NoResults = ({
 
   // Trigger GTM for no results found.
   Drupal.algoliaReact.triggerSearchResultsUpdatedEvent(0);
+
+  if (predictiveSearchEnabled) {
+    updatePredictiveSearchContainer('hide', searchResults.query);
+  }
   return (
     <div className="hits-empty-state">
       <div className="view-empty">
-        {parse(Drupal.t('Your search did not return any results.'))}
+        {parse(Drupal.t('Unfortunately, nothing matches your search. Please try another search term, or browse by category below.'))}
       </div>
     </div>
   );

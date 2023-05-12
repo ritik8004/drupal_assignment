@@ -16,6 +16,13 @@ const { predictiveSearchEnabled } = drupalSettings.algoliaSearch;
 const clearText = predictiveSearchEnabled ? Drupal.t('Clear') : null;
 const InputButtons = React.memo((props) => (
   <>
+    {(predictiveSearchEnabled && props.hits.length < 1 && props.value.trim() !== '') ? (
+      <Portal
+        key="no-result"
+        className="predictive-search__msg-no-result hidden"
+        innerHTML={`${Drupal.t('Nothing found for "')}<span class="bold">${props.value}"</span>`}
+      />
+    ) : null}
     <Portal
       key="back-button"
       onclick={(event) => props.backCallback(event)}
@@ -214,6 +221,12 @@ class Autocomplete extends React.Component {
       const { onChange } = this.props;
       const inputTag = this.autosuggest.current.input;
       onChange(value, inputTag);
+      // Remove class for closing overlay on form submit.
+      const predictiveSearchComponent = document.getElementsByClassName('predictive-search');
+      if (predictiveSearchComponent.length !== 0
+        && predictiveSearchComponent[0].classList.contains('predictive-search--open')) {
+        predictiveSearchComponent[0].classList.remove('predictive-search--open');
+      }
     }
     return false;
   }
@@ -297,6 +310,8 @@ class Autocomplete extends React.Component {
           backCallback={this.backIconClickEvent}
           clearCallback={this.clearSearchFieldInput}
           closeCallback={this.closePredictiveSearchEvent}
+          hits={hits}
+          value={value}
         />
       </>
     );

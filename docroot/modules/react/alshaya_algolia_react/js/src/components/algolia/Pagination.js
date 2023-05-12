@@ -3,7 +3,11 @@ import { connectStats } from 'react-instantsearch-dom';
 
 import ProgressBar from './widgets/ProgressBar';
 import {
-  showLoader, toggleSearchResultsContainer, toggleSortByFilter, toggleBlockCategoryFilter,
+  showLoader,
+  toggleSearchResultsContainer,
+  toggleSortByFilter,
+  toggleBlockCategoryFilter,
+  updatePredictiveSearchContainer,
 } from '../../utils';
 import ConditionalView from '../../../../../js/utilities/components/conditional-view';
 
@@ -12,6 +16,7 @@ const PaginationStats = connectStats(({ nbHits, currentResults }) => {
   toggleSearchResultsContainer();
   toggleSortByFilter('show');
   toggleBlockCategoryFilter('show');
+  updatePredictiveSearchContainer('show');
 
   return (
     <>
