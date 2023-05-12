@@ -11,6 +11,35 @@ use Symfony\Component\Yaml\Yaml;
 /**
  * Implements hook_update_N().
  *
+ * Enabling the new field 'version' to static html bundle.
+ */
+function alshaya_static_html_update_8004() {
+  $module_path = drupal_get_path('module', 'alshaya_static_html');
+
+  // Create field storage.
+  $yml = Yaml::parse(file_get_contents($module_path . '/config/install/field.storage.node.field_version.yml'));
+  if (!FieldStorageConfig::loadByName($yml['entity_type'], $yml['field_name'])) {
+    FieldStorageConfig::create($yml)->save();
+
+    $configs = [
+      'field.field.node.static_html.field_version',
+    ];
+    // Create field.
+    alshaya_config_install_configs($configs, 'alshaya_static_html');
+
+    // Set widget type to the field.
+    \Drupal::entityTypeManager()
+      ->getStorage('entity_form_display')
+      ->load('node.static_html.default')
+      ->setComponent('field_version', [
+        'Widget' => 'textfield',
+      ])->save();
+  }
+}
+
+/**
+ * Implements hook_update_N().
+ *
  * Enable replicate feature for static html content.
  */
 function alshaya_static_html_update_8003() {
