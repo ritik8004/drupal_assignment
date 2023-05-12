@@ -6,6 +6,7 @@ import PropTypes from 'prop-types';
 import { createConnector } from 'react-instantsearch-dom';
 // @ts-ignore
 import { getResults } from '../../../utils/indexUtils';
+import logger from '../../../../../../js/utilities/logger';
 
 // The default number of facet values to request.
 const MAX_WILDCARD_FACETS = 20;
@@ -54,7 +55,7 @@ export default createConnector({
     // eslint-disable-next-line no-underscore-dangle
     if (props.maxValuesPerFacet < results._state.maxValuesPerFacet) {
       // eslint-disable-next-line no-console,no-underscore-dangle
-      console.warn('The maxValuesPerFacet set by dynamic widgets ('.concat(props.maxValuesPerFacet, ') is smaller than one of the limits set by a widget (').concat(results._state.maxValuesPerFacet, '). This causes a mismatch in query parameters and thus an extra network request when that widget is mounted.'));
+      logger.warn('The maxValuesPerFacet set by dynamic widgets ('.concat(props.maxValuesPerFacet, ') is smaller than one of the limits set by a widget (').concat(results._state.maxValuesPerFacet, '). This causes a mismatch in query parameters and thus an extra network request when that widget is mounted.'));
     }
 
     const { userData } = results;
