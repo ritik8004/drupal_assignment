@@ -19,6 +19,7 @@ postpay_pdp:
     - core/jquery
     - core/drupal
     - core/jquery.once
+    - alshaya_master/common_functions
 
 postpay_cart:
   version: 1.x

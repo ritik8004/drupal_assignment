@@ -22,12 +22,14 @@
       if (skuBaseForm.length <= 0) {
         return;
       }
+      var selectedVariant = null;
 
       skuBaseForm.once('postpay-pdp-initial').each(function () {
         setPostpayWidgetAmount(this);
       });
 
       skuBaseForm.once('postpay-pdp').on('variant-selected magazinev2-variant-selected', function (event, variant, code) {
+        selectedVariant = variant;
         setPostpayWidgetAmount(this, variant, event);
       });
 
@@ -36,7 +38,8 @@
       // the gallery / product zoom container that refreshes on every variant
       // change or page load.
       $(document).once('product-gallery-loaded').on('productGalleryLoaded', function () {
-        setPostpayWidgetAmount(skuBaseForm);
+        // Use the selected variant SKU on variant change.
+        Drupal.hasValue(selectedVariant) ? setPostpayWidgetAmount(skuBaseForm, selectedVariant) : setPostpayWidgetAmount(skuBaseForm);
       });
     }
   };
@@ -57,19 +60,22 @@
         variant = event.detail.variant;
       }
     } else if (productData.type != 'simple') {
-      // Use first child provided in settings if available.
-      // Use the first variant otherwise.
-      var configurableCombinations = window.commerceBackend.getConfigurableCombinations(sku);
-      var variant = (typeof configurableCombinations.firstChild === 'undefined')
-        ? Object.keys(variants)[0]
-        : configurableCombinations.firstChild;
+      // Use the selected variant if available, else proceed.
+      if (!Drupal.hasValue(variant)) {
+        // Use first child provided in settings if available.
+        // Use the first variant otherwise.
+        var configurableCombinations = window.commerceBackend.getConfigurableCombinations(sku);
+        variant = (typeof configurableCombinations.firstChild === 'undefined')
+          ? Object.keys(variants)[0]
+          : configurableCombinations.firstChild;
 
-      // Check if we are in mag-v2 layout
-      // due to different markup the initial variant fetch will fail.
-      if (typeof variant === 'undefined') {
-        if ($('body').hasClass('magazine-layout-v2')) {
-          // variantselected is an attribute in magv2 form.
-          variant = $(element).attr('variantselected');
+        // Check if we are in mag-v2 layout
+        // due to different markup the initial variant fetch might fail.
+        if (!Drupal.hasValue(variant)) {
+          if ($('body').hasClass('magazine-layout-v2')) {
+            // variantselected is an attribute in magv2 form.
+            variant = $(element).attr('variantselected');
+          }
         }
       }
     }
