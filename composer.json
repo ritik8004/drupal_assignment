@@ -104,7 +104,7 @@
         "drupal/robotstxt": "^1.1",
         "drupal/role_delegation": "^1.2",
         "drupal/s3fs": "^3.0@beta",
-        "drupal/search_api": "^1.17",
+        "drupal/search_api": "^1.29",
         "drupal/search_api_algolia": "^3.0@beta",
         "drupal/search_api_autocomplete": "^1.0",
         "drupal/search_api_spellcheck": "^3.0@beta",
