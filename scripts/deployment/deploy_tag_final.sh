@@ -244,7 +244,10 @@ then
 
       $clear_caches_post_command_site $site cr 5 &>> ${log_file}
       log_message_and_details "$site: CR done."
-
+      echo
+      printf "%80s" " " | tr ' ' '='
+      echo
+      echo
       sh $slack_file "$site: UPDB done and site put back online."
     fi
   done
