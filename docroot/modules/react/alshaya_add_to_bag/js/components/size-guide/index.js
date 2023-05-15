@@ -2,7 +2,7 @@ import React from 'react';
 import parse from 'html-react-parser';
 import DrupalDialog from '../../../../js/utilities/components/drupal-dialog';
 
-const SizeGuide = ({ sizeGuideData }) => {
+const SizeGuide = ({ sizeGuideData, context }) => {
   const sizeGuideLink = parse(sizeGuideData.link);
 
   // Attach event handler for size guide modal open.
@@ -15,6 +15,8 @@ const SizeGuide = ({ sizeGuideData }) => {
       linkClass={sizeGuideLink.props.className}
       dialogDisplay="fullscreen"
       dialogType="dialog"
+      isSizeGuideLink
+      context={context}
     />
   );
 };
