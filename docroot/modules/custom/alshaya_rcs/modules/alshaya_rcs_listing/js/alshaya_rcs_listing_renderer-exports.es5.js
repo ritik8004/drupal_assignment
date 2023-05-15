@@ -34,7 +34,7 @@ exports.render = function render(
     innerHtmlObj.attr({
       'data-hierarchy': hierarchy_list,
       'data-level': contexts.length - 1,
-      'data-rule-context': contexts.concat(webContexts),
+      'data-rule-context': contexts.reverse().concat(webContexts),
       'data-category-field': 'field_category_name.lvl' + (contexts.length - 1),
     });
   }

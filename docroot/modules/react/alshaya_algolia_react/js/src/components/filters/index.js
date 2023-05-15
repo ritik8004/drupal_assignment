@@ -5,6 +5,7 @@ import { hasValue } from '../../../../../js/utilities/conditionsUtility';
 import { isConfigurableFiltersEnabled } from '../../../../../js/utilities/helper';
 import { getFilters } from '../../utils';
 import dispatchCustomEvent from '../../../../../js/utilities/events';
+import { getMaxValuesFromFacets } from '../../utils/FilterUtils';
 
 const Filters = ({ indexName, pageType, ...props }) => {
   const [filterCounts, setfilters] = useState([]);
@@ -252,13 +253,6 @@ const Filters = ({ indexName, pageType, ...props }) => {
         filter.facet_values = value.facet_values[identifierPrefix];
       }
 
-      if (key === 'attr_delivery_ways' && hasValue(value.facet_values[identifierPrefix])) {
-        // Get delivery type express key value.
-        filter.express_value = value.facet_values[identifierPrefix].express_day_delivery_available;
-        // Get delivery type same day key value.
-        filter.same_value = value.facet_values[identifierPrefix].same_day_delivery_available;
-      }
-
       if (hasValue(value.lhn)) {
         lhnFilters[key] = filter;
       } else {
@@ -340,7 +334,7 @@ const Filters = ({ indexName, pageType, ...props }) => {
       <DynamicWidgets
         buildFacets={buildFacets}
         facets={['*']}
-        maxValuesPerFacet={1000}
+        maxValuesPerFacet={getMaxValuesFromFacets()}
       >
         {facetsList}
       </DynamicWidgets>

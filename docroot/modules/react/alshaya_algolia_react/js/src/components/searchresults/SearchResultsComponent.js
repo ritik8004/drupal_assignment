@@ -42,6 +42,7 @@ import BecomeHelloMember from '../../../../../js/utilities/components/become-hel
 import { hasValue } from '../../../../../js/utilities/conditionsUtility';
 import { isMobile } from '../../../../../js/utilities/display';
 import DynamicWidgets from '../algolia/widgets/DynamicWidgets';
+import { getMaxValuesFromFacets } from '../../utils/FilterUtils';
 
 /**
  * Render search results elements facets, filters and sorting etc.
@@ -124,6 +125,8 @@ const SearchResultsComponent = ({
     ? SideBar
     : DynamicWidgets;
 
+  const maxValuesPerFacets = getMaxValuesFromFacets();
+
   return (
     <InstantSearch
       searchClient={algoliaSearchClient}
@@ -147,7 +150,7 @@ const SearchResultsComponent = ({
       ) : null}
       {isDesktop()
           && (
-          <SideBarWrapper lhn>
+          <SideBarWrapper lhn maxValuesPerFacet={maxValuesPerFacets}>
             {superCategoryComponent}
             {fieldCategoryComponent}
           </SideBarWrapper>
@@ -217,7 +220,7 @@ const SearchResultsComponent = ({
                         <h3 className="c-facet__title c-accordion__title c-collapse__title" onClick={showCategoryFacets}>
                           {Drupal.t('Brands/Category')}
                         </h3>
-                        <DynamicWidgets lhn>
+                        <DynamicWidgets lhn maxValuesPerFacet={maxValuesPerFacets}>
                           {superCategoryComponent}
                           {fieldCategoryComponent}
                         </DynamicWidgets>

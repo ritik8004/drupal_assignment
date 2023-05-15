@@ -32,6 +32,7 @@ import { getExpressDeliveryStatus } from '../../../../js/utilities/expressDelive
 import { hasValue } from '../../../../js/utilities/conditionsUtility';
 import { isMobile } from '../../../../js/utilities/display';
 import DynamicWidgets from '../components/algolia/widgets/DynamicWidgets';
+import { getMaxValuesFromFacets } from '../utils/FilterUtils';
 
 if (window.NodeList && !NodeList.prototype.forEach) {
   NodeList.prototype.forEach = Array.prototype.forEach;
@@ -186,6 +187,8 @@ const PlpApp = ({
   const MobileFilterWrapper = isConfigurableFiltersEnabled()
     ? DynamicWidgets : React.Fragment;
 
+  const maxValuesPerFacets = getMaxValuesFromFacets();
+
   return (
     <InstantSearch
       searchClient={algoliaSearchClient}
@@ -229,7 +232,9 @@ const PlpApp = ({
             <ConditionalView condition={categoryFieldAttributes.length > 0}>
               <div className="c-facet c-accordion block-facet-blockcategory-facet-plp algolia-plp-category-facet">
                 <h3 className="c-facet__title c-accordion__title c-collapse__title plp-category-facet-title">{drupalSettings.algoliaSearch.category_facet_label}</h3>
-                <MobileFilterWrapper>
+                <MobileFilterWrapper
+                  {...(isConfigurableFiltersEnabled() ? maxValuesPerFacets : {})}
+                >
                   <PLPHierarchicalMenu
                     attributes={categoryFieldAttributes}
                     rootPath={lhnCategoryFilter}

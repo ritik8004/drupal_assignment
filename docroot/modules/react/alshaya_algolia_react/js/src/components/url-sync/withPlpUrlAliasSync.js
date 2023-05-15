@@ -190,8 +190,8 @@ const withPlpUrlAliasSync = (
       // Wait till userData is received then apply filters.
       document.addEventListener('userDataReceived', this.applyFilters);
     } else {
-      // apply filters from drupal settings data.
-      await this.applyFilters();
+      // Apply filters from drupal settings data.
+      this.applyFilters();
     }
   }
 

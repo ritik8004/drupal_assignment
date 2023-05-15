@@ -22,3 +22,5 @@ exclude_render_single_result_facets: ''
 product_teaser_attributes: ''
 # Enable or disable configurable filters.
 algolia_enable_configurable_filter: false
+# Max values per facets
+algolia_max_values_per_facets: 1000

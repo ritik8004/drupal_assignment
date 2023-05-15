@@ -175,15 +175,15 @@ const customQueryRedirect = (items) => {
 };
 
 /**
- * Provides component display name for error message.
+ * Get Max values per facets from settings.
  *
- * @param Component
- *   React component.
- *
- * @returns {*|string}
- *   Diaplay name or unkown component.
+ * @returns {number|*}
+ *   Max values per facets.
  */
-const getDisplayName = (Component) => Component.displayName || Component.name || 'UnknownComponent';
+const getMaxValuesFromFacets = () => {
+  const { maxValuesPerFacets } = drupalSettings.algoliaSearch;
+  return maxValuesPerFacets || 1000;
+};
 
 export {
   getFilters,
@@ -192,5 +192,5 @@ export {
   hasSuperCategoryFilter,
   facetFieldAlias,
   customQueryRedirect,
-  getDisplayName,
+  getMaxValuesFromFacets,
 };
