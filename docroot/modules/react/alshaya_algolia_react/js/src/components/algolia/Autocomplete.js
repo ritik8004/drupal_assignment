@@ -162,7 +162,7 @@ class Autocomplete extends React.Component {
 
     if (valueToCheck !== '') {
       this.reactSearchBlock[0].classList.add('clear-icon');
-      // Add class for mobile and if predictiveSearch.
+      // Add class for mobile Or when predictive search is enabled.
       if (isMobile() || predictiveSearchEnabled) {
         this.reactSearchBlock[0].classList.add('show-algolia-search-bar');
       }
