@@ -41,7 +41,7 @@ const GroupSelectOption = ({
             ))}
           </div>
         </div>
-        <SizeGuide attrId={code} />
+        <SizeGuide attrId={code} context="pdp" />
         <div className="group-option-wrapper">
           <ul id={code} className="select-attribute-group clicked">
             {configurables.values && Object.keys(configurables.values).map((key) => {
