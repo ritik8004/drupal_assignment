@@ -165,4 +165,14 @@
       }
     }
   }
+
+  &.path--checkout {
+    @include breakpoint($upto-desktop) {
+      margin-top: 0;
+
+      html[lang="ar"] & {
+        margin-top: rem(15);
+      }
+    }
+  }
 }
