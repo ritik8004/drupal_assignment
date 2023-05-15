@@ -63,6 +63,8 @@ function alshaya_get_commerce_third_party_settings($site_code, $country_code, $e
 function alshaya_get_env_keys($site_code, $country_code, $env) {
   $site = $site_code . $country_code;
 
+  global $_acsf_site_name_full;
+
   // Default mapping is following:
   // dev, dev2, dev3, test, qa2: QA/Test.
   // uat: UAT.
@@ -237,6 +239,12 @@ function alshaya_get_env_keys($site_code, $country_code, $env) {
       'dev2' => [
         'magento' => 'mc_uat',
         'conductor' => 'mcae_dev2',
+      ],
+    ],
+    'mcsa2' => [
+      'dev2' => [
+        'magento' => 'mc_oms_pprod',
+        'conductor' => 'mcsa_oms_dev2',
       ],
     ],
     'mcsa' => [
@@ -664,7 +672,10 @@ function alshaya_get_env_keys($site_code, $country_code, $env) {
   // Get the keys following this fallback (from the more specific to the more
   // generic one): site+env > site+default > default+env > default+default.
   $map = [];
-  if (isset($mapping[$site][$env])) {
+  if (!empty($_acsf_site_name_full) && isset($mapping[$_acsf_site_name_full][$env])) {
+    $map = $mapping[$_acsf_site_name_full][$env];
+  }
+  elseif (isset($mapping[$site][$env])) {
     $map = $mapping[$site][$env];
   }
   elseif (isset($mapping[$site]['default'])) {
