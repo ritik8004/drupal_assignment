@@ -165,10 +165,4 @@
       }
     }
   }
-
-  &:not(.no-sticky-algolia-search-bar) {
-    @include breakpoint($upto-desktop) {
-      margin-top: 0;
-    }
-  }
 }

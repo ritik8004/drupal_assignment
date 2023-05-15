@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import Parser from 'html-react-parser';
 import Gallery from '../gallery';
 import Price from '../price';
@@ -27,7 +27,7 @@ import { isAddToBagHoverEnabled } from '../../../../../js/utilities/addToBagHelp
 import ArticleSwatches from '../article_swatch';
 import SliderSwatch from '../slider-swatch';
 import { getShoeAiStatus } from '../../../../../js/utilities/util';
-import ProductCategory from '../product-category';
+import ProductTeaserAttributes from '../product-teaser-attributes';
 
 const Teaser = ({
   hit, gtmContainer = null, pageType, extraInfo, indexName,
@@ -36,11 +36,9 @@ const Teaser = ({
 }) => {
   const { showSwatches, showSliderSwatch } = drupalSettings.reactTeaserView.swatches;
   const { showColorSwatchSlider } = drupalSettings.reactTeaserView.swatches;
-  const { showReviewsRating } = drupalSettings.algoliaSearch;
+  const { showReviewsRating, plpTeaserAttributes } = drupalSettings.algoliaSearch;
   const collectionLabel = [];
   const [initSlider, setInitiateSlider] = useState(false);
-  const [touchStart, setTouchStart] = useState(null);
-  const [touchEnd, setTouchEnd] = useState(null);
   const [slider, setSlider] = useState(false);
   const [sku, setSkuCode] = useState(hit.sku);
   const [media, setSkuMedia] = useState(hit.media);
@@ -55,17 +53,8 @@ const Teaser = ({
   const touchEnable = drupalSettings.reactTeaserView.swipeImage.enableSwipeImageMobile;
   const activateShoeAI = getShoeAiStatus();
 
-  // Touch events for Mobile devices.
-  const onTouchStart = (e) => {
-    if (!isDesktop) {
-      setTouchEnd(null);
-      // Calculate the coordinates of the touch event.
-      setTouchStart(e.targetTouches[0].clientX);
-    }
-  };
-
-  // Calculate the coordinates of the touch event.
-  const onTouchMove = (e) => {
+  // Add GTM events on touch.
+  const onTouchMove = () => {
     if (!isDesktop) {
       // Set object data for GTM.
       const swipeGAData = {
@@ -75,31 +64,9 @@ const Teaser = ({
       };
       // Push image swipe data in GTM.
       window.dataLayer.push(swipeGAData);
-      setTouchEnd(e.targetTouches[0].clientX);
     }
   };
 
-  const onTouchEnd = () => {
-    if (!touchStart || !touchEnd) return;
-    const distance = touchStart - touchEnd;
-    // The minimum swipe distance between touchStart and touchEnd to be detected as
-    // a left or right swipe.
-    const isLeftSwipe = distance > 40;
-    const isRightSwipe = distance < -40;
-    if (isLeftSwipe || isRightSwipe) {
-      if (!isDesktop) {
-        // Check if Slick is initialized.
-        if (!initSlider) {
-          setInitiateSlider(true);
-        }
-        if (slider !== false) {
-          // Setting the first slide to 1 since on-swipe the image change should occur
-          // else we don't see any visible change as the slick gets initialized.
-          slider.slickGoTo(1, true);
-        }
-      }
-    }
-  };
 
   if (drupalSettings.plp_attributes
     && drupalSettings.plp_attributes.length > 0
@@ -271,19 +238,24 @@ const Teaser = ({
   let dataVmode = null;
   if (pageType === 'search') {
     dataVmode = { 'data-vmode': 'search_result' };
+
+    // Initialize slick carousel for touch devices.
+    useEffect(() => {
+      // Check if touch device and Slick is initialized.
+      if (!isDesktop && !initSlider) {
+        setInitiateSlider(true);
+      }
+    }, []);
   }
 
-  // check if we need to display the productInfo in below the product title.
-  const showProductCategory = hasValue(drupalSettings.showProductCategory)
-    ? drupalSettings.showProductCategory
-    : false;
-
-  // Gender Identification.
-  const genderText = hasValue(updatedAttribute.attr_gender)
-    ? updatedAttribute.attr_gender : attribute.attr_gender;
-  // Product type Identification.
-  const productType = hasValue(updatedAttribute.attr_nb_product_type)
-    ? updatedAttribute.attr_nb_product_type : attribute.attr_nb_product_type;
+  // Show attributes on PLP product teaser.
+  const plpProductCategoryAttributes = {};
+  if (hasValue(plpTeaserAttributes)) {
+    const attributeArr = plpTeaserAttributes.split(',');
+    attributeArr.forEach((attr) => {
+      plpProductCategoryAttributes[attr] = hit[attr];
+    });
+  }
 
   return (
     <div className={teaserClass}>
@@ -315,9 +287,7 @@ const Teaser = ({
             slider.slickPause();
           }
         }}
-        onTouchStart={touchEnable ? onTouchStart : null}
         onTouchMove={touchEnable ? onTouchMove : null}
-        onTouchEnd={onTouchEnd}
       >
         <div className="field field--name-field-skus field--type-sku field--label-hidden field__items">
           <a
@@ -433,19 +403,20 @@ const Teaser = ({
             {/* Render price based on range/single price conditionals */}
             {hasValue(updatedAttribute.renderProductPrice)
               ? updatedAttribute.renderProductPrice : renderPrice}
-            {/* Show product category. */}
-            <ProductCategory
-              showProductCategory={showProductCategory}
-              genderText={genderText}
-              productType={productType}
-            />
+            {/* Render attributes on PLP product teaser. */}
+            {hasValue(plpProductCategoryAttributes) ? (
+              <ProductTeaserAttributes
+                plpProductCategoryAttributes={plpProductCategoryAttributes}
+              />
+            ) : null}
             <ConditionalView condition={isPromotionFrameEnabled()}>
               <PromotionsFrame promotions={attribute.promotions} />
             </ConditionalView>
             <ConditionalView condition={!isPromotionFrameEnabled()}>
               <Promotions promotions={attribute.promotions} />
             </ConditionalView>
-            {showSwatches ? (
+            {/* Render the Article color swatches when showColorSwatchSlider is TRUE */}
+            {showSwatches && !showColorSwatchSlider ? (
               <Swatches
                 swatches={attribute.swatches}
                 url={url}

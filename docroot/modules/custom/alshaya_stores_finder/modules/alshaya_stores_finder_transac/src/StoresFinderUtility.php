@@ -3,6 +3,8 @@
 namespace Drupal\alshaya_stores_finder_transac;
 
 use Drupal\alshaya_addressbook\AlshayaAddressBookManager;
+use Drupal\alshaya_api\AlshayaApiWrapper;
+use Drupal\alshaya_api\Helper\MagentoApiHelper;
 use Drupal\Core\Cache\Cache;
 use Drupal\Core\Cache\CacheBackendInterface;
 use Drupal\Core\Config\ConfigFactoryInterface;
@@ -89,6 +91,20 @@ class StoresFinderUtility {
   protected $entityRepository;
 
   /**
+   * Alshaya API Wrapper.
+   *
+   * @var \Drupal\alshaya_api\AlshayaApiWrapper
+   */
+  protected $alshayaApi;
+
+  /**
+   * The magento API helper.
+   *
+   * @var \Drupal\alshaya_api\Helper\MagentoApiHelper
+   */
+  protected $mdcHelper;
+
+  /**
    * Constructs a new StoresFinderUtility object.
    *
    * @param \Drupal\Core\Entity\EntityTypeManagerInterface $entity_type_manager
@@ -109,6 +125,10 @@ class StoresFinderUtility {
    *   Config Factory service object.
    * @param \Drupal\Core\Entity\EntityRepositoryInterface $entityRepository
    *   Entity Repository service.
+   * @param \Drupal\alshaya_api\AlshayaApiWrapper $alshaya_api
+   *   Alshaya API Wrapper.
+   * @param \Drupal\alshaya_api\Helper\MagentoApiHelper $mdc_helper
+   *   The magento API helper.
    *
    * @throws \Drupal\Component\Plugin\Exception\InvalidPluginDefinitionException
    * @throws \Drupal\Component\Plugin\Exception\PluginNotFoundException
@@ -122,7 +142,9 @@ class StoresFinderUtility {
     ModuleHandlerInterface $module_handler,
     CacheBackendInterface $cache,
     ConfigFactoryInterface $config_factory,
-    EntityRepositoryInterface $entityRepository
+    EntityRepositoryInterface $entityRepository,
+    AlshayaApiWrapper $alshaya_api,
+    MagentoApiHelper $mdc_helper
   ) {
     $this->nodeStorage = $entity_type_manager->getStorage('node');
     $this->addressBookManager = $address_book_manager;
@@ -133,6 +155,8 @@ class StoresFinderUtility {
     $this->cache = $cache;
     $this->configFactory = $config_factory;
     $this->entityRepository = $entityRepository;
+    $this->alshayaApi = $alshaya_api;
+    $this->mdcHelper = $mdc_helper;
   }
 
   /**
@@ -598,6 +622,41 @@ class StoresFinderUtility {
 
     $static[$langcode] = $options;
     return $options;
+  }
+
+  /**
+   * Stores list for the brand transac site.
+   *
+   * @param bool $full_stores_data
+   *   If true return complete store details, else return an array with store
+   *   code as key and title as value.
+   *
+   * @return mixed|array
+   *   Stored details from the MDC API.
+   */
+  public function getStores($full_stores_data = TRUE) {
+    $request_options = [
+      'timeout' => $this->mdcHelper->getPhpTimeout('store_search'),
+    ];
+    $config = $this->configFactory->get('alshaya_stores_finder.settings');
+    $endpoint = ltrim($config->get('filter_path'), '/');
+    $result = $this->alshayaApi->invokeApi($endpoint, [], 'GET', FALSE, $request_options);
+    $stores = json_decode($result, TRUE);
+
+    // Return if we need complete store details.
+    if ($full_stores_data) {
+      return $stores;
+    }
+
+    // Process the data further to return only store code & name.
+    $store_list = [];
+    if (!empty($stores) && !empty($stores['items'])) {
+      foreach ($stores['items'] as $store) {
+        $store_list[$store['store_code']] = $store['store_name'];
+      }
+    }
+
+    return $store_list;
   }
 
 }

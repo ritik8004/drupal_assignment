@@ -24,11 +24,6 @@
       sku: data.sku,
     };
 
-    e.detail.result.productInfo = {
-      gender: window.commerceBackend.getAttributeValueLabel('gender', data.gender),
-      nb_product_type: window.commerceBackend.getAttributeValueLabel('nb_product_type', data.nb_product_type),
-    }
-
     // Append field values to short_description.
     // The text will be trimmed if the description is longer than 160 characters.
     var short_description = { html: data.description.html };

@@ -96,6 +96,12 @@
           font-size: 0.6875rem;
         }
       }
+
+      .alshaya_search_slider {
+        opacity: 1;
+        display: block;
+        visibility: visible;
+      }
     }
 
     @include breakpoint($desktop) {

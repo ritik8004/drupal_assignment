@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { hasValue } from '../../../../../js/utilities/conditionsUtility';
 import CardDetails from '../card-details';
 import EgiftCardDetails from '../../../return-request/components/egift-card-details';
@@ -9,40 +9,43 @@ import { isUserAuthenticated } from '../../../../../js/utilities/helper';
 const RefundMethods = ({
   paymentInfo,
 }) => {
+  if (!hasValue(paymentInfo)) {
+    return null;
+  }
   const [cardList, setCardList] = useState(null);
   // Variable to check whether the new eGift option needs
   // to be given to the user or not in the refund form.
   const [showNewEgiftCardOption, setNewEgiftCardOption] = useState(false);
-  if (!hasValue(paymentInfo)) {
-    return null;
-  }
-
-  // Checking whether the eGift refund feature is enabled or not and the user is authenticated.
-  if (isUserAuthenticated() && isEgiftRefundEnabled() && !hasValue(paymentInfo.aura)) {
-    // Call to get customer linked eGift card details.
-    const result = callEgiftApi('eGiftCardList', 'GET', {});
-    if (result instanceof Promise) {
-      result.then((response) => {
-        if (hasValue(response.data) && hasValue(response.data.card_number)) {
-          const cardData = response.data ? response.data : null;
-          setCardList(cardData);
-        } else {
-          // If user has no linked eGift card, we call api to get all
-          // eGift cards having same email address as of the current user.
-          const unlinkedResult = callEgiftApi('unlinkedEiftCardList', 'GET', {});
-          unlinkedResult.then((unlinkresponse) => {
-            if (typeof unlinkresponse.data === 'undefined'
-              || !hasValue(unlinkresponse.data.card_number)
-              || (typeof paymentInfo.cashondelivery !== 'undefined'
-                && hasValue(paymentInfo.cashondelivery.payment_type)
-                && paymentInfo.cashondelivery.payment_type === 'cashondelivery')) {
-              setNewEgiftCardOption(true);
-            }
-          });
-        }
-      });
+  // Egift card number.
+  const cardNumber = cardList ? cardList.card_number : '';
+  useEffect(() => {
+    // Checking whether the eGift refund feature is enabled or not and the user is authenticated.
+    if (isUserAuthenticated() && isEgiftRefundEnabled() && !hasValue(paymentInfo.aura)) {
+      // Call to get customer linked eGift card details.
+      const result = callEgiftApi('eGiftCardList', 'GET', {});
+      if (result instanceof Promise) {
+        result.then((response) => {
+          if (hasValue(response.data) && hasValue(response.data.card_number)) {
+            const cardData = response.data ? response.data : null;
+            setCardList(cardData);
+          } else {
+            // If user has no linked eGift card, we call api to get all
+            // eGift cards having same email address as of the current user.
+            const unlinkedResult = callEgiftApi('unlinkedEiftCardList', 'GET', {});
+            unlinkedResult.then((unlinkresponse) => {
+              if (typeof unlinkresponse.data === 'undefined'
+                || !hasValue(unlinkresponse.data.card_number)
+                || (typeof paymentInfo.cashondelivery !== 'undefined'
+                  && hasValue(paymentInfo.cashondelivery.payment_type)
+                  && paymentInfo.cashondelivery.payment_type === 'cashondelivery')) {
+                setNewEgiftCardOption(true);
+              }
+            });
+          }
+        });
+      }
     }
-  }
+  }, [cardNumber, showNewEgiftCardOption]);
 
   // Variable to check whether the payment made through multiple methods i.e. hybrid or not.
   const isHybrid = isHybridPayment(paymentInfo);
@@ -59,7 +62,7 @@ const RefundMethods = ({
   const isEgiftCardSelected = Drupal.getItemFromLocalStorage('is_egift_selected');
   // Assigning payment data to a different variable to make the change on that conditionally,
   // otherwise it will throw the "no-param-reassign" lint error.
-  const paymentData = paymentInfo;
+  const paymentData = JSON.parse(JSON.stringify(paymentInfo));
   // Deleting the eGift value from the payment object
   // if it is hybrid, as we are already showing the new eGift option here.
   if (isEgiftRefundEnabled() && isHybrid && hasValue(paymentInfo.egift)) {
@@ -93,7 +96,8 @@ const RefundMethods = ({
     ));
 
   // Components for eGift card hybrid payment method.
-  const HybridPaymentMethods = () => (isEgiftRefundEnabled() && !hasValue(paymentInfo.aura)
+  const HybridPaymentMethods = () => (isEgiftRefundEnabled()
+  && (!hasValue(paymentInfo.aura) || hasValue(paymentInfo.egift))
     ? (
       <>
         <EgiftCardDetails

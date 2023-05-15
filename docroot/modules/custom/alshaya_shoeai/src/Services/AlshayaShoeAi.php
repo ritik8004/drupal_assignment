@@ -114,8 +114,7 @@ class AlshayaShoeAi {
   public function getShoeAiZeroHash() {
     // If user is anonymous.
     $zeroHash = '';
-    if ($this->currentUser->isAuthenticated() &&
-      !empty($this->currentUser->getEmail())) {
+    if (alshaya_acm_customer_is_customer($this->currentUser)) {
       $zeroHash = md5($this->currentUser->getEmail());
     }
     return $zeroHash;
@@ -161,19 +160,19 @@ class AlshayaShoeAi {
    */
   public function getShoeaiLandingPage() {
     $shoeai_landing_page = $this->configFactory->get('alshaya_shoeai.settings');
-    $landingPages = $shoeai_landing_page->get('landing_page_path');
-    $path = [];
+    $landing_pages = $shoeai_landing_page->get('landing_page_path');
+    $paths = [];
     // landing_page_path is optional we need to check if value present.
-    if (!empty($landingPages)) {
-      $landingPages = explode(',', $landingPages);
-      if (!empty($landingPages)) {
+    if (!empty($landing_pages)) {
+      $landing_pages = preg_split('/\n|\r\n?/', $landing_pages);
+      if (!empty($landing_pages)) {
         // Remove forward slash & space from beginning.
-        foreach ($landingPages as $key => $page) {
-          $path[$key] = ltrim(trim($page), '/');
+        foreach ($landing_pages as $key => $page) {
+          $paths[$key] = ltrim(trim($page), '/');
         }
       }
     }
-    return $path;
+    return $paths;
   }
 
   /**
@@ -187,18 +186,18 @@ class AlshayaShoeAi {
     $path_alias = ltrim($this->aliasManager->getAliasByPath($current_path), '/');
     // Remove / from current_path to compare the paths.
     $path = ltrim($current_path, '/');
-    $shoeAiEnabled = FALSE;
+    $is_shoeai_page = FALSE;
     $allowed_urls = $this->getShoeaiLandingPage();
     // If allowed URLs are not set, skip all pages.
     if (empty($allowed_urls)) {
-      return $shoeAiEnabled;
+      return $is_shoeai_page;
     }
     // Make sure alias as well as actual(/node) url are also compared.
     if (in_array($path_alias, $allowed_urls) || in_array($path, $allowed_urls)) {
-      $shoeAiEnabled = TRUE;
+      $is_shoeai_page = TRUE;
     }
 
-    return $shoeAiEnabled;
+    return $is_shoeai_page;
   }
 
 }

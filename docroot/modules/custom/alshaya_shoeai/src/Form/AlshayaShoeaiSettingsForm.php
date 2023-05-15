@@ -51,14 +51,13 @@ class AlshayaShoeaiSettingsForm extends ConfigFormBase {
       '#description' => $this->t('shopID config provided by ShoeAI for this site.'),
     ];
     $form['landing_page_path'] = [
-      '#type' => 'textfield',
+      '#type' => 'textarea',
       '#title' => $this
         ->t('ShoeAI Landing page path'),
       '#default_value' => $config->get('landing_page_path') ?: 'shoeai',
       '#size' => 60,
       '#maxlength' => 128,
-      '#description' => $this->t('Enter the path like “shoeai“ or “node/42“ and this would load the ShoeAI
-       Loader Script on it. For multiple paths add them comma separated.'),
+      '#description' => $this->t('Enter path "shoeai" or "node/42", to load ShoeAI Script. For multiple paths add path per line.'),
     ];
     return $form;
   }

@@ -10,8 +10,10 @@ use Drupal\Core\Extension\ModuleExtensionList;
 use Drupal\Core\Extension\ModuleHandlerInterface;
 use Drupal\Core\Extension\ModuleInstallerInterface;
 use Drupal\Core\Language\LanguageManagerInterface;
+use Drupal\Core\Logger\LoggerChannelFactory;
 use Drupal\Core\Site\Settings;
 use Drupal\Core\State\StateInterface;
+use Drupal\Core\Update\UpdateHookRegistry;
 use Drupal\datetime\Plugin\Field\FieldType\DateTimeItemInterface;
 use Drupal\lightning_core\ConfigHelper;
 use Drupal\locale\LocaleConfigManager;
@@ -110,6 +112,20 @@ class AlshayaMasterCommands extends DrushCommands implements SiteAliasManagerAwa
   protected $localeConfigManager;
 
   /**
+   * Drupal Logger.
+   *
+   * @var \Drupal\Core\Logger\LoggerChannel|\Drupal\Core\Logger\LoggerChannelInterface
+   */
+  protected $drupalLogger;
+
+  /**
+   * Update Hook Registry.
+   *
+   * @var \Drupal\Core\Update\UpdateHookRegistry
+   */
+  protected $updateHookRegistery;
+
+  /**
    * AlshayaMasterCommands constructor.
    *
    * @param \Drupal\Core\State\StateInterface $state
@@ -134,18 +150,24 @@ class AlshayaMasterCommands extends DrushCommands implements SiteAliasManagerAwa
    *   The install profile.
    * @param \Drupal\locale\LocaleConfigManager $locale_config_manager
    *   The locale configuration manager.
+   * @param \Drupal\Core\Logger\LoggerChannelFactory $logger_factory
+   *   Logger Channel Factory.
+   * @param \Drupal\Core\Update\UpdateHookRegistry $update_hook_registry
+   *   Update Hook Registery.
    */
   public function __construct(StateInterface $state,
-                              ConfigFactoryInterface $configFactory,
-                              ModuleInstallerInterface $moduleInstaller,
-                              ModuleHandlerInterface $moduleHandler,
-                              CachedStorage $configStorage,
-                              LanguageManagerInterface $languageManager,
-                              EntityTypeManagerInterface $entityTypeManager,
-                              ModuleExtensionList $module_extension_list,
-                              DateFormatter $date_formatter,
-                              $install_profile,
-                              LocaleConfigManager $locale_config_manager) {
+    ConfigFactoryInterface $configFactory,
+    ModuleInstallerInterface $moduleInstaller,
+    ModuleHandlerInterface $moduleHandler,
+    CachedStorage $configStorage,
+    LanguageManagerInterface $languageManager,
+    EntityTypeManagerInterface $entityTypeManager,
+    ModuleExtensionList $module_extension_list,
+    DateFormatter $date_formatter,
+    $install_profile,
+    LocaleConfigManager $locale_config_manager,
+    LoggerChannelFactory $logger_factory,
+    UpdateHookRegistry $update_hook_registry) {
     $this->state = $state;
     $this->configFactory = $configFactory;
     $this->moduleInstaller = $moduleInstaller;
@@ -157,6 +179,8 @@ class AlshayaMasterCommands extends DrushCommands implements SiteAliasManagerAwa
     $this->dateFormatter = $date_formatter;
     $this->installProfile = $install_profile;
     $this->localeConfigManager = $locale_config_manager;
+    $this->drupalLogger = $logger_factory->get('AlshayaMasterCommands');
+    $this->updateHookRegistery = $update_hook_registry;
   }
 
   /**
@@ -490,6 +514,110 @@ class AlshayaMasterCommands extends DrushCommands implements SiteAliasManagerAwa
     if (!isset($url['scheme']) || $url['scheme'] == 'http') {
       throw new \Exception('Please use https URI.');
     }
+  }
+
+  /**
+   * Utility command to fix module update version.
+   *
+   * We try to reduce the update hooks by merging before we release code
+   * on production. Since those update hook numbers are already executed on
+   * non-prod it creates issue when we add them back in future. To avoid the
+   * issue this command is created which should be executed post deployment
+   * every-time.
+   *
+   * @command alshaya_master:fix-update-version
+   *
+   * @aliases fix-update-version
+   */
+  public function fixUpdateVersion(array $options = ['dry-run' => FALSE]) {
+    foreach ($this->moduleExtensionList->getList() as $module) {
+      $module_name = $module->getName();
+
+      $version = (int) $this->updateHookRegistery->getInstalledVersion($module->getName());
+      if (empty($version)) {
+        continue;
+      }
+      $installed_version = $version;
+
+      $this->moduleHandler->loadInclude($module_name, 'install');
+
+      while (TRUE) {
+        if (function_exists("{$module_name}_update_{$version}")) {
+          if ($installed_version === $version) {
+            break;
+          }
+
+          if (empty($options['dry-run'])) {
+            $this->updateHookRegistery->setInstalledVersion($module_name, $version);
+
+            $this->drupalLogger->warning('Installed Update Version updated for module: @module, to version: @version_to, from version: @version_from.', [
+              '@module' => $module_name,
+              '@version_from' => $installed_version,
+              '@version_to' => $version,
+            ]);
+
+            break;
+          }
+
+          $this->drupalLogger->warning('Update Version for module @module is @version_from while as per code last version available is @version_to.', [
+            '@module' => $module_name,
+            '@version_from' => $installed_version,
+            '@version_to' => $version,
+          ]);
+
+          break;
+        }
+
+        $version--;
+
+        if ($version < 9000) {
+          break;
+        }
+      }
+    }
+  }
+
+  /**
+   * Utility command to reset update hook version.
+   *
+   * At times when there is some feedback in update hook code we do not
+   * create a new one till the update hook is executed on prod. This creates
+   * problems at times as we need the hook to be executed again, restoring
+   * database from prod is not possible all the time (especially on UAT).
+   *
+   * @param string $module
+   *   Module name.
+   * @param int $version
+   *   Update Hook Version to re-run.
+   *
+   * @command alshaya_master:reset-update-hook
+   *
+   * @aliases reset-update-hook
+   *
+   * @usage drush reset-update-hook alshaya_master 9403
+   */
+  public function resetUpdateHook(string $module, int $version) {
+    $modules = $this->moduleExtensionList->getList();
+    if (empty($modules[$module])) {
+      throw new \InvalidArgumentException('Module either not available or installed.');
+    }
+
+    $version_installed = (int) $this->updateHookRegistery->getInstalledVersion($module);
+    if ($version_installed >= $version) {
+      $version--;
+      $this->updateHookRegistery->setInstalledVersion($module, $version);
+      $this->drupalLogger->notice('Update Hook Version updated to @version for module @module. Please run updb again.', [
+        '@version' => $version,
+        '@module' => $module,
+      ]);
+
+      return;
+    }
+
+    $this->drupalLogger->warning('Update Hook Version for module @module is @version currently.', [
+      '@version' => $version_installed,
+      '@module' => $module,
+    ]);
   }
 
 }

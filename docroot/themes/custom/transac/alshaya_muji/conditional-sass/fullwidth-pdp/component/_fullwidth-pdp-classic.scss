@@ -1,0 +1,19 @@
+@include breakpoint($desktop) {
+  .cloudzoom {
+    .cloudzoom__herocontainer {
+      width: calc(100% - #{rem(126)});
+    }
+  }
+
+  body.nodetype--acq_product:not(.magazine-layout):not(.magazine-layout-v2) {
+    .page-standard.c-pdp {
+      .acq-content-product {
+        .express-delivery-text {
+          &:nth-child(2) {
+            margin-top: rem(10);
+          }
+        }
+      }
+    }
+  }
+}

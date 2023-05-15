@@ -255,6 +255,8 @@ window.commerceBackend = window.commerceBackend || {};
     const productConfigurables = getConfigurables(product);
     const variantConfigurableOptions = [];
 
+    const sizeGroupAttribute = drupalSettings.alshaya_spc.sizeGroupAttribute;
+    const sizeGroupAlternates = drupalSettings.alshaya_spc.sizeGroupAlternates;
     Object.keys(productConfigurables).forEach(function (attributeCode) {
       let label = productConfigurables[attributeCode].label;
       const optionId = productConfigurables[attributeCode].attribute_id;
@@ -274,6 +276,17 @@ window.commerceBackend = window.commerceBackend || {};
             value = variant.product[field];
           }
         });
+      }
+
+      if (Drupal.hasValue(sizeGroupAttribute) && Drupal.hasValue(sizeGroupAlternates) && attributeCode === sizeGroupAttribute) {
+        let sizeGroup = '';
+        Object.keys(sizeGroupAlternates).forEach(function (key) {
+          const valueLabel = window.commerceBackend.getAttributeValueLabel(key, variant.product[key]);
+          if (Drupal.hasValue(valueLabel)) {
+            sizeGroup += `${valueLabel}(${sizeGroupAlternates[key]}) `;
+          }
+        });
+        value = sizeGroup;
       }
 
       variantConfigurableOptions.push({
@@ -1398,5 +1411,16 @@ window.commerceBackend.getSortedAttributeValues = function getSortedAttributeVal
     }
 
     product.promotions = promotionVal;
+
+    // Attributes to be shown near title on PDP.
+    if (Drupal.hasValue(drupalSettings.alshayaRcs.pdpTitleAttributes)) {
+      product.titleAttributes = [];
+      drupalSettings.alshayaRcs.pdpTitleAttributes.forEach(function processTitleAttribute(titleAttribute) {
+        product.titleAttributes.push({
+          attr : window.commerceBackend.getAttributeValueLabel(titleAttribute, product[titleAttribute]),
+        });
+      });
+    }
+
   });
 })(Drupal, drupalSettings, jQuery);

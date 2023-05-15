@@ -69,7 +69,8 @@ class ReturnRefundDetails extends React.Component {
       // Variable to decide whether eGift card details API needs to be called.
       let callEgiftDetailsApi = false;
       if (!hasValue(paymentInfo.aura)
-        || (hasValue(paymentInfo.aura) && isHybridPayment(paymentInfo))) {
+        || (hasValue(paymentInfo.aura)
+          && hasValue(paymentInfo.egift) && isHybridPayment(paymentInfo))) {
         callEgiftDetailsApi = true;
       }
       if (callEgiftDetailsApi && !isNotSupportedPaymentMethod) {

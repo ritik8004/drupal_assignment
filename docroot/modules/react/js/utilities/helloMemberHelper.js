@@ -91,7 +91,13 @@ export const getApiEndpoint = (action, params = {}, postParams) => {
       endpoint = `/V1/customers/apcDicData/${endPointParams.type}`; // endpoint to get hello member dictonary data.
       break;
     case 'helloMemberGetPointsEarned':
-      endpoint = `/V1/apc/${postParams.identifierNo}/sales`; // endpoint to get hello member points earned data.
+      // endpoint to get hello member points earned data for guest without identifier no.
+      endpoint = '/V1/apc/guest/simulate/sales';
+      if (hasValue(postParams.identifierNo)) {
+        endpoint = isUserAuthenticated()
+          ? `/V1/apc/${postParams.identifierNo}/simulate/sales` // endpoint to get hello member points earned data with identifier no.
+          : `/V1/apc/${postParams.identifierNo}/guest/simulate/sales`; // endpoint to get hello member points earned data for guest with identifier no.
+      }
       break;
     case 'helloMemberSetLoyaltyCard':
       endpoint = '/V1/customers/mine/set-loyalty-card'; // endpoint to set hello member loyalty card details.
@@ -230,58 +236,18 @@ export const getPriceToHelloMemberPoint = (price, dictionaryData) => {
  * @returns {Object}
  *   Return hello member points to earn.
  */
-export const getHelloMemberPointsToEarn = async (items, identifierNo) => {
-  const { currencyCode } = drupalSettings.helloMember;
+export const getHelloMemberPointsToEarn = async (identifierNo) => {
+  // Get cart id from session.
+  const cartId = window.commerceBackend.getCartId();
 
-  if (!hasValue(items)) {
-    logger.warning('Error while trying to get hello member points to earn. Product details is required.');
-    return getErrorResponse('Product details is required.', 404);
+  if (!hasValue(cartId)) {
+    logger.error('Error while trying to set loyalty card in cart. Cart id not available.');
+    return { data: getErrorResponse('Cart id not available.', 404) };
   }
-
-  // For guest user, there is no identifier number
-  // calculate points to earn using dictionary API ratio.
-  if (!hasValue(identifierNo)) {
-    let totalPrice = 0;
-    Object.entries(items).forEach(([, item]) => {
-      totalPrice += (item.qty * item.finalPrice);
-    });
-
-    // If dictionary data does not exists in storage, we do api call.
-    const requestData = {
-      type: 'HM_ACCRUAL_RATIO',
-      programCode: 'hello_member',
-    };
-    const response = await getHelloMemberDictionaryData(requestData);
-    if (hasValue(response.data.error)) {
-      const message = hasValue(response.data.message) ? response.data.message : '';
-      logger.error('Error while trying to get hello member dictionary data. Message: @message', {
-        '@message': message,
-      });
-      return getErrorResponse(message, 500);
-    }
-    if (hasValue(response.data) && !hasValue(response.data.error)) {
-      return {
-        data: { hm_points: getPriceToHelloMemberPoint(totalPrice, response.data) },
-      };
-    }
-  }
-
-  // Prepare request data.
-  const products = [];
-
-  Object.entries(items).forEach(([, item]) => {
-    const itemDetails = {
-      code: item.sku,
-      quantity: item.qty,
-      amount: item.qty * item.finalPrice,
-    };
-    products.push(itemDetails);
-  });
 
   const requestData = {
     sales: {
-      currencyCode,
-      products,
+      quote_id: cartId,
     },
     programCode: 'hello_member',
   };
@@ -381,4 +347,19 @@ export const getExternalBenefitText = (responseData, returnTranslatable) => {
     }
   }
   return benefitText;
+};
+
+/**
+ * Helper function to return benefitList based on benefit Tag 'I'.
+ *
+ *  @param {array} benefitList
+ *  @returns {array} sorted benefitList.
+ */
+export const sortBenefits = (benefitList) => {
+  for (let index = 0; index < benefitList.length; index++) {
+    if (benefitList[index].tag === 'I') {
+      benefitList.push(benefitList.splice(benefitList.indexOf(benefitList[index]), 1)[0]);
+    }
+  }
+  return benefitList;
 };
