@@ -73,7 +73,7 @@ To access database via PHPMyAdmin please execute `ddev launch -p`
 
 ### Logs
 
-To access Drupal Logs we can use `ddev ssh; tail -f /var/logs/syslog`
+To access Drupal Logs we can use `ddev ssh; tail -f /var/log/syslog /var/log/apache2/*.log`
 
 ### BLT
 

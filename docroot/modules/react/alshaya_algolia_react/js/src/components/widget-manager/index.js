@@ -2,6 +2,7 @@ import React from 'react';
 import FilterPanel from '../panels/FilterPanel';
 import SortByList from '../algolia/widgets/SortByList';
 import ColorFilter from '../algolia/widgets/ColorFilter';
+import MultiLevelFilter from '../algolia/widgets/MultiLevelFilter';
 import SizeGroupFilter from '../algolia/widgets/SizeGroupFilter';
 import RefinementList from '../algolia/widgets/RefinementList';
 import PriceFilter from '../algolia/widgets/PriceFilter';
@@ -21,6 +22,8 @@ const WidgetManager = React.memo((props) => {
   let currentWidget = '';
   let className = '';
   let plpSortIndex = null;
+  let filterId = filter.identifier;
+  const seprator = ' ';
   switch (filter.widget.type) {
     case 'sort_by':
       // If page type is search then default sort index is taken from filter.
@@ -45,6 +48,19 @@ const WidgetManager = React.memo((props) => {
           attribute={`${filter.identifier}.value`}
           searchable={false}
           itemCount={itemCount}
+        />
+      );
+      break;
+    case 'multi_level_widget':
+      className = 'block-facet--multi-level-widget';
+      filterId = 'multi-attr-group';
+      currentWidget = (
+        <MultiLevelFilter
+          name={name}
+          attribute={filter.identifier}
+          searchable={false}
+          itemCount={itemCount}
+          seprator={seprator}
         />
       );
       break;
@@ -112,7 +128,12 @@ const WidgetManager = React.memo((props) => {
   }
 
   return (
-    <FilterPanel header={filter.label} id={filter.identifier} className={className}>
+    <FilterPanel
+      header={filter.label}
+      id={filterId}
+      dataId={filter.identifier}
+      className={className}
+    >
       {currentWidget}
     </FilterPanel>
   );

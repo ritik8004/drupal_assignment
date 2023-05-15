@@ -464,6 +464,7 @@ export default class ConfigurableForm extends React.Component {
           <ConditionalView condition={showSizeGuideCond}>
             <SizeGuide
               sizeGuideData={productData.size_guide}
+              context="quick_view"
             />
           </ConditionalView>
           <ConditionalView condition={!isSwatch}>
