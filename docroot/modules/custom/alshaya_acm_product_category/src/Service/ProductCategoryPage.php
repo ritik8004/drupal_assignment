@@ -213,6 +213,9 @@ class ProductCategoryPage {
       $cache_tags = Cache::mergeTags($cache_tags, $term->getCacheTags());
     }
 
+    // Reverse context list.
+    $contexts = array_reverse($contexts);
+
     // Add prefix "web" to every context value.
     $web_contexts = [];
     foreach ($contexts as $context_item) {
