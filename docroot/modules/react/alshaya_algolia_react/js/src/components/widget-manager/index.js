@@ -86,6 +86,7 @@ const WidgetManager = React.memo((props) => {
         />
       );
       break;
+
     case 'delivery_ways': {
       let sameDayValue = hasValue(filter.same_value) ? filter.same_value : '';
       let expressDeliveryValue = hasValue(filter.express_value) ? filter.express_value : '';

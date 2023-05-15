@@ -54,8 +54,11 @@ export default createConnector({
     }
     // eslint-disable-next-line no-underscore-dangle
     if (props.maxValuesPerFacet < results._state.maxValuesPerFacet) {
-      // eslint-disable-next-line no-console,no-underscore-dangle
-      logger.warn('The maxValuesPerFacet set by dynamic widgets ('.concat(props.maxValuesPerFacet, ') is smaller than one of the limits set by a widget (').concat(results._state.maxValuesPerFacet, '). This causes a mismatch in query parameters and thus an extra network request when that widget is mounted.'));
+      logger.warn('The maxValuesPerFacet set by dynamic widgets (@maxValuesPerFacetsWidget) is smaller than one of the limits set by a widget (@maxValuesPerFacetsDefault). This causes a mismatch in query parameters and thus an extra network request when that widget is mounted.', {
+        '@maxValuesPerFacetsWidget': props.maxValuesPerFacet,
+        // eslint-disable-next-line no-console,no-underscore-dangle
+        '@maxValuesPerFacetsDefault': results._state.maxValuesPerFacet,
+      });
     }
 
     const { userData } = results;
