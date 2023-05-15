@@ -175,8 +175,8 @@ class SimplePageResource extends ResourceBase {
       'id' => (int) $node->id(),
       'name' => $node->label(),
       'path' => $node_url->getGeneratedUrl(),
-      'updated' => $node->get('changed')->value,
-      'version' => $node->get('field_version')->value,
+      'updated' => $node->get('changed')->getString(),
+      'version' => $node->get('field_version')->getString(),
       'deeplink' => $this->mobileAppUtility->getDeepLink($node),
       'html' => !empty($node->get('body')->first())
       ? $this->mobileAppUtility->convertRelativeUrlsToAbsolute($node->get('body')->first()->getValue()['value'])

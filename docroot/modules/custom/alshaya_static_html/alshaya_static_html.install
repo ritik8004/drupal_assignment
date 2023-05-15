@@ -7,34 +7,26 @@
 
 use Drupal\field\Entity\FieldStorageConfig;
 use Symfony\Component\Yaml\Yaml;
+use Drupal\alshaya_config\AlshayaConfigManager;
 
 /**
  * Implements hook_update_N().
  *
  * Enabling the new field 'version' to static html bundle.
  */
-function alshaya_static_html_update_8004() {
-  $module_path = drupal_get_path('module', 'alshaya_static_html');
+function alshaya_static_html_update_9001() {
 
-  // Create field storage.
-  $yml = Yaml::parse(file_get_contents($module_path . '/config/install/field.storage.node.field_version.yml'));
-  if (!FieldStorageConfig::loadByName($yml['entity_type'], $yml['field_name'])) {
-    FieldStorageConfig::create($yml)->save();
+  $manager = \Drupal::service('alshaya_config.manager');
+  $manager->updateConfigs([
+    'field.storage.node.field_version',
+    'field.field.node.static_html.field_version',
+    'core.entity_form_display.node.static_html.default',
+  ],
+    'alshaya_static_html',
+    'install',
+    AlshayaConfigManager::MODE_MERGE
+  );
 
-    $configs = [
-      'field.field.node.static_html.field_version',
-    ];
-    // Create field.
-    alshaya_config_install_configs($configs, 'alshaya_static_html');
-
-    // Set widget type to the field.
-    \Drupal::entityTypeManager()
-      ->getStorage('entity_form_display')
-      ->load('node.static_html.default')
-      ->setComponent('field_version', [
-        'Widget' => 'textfield',
-      ])->save();
-  }
 }
 
 /**
