@@ -10,6 +10,24 @@ use Drupal\Core\Site\Settings;
 use Drupal\Component\Utility\Unicode;
 
 /**
+ * Implements hook_update_N().
+ *
+ * Disabling swatches display on PLP/Search pages.
+ * Index products with new swatches field for Mobile App usage only.
+ */
+function alshaya_vs_transac_update_9407() {
+  $manager = \Drupal::service('alshaya_config.manager');
+  $manager->updateConfigs(
+    [
+      'alshaya_acm_product.display_settings',
+    ],
+    'alshaya_acm_product'
+  );
+  // Queue all products which index a new field swatches.
+  \Drupal::service('alshaya_acm_product.product_queue_utility')->queueAllProducts();
+}
+
+/**
  * Update algolia react with default value for render_single_result_facets.
  *
  * And also for exclude_render_single_result_facets.
