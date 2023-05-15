@@ -80,6 +80,23 @@ function prepareQuery(query, variables) {
   return graphqlQuery;
 }
 
+/**
+ * Get graphQL response if it's already set from SSR..
+ *
+ * @param {string} pageType
+ *   Page type to check
+ *
+ * @returns {object}
+ *   Result object set from SSR.
+ */
+const getGraphQLSsrResponse = (pageType) => {
+  let response = null;
+  if (drupalSettings.rcs.ssr_result && drupalSettings.rcs.ssr_result[pageType]) {
+    response = drupalSettings.rcs.ssr_result[pageType];
+  }
+  return response;
+}
+
 exports.getEntity = async function getEntity(langcode) {
   const pageType = globalThis.rcsPhGetPageType();
   if (!pageType) {
@@ -99,12 +116,16 @@ exports.getEntity = async function getEntity(langcode) {
   let result = null;
   let response = null;
   let urlKey = drupalSettings.rcsPage.fullPath;
+  // Check for response set from backend.
+  response = getGraphQLSsrResponse(pageType);
 
   switch (pageType) {
     case 'product':
-      request.data = prepareQuery(rcsPhGraphqlQuery.pdp_product.query, rcsPhGraphqlQuery.pdp_product.variables);
-      // Fetch response.
-      response = await rcsCommerceBackend.invokeApi(request);
+      if (!response) {
+        request.data = prepareQuery(rcsPhGraphqlQuery.pdp_product.query, rcsPhGraphqlQuery.pdp_product.variables);
+        // Fetch response.
+        response = await rcsCommerceBackend.invokeApi(request);
+      }
 
       if (response && response.data.products.total_count) {
         result = response.data.products.items[0];
@@ -118,11 +139,13 @@ exports.getEntity = async function getEntity(langcode) {
       break;
 
     case 'category':
-      // Build query.
-      request.data = prepareQuery(rcsPhGraphqlQuery.categories.query, rcsPhGraphqlQuery.categories.variables);
+      if (!response) {
+        // Build query.
+        request.data = prepareQuery(rcsPhGraphqlQuery.categories.query, rcsPhGraphqlQuery.categories.variables);
 
-      // Fetch response.
-      response = await rcsCommerceBackend.invokeApi(request);
+        // Fetch response.
+        response = await rcsCommerceBackend.invokeApi(request);
+      }
       if (response && response.data.categories.total_count) {
         result = response.data.categories.items[0];
         var currentPath = window.location.href;
@@ -141,11 +164,13 @@ exports.getEntity = async function getEntity(langcode) {
       break;
 
     case 'promotion':
-      // Build query.
-      request.data = prepareQuery(rcsPhGraphqlQuery.promotions.query, rcsPhGraphqlQuery.promotions.variables);
+      if (!response) {
+        // Build query.
+        request.data = prepareQuery(rcsPhGraphqlQuery.promotions.query, rcsPhGraphqlQuery.promotions.variables);
 
-      // Fetch response.
-      response = await rcsCommerceBackend.invokeApi(request);
+        // Fetch response.
+        response = await rcsCommerceBackend.invokeApi(request);
+      }
       if (response.data.promotionUrlResolver) {
         result = response.data.promotionUrlResolver;
       }

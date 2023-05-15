@@ -71,6 +71,13 @@ class AlshayaRcsMetatagSsrHelper {
   private static $processedMetatagData = [];
 
   /**
+   * Static storage for graphQL result data.
+   *
+   * @var array
+   */
+  protected static $ssrGraphQLResult = [];
+
+  /**
    * Module Handler.
    *
    * @var \Drupal\Core\Extension\ModuleHandlerInterface
@@ -165,6 +172,30 @@ class AlshayaRcsMetatagSsrHelper {
    */
   private function getProcessedMetatags(): array {
     return self::$processedMetatagData;
+  }
+
+  /**
+   * Get GraphQL SSR result for page type.
+   *
+   * @param string $page_type
+   *   Page type to use.
+   *
+   * @return array
+   *   Response with meta details array.
+   */
+  protected function getSsrGraphqlResultForPageType(string $page_type): array {
+    return self::$ssrGraphQLResult[$page_type] ?? [];
+  }
+
+  /**
+   * Set graphQL result for page type.
+   *
+   * @param array $response
+   *   Response with graphQL result array.
+   */
+  protected function setSsrGraphqlResultForPageType(array $response): void {
+    $page_type = $this->rcsPathProcessor->getRcsPageType();
+    self::$ssrGraphQLResult[$page_type]['data'] = $response;
   }
 
   /**
@@ -263,6 +294,9 @@ class AlshayaRcsMetatagSsrHelper {
       $response->send();
       exit;
     }
+
+    // Set response in variable for page type.
+    $this->setSsrGraphqlResultForPageType($response);
 
     return !empty($response[$item_key]['items'])
       ? $response[$item_key]['items'][0]
@@ -509,6 +543,22 @@ class AlshayaRcsMetatagSsrHelper {
             str_replace('#rcs.promotion.description#', (string) $rcs_metatags['description'], $variables['content']['inside']['#children']);
         }
         break;
+    }
+  }
+
+  /**
+   * Set graphQL result for page attachment.
+   *
+   * @param array $attachments
+   *   Page attachment to process.
+   */
+  public function setSsrGraphqlResulInPageAttachment(array &$attachments): void {
+    $page_type = $this->rcsPathProcessor->getRcsPageType();
+    if (!empty($page_type)) {
+      $rcs_result = $this->getSsrGraphqlResultForPageType($page_type);
+      if (!empty($rcs_result)) {
+        $attachments['#attached']['drupalSettings']['rcs']['ssr_result'][$page_type] = $rcs_result;
+      }
     }
   }
 
