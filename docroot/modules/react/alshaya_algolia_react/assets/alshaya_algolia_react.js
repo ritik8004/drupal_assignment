@@ -109,7 +109,7 @@
     // that facet blocks can be closed.
     $('.all-filters-algolia .back-facet-list', context).once('algolia-search').on('click', function() {
       var all_filters = $(this).parents('.all-filters-algolia');
-      $('.c-collapse-item', all_filters).find('ul').hide();
+      $('.c-collapse-item', all_filters).children('ul').hide();
       $(this).hide();
       $('.filter-sort-title', all_filters).html(Drupal.t('filter & sort'));
       $('.c-collapse-item', all_filters).removeClass('show-facet');

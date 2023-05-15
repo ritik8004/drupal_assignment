@@ -27,7 +27,7 @@ const NonGroupSelectOption = ({
         <div className="non-group-anchor-wrapper">
           <label htmlFor={attributeKey}>{Drupal.t('Select @title', { '@title': configurables.label })}</label>
         </div>
-        <SizeGuide attrId={code} />
+        <SizeGuide attrId={code} context="pdp" />
         <div className="non-group-option-wrapper">
           <ul id={code} className="select-attribute" onChange={(e) => handleSelectionChanged(e, code)}>
             {configurables.values && Object.keys(configurables.values).map((key) => {

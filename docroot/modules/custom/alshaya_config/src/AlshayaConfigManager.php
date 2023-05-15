@@ -391,6 +391,11 @@ class AlshayaConfigManager {
     $file = drupal_get_path('module', $module_name) . '/config/' . $path . '/' . $config_id . '.yml';
 
     if (!file_exists($file)) {
+      $this->logger->warning('Config file:@config for module:@module does not exist in directory:@path', [
+        '@config' => $config_id,
+        '@module' => $module_name,
+        '@path' => $path,
+      ]);
       return '';
     }
 

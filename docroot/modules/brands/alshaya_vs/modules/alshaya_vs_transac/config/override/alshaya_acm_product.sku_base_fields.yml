@@ -35,3 +35,11 @@ fields:
     label: 'Bra Type'
     description: 'Bra Type.'
     index: 1
+  # Psuedo field for grouping the band size and cup size.  
+  bra_size:
+    label: 'Bra Size'
+    description: 'Bra Size.'
+    facet: 1
+    index: 1
+    widget:
+      type: multi_level_widget
