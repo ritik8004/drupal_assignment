@@ -215,7 +215,6 @@ class ProductCategoryPage {
 
     // Reverse context list.
     $contexts = array_reverse($contexts);
-
     // Add prefix "web" to every context value.
     $web_contexts = [];
     foreach ($contexts as $context_item) {
