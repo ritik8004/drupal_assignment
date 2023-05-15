@@ -60,6 +60,12 @@ class SearchApp extends React.PureComponent {
 
   onSuggestionSelected = (event, { suggestion }) => {
     this.setQueryValue(suggestion.query);
+    // Remove class for closing overlay on form submit.
+    const predictiveSearchComponent = document.getElementsByClassName('predictive-search');
+    if (predictiveSearchComponent.length !== 0
+      && predictiveSearchComponent[0].classList.contains('predictive-search--open')) {
+      predictiveSearchComponent[0].classList.remove('predictive-search--open');
+    }
   };
 
   onSuggestionCleared = () => {
