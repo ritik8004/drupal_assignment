@@ -1,0 +1,130 @@
+#multi-attr-group {
+  .block-facet--multi-level-widget {
+    &__level-one {
+      > li {
+        margin-bottom: 0;
+      }
+    }
+  }
+
+  .level-two {
+    &.is-active {
+      .level-two__title {
+        font-family: $alshaya-bold;
+        border-bottom: none;
+
+        &::after {
+          transform: translateY(-50%) rotate(180deg);
+        }
+      }
+
+      .level-two__dropdown {
+        border-bottom: rem(2) solid $multilevel-level-open-accordion-border;
+        max-height: rem(1000);
+        transition: max-height 300ms ease-in-out;
+      }
+    }
+
+    &.selected-collapsed {
+      .level-two__title {
+        font-family: $alshaya-bold;
+        background-color: $multilevel-level-selected-collapsed-title-bg;
+      }
+    }
+
+    &__title {
+      margin: 0;
+      line-height: rem(14);
+      padding: rem(21) rem(24);
+      font-size: rem(12);
+      color: $multilevel-filter-title-txt;
+      background-color: $multilevel-filter-title-bg;
+      position: relative;
+      border-bottom: rem(1) solid $multilevel-filter-title-border;
+
+      @include icon(chevrondown, after) {
+        color: $multilevel-arrow;
+        font-size: rem(24);
+        cursor: pointer;
+        pointer-events: none;
+        position: absolute;
+        #{$right}: rem(24);
+        top: 50%;
+        transform: translateY(-50%);
+        transition: transform 0.4s ease-in-out;
+      }
+    }
+
+    &__dropdown {
+      display: flex;
+      flex-wrap: wrap;
+      background-color: $multilevel-level-two-bg;
+      max-height: 0;
+      transition: max-height 0.3s cubic-bezier(0, 0, 0.2, 1);
+
+      > .facet-item {
+        // Overiding !important styles.
+        padding-top: rem(17) !important;
+        padding-bottom: rem(17) !important;
+        padding-#{$right}: 0 !important;
+        padding-#{$left}: rem(24) !important;
+        display: flex;
+        align-items: center;
+        border-bottom: none;
+        width: 50%;
+
+        > a {
+          margin-top: 0;
+
+          .facet-item__value {
+            &::before {
+              margin-#{$right}: rem(15);
+            }
+
+            .facet-item__label {
+              color: $multilevel-filter-band-txt;
+              line-height: 1;
+            }
+
+            .facet-item__count {
+              line-height: 1;
+              padding-#{$left}: rem(4);
+              color: $multilevel-filter-band-txt;
+            }
+          }
+        }
+
+        &.is-active {
+          background: none;
+
+          .facet-item__value {
+            font-family: $alshaya-bold;
+          }
+
+          &::after {
+            content: none;
+          }
+        }
+      }
+    }
+  }
+}
+
+@include breakpoint($desktop) {
+  // Unsetting inherited style for top filters
+  .sticky-filter-wrapper #multi-attr-group {
+    .block-facet--multi-level-widget__level-one {
+      top: unset;
+      padding-top: 0;
+      padding-bottom: 0;
+    }
+
+    .level-two__dropdown {
+      top: unset;
+      padding: 0;
+      position: relative;
+      width: unset;
+      border-bottom: 0;
+    }
+  }
+}
