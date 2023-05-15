@@ -182,11 +182,7 @@ const customQueryRedirect = (items) => {
  */
 const getMaxValuesFromFacets = () => {
   const { maxValuesPerFacets } = drupalSettings.algoliaSearch;
-  if (hasValue(maxValuesPerFacets)) {
-    return maxValuesPerFacets;
-  }
-
-  return 1000;
+  return maxValuesPerFacets || 1000;
 };
 
 export {
