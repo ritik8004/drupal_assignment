@@ -255,6 +255,14 @@ class AlshayaAlgoliaReactConfig implements AlshayaAlgoliaReactConfigInterface {
       $response[$page_type]['filters'] = $this->getFilters($index_name, $page_type, $sub_page);
     }
 
+    // Add library for multilevel_widget eg: Bra Size.
+    foreach ($response[$page_type]['filters'] as $facet) {
+      if ($facet['widget']['type'] === 'multi_level_widget') {
+        $libraries[] = 'alshaya_white_label/multi-level-widget';
+        break;
+      }
+    }
+
     $response['autocomplete'] = [
       'hits' => $alshaya_algolia_react_setting_values->get('hits') ?? 4,
       'topResults' => $alshaya_algolia_react_setting_values->get('top_results') ?? 4,

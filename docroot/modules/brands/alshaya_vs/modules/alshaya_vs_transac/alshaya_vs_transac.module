@@ -360,6 +360,38 @@ function alshaya_vs_transac_sku_product_attribute_alter(array &$attributes, SKUI
  */
 function alshaya_vs_transac_alshaya_search_algolia_object_alter(array &$object) {
   $sku = SKU::loadFromSku($object['sku'], $object['search_api_language']);
+  if (!$sku instanceof SKUInterface) {
+    return NULL;
+  }
+  // Add Bra Size for indexing if both band size and cup size fields exist.
+  if ($sku->hasField('attr_band_size') && $sku->hasField('attr_cup_size')) {
+    $bra_sizes = [];
+    if ($sku->bundle() == 'configurable') {
+      $configured_skus = $sku->get('field_configured_skus')->getValue();
+      foreach ($configured_skus as $simple_sku) {
+        $child_sku = SKU::loadFromSku($simple_sku['value']);
+        if ($child_sku instanceof SKUInterface) {
+          $band_size = $child_sku->get('attr_band_size')->getString();
+          $cup_size = $child_sku->get('attr_cup_size')->getString();
+          if ($band_size && $cup_size) {
+            $bra_size = implode(" ", [$band_size, $cup_size]);
+            if (!in_array($bra_size, $bra_sizes)) {
+              $bra_sizes[] = $bra_size;
+            }
+          }
+        }
+      }
+    }
+    else {
+      $band_size = $sku->get('attr_band_size')->getString();
+      $cup_size = $sku->get('attr_cup_size')->getString();
+      if ($band_size && $cup_size) {
+        $bra_size = implode(" ", [$band_size, $cup_size]);
+        $bra_sizes[] = $bra_size;
+      }
+    }
+    $object['attr_bra_size'] = $bra_sizes;
+  }
   $attr_fragrance = $sku->get('attr_fragrance')->getString();
   if ($attr_fragrance) {
     $object['attr_fragrance'] = $attr_fragrance;
