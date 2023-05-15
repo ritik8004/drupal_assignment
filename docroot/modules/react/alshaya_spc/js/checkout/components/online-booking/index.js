@@ -15,6 +15,7 @@ import Loading from '../../../../../js/utilities/loading';
 import DefaultShippingElement from '../shipping-method/components/DefaultShippingElement';
 import OnlineBookingCalendar from './calendar';
 import ConditionalView from '../../../../../js/utilities/components/conditional-view';
+import logger from '../../../../../js/utilities/logger';
 
 export default class OnlineBooking extends React.Component {
   constructor(props) {
@@ -54,6 +55,10 @@ export default class OnlineBooking extends React.Component {
   updateBookingDetails = async () => {
     const { cart, shippingInfoUpdated } = this.props;
     let result = { api_error: true };
+    // Add log for cart details during online booking.
+    logger.notice('Cart details during online booking: @cart.', {
+      '@cart': JSON.stringify(cart.cart),
+    });
     // We need to show online booking component only if home delivery method
     // is selected and shipping methods are available in cart and valid for user.
     if (!getHideOnlineBooking()
@@ -71,6 +76,11 @@ export default class OnlineBooking extends React.Component {
       // thus now we need to show the info of that slot only.
       if (hasValue(cart.cart.hfd_hold_confirmation_number)) {
         result = await getBookingDetailByConfirmationNumber(cart.cart.hfd_hold_confirmation_number);
+        // Add log for online booking if cart has confirmation number.
+        logger.notice('Online Booking API response with confirmation number: @response, Confirmation number @confirmationNumber.', {
+          '@response': JSON.stringify(result),
+          '@confirmationNumber': cart.cart.hfd_hold_confirmation_number,
+        });
       } else {
         // If confirmation number is not there in basket,
         // this means user hadn't reserved any slot earlier.
@@ -83,6 +93,10 @@ export default class OnlineBooking extends React.Component {
         if (!hasValue(result.status)) {
           setHideOnlineBooking(true);
         }
+        // Add log for online booking if cart doesn't have confirmation number.
+        logger.notice('Online Booking API response without confirmation number: @response.', {
+          '@response': JSON.stringify(result),
+        });
       }
     }
 
