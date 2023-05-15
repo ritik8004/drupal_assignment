@@ -4,6 +4,13 @@
  */
 (function ($, Drupal) {
 
+  Drupal.behaviors.alshayaAlgoliaReactPLP = {
+    attach: function (context, settings) {
+      var effectContext = $('#alshaya-algolia-plp');
+      Drupal.algoliaReactPLP.facetEffects(effectContext);
+    }
+  };
+
   Drupal.algoliaReactPLP = Drupal.algoliaReactPLP || {};
 
   // Trigger events when Algolia finishes loading search results.
