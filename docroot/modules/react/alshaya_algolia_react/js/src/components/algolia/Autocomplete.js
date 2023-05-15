@@ -97,7 +97,8 @@ class Autocomplete extends React.Component {
 
   shouldRenderSuggestions = (value) => (
     // Display trending searches for desktop on when searchbox is empty.
-    // otherwise show it only for mobile always and predictive search only.
+    // otherwise show it only for mobile always.
+    // Or Show it when predictive search is enabled.
     (value.trim() === '') || (window.innerWidth < 768) || predictiveSearchEnabled
   );
 
