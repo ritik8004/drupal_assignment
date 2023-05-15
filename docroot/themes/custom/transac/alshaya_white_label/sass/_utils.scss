@@ -913,3 +913,11 @@ $full_width_padding_desktop_wide: rem(40); /* viewport width >= 1680px */
     height: 100%;
   }
 }
+
+// Back to Top theming when alshaya-icon is used.
+@mixin backToTopFontIconTheme($width, $height) {
+  width: $width;
+  height: $height;
+  border: rem(1) solid $btt_border;
+  background: $btt_bg;
+}

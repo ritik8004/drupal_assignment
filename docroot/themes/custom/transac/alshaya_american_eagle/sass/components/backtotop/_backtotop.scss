@@ -1,10 +1,3 @@
-@mixin aeoBackToTopTheme {
-  width: rem(54);
-  height: rem(44);
-  border: rem(1) solid $btt_border;
-  background: $btt_bg;
-}
-
 #backtotop {
   @include icon(chevronup, after) {
     width: 2rem;
@@ -21,7 +14,7 @@
   &:not(.sprinklr-enabled) {
     #{$right}: 0;
 
-    @include aeoBackToTopTheme;
+    @include backToTopFontIconTheme($width: rem(54), $height: rem(44));
   }
 
   .path--cart & {
@@ -34,7 +27,7 @@
     &::after {
       line-height: rem(40);
 
-      @include aeoBackToTopTheme;
+      @include backToTopFontIconTheme($width: rem(54), $height: rem(44));
     }
   }
 }
