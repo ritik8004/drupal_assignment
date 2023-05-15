@@ -174,6 +174,21 @@ const customQueryRedirect = (items) => {
   return [];
 };
 
+/**
+ * Get Max values per facets from settings.
+ *
+ * @returns {number|*}
+ *   Max values per facets.
+ */
+const getMaxValuesFromFacets = () => {
+  const { maxValuesPerFacets } = drupalSettings.algoliaSearch;
+  if (hasValue(maxValuesPerFacets)) {
+    return maxValuesPerFacets;
+  }
+
+  return 1000;
+};
+
 export {
   getFilters,
   hasCategoryFilter,
@@ -181,4 +196,5 @@ export {
   hasSuperCategoryFilter,
   facetFieldAlias,
   customQueryRedirect,
+  getMaxValuesFromFacets,
 };

@@ -5,6 +5,7 @@ import { hasValue } from '../../../../../js/utilities/conditionsUtility';
 import { isConfigurableFiltersEnabled } from '../../../../../js/utilities/helper';
 import { getFilters } from '../../utils';
 import dispatchCustomEvent from '../../../../../js/utilities/events';
+import { getMaxValuesFromFacets } from '../../utils/FilterUtils';
 
 const Filters = ({ indexName, pageType, ...props }) => {
   const [filterCounts, setfilters] = useState([]);
@@ -332,7 +333,7 @@ const Filters = ({ indexName, pageType, ...props }) => {
       <DynamicWidgets
         buildFacets={buildFacets}
         facets={['*']}
-        maxValuesPerFacet={1000}
+        maxValuesPerFacet={getMaxValuesFromFacets()}
       >
         {facetsList}
       </DynamicWidgets>

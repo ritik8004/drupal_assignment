@@ -59,6 +59,9 @@ alshaya_algolia_react.settings:
     algolia_enable_configurable_filter:
       type: boolean
       label: 'Enable or disable configurable filters.'
+    algolia_max_values_per_facets:
+      type: integer
+      label: 'Max values per facets'
 
 alshaya_algolia_react.product_frames:
   type: config_object

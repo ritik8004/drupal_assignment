@@ -231,6 +231,7 @@ class AlshayaAlgoliaReactConfig implements AlshayaAlgoliaReactConfigInterface {
       'plpTeaserAttributes' => $alshaya_algolia_react_setting_values->get('product_teaser_attributes'),
       'facetListExpiry' => $alshaya_algolia_react_setting_values->get('algolia_facets_local_storage_expiry'),
       'enableConfigurableFilters' => $alshaya_algolia_react_setting_values->get('algolia_enable_configurable_filter'),
+      'maxValuesPerFacets' => $alshaya_algolia_react_setting_values->get('algolia_max_values_per_facets'),
     ];
 
     // Set product elements alignment to true only
