@@ -8,7 +8,6 @@ on:
       - master
       - develop-adyen
       - develop-egift-return
-      - develop-algolia-configurable
   create:
 
 concurrency: deploy-${{ github.ref }}
