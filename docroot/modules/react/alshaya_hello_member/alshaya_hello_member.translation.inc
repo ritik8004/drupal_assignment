@@ -553,7 +553,7 @@ function _alshaya_hello_member_react_translations() {
         'ar' => 'احجز الآن',
         'context' => 'hello_member',
       ],
-      '@plus_label member' => [
+      'plus member' => [
         'ar' => 'عضوية مميزه',
         'context' => 'hello_member',
       ],
