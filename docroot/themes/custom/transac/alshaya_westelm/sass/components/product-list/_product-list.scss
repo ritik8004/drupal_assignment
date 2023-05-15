@@ -88,6 +88,14 @@
       }
     }
 
+    .alshaya_search_slider {
+      @include breakpoint($upto-desktop) {
+        opacity: 1;
+        display: block;
+        visibility: visible;
+      }
+    }
+
     @include breakpoint($desktop) {
       article:hover {
         &::after {
