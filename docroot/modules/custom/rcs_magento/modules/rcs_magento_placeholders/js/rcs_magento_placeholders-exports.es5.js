@@ -81,7 +81,7 @@ function prepareQuery(query, variables) {
 }
 
 /**
- * Get graphQL response if it's already set from SSR..
+ * Get graphQL response if it's already set from SSR.
  *
  * @param {string} pageType
  *   Page type to check
