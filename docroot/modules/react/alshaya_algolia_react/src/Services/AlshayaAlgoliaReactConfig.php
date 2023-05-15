@@ -249,7 +249,7 @@ class AlshayaAlgoliaReactConfig implements AlshayaAlgoliaReactConfigInterface {
         break;
       }
     }
-  
+
     $response['autocomplete'] = [
       'hits' => $alshaya_algolia_react_setting_values->get('hits') ?? 4,
       'topResults' => $alshaya_algolia_react_setting_values->get('top_results') ?? 4,
