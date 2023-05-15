@@ -21,9 +21,7 @@ function alshaya_vs_transac_update_9407() {
     [
       'alshaya_acm_product.display_settings',
     ],
-    'alshaya_vs_transac',
-    'override',
-    AlshayaConfigManager::MODE_ADD_MISSING
+    'alshaya_acm_product'
   );
   // Queue all products which index a new field swatches.
   \Drupal::service('alshaya_acm_product.product_queue_utility')->queueAllProducts();
