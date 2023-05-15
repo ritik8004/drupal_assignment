@@ -66,7 +66,10 @@ function invoke_api($endpoint, $method = 'GET', array $data = []) {
     }
   }
   catch (Exception $e) {
-    error_log($e->getMessage());
+    global $mode;
+    if ($mode && $mode !== 'report') {
+      error_log($e->getMessage());
+    }
 
     return new stdClass();
   }
