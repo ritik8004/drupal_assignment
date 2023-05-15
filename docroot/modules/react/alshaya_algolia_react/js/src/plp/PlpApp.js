@@ -233,9 +233,7 @@ const PlpApp = ({
               <div className="c-facet c-accordion block-facet-blockcategory-facet-plp algolia-plp-category-facet">
                 <h3 className="c-facet__title c-accordion__title c-collapse__title plp-category-facet-title">{drupalSettings.algoliaSearch.category_facet_label}</h3>
                 <MobileFilterWrapper
-                  maxValuesPerFacet={isConfigurableFiltersEnabled()
-                    ? maxValuesPerFacets
-                    : undefined}
+                  {...(isConfigurableFiltersEnabled() ? maxValuesPerFacets : {})}
                 >
                   <PLPHierarchicalMenu
                     attributes={categoryFieldAttributes}
