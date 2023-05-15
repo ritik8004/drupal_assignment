@@ -458,6 +458,10 @@ function alshaya_vs_transac_install() {
       'en' => 'Fragrance',
       'ar' => 'العطر',
     ],
+    'Bra Size' => [
+      'en' => 'Bra Size',
+      'ar' => 'مقاس حمالة الصدر',
+    ],
 
   ];
   alshaya_i18n_save_translations($strings);
