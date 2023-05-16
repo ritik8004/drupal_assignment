@@ -44,12 +44,28 @@
     right: auto;
   }
 
-  &.backtotop-nofooter {
-    position: fixed;
+  &:not(.sprinklr-enabled) {
+    &.backtotop-nofooter {
+      position: fixed;
+    }
   }
 
   &:hover {
     opacity: unset !important;
+  }
+
+  &.sprinklr-enabled {
+    // unset row-gap if font-size is 0.
+    row-gap: unset;
+    transform: unset;
+
+    &::after {
+      transform: rotate(90deg);
+    }
+
+    html[lang="ar"] & {
+      left: rem(20);
+    }
   }
 }
 
