@@ -187,8 +187,8 @@ export default class Checkout extends React.Component {
   }
 
   processAddressFromLocalStorage = (result) => {
-    // Do this only for guests.
-    if (!(drupalSettings.userDetails.customerId)) {
+    // Do this only for guests, for guests 0 is returned.
+    if (drupalSettings.userDetails.customerId !== 0) {
       return;
     }
 
