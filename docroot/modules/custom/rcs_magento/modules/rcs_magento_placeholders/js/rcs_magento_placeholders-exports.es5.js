@@ -116,16 +116,12 @@ exports.getEntity = async function getEntity(langcode) {
   let result = null;
   let response = null;
   let urlKey = drupalSettings.rcsPage.fullPath;
-  // Check for response set from backend.
-  response = getGraphQLSsrResponse(pageType);
 
   switch (pageType) {
     case 'product':
-      if (!response) {
-        request.data = prepareQuery(rcsPhGraphqlQuery.pdp_product.query, rcsPhGraphqlQuery.pdp_product.variables);
-        // Fetch response.
-        response = await rcsCommerceBackend.invokeApi(request);
-      }
+      request.data = prepareQuery(rcsPhGraphqlQuery.pdp_product.query, rcsPhGraphqlQuery.pdp_product.variables);
+      // Fetch response.
+      response = await rcsCommerceBackend.invokeApi(request);
 
       if (response && response.data.products.total_count) {
         result = response.data.products.items[0];
@@ -139,13 +135,11 @@ exports.getEntity = async function getEntity(langcode) {
       break;
 
     case 'category':
-      if (!response) {
-        // Build query.
-        request.data = prepareQuery(rcsPhGraphqlQuery.categories.query, rcsPhGraphqlQuery.categories.variables);
+      // Build query.
+      request.data = prepareQuery(rcsPhGraphqlQuery.categories.query, rcsPhGraphqlQuery.categories.variables);
 
-        // Fetch response.
-        response = await rcsCommerceBackend.invokeApi(request);
-      }
+      // Fetch response.
+      response = await rcsCommerceBackend.invokeApi(request);
       if (response && response.data.categories.total_count) {
         result = response.data.categories.items[0];
         var currentPath = window.location.href;
@@ -164,13 +158,11 @@ exports.getEntity = async function getEntity(langcode) {
       break;
 
     case 'promotion':
-      if (!response) {
-        // Build query.
-        request.data = prepareQuery(rcsPhGraphqlQuery.promotions.query, rcsPhGraphqlQuery.promotions.variables);
+      // Build query.
+      request.data = prepareQuery(rcsPhGraphqlQuery.promotions.query, rcsPhGraphqlQuery.promotions.variables);
 
-        // Fetch response.
-        response = await rcsCommerceBackend.invokeApi(request);
-      }
+      // Fetch response.
+      response = await rcsCommerceBackend.invokeApi(request);
       if (response.data.promotionUrlResolver) {
         result = response.data.promotionUrlResolver;
       }

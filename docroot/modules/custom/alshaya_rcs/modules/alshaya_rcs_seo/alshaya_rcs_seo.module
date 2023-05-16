@@ -40,11 +40,6 @@ function alshaya_rcs_seo_library_info_alter(&$libraries, $extension) {
  * Implements hook_page_attachments_alter().
  */
 function alshaya_rcs_seo_page_attachments_alter(&$attachments) {
-  // Set attachment for RCS result from SSR.
-  /** @var \Drupal\alshaya_rcs_seo\Services\AlshayaRcsMetatagSsrHelper $rcs_metatag_ssr_helper */
-  $rcs_metatag_ssr_helper = \Drupal::service('alshaya_rcs_seo.metatag_ssr_helper');
-  $rcs_metatag_ssr_helper->setSsrGraphqlResulInPageAttachment($attachments);
-
   $route_match = \Drupal::routeMatch();
   $route_name = $route_match->getRouteName();
 
