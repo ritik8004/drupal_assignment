@@ -14,12 +14,23 @@
 
   #{$right}: 1.25rem;
   bottom: 6.25rem;
-  height: 2.625rem;
-  width: 2.625rem;
-  border: 1px solid $btt_border;
-  background: $btt_bg;
+
+  &:not(.sprinklr-enabled) {
+    @include backToTopFontIconTheme($width: rem(42), $height: rem(42));
+  }
 
   @include breakpoint($only-mobile) {
     bottom: 10.5rem;
+  }
+
+  &.sprinklr-enabled {
+    padding: 0;
+
+    &::after {
+      @include backToTopFontIconTheme($width: rem(42), $height: rem(42));
+
+      border-radius: unset;
+      line-height: rem(38);
+    }
   }
 }

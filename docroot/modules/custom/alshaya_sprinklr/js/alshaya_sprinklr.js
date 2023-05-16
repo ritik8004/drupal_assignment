@@ -3,7 +3,7 @@
  * Contains Alshaya Sprinklr chatbot functionality.
  */
 
-(function (drupalSettings) {
+(function (Drupal, drupalSettings, once) {
   document.addEventListener('sprChatSettingsAlter', (e) => {
     if (typeof drupalSettings.sprinklr === 'undefined') {
       return;
@@ -27,16 +27,13 @@
     }
   });
 
-  // For re-positioning Back to top button when sprinklr is enable.
-  // SetTimeout is used because the Sprinklr iframe is loading at last.
-  // So to get Sprinklr iframe ID setTimeout is used here.
-  setTimeout(function () {
-    var sprChatId = document.getElementById('spr-live-chat-frame');
-    var winWidth = window.innerWidth;
-    var backToTop = document.getElementById('backtotop');
-    if (sprChatId !== null && backToTop !== null) {
-      backToTop.classList.add('sprinklr-enabled');
-    }
-  }, 2000);
-
-})(drupalSettings);
+  Drupal.behaviors.AlshayaSprinklr = {
+    attach: function (context) {
+      // Re-position Back to top button when sprinklr is enabled.
+      var [backToTop] = once("sprinklr-back-to-top", "#backtotop", context);
+      if (backToTop) {
+        backToTop.classList.add("sprinklr-enabled");
+      }
+    },
+  };
+})(Drupal, drupalSettings, once);
