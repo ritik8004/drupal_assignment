@@ -16,13 +16,6 @@ const { predictiveSearchEnabled } = drupalSettings.algoliaSearch;
 const clearText = predictiveSearchEnabled ? Drupal.t('Clear') : null;
 const InputButtons = React.memo((props) => (
   <>
-    {(predictiveSearchEnabled && props.hits.length < 1 && props.value.trim() !== '') ? (
-      <Portal
-        key="no-result"
-        className="predictive-search__msg-no-result"
-        innerHTML={`${Drupal.t('Nothing found for "')}<span class="bold">${props.value}"</span>`}
-      />
-    ) : null}
     <Portal
       key="back-button"
       onclick={(event) => props.backCallback(event)}
@@ -312,8 +305,6 @@ class Autocomplete extends React.Component {
           backCallback={this.backIconClickEvent}
           clearCallback={this.clearSearchFieldInput}
           closeCallback={this.closePredictiveSearchEvent}
-          hits={hits}
-          value={value}
         />
       </>
     );

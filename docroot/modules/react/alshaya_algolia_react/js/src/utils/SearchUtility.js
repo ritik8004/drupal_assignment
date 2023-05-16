@@ -119,24 +119,6 @@ function removeLoader() {
   }
 }
 
-function updatePredictiveSearchContainer(action, query = null) {
-  const searchWrapper = document.getElementById('alshaya-algolia-search');
-  if (action === 'hide') {
-    // Hide result cound and grid switcher block.
-    searchWrapper.querySelector('.block-alshaya-grid-count-block').classList.add('hide-grid-count-block');
-    // Change the page title when search results are empty.
-    searchWrapper.querySelector('.block-page-title-block .c-page-title').innerHTML = `${Drupal.t('NO RESULTS FOUND FOR')} "${query}"`;
-  } else {
-    const searchQuery = getSearchQuery();
-    searchWrapper.querySelector('.block-alshaya-grid-count-block').classList.remove('hide-grid-count-block');
-    if (searchQuery !== '' && searchQuery !== null) {
-      searchWrapper.querySelector('.block-page-title-block .c-page-title').innerHTML = `${Drupal.t('SEARCH RESULTS FOR')} "${searchQuery}"`;
-    } else {
-      searchWrapper.querySelector('.block-page-title-block .c-page-title').innerHTML = Drupal.t('Search results');
-    }
-  }
-}
-
 export {
   contentDiv,
   createSearchResultDiv,
@@ -145,5 +127,4 @@ export {
   showLoader,
   removeLoader,
   toggleBlockCategoryFilter,
-  updatePredictiveSearchContainer,
 };

@@ -5,7 +5,6 @@ import {
   toggleSearchResultsContainer,
   toggleSortByFilter,
   toggleBlockCategoryFilter,
-  updatePredictiveSearchContainer,
 } from '../../utils';
 
 const NoResults = ({
@@ -15,8 +14,6 @@ const NoResults = ({
     return null;
   }
 
-  // For checking state of predictiveSearch.
-  const { predictiveSearchEnabled } = drupalSettings.algoliaSearch;
   if (!searching && !isSearchStalled && !searchingForFacetValues) {
     toggleSearchResultsContainer();
     toggleSortByFilter('hide');
@@ -26,9 +23,6 @@ const NoResults = ({
   // Trigger GTM for no results found.
   Drupal.algoliaReact.triggerSearchResultsUpdatedEvent(0);
 
-  if (predictiveSearchEnabled) {
-    updatePredictiveSearchContainer('hide', searchResults.query);
-  }
   return (
     <div className="hits-empty-state">
       <div className="view-empty">
