@@ -101,9 +101,9 @@ class SearchApp extends React.PureComponent {
   };
 
   render() {
-    const { query } = this.state;
     // Predictive search updates state on enter hence reading html value.
-    const { input } = this.state;
+    const { query, input } = this.state;
+
     // Display search results when wrapper is present on page.
     const searchWrapper = document.getElementById('alshaya-algolia-search');
     const searchResultsDiv = (typeof searchWrapper !== 'undefined' && searchWrapper != null)
