@@ -1,0 +1,54 @@
+#top-results,
+.c-plp {
+  .swatches {
+    .article-swatch {
+      &.active::before,
+      &:hover::before {
+        width: rem(30);
+        height: rem(30);
+        top: rem(-3);
+        #{$left}: rem(-3);
+      }
+    }
+
+    &.swatch-slider {
+      .slick-arrow {
+        width: rem(36);
+      }
+
+      // Center aligning the swatches properly when slider does not have buttons.
+      .slick-list:only-child {
+        margin-right: auto;
+        margin-left: auto;
+
+        .slick-track {
+          margin: 0 auto;
+          justify-content: center;
+        }
+
+        .slick-slide {
+          width: auto !important;
+
+          &:last-child .article-swatch {
+            margin-#{$right}: rem(3);
+          }
+        }
+      }
+    }
+  }
+
+  .c-products__item .swatches.swatch-slider {
+    @include swatchSliderMaxWidth($swatch_width: rem(36));
+
+    margin: rem(18) auto rem(12);
+  }
+}
+
+@include breakpoint($only-mobile) {
+  #top-results,
+  .c-plp {
+    .c-products__item .swatches.swatch-slider {
+      margin: rem(12) auto rem(14);
+    }
+  }
+}
