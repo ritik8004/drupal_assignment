@@ -7,6 +7,27 @@
 
 use Drupal\field\Entity\FieldStorageConfig;
 use Symfony\Component\Yaml\Yaml;
+use Drupal\alshaya_config\AlshayaConfigManager;
+
+/**
+ * Implements hook_update_N().
+ *
+ * Enabling the new field 'version' to static html bundle.
+ */
+function alshaya_static_html_update_9001() {
+
+  $manager = \Drupal::service('alshaya_config.manager');
+  $manager->updateConfigs([
+    'field.storage.node.field_version',
+    'field.field.node.static_html.field_version',
+    'core.entity_form_display.node.static_html.default',
+  ],
+    'alshaya_static_html',
+    'install',
+    AlshayaConfigManager::MODE_MERGE
+  );
+
+}
 
 /**
  * Implements hook_update_N().
