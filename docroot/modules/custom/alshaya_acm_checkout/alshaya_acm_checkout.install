@@ -13,6 +13,23 @@ use Drupal\taxonomy\Entity\Term;
 /**
  * Implements hook_update_N().
  *
+ * Add settings to expire the shippingaddress-formdata
+ * local storage data based on cart_storage_expiration.
+ */
+function alshaya_acm_checkout_update_9501() {
+  /** @var \Drupal\alshaya_config\AlshayaConfigManager $manager */
+  $manager = \Drupal::service('alshaya_config.manager');
+  $manager->updateConfigs(
+    ['alshaya_acm_checkout.settings'],
+    'alshaya_acm_checkout',
+    'install',
+    AlshayaConfigManager::MODE_ADD_MISSING
+  );
+}
+
+/**
+ * Implements hook_update_N().
+ *
  * Update taxonomy term definition to fix
  * Mismatched entity and/or field definitions.
  */
