@@ -264,6 +264,8 @@ function alshaya_search_algolia_uninstall() {
  * We are tracking the deleted objectids with the help of this table
  * This table is temporary and can be removed once the feature is available
  * On every brand.
+ * Stores node_id if the index_sku_as_object_id is TRUE
+ * Stores SKU if the flag is FALSE.
  */
 function alshaya_search_algolia_schema() {
   $schema['deleted_objectids'] = [
