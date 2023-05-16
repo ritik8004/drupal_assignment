@@ -25,6 +25,7 @@ function alshaya_search_algolia_update_9401() {
     'install',
     AlshayaConfigManager::MODE_ADD_MISSING
   );
+  drupal_install_schema('alshaya_search_algolia');
 }
 
 /**
@@ -240,6 +241,9 @@ function alshaya_search_algolia_install() {
 
   // Set Drupal index as index prefix.
   \Drupal::service('alshaya_search_algolia.index_helper')->setAlgoliaIndexPrefix('drupal');
+
+  // Install table for tracking processed nodes.
+  drupal_install_schema('alshaya_search_algolia');
 }
 
 /**
@@ -248,4 +252,32 @@ function alshaya_search_algolia_install() {
 function alshaya_search_algolia_uninstall() {
   // Reset configs overridden by this module.
   alshaya_config_install_configs(['search_api.index.acquia_search_index'], 'alshaya_search', 'optional');
+}
+
+/**
+ * Implements hook_schema().
+ */
+function alshaya_search_algolia_schema() {
+  $schema['deleted_objectids'] = [
+    'description' => 'Deleted object ids',
+    'fields' => [
+      'id' => [
+        'description' => 'Unique identifier',
+        'type' => 'serial',
+        'unsigned' => TRUE,
+        'not null' => TRUE,
+      ],
+      'object_id' => [
+        'description' => 'object id processed for deletion',
+        'type' => 'varchar',
+        'length' => 32,
+        'not null' => TRUE,
+      ],
+    ],
+    'indexes' => [
+      'object_id' => ['object_id'],
+    ],
+    'primary key' => ['id'],
+  ];
+  return $schema;
 }

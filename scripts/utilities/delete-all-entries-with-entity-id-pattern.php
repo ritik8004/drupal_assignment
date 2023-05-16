@@ -45,14 +45,18 @@ catch (\Exception $e) {
 }
 // Get all sku's and node_ids.
 $query = \Drupal::database()->select('node__field_skus', 'nfs');
+
 // Use SKU if the configuration is enabled for Search Index.
 $index_sku_as_object_id = \Drupal::config('alshaya_search_algolia.settings')->get('index_sku_as_object_id');
 if ($index_sku_as_object_id) {
   $query->addField('nfs', 'entity_id', 'nid');
+  $query->leftJoin('deleted_objectids', 'did', 'nfs.entity_id = did.object_id');
 }
 else {
   $query->addField('nfs', 'field_skus_value', 'sku');
+  $query->leftJoin('deleted_objectids', 'did', 'nfs.field_skus_value = did.object_id');
 }
+$query->condition('did.object_id', NULL, 'IS NULL');
 $objectids_to_delete = $query->execute()->fetchCol();
 $logger->notice('@count products found.', [
   '@count' => count($objectids_to_delete),
@@ -62,12 +66,17 @@ foreach (array_chunk($objectids_to_delete, '500') as $smaller_chunk) {
   $logger->warning('Removing chunk of 500 records.');
   foreach ($smaller_chunk as $object_id) {
     $obj_id[] = $index_sku_as_object_id ? "entity:node/$object_id:$lang" : $object_id;
+    $insert = \Drupal::database()->query("INSERT INTO deleted_objectids VALUES (DEFAULT,'$object_id')");
   }
   $response = $index->deleteObjects($obj_id);
   $response->wait();
+
   $logger->warning('Removed entries from index @index, objectID: @objectID, Response: @response.', [
     '@index' => $index->getIndexName(),
     '@objectID' => implode(',', $obj_id),
     '@response' => json_encode($response->getBody(), JSON_THROW_ON_ERROR),
   ]);
 }
+
+\Drupal::database()->query("TRUNCATE TABLE deleted_objectids");
+$logger->notice('Finished operation');
