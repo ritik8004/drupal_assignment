@@ -247,7 +247,9 @@ function alshaya_search_algolia_install() {
   \Drupal::service('alshaya_search_algolia.index_helper')->setAlgoliaIndexPrefix('drupal');
 
   // Install table for tracking processed nodes.
-  drupal_install_schema('alshaya_search_algolia');
+  if (!\Drupal::database()->schema()->tableExists('deleted_objectids')) {
+    drupal_install_schema('alshaya_search_algolia');
+  }
 }
 
 /**
