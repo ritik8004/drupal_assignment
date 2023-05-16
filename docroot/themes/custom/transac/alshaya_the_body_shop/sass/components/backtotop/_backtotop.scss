@@ -25,4 +25,9 @@
       }
     }
   }
+
+  &.sprinklr-enabled {
+    // unset row-gap if font-size is 0.
+    row-gap: unset;
+  }
 }
