@@ -26,7 +26,10 @@ function alshaya_search_algolia_update_9401() {
     AlshayaConfigManager::MODE_ADD_MISSING
   );
   // For creating a new table to track deleted objectids.
-  drupal_install_schema('alshaya_search_algolia');
+  // Check if table exists.
+  if (!\Drupal::database()->schema()->tableExists('deleted_objectids')) {
+    drupal_install_schema('alshaya_search_algolia');
+  }
 }
 
 /**
