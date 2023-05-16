@@ -13,38 +13,13 @@ use Drupal\facets\Entity\Facet;
  * Save translations for Cart.
  */
 function alshaya_nb_transac_update_9408() {
-  $strings = [
-    'Move to basket' => [
-      'en' => 'Move to Cart',
-      'ar' => 'انقل لعربة التسوق',
-    ],
-    'Bag' => [
-      'en' => 'Cart',
-      'ar' => 'حقيبة التسوق',
-    ],
-    'Basket' => [
-      'en' => 'Cart',
-      'ar' => 'حقيبة التسوق',
-    ],
-    'add to cart' => [
-      'en' => 'Add to Cart',
-      'ar' => 'أضف لعربة التسوق',
-    ],
-    'my shopping bag' => [
-      'en' => 'my shopping cart',
-      'ar' => 'عربة التسوق الخاصة بي',
-    ],
-    'Shopping Bag' => [
-      'en' => 'Shopping Cart',
-      'ar' => 'عربة التسوق',
-    ],
-    'view cart' => [
-      'en' => 'view cart',
-      'ar' => 'عرض عربة التسوق',
-    ],
-  ];
-
-  alshaya_i18n_save_translations($strings);
+  // Add translations.
+  \Drupal::moduleHandler()
+    ->loadInclude('alshaya_nb_transac', 'inc', 'alshaya_nb_transac.translation');
+  $translations = _alshaya_nb_transac_get_translations('v6');
+  if ($translations) {
+    alshaya_i18n_save_translations($translations);
+  }
 }
 
 /**
