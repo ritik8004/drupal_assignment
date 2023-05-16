@@ -40,7 +40,7 @@ class AlshayGraphqlApiWrapper {
    *
    * @var \Drupal\Core\Language\LanguageManagerInterface
    */
-  private $languageManager;
+  protected $languageManager;
 
   /**
    * AlshayGraphqlApiWrapper constructor.
@@ -130,21 +130,23 @@ class AlshayGraphqlApiWrapper {
           '@api' => $request_url,
         ]);
 
-        return NULL;
+        return [];
       }
 
       $result = json_decode($result, TRUE);
       if (isset($result['errors'])) {
-        $this->logger->error('Error occured while invoking GraphQL api with following response: @errors', [
+        $this->logger->error('Error occurred while invoking GraphQL API @api with following response: @errors', [
           'errors' => json_decode($result['errors'], TRUE),
+          '@api' => $request_url,
         ]);
       }
 
       $result = $result['data'] ?? [];
     }
     catch (\Exception $e) {
-      $this->logger->error('Some exceptions are found while invoking GraphQL api @message', [
+      $this->logger->error('Some exceptions are found while invoking GraphQL API @api with message: @message', [
         'message' => $e->getMessage(),
+        '@api' => $request_url,
       ]);
     }
 
