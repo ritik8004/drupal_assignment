@@ -80,23 +80,6 @@ function prepareQuery(query, variables) {
   return graphqlQuery;
 }
 
-/**
- * Get graphQL response if it's already set from SSR.
- *
- * @param {string} pageType
- *   Page type to check
- *
- * @returns {object}
- *   Result object set from SSR.
- */
-const getGraphQLSsrResponse = (pageType) => {
-  let response = null;
-  if (drupalSettings.rcs.ssr_result && drupalSettings.rcs.ssr_result[pageType]) {
-    response = drupalSettings.rcs.ssr_result[pageType];
-  }
-  return response;
-}
-
 exports.getEntity = async function getEntity(langcode) {
   const pageType = globalThis.rcsPhGetPageType();
   if (!pageType) {
