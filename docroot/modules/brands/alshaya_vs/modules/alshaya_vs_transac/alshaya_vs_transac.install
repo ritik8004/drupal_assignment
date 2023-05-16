@@ -16,7 +16,7 @@ use Drupal\Component\Utility\Unicode;
  *
  * Disabling swatches display on PLP/Search pages.
  */
-function alshaya_vs_transac_update_9407() {
+function alshaya_vs_transac_update_9408() {
   // Add string translations.
   $strings = [
     'Bra Size' => [
@@ -30,6 +30,7 @@ function alshaya_vs_transac_update_9407() {
   $manager->updateConfigs(
     [
       'alshaya_acm_product.sku_base_fields',
+      'alshaya_acm_product.display_settings',
     ],
     'alshaya_acm_product'
   );
@@ -40,14 +41,23 @@ function alshaya_vs_transac_update_9407() {
   alshaya_config_install_configs(['search_api.index.product'], 'alshaya_product');
   alshaya_config_install_configs(['search_api.index.acquia_search_index'], 'alshaya_search', 'optional');
 
-  // Disabling swatches display on PLP/Search pages.
+  \Drupal::service('alshaya_acm_product.product_queue_utility')->queueAllProducts();
+}
+
+/**
+ * Disabling swatches display on PLP/Search pages.
+ *
+ * Index products with new swatches field for Mobile App usage only.
+ */
+function alshaya_vs_transac_update_9407() {
+  $manager = \Drupal::service('alshaya_config.manager');
   $manager->updateConfigs(
     [
       'alshaya_acm_product.display_settings',
     ],
     'alshaya_acm_product'
   );
-
+  // Queue all products which index a new field swatches.
   \Drupal::service('alshaya_acm_product.product_queue_utility')->queueAllProducts();
 }
 
