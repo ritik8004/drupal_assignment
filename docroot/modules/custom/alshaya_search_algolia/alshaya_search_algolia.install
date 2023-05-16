@@ -25,6 +25,11 @@ function alshaya_search_algolia_update_9401() {
     'install',
     AlshayaConfigManager::MODE_ADD_MISSING
   );
+  // For creating a new table to track deleted objectids.
+  // Check if table exists.
+  if (!\Drupal::database()->schema()->tableExists('deleted_objectids')) {
+    drupal_install_schema('alshaya_search_algolia');
+  }
 }
 
 /**
@@ -248,4 +253,47 @@ function alshaya_search_algolia_install() {
 function alshaya_search_algolia_uninstall() {
   // Reset configs overridden by this module.
   alshaya_config_install_configs(['search_api.index.acquia_search_index'], 'alshaya_search', 'optional');
+}
+
+/**
+ * Implements hook_schema().
+ *
+ * This table is created for tracking extra records for deletion
+ * After using SKU as objectid duplicate records are created in the
+ * Search index that are required to be removed.
+ * We are tracking the deleted objectids with the help of this table
+ * This table is temporary and can be removed once the feature is available
+ * On every brand.
+ * Stores node_id if the index_sku_as_object_id is TRUE
+ * Stores SKU if the flag is FALSE.
+ */
+function alshaya_search_algolia_schema() {
+  $schema['deleted_objectids'] = [
+    'description' => 'Deleted object ids',
+    'fields' => [
+      'id' => [
+        'description' => 'Unique identifier',
+        'type' => 'serial',
+        'unsigned' => TRUE,
+        'not null' => TRUE,
+      ],
+      'object_id' => [
+        'description' => 'object id processed for deletion',
+        'type' => 'varchar',
+        'length' => 32,
+        'not null' => TRUE,
+      ],
+      'langcode' => [
+        'description' => 'langcode processed for deletion',
+        'type' => 'varchar',
+        'length' => 32,
+        'not null' => TRUE,
+      ],
+    ],
+    'indexes' => [
+      'object_id' => ['object_id', 'langcode'],
+    ],
+    'primary key' => ['id'],
+  ];
+  return $schema;
 }
