@@ -502,11 +502,8 @@ function rcs_placeholders_page_bottom(array &$page_bottom) {
     return;
   }
 
-  // Invoke hook to get default values.
-  $queries = \Drupal::moduleHandler()->invokeAll('rcs_placeholders_graphql_query');
-
-  // Allow other modules to alter the data.
-  \Drupal::moduleHandler()->alter('rcs_placeholders_graphql_query', $queries);
+  // Get placeholder queries to use.
+  $queries = \Drupal::service('rcs_placeholders.helper')->getRcsPlaceholderGraphqlQueries();
 
   // Store cache data an unset in original array so that no further processing
   // for it occurs in the array.
