@@ -89,11 +89,6 @@ foreach (array_chunk($objectids_to_delete, $size) as $smaller_chunk) {
     ]);
   }
   catch (\Exception $e) {
-    // Delete records for re-processing on failure.
-    \Drupal::database()->delete('deleted_objectids')
-      ->condition('object_id', $obj_id, 'IN')
-      ->condition('langcode', $lang)
-      ->execute();
     $logger->error("Failed to delete @object_ids from index. Exception: @error", [
       '@error' => $e->getMessage(),
       '@object_ids' => implode($obj_id),
