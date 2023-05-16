@@ -97,6 +97,36 @@ function _alshaya_nb_transac_translations() {
         'ar' => 'المميزات',
       ],
     ],
+    'v6' => [
+      'Move to basket' => [
+        'en' => 'Move to Cart',
+        'ar' => 'انقل لعربة التسوق',
+      ],
+      'Bag' => [
+        'en' => 'Cart',
+        'ar' => 'حقيبة التسوق',
+      ],
+      'Basket' => [
+        'en' => 'Cart',
+        'ar' => 'حقيبة التسوق',
+      ],
+      'add to cart' => [
+        'en' => 'Add to Cart',
+        'ar' => 'أضف لعربة التسوق',
+      ],
+      'my shopping bag' => [
+        'en' => 'my shopping cart',
+        'ar' => 'عربة التسوق الخاصة بي',
+      ],
+      'Shopping Bag' => [
+        'en' => 'Shopping Cart',
+        'ar' => 'عربة التسوق',
+      ],
+      'view cart' => [
+        'en' => 'view cart',
+        'ar' => 'عرض عربة التسوق',
+      ],
+    ],
   ];
 }
 
