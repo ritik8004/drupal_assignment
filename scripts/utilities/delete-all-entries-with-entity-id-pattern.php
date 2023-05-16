@@ -91,7 +91,7 @@ foreach (array_chunk($objectids_to_delete, $size) as $smaller_chunk) {
   catch (\Exception $e) {
     $logger->error("Failed to delete @object_ids from index. Exception: @error", [
       '@error' => $e->getMessage(),
-      '@object_ids' => implode($obj_id),
+      '@object_ids' => implode(',', $obj_id),
     ]);
   }
 
