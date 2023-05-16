@@ -12,7 +12,41 @@ use Drupal\Component\Utility\Unicode;
 /**
  * Implements hook_update_N().
  *
+ * Adds 'bra_size' field in the sku base field existing config.
+ *
  * Disabling swatches display on PLP/Search pages.
+ */
+function alshaya_vs_transac_update_9408() {
+  // Add string translations.
+  $strings = [
+    'Bra Size' => [
+      'en' => 'Bra Size',
+      'ar' => 'مقاس حمالة الصدر',
+    ],
+  ];
+  alshaya_i18n_save_translations($strings);
+
+  $manager = \Drupal::service('alshaya_config.manager');
+  $manager->updateConfigs(
+    [
+      'alshaya_acm_product.sku_base_fields',
+      'alshaya_acm_product.display_settings',
+    ],
+    'alshaya_acm_product'
+  );
+  $fieldsManager = \Drupal::service('acq_sku.fields_manager');
+  $fieldsManager->addFields();
+
+  // Re-save index configs to ensure overrides are taken into consideration.
+  alshaya_config_install_configs(['search_api.index.product'], 'alshaya_product');
+  alshaya_config_install_configs(['search_api.index.acquia_search_index'], 'alshaya_search', 'optional');
+
+  \Drupal::service('alshaya_acm_product.product_queue_utility')->queueAllProducts();
+}
+
+/**
+ * Disabling swatches display on PLP/Search pages.
+ *
  * Index products with new swatches field for Mobile App usage only.
  */
 function alshaya_vs_transac_update_9407() {
@@ -443,6 +477,10 @@ function alshaya_vs_transac_install() {
     'Fragrance' => [
       'en' => 'Fragrance',
       'ar' => 'العطر',
+    ],
+    'Bra Size' => [
+      'en' => 'Bra Size',
+      'ar' => 'مقاس حمالة الصدر',
     ],
 
   ];

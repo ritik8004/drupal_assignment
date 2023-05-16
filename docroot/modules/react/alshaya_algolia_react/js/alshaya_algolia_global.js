@@ -12,7 +12,7 @@
         var facet_block = $('.container-without-product .c-collapse-item');
         if ($(facet_block).find(event.target).length === 0) {
           $(facet_block).find('.c-facet__title').removeClass('active');
-          $(facet_block).find('ul').slideUp();
+          $(facet_block).children('ul').slideUp();
         }
       });
 
