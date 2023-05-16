@@ -607,7 +607,11 @@ export const checkoutAddressProcess = (e) => {
 
         const cartData = { cart: cartResult };
         // Store the address in localStorage.
-        Drupal.addItemInLocalStorage('shippingaddress-formdata', formData);
+        Drupal.addItemInLocalStorage(
+          'shippingaddress-formdata',
+          formData,
+          parseInt(drupalSettings.address_storage_expiration, 1440) * 60,
+        );
         // Trigger event.
         dispatchCustomEvent('refreshCartOnAddress', cartData);
       });
