@@ -257,6 +257,13 @@ function alshaya_search_algolia_uninstall() {
 
 /**
  * Implements hook_schema().
+ *
+ * This table is created for tracking extra records for deletion
+ * After using SKU as objectid duplicate records are created in the
+ * Search index that are required to be removed.
+ * We are tracking the deleted objectids with the help of this table
+ * This table is temporary and can be removed once the feature is available
+ * On every brand.
  */
 function alshaya_search_algolia_schema() {
   $schema['deleted_objectids'] = [
@@ -274,9 +281,15 @@ function alshaya_search_algolia_schema() {
         'length' => 32,
         'not null' => TRUE,
       ],
+      'langcode' => [
+        'description' => 'langcode processed for deletion',
+        'type' => 'varchar',
+        'length' => 32,
+        'not null' => TRUE,
+      ],
     ],
     'indexes' => [
-      'object_id' => ['object_id'],
+      'object_id' => ['object_id', 'langcode'],
     ],
     'primary key' => ['id'],
   ];
