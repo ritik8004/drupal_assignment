@@ -155,7 +155,9 @@ const getHomeDeliveryShippingMethods = async (data) => {
 
   if (!hasValue(staticShippingMethods[key])) {
     staticShippingMethods[key] = [];
-    const url = getApiEndpoint('estimateShippingMethods', { cartId: window.commerceBackend.getCartId() });
+    const cartId = window.commerceBackend.getCartId();
+
+    const url = getApiEndpoint('estimateShippingMethods', { cartId });
     const response = await callMagentoApi(url, 'POST', { address: formattedAddress });
 
     // Check for errors.
@@ -172,6 +174,15 @@ const getHomeDeliveryShippingMethods = async (data) => {
       logger.notice(message);
 
       return getFormattedError(600, message);
+    }
+
+    // Add log for shipping methods for HD that we get from magento.
+    if (hasValue(drupalSettings.logHdShippingMethods)) {
+      logger.notice('Shipping methods for HD. CartId: @cartId, Url: @url, Response: @response.', {
+        '@cartId': cartId,
+        '@url': url,
+        '@response': JSON.stringify(response.data),
+      });
     }
 
     // Delete methods for CNC.
