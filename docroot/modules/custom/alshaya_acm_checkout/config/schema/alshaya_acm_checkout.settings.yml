@@ -60,6 +60,9 @@ alshaya_acm_checkout.settings:
     cnc_store_info_cache_time:
       type: integer
       label: 'Set the cache time for cnc store info'
+    address_storage_expiration:
+      type: integer
+      label: 'Address storage expiration'
 
 alshaya_acm_checkout.ab_testing:
   type: config_object
