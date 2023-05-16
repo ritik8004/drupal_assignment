@@ -177,11 +177,13 @@ const getHomeDeliveryShippingMethods = async (data) => {
     }
 
     // Add log for shipping methods for HD that we get from magento.
-    logger.notice('Shipping methods for HD. CartId: @cartId, Url: @url, Response: @response.', {
-      '@cartId': cartId,
-      '@url': url,
-      '@response': JSON.stringify(response.data),
-    });
+    if (hasValue(drupalSettings.logHdShippingMethods)) {
+      logger.notice('Shipping methods for HD. CartId: @cartId, Url: @url, Response: @response.', {
+        '@cartId': cartId,
+        '@url': url,
+        '@response': JSON.stringify(response.data),
+      });
+    }
 
     // Delete methods for CNC.
     const methods = response.data.filter((i) => i.carrier_code !== 'click_and_collect');
