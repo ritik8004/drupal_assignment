@@ -2,6 +2,8 @@
 
   // The threshold for how far you should reach before loading related products.
   var scrollThreshold = 200;
+  // Set the flag to false on initial page load until we use the selected param.
+  var selectedParameterProcessed = false;
 
   /**
    * Checks if the PDP is RCS PDP or not.
@@ -342,25 +344,11 @@
           }
         }
 
-        const query = new URLSearchParams(window.location.search);
-        const selectedParam = query.get('selected');
-        // Proceed only if there is a 'selected' query param.
-        if (Drupal.hasValue(selectedParam)) {
-          const selectedSkuFromQuery = Drupal.getSelectedProductFromQueryParam(viewMode, productData);
-          const variantInfo = (Drupal.hasValue(productData.variants) && Drupal.hasValue(productData.variants[selectedSkuFromQuery]))
-            ? productData.variants[selectedSkuFromQuery]
-            : null;
-          const variantTitle = Drupal.hasValue(variantInfo) ? variantInfo.cart_title : '';
-          const newUrl = Drupal.removeURLParameter(window.location.href, 'selected');
-
-          // Remove the 'selected' query param once page is fully loaded.
-          if (window && window.history && window.history.replaceState) {
-            window.history.replaceState(variantInfo, variantTitle, newUrl);
-          }
-        }
-
         var skuBaseFormLoadedEvent = new CustomEvent('onSkuBaseFormLoad', { bubbles: true, detail: { data: data }});
         document.dispatchEvent(skuBaseFormLoadedEvent);
+
+        // Set the flag to true once the page is fully loaded.
+        selectedParameterProcessed = true;
       });
 
       // Show images for oos product on PDP.
@@ -719,9 +707,10 @@
     if (productInfo.swatch_param !== undefined) {
       selectedSku = Drupal.getSelectedSkuFromPdpPrettyPath(productInfo);
     }
-    // Use selected from query parameter only for main product.
+    // Use selected from query parameter only for main product on initial
+    // page load.
     var variants = productInfo['variants'];
-    var selected = (viewMode === 'full')
+    var selected = ((viewMode === 'full') && !selectedParameterProcessed)
       ? parseInt(Drupal.getQueryVariable('selected'))
       : 0;
 

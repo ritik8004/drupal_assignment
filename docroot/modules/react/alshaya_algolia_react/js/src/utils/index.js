@@ -23,6 +23,7 @@ export {
   showLoader,
   removeLoader,
   toggleBlockCategoryFilter,
+  updatePredictiveSearchContainer,
 } from './SearchUtility';
 
 export {
