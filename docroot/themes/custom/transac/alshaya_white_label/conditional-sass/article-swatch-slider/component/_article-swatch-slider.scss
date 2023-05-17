@@ -60,6 +60,7 @@
     }
 
     &.swatch-square {
+      // Changing the size of the swatch when it's square.
       .article-swatch {
         &.active::before,
         &:hover::before {
@@ -69,7 +70,7 @@
           #{$left}: rem(-3);
         }
       }
-  
+
       &.swatch-slider {
         .slick-arrow {
           width: rem(36);
