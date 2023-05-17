@@ -10,6 +10,19 @@ use Drupal\alshaya_config\AlshayaConfigManager;
 /**
  * Implements hook_update_N().
  *
+ * Adding arabic translations for - predictive search messages.
+ */
+function alshaya_algolia_react_update_9411() {
+  module_load_include('inc', 'alshaya_algolia_react', 'alshaya_algolia_react.translations');
+  $translations = _alshaya_algolia_react_get_translations('v2');
+  if (!empty($translations)) {
+    alshaya_i18n_save_translations($translations);
+  }
+}
+
+/**
+ * Implements hook_update_N().
+ *
  * Adds config for expiry time in seconds for facet list in local storage.
  */
 function alshaya_algolia_react_update_9410() {
@@ -356,32 +369,9 @@ function alshaya_algolia_react_install() {
   $new->set('weight', $existing->get('weight'));
   $new->save();
 
-  $strings = [
-    'top suggestions' => [
-      'ar' => 'أفضل الإقتراحات',
-    ],
-    'showing @current of @total items' => [
-      'ar' => 'عرض @current من إجمالي @total',
-    ],
-    'Load more products' => [
-      'ar' => 'تحميل المزيد من المنتجات',
-    ],
-    'clear filters' => [
-      'ar' => 'مسح الاختيارات',
-    ],
-    'Promotions' => [
-      'ar' => 'العروض',
-    ],
-    'Shop all products in this offer' => [
-      'ar' => 'تسوق جميع المنتجات المشمولة بهذا العرض',
-    ],
-    'Offers available' => [
-      'ar' => 'العروض متوفرة',
-    ],
-    'You can combine promotions but only one offer code can be used per transaction' => [
-      'ar' => 'يمكنك الجمع بين العروض الترويجية ولكن لا يمكن استخدام إلا رمز عرض واحد لكل معاملة تجارية',
-    ],
-  ];
-
-  alshaya_i18n_save_translations($strings);
+  // Add translations.
+  module_load_include('inc', 'alshaya_algolia_react', 'alshaya_algolia_react.translations');
+  if ($translations = _alshaya_algolia_react_get_translations()) {
+    alshaya_i18n_save_translations($translations);
+  }
 }
