@@ -59,6 +59,24 @@
       }
     }
 
+    &.swatch-square {
+      .article-swatch {
+        &.active::before,
+        &:hover::before {
+          width: rem(30);
+          height: rem(30);
+          top: rem(-3);
+          #{$left}: rem(-3);
+        }
+      }
+  
+      &.swatch-slider {
+        .slick-arrow {
+          width: rem(36);
+        }
+      }
+    }
+
     &.swatch-circle {
       .article-swatch {
         border-radius: 50%;

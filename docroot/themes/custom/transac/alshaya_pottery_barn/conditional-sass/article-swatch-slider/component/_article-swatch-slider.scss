@@ -1,21 +1,7 @@
 #top-results,
 .c-plp {
   .swatches {
-    .article-swatch {
-      &.active::before,
-      &:hover::before {
-        width: rem(30);
-        height: rem(30);
-        top: rem(-3);
-        #{$left}: rem(-3);
-      }
-    }
-
     &.swatch-slider {
-      .slick-arrow {
-        width: rem(36);
-      }
-
       // Center aligning the swatches properly when slider does not have buttons.
       .slick-list:only-child {
         margin-right: auto;
