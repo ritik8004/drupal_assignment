@@ -157,7 +157,11 @@ const ArticleSwatch = ({
   // Render Image swatches when swatch_type is image.
   if (hasValue(swatch.swatch_type) && swatch.swatch_type === 'image') {
     return (
-      <a href="#" onClick={(e) => showSelectedSwatchProduct(e, swatch)}>
+      <button
+        onClick={(e) => showSelectedSwatchProduct(e, swatch)}
+        type="button"
+        className="article-swatch"
+      >
         <span
           className={selectedSwatch === swatch.article_sku_code ? 'image-swatch active' : 'image-swatch'}
         >
@@ -166,7 +170,7 @@ const ArticleSwatch = ({
             loading="lazy"
           />
         </span>
-      </a>
+      </button>
     );
   }
 
