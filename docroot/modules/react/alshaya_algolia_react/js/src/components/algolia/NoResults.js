@@ -26,7 +26,7 @@ const NoResults = ({
   return (
     <div className="hits-empty-state">
       <div className="view-empty">
-        {parse(Drupal.t('Unfortunately, nothing matches your search. Please try another search term, or browse by category below.'))}
+        {parse(Drupal.t('Your search did not return any results.'))}
       </div>
     </div>
   );
