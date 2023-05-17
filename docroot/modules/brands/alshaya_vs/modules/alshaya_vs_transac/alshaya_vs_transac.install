@@ -16,7 +16,7 @@ use Drupal\Component\Utility\Unicode;
  * Disabling swatches display on PLP/Search pages.
  * Index products with new swatches field for Mobile App usage only.
  */
-function alshaya_vs_transac_update_9406() {
+function alshaya_vs_transac_update_9405() {
   $manager = \Drupal::service('alshaya_config.manager');
   $manager->updateConfigs(
     [
