@@ -42,8 +42,8 @@ search_insights:
 
 plp:
   js:
-    dist/plp.js: {}
     assets/alshaya_algolia_plp.js: {}
+    dist/plp.js: {}
   dependencies:
     - core/drupalSettings
     - alshaya_algolia_react/algolia_common
@@ -53,8 +53,8 @@ plp:
 
 plpv2:
   js:
-    dist/plpv2.js: {}
     assets/alshaya_algolia_plp.js: {}
+    dist/plpv2.js: {}
   dependencies:
     - core/drupalSettings
     - alshaya_algolia_react/algolia_common

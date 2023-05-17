@@ -12,6 +12,8 @@ use Drupal\Core\Entity\Display\EntityViewDisplayInterface;
 use Drupal\Core\Entity\EntityInterface;
 use Drupal\Core\Form\FormStateInterface;
 use Drupal\Core\Url;
+use Drupal\taxonomy\TermInterface;
+use Drupal\alshaya_product_options\SwatchesHelper;
 
 /**
  * Implements hook_module_implements_alter().
@@ -358,8 +360,73 @@ function alshaya_vs_transac_sku_product_attribute_alter(array &$attributes, SKUI
  */
 function alshaya_vs_transac_alshaya_search_algolia_object_alter(array &$object) {
   $sku = SKU::loadFromSku($object['sku'], $object['search_api_language']);
+  if (!$sku instanceof SKUInterface) {
+    return NULL;
+  }
+  // Add Bra Size for indexing if both band size and cup size fields exist.
+  if ($sku->hasField('attr_band_size') && $sku->hasField('attr_cup_size')) {
+    $bra_sizes = [];
+    if ($sku->bundle() == 'configurable') {
+      $configured_skus = $sku->get('field_configured_skus')->getValue();
+      foreach ($configured_skus as $simple_sku) {
+        $child_sku = SKU::loadFromSku($simple_sku['value']);
+        if ($child_sku instanceof SKUInterface) {
+          $band_size = $child_sku->get('attr_band_size')->getString();
+          $cup_size = $child_sku->get('attr_cup_size')->getString();
+          if ($band_size && $cup_size) {
+            $bra_size = implode(" ", [$band_size, $cup_size]);
+            if (!in_array($bra_size, $bra_sizes)) {
+              $bra_sizes[] = $bra_size;
+            }
+          }
+        }
+      }
+    }
+    else {
+      $band_size = $sku->get('attr_band_size')->getString();
+      $cup_size = $sku->get('attr_cup_size')->getString();
+      if ($band_size && $cup_size) {
+        $bra_size = implode(" ", [$band_size, $cup_size]);
+        $bra_sizes[] = $bra_size;
+      }
+    }
+    $object['attr_bra_size'] = $bra_sizes;
+  }
   $attr_fragrance = $sku->get('attr_fragrance')->getString();
   if ($attr_fragrance) {
     $object['attr_fragrance'] = $attr_fragrance;
+  }
+  // Process child skus swatches field to index.
+  $children = \Drupal::service('alshaya_acm_product.skumanager')->getAvailableChildren($sku);
+  $object['swatches'] = [];
+  foreach ($children as $child_sku => $child) {
+    $attribute_id = $child->get('attr_actual_color_label_code')->getString();
+    if (empty($attribute_id)) {
+      continue;
+    }
+    $term = \Drupal::service('acq_sku.product_options_manager')->loadProductOptionByOptionId(
+      'actual_color_label_code',
+      $attribute_id,
+      $object['search_api_language']
+    );
+    if ($term instanceof TermInterface) {
+      // Set swatch data based on swatch type.
+      switch ($term->get('field_attribute_swatch_type')->getString()) {
+        case SwatchesHelper::SWATCH_TYPE_VISUAL_COLOR:
+          $object['swatches'][] = [
+            'child_sku_code' => $child_sku,
+            'rgb_color' => $term->get('field_attribute_swatch_value')->getString(),
+          ];
+          break;
+
+        case SwatchesHelper::SWATCH_TYPE_VISUAL_IMAGE:
+          $object['swatches'][] = [
+            'child_sku_code' => $child_sku,
+            'swatch_image' => $term->get('field_attribute_swatch_value')->getString(),
+          ];
+          break;
+
+      }
+    }
   }
 }

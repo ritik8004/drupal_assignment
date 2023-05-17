@@ -229,6 +229,9 @@ class AlshayaAlgoliaReactConfig implements AlshayaAlgoliaReactConfigInterface {
       'renderSingleResultFacets' => $alshaya_algolia_react_setting_values->get('render_single_result_facets'),
       'excludeRenderSingleResultFacets' => $alshaya_algolia_react_setting_values->get('exclude_render_single_result_facets'),
       'plpTeaserAttributes' => $alshaya_algolia_react_setting_values->get('product_teaser_attributes'),
+      'facetListExpiry' => $alshaya_algolia_react_setting_values->get('algolia_facets_local_storage_expiry'),
+      'enableConfigurableFilters' => $alshaya_algolia_react_setting_values->get('algolia_enable_configurable_filter'),
+      'maxValuesPerFacets' => $alshaya_algolia_react_setting_values->get('algolia_max_values_per_facets'),
     ];
 
     // Set product elements alignment to true only
@@ -240,7 +243,25 @@ class AlshayaAlgoliaReactConfig implements AlshayaAlgoliaReactConfigInterface {
       $response['commonAlgoliaSearch']['productElementAlignmentEnabled'] = TRUE;
     }
 
-    $response[$page_type]['filters'] = $this->getFilters($index_name, $page_type, $sub_page);
+    // Set filters array for drupalsettings.
+    $response[$page_type]['filters'] = [];
+
+    // If the algolia configurable filters is disabled then
+    // the filters data is passed in drupal settings.
+    // If the algolia configurable filters are enabled then
+    // we pass empty array for filters in drupal settings and prepare
+    // filters data from userData in algolia query response.
+    if (!$alshaya_algolia_react_setting_values->get('algolia_enable_configurable_filter')) {
+      $response[$page_type]['filters'] = $this->getFilters($index_name, $page_type, $sub_page);
+    }
+
+    // Add library for multilevel_widget eg: Bra Size.
+    foreach ($response[$page_type]['filters'] as $facet) {
+      if ($facet['widget']['type'] === 'multi_level_widget') {
+        $libraries[] = 'alshaya_white_label/multi-level-widget';
+        break;
+      }
+    }
 
     $response['autocomplete'] = [
       'hits' => $alshaya_algolia_react_setting_values->get('hits') ?? 4,

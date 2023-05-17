@@ -7,14 +7,20 @@ import {
   toggleSearchResultsContainer,
   toggleSortByFilter,
   toggleBlockCategoryFilter,
+  updatePredictiveSearchContainer,
 } from '../../utils';
 import ConditionalView from '../../../../../js/utilities/components/conditional-view';
 
 // Stats with pagination.
 const PaginationStats = connectStats(({ nbHits, currentResults }) => {
+  // For checking state of predictiveSearch.
+  const { predictiveSearchEnabled } = drupalSettings.algoliaSearch;
   toggleSearchResultsContainer();
   toggleSortByFilter('show');
   toggleBlockCategoryFilter('show');
+  if (predictiveSearchEnabled) {
+    updatePredictiveSearchContainer('show');
+  }
 
   return (
     <>

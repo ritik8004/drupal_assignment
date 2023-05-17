@@ -123,6 +123,8 @@ class MyBenefitsPage extends React.Component {
     // Show CartButton, either if response has no benefit tag or has a value '0' or 'E'.
     const showCartButton = !!(!hasValue(benefitTag)
     || (hasValue(benefitTag) && (benefitTag === 'O' || benefitTag === 'E')));
+    // show learnMore CTA and hide expiry date if benefitTag is 'I'.
+    const showLearnMore = hasValue(benefitTag) && benefitTag === 'I';
 
     return (
       <div className="my-benefit-page-wrapper">
@@ -139,9 +141,12 @@ class MyBenefitsPage extends React.Component {
           <div className="info">
             {myBenefit.description}
           </div>
-          <div className="expiry">
-            {getStringMessage('benefit_expire', { '@expire_date': formatDate(new Date(myBenefit.expiry_date || myBenefit.end_date)) })}
-          </div>
+          {!showLearnMore
+            && (
+              <div className="expiry">
+                {getStringMessage('benefit_expire', { '@expire_date': formatDate(new Date(myBenefit.expiry_date || myBenefit.end_date)) })}
+              </div>
+            )}
         </div>
         <div className="btn-wrapper">
           {showQRButton
@@ -165,9 +170,9 @@ class MyBenefitsPage extends React.Component {
                 promotionType={promotionType}
               />
             )}
-          {hasValue(myBenefit.benefit_url) && hasValue(benefitTag) && benefitTag === 'I'
+          {showLearnMore && hasValue(myBenefit.benefit_url)
           && (
-            <a target="_blank" rel="noopener noreferrer" className="button-wide learn-more" href={myBenefit.benefit_url} onClick={() => this.handleClick(myBenefit, 'Learn more')}>
+            <a className="button-wide learn-more" href={myBenefit.benefit_url} onClick={() => this.handleClick(myBenefit, 'Learn more')}>
               {Drupal.t('Learn more', {}, { context: 'aura' })}
             </a>
           )}

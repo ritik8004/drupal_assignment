@@ -20,8 +20,12 @@ const StickyFilterWrapper = React.forwardRef(({ callback, pageType = null }, ref
         if (activeFilter.id === 'sort_by') {
           return;
         }
-
-        const facetAlias = facetFieldAlias(activeFilter.id, 'alias', pageType);
+        // for multi-level-widget we use seprate id and not the attribute.
+        let activeFilterId = activeFilter.id;
+        if (activeFilter.id === 'multi-attr-group') {
+          activeFilterId = activeFilter['data-id'];
+        }
+        const facetAlias = facetFieldAlias(activeFilterId, 'alias', pageType);
         if (filters.indexOf(facetAlias) < 0) {
           filters.push(facetAlias);
           makeFacetAliasApiRequest(facetAlias);

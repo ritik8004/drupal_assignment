@@ -6,6 +6,7 @@ import React from 'react';
 const FilterPanel = (props) => {
   const {
     id,
+    dataId,
     className,
     header,
     children,
@@ -16,7 +17,7 @@ const FilterPanel = (props) => {
   return (
     // Remove language suffix for _product_list index.
     // ID to be attr_size instead of attr_size.en.
-    <div className={finalClassName} id={id.split('.')[0]}>
+    <div className={finalClassName} id={id.split('.')[0]} data-id={dataId.split('.')[0]}>
       <h3 className="c-facet__title c-collapse__title">{header}</h3>
       {children}
     </div>

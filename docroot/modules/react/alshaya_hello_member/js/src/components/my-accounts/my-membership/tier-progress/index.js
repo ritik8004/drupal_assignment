@@ -36,7 +36,7 @@ class TierProgress extends React.Component {
         };
         let userProgressWidth = 0;
         if (hasValue(response) && !hasValue(response.error) && hasValue(response.data)) {
-          currentTier = response.data.extension_attributes.current_tier;
+          currentTier = response.data.extension_attributes.current_tier_en;
           nextTier = response.data.extension_attributes.next_tier_en;
           pointsSummmary = response.data.extension_attributes.points_summary;
           tierWidthData = this.getTierWidthData(response.data);
@@ -151,7 +151,7 @@ class TierProgress extends React.Component {
         { currentTier === tier2Label
           && (
           <div className="progress-header">
-            {Drupal.t('@plus_label member', { '@plus_label': tier2Label }, { context: 'hello_member' })}
+            {Drupal.t('plus member', {}, { context: 'hello_member' })}
           </div>
           )}
         <div className="my-points">

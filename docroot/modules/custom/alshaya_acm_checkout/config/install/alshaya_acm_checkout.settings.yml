@@ -32,3 +32,5 @@ card_bin_numbers:
 langcode: en
 # Set caching time for store info to 4hrs i.e. 240 mins by default.
 cnc_store_info_cache_time: 240
+# Set expiration time for address storage to 24hrs i.e. 1440 mins by default.
+address_storage_expiration: 1440

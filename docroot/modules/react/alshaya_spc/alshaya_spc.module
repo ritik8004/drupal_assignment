@@ -36,6 +36,11 @@ function alshaya_spc_alshaya_stores_finder_store_update_alter(&$node, array $sto
  * Implements hook_alshaya_spc_checkout_build_alter().
  */
 function alshaya_spc_alshaya_spc_checkout_build_alter(array &$build) {
+  // Log Shipping methods for HD when needed.
+  if (Settings::get('log_hd_shipping_methods', FALSE)) {
+    $build['#attached']['drupalSettings']['logHdShippingMethods'] = TRUE;
+  }
+
   $config = \Drupal::config('alshaya_spc.collection_points');
   $cnc_collection_points_enabled = $config->get('click_collect_collection_points_enabled');
   $build['#attached']['drupalSettings']['cnc_collection_points_enabled'] = $cnc_collection_points_enabled;

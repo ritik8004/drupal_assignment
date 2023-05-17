@@ -188,11 +188,12 @@ class AlshayaProductListHelper {
       : $node;
 
     $context = $this->algoliaReactHelper->formatCleanRuleContext($node_en->label());
+    $rule_context = 'brand_list__' . $context;
 
     return [
       'option_key' => $node->get('field_attribute_name')->first()->getString(),
       'option_val' => $node->get('field_attribute_value')->first()->getString(),
-      'ruleContext' => ['brand_list__' . $context],
+      'ruleContext' => [$rule_context, "web__$rule_context"],
     ];
   }
 

@@ -2,6 +2,7 @@ import React from 'react';
 import FilterPanel from '../panels/FilterPanel';
 import SortByList from '../algolia/widgets/SortByList';
 import ColorFilter from '../algolia/widgets/ColorFilter';
+import MultiLevelFilter from '../algolia/widgets/MultiLevelFilter';
 import SizeGroupFilter from '../algolia/widgets/SizeGroupFilter';
 import RefinementList from '../algolia/widgets/RefinementList';
 import PriceFilter from '../algolia/widgets/PriceFilter';
@@ -11,6 +12,8 @@ import DeliveryTypeFilter from '../algolia/widgets/DeliveryTypeFilter';
 import ConditionalView from '../../../common/components/conditional-view';
 import { isExpressDeliveryEnabled } from '../../../../../js/utilities/expressDeliveryHelper';
 import { getBackToPlpPageIndex } from '../../utils/indexUtils';
+import { hasValue } from '../../../../../js/utilities/conditionsUtility';
+import { isConfigurableFiltersEnabled } from '../../../../../js/utilities/helper';
 
 const WidgetManager = React.memo((props) => {
   const
@@ -21,6 +24,9 @@ const WidgetManager = React.memo((props) => {
   let currentWidget = '';
   let className = '';
   let plpSortIndex = null;
+  let filterId = filter.identifier;
+  const seprator = ' ';
+
   switch (filter.widget.type) {
     case 'sort_by':
       // If page type is search then default sort index is taken from filter.
@@ -41,10 +47,24 @@ const WidgetManager = React.memo((props) => {
       currentWidget = (
         <ColorFilter
           name={name}
-          facetValues={filter.facet_values}
+          filterConfig={filter}
           attribute={`${filter.identifier}.value`}
           searchable={false}
           itemCount={itemCount}
+          swatch
+        />
+      );
+      break;
+    case 'multi_level_widget':
+      className = 'block-facet--multi-level-widget';
+      filterId = 'multi-attr-group';
+      currentWidget = (
+        <MultiLevelFilter
+          name={name}
+          attribute={filter.identifier}
+          searchable={false}
+          itemCount={itemCount}
+          seprator={seprator}
         />
       );
       break;
@@ -82,7 +102,22 @@ const WidgetManager = React.memo((props) => {
         />
       );
       break;
-    case 'delivery_ways':
+
+    case 'delivery_ways': {
+      let sameDayValue = hasValue(filter.same_value) ? filter.same_value : '';
+      let expressDeliveryValue = hasValue(filter.express_value) ? filter.express_value : '';
+
+      // If configurable filters is enabled then prepare label values from
+      // facet values.
+      if (isConfigurableFiltersEnabled()) {
+        const {
+          same_day_delivery_available: sameValue,
+          express_day_delivery_available: expressValue,
+        } = filter.facet_values;
+        sameDayValue = sameValue;
+        expressDeliveryValue = expressValue;
+      }
+
       currentWidget = (
         <ConditionalView condition={
           isExpressDeliveryEnabled()
@@ -93,12 +128,13 @@ const WidgetManager = React.memo((props) => {
             facetValues={filter.facet_values}
             attribute={filter.identifier}
             itemCount={itemCount}
-            sameDayValue={filter.same_value}
-            expressDeliveryValue={filter.express_value}
+            sameDayValue={sameDayValue}
+            expressDeliveryValue={expressDeliveryValue}
           />
         </ConditionalView>
       );
       break;
+    }
     case 'checkbox':
     default:
       currentWidget = (
@@ -112,7 +148,12 @@ const WidgetManager = React.memo((props) => {
   }
 
   return (
-    <FilterPanel header={filter.label} id={filter.identifier} className={className}>
+    <FilterPanel
+      header={filter.label}
+      id={filterId}
+      dataId={filter.identifier}
+      className={className}
+    >
       {currentWidget}
     </FilterPanel>
   );

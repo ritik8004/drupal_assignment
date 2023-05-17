@@ -1,5 +1,8 @@
 import { hasCategoryFilter } from './FilterUtils';
 import { getSearchQuery, getLangRedirect } from './localStorage';
+import { isConfigurableFiltersEnabled } from '../../../../js/utilities/helper';
+import { hasValue } from '../../../../js/utilities/conditionsUtility';
+
 
 const contentDiv = document.querySelector('.page-standard main');
 const body = document.querySelector('body');
@@ -7,7 +10,7 @@ const body = document.querySelector('body');
 const pageStandard = document.querySelector('.page-standard');
 const defaultClasses = pageStandard.className;
 let searchClasses = 'page-standard c-plp c-plp-only ';
-searchClasses += hasCategoryFilter() ? 'l-two--sf l-container' : 'l-one--w lhn-without-sidebar l-container';
+searchClasses += hasCategoryFilter() || isConfigurableFiltersEnabled() ? 'l-two--sf l-container' : 'l-one--w lhn-without-sidebar l-container';
 
 // Create Search result div wrapper to render results.
 function createSearchResultDiv() {
@@ -119,6 +122,36 @@ function removeLoader() {
   }
 }
 
+/**
+ * Update the search results container for no search results.
+ */
+function updatePredictiveSearchContainer(action, query = null) {
+  const searchWrapper = document.getElementById('alshaya-algolia-search');
+  const gridCountBlockWrapper = searchWrapper.querySelector('.block-alshaya-grid-count-block');
+  let pageTitle = Drupal.t('Search results');
+  if (hasValue(searchWrapper)) {
+    if (action === 'hide') {
+      // Hide result cound and grid switcher block.
+      if (hasValue(gridCountBlockWrapper)) {
+        gridCountBlockWrapper.classList.add('hide-grid-count-block');
+      }
+      // Change the page title when search results are empty.
+      pageTitle = `${Drupal.t('No result found for')} <span class="keyword">"${query}"</span>`;
+    } else {
+      const searchQuery = getSearchQuery();
+      if (hasValue(gridCountBlockWrapper)) {
+        gridCountBlockWrapper.classList.remove('hide-grid-count-block');
+      }
+      if (hasValue(searchQuery)) {
+        pageTitle = `${Drupal.t('Search results for')} <span class="keyword">"${searchQuery}"</span>`;
+      } else {
+        pageTitle = Drupal.t('Search results');
+      }
+    }
+    searchWrapper.querySelector('.block-page-title-block .c-page-title').innerHTML = pageTitle;
+  }
+}
+
 export {
   contentDiv,
   createSearchResultDiv,
@@ -127,4 +160,5 @@ export {
   showLoader,
   removeLoader,
   toggleBlockCategoryFilter,
+  updatePredictiveSearchContainer,
 };

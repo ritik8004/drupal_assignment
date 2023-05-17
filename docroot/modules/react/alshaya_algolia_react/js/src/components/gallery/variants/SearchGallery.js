@@ -18,6 +18,7 @@ const SliderElement = ({
 const slickEffect = hasValue(drupalSettings.reactTeaserView.swipeImage.slideEffect)
   ? drupalSettings.reactTeaserView.swipeImage.slideEffect
   : null;
+const { showColorSwatchSlider } = drupalSettings.reactTeaserView.swatches;
 
 // Common slider configurations for all viewports.
 const sliderSettings = {
@@ -49,6 +50,14 @@ const swipeSettings = {
   initialSlide: 1,
   swipe: true,
   touchThreshold: 40,
+  afterChange() {
+    // Push image swipe data in GTM.
+    window.dataLayer.push({
+      event: showColorSwatchSlider ? 'swatches_imageswipe' : 'imageswipe',
+      eventCategory: showColorSwatchSlider ? 'swatches_imageswipe' : 'imageswipe',
+      eventAction: showColorSwatchSlider ? 'swatches_imageswipe' : 'imageswipe',
+    });
+  },
 };
 
 // Slider configurations based on device.

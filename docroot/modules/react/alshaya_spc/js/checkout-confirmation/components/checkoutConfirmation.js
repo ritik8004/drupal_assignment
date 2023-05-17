@@ -46,10 +46,11 @@ class CheckoutConfirmation extends React.Component {
     });
 
     try {
-      // Remove the 'shippingaddress-formdata' from localStorage
-      // when we come to the order confirmation page after the order
-      // has been placed.
+      // Remove the 'shippingaddress-formdata' & 'hide_online_booking' from
+      // localStorage when we come to the order confirmation page after the
+      // order has been placed.
       Drupal.removeItemFromLocalStorage('shippingaddress-formdata');
+      Drupal.removeItemFromLocalStorage('hide_online_booking');
       if (Cookies.get('middleware_order_placed')) {
         window.commerceBackend.removeCartDataFromStorage(true);
         Cookies.remove('middleware_order_placed');
