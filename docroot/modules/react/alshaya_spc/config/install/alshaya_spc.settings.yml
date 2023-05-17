@@ -10,3 +10,5 @@ show_notification_drawer: false
 redirect_to_cart_threshold:
   mobile: 0
   desktop: 0
+# Used to determine if we need to validate order on payment failure or not.
+validate_order_on_payment_failure: false
