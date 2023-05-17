@@ -148,7 +148,7 @@ const SearchResultsComponent = ({
           userToken={Drupal.getAlgoliaUserToken()}
         />
       ) : null}
-      {isDesktop()
+      {isDesktop() && showSidebar
           && (
           <SideBarWrapper lhn maxValuesPerFacet={maxValuesPerFacets}>
             {superCategoryComponent}
