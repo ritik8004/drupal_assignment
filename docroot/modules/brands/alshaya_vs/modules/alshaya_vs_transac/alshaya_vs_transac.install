@@ -10,12 +10,13 @@ use Drupal\Core\Site\Settings;
 use Drupal\Component\Utility\Unicode;
 
 /**
- * Implements hook_update_N().
+ * Update algolia react with default value for render_single_result_facets.
  *
+ * And also for exclude_render_single_result_facets.
  * Disabling swatches display on PLP/Search pages.
  * Index products with new swatches field for Mobile App usage only.
  */
-function alshaya_vs_transac_update_9407() {
+function alshaya_vs_transac_update_9405() {
   $manager = \Drupal::service('alshaya_config.manager');
   $manager->updateConfigs(
     [
@@ -25,14 +26,7 @@ function alshaya_vs_transac_update_9407() {
   );
   // Queue all products which index a new field swatches.
   \Drupal::service('alshaya_acm_product.product_queue_utility')->queueAllProducts();
-}
 
-/**
- * Update algolia react with default value for render_single_result_facets.
- *
- * And also for exclude_render_single_result_facets.
- */
-function alshaya_vs_transac_update_9406() {
   $config = \Drupal::configFactory()->getEditable('alshaya_algolia_react.settings');
   if ($config) {
     $config->set('render_single_result_facets', FALSE);
@@ -548,7 +542,7 @@ function _alshaya_vs_transac_save_metatag_translations() {
 function alshaya_vs_transac_update_dependencies() {
   return [
     'alshaya_vs_transac' => [
-      '9406' => [
+      '9405' => [
         'alshaya_algolia_react' => '9408',
       ],
     ],
