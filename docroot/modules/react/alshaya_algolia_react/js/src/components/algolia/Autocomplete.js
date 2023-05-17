@@ -202,7 +202,7 @@ class Autocomplete extends React.Component {
     this.setState({
       value: newValue,
     });
-    // In predictive search query is updated only on form submit, we need to store keyword.
+    // In predictive search, query is updated only on form submit. So, we need to store keyword.
     inputSearchValue(newValue);
     this.showMobileElements(newValue);
   };
