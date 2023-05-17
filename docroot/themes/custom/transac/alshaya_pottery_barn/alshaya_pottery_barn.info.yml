@@ -257,3 +257,8 @@ libraries-override:
     css:
       theme:
         css/conditional-sass/fullwidth-store-finder/fullwidth-store-finder.ltr.css: css/conditional-sass/fullwidth-store-finder/fullwidth-store-finder.ltr.css
+
+  alshaya_white_label/article-swatch-slider:
+    css:
+      theme:
+        css/conditional-sass/article-swatch-slider/article-swatch-slider.ltr.css: css/conditional-sass/article-swatch-slider/article-swatch-slider.ltr.css
