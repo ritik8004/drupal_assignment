@@ -28,7 +28,8 @@
   };
 
   // Show all filters blocks.
-  Drupal.algoliaReactPLP.facetEffects = function (context) {
+  Drupal.algoliaReactPLP.facetEffects = function () {
+    var context = $('#alshaya-algolia-plp');
     // On clicking facet block title, update the title of block and hide
     // other facets.
     $('.all-filters-plp-algolia .c-collapse-item', context).once('algolia-plp').on('click', function() {
