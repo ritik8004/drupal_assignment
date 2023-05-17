@@ -11,7 +11,11 @@ import {
   refineValue,
   getCurrentRefinementValue,
   getResults,
+  unescapeFacetValue,
 } from '../../../utils/indexUtils';
+import { isConfigurableFiltersEnabled } from '../../../../../../js/utilities/helper';
+import { hasValue } from '../../../../../../js/utilities/conditionsUtility';
+import logger from '../../../../../../js/utilities/logger';
 
 const namespace = 'refinementList';
 
@@ -39,14 +43,13 @@ function getCurrentRefinement(props, searchState, context) {
   return [];
 }
 
-function getValue(name, props, searchState, context) {
+function getValue(value, props, searchState, context) {
   const currentRefinement = getCurrentRefinement(props, searchState, context);
-  const isAnewValue = currentRefinement.indexOf(name) === -1;
+  const isAnewValue = currentRefinement.indexOf(value) === -1;
   const nextRefinement = isAnewValue
-    ? currentRefinement.concat([name]) // cannot use .push(), it mutates
-    : currentRefinement.filter(
-      (selectedValue) => selectedValue !== name,
-    ); // cannot use .splice(), it mutates
+    ? currentRefinement.concat([value]) // cannot use .push(), it mutates
+    // cannot use .splice(), it mutates
+    : currentRefinement.filter((selectedValue) => selectedValue !== value);
   return nextRefinement;
 }
 
@@ -109,6 +112,7 @@ function cleanUp(props, searchState, context) {
 const sortBy = ['isRefined', 'count:desc', 'name:asc'];
 export default createConnector({
   displayName: 'AlgoliaRefinementList',
+  $$type: 'ais.refinementList',
 
   propTypes: {
     id: PropTypes.string,
@@ -122,6 +126,7 @@ export default createConnector({
     ),
     searchable: PropTypes.bool,
     transformItems: PropTypes.func,
+    facetOrdering: PropTypes.bool,
   },
 
   defaultProps: {
@@ -129,6 +134,7 @@ export default createConnector({
     showMore: false,
     // limit: 10,
     showMoreLimit: 20,
+    facetOrdering: true,
   },
 
   getProvidedProps(
@@ -138,8 +144,46 @@ export default createConnector({
     metadata,
     searchForFacetValuesResults,
   ) {
-    const { attribute, searchable } = props;
-    const results = getResults(searchResults, this.context);
+    const {
+      attribute,
+      searchable,
+      indexContextValue,
+      facetOrdering,
+    } = props;
+    const results = getResults(searchResults, {
+      ais: props.contextValue,
+      multiIndexContext: props.indexContextValue,
+    });
+
+    let facetValues = {};
+    // When configurable filters is enabled, we try to load data from Algolia
+    // if that filter data is indexed in Algolia.
+    // For other filters, we load filter values which is being passed from
+    // backend.
+    if (isConfigurableFiltersEnabled() && hasValue(props.swatch)) {
+      try {
+        // For swatch_list widget, we have results in .label field.
+        // This is similar to how it is done in backend in
+        // AlshayaAlgoliaReactConfig::loadFacetValues().
+        // facetValues will then be available in the refinementList component.
+        const labelAttribute = props.attribute.replace('value', 'label');
+        // eslint-disable-next-line no-underscore-dangle
+        Object.keys(results._rawResults[0].facets[labelAttribute]).forEach((value) => {
+          facetValues[value.split(',')[0]] = value;
+        });
+      } catch (e) {
+        logger.error('Exception happened while fetching facet values: @error', {
+          '@error': e.message,
+        });
+      }
+    } else {
+      facetValues = hasValue(props.filterConfig) && hasValue(props.filterConfig.facet_values)
+        ? props.filterConfig.facet_values
+        : facetValues;
+
+      // Assign facet values from props if passed directly.
+      facetValues = hasValue(props.facet_values) ? props.facet_values : facetValues;
+    }
 
     const canRefine = Boolean(results) && Boolean(results.getFacetByName(attribute));
 
@@ -150,7 +194,7 @@ export default createConnector({
     );
 
     // Search For Facet Values is not available with derived helper (used for multi index search)
-    if (searchable && this.context.multiIndexContext) {
+    if (searchable && indexContextValue) {
       throw new Error(
         'react-instantsearch: searching in *List is not available when used inside a'
           + ' multi index context',
@@ -160,11 +204,10 @@ export default createConnector({
     if (!canRefine) {
       return {
         items: [],
-        currentRefinement: getCurrentRefinement(
-          props,
-          searchState,
-          this.context,
-        ),
+        currentRefinement: getCurrentRefinement(props, searchState, {
+          ais: props.contextValue,
+          multiIndexContext: props.indexContextValue,
+        }),
         canRefine,
         isFromSearch,
         searchable,
@@ -186,14 +229,20 @@ export default createConnector({
     const items = isFromSearch
       ? searchForFacetValuesResults[attribute].map((v) => ({
         label: v.value,
-        value: getValue(v.value, props, searchState, this.context),
+        value: getValue(v.escapedValue, props, searchState, {
+          ais: props.contextValue,
+          multiIndexContext: props.indexContextValue,
+        }),
         _highlightResult: { label: { value: v.highlighted } },
         count: v.count,
         isRefined: v.isRefined,
       }))
-      : results.getFacetValues(attribute, { sortBy: sortOrder }).map((v) => ({
+      : results.getFacetValues(attribute, { sortBy: sortOrder, facetOrdering }).map((v) => ({
         label: v.name,
-        value: getValue(v.name, props, searchState, this.context),
+        value: getValue(v.escapedValue, props, searchState, {
+          ais: props.contextValue,
+          multiIndexContext: props.indexContextValue,
+        }),
         count: v.count,
         isRefined: v.isRefined,
       }));
@@ -204,15 +253,22 @@ export default createConnector({
 
     return {
       items: transformedItems.slice(0, getLimit(props)),
-      currentRefinement: getCurrentRefinement(props, searchState, this.context),
+      currentRefinement: getCurrentRefinement(props, searchState, {
+        ais: props.contextValue,
+        multiIndexContext: props.indexContextValue,
+      }),
       isFromSearch,
       searchable,
       canRefine: transformedItems.length > 0,
+      facetValues,
     };
   },
 
   refine(props, searchState, nextRefinement) {
-    return refine(props, searchState, nextRefinement, this.context);
+    return refine(props, searchState, nextRefinement, {
+      ais: props.contextValue,
+      multiIndexContext: props.indexContextValue,
+    });
   },
 
   searchForFacetValues(props, searchState, nextRefinement) {
@@ -224,7 +280,10 @@ export default createConnector({
   },
 
   cleanUp(props, searchState) {
-    return cleanUp(props, searchState, this.context);
+    return cleanUp(props, searchState, {
+      ais: props.contextValue,
+      multiIndexContext: props.indexContextValue,
+    });
   },
 
   getSearchParameters(searchParameters, props, searchState) {
@@ -235,7 +294,10 @@ export default createConnector({
 
     const finalSearchParameters = searchParameters[addKey](attribute);
 
-    return getCurrentRefinement(props, searchState, this.context).reduce(
+    return getCurrentRefinement(props, searchState, {
+      ais: props.contextValue,
+      multiIndexContext: props.indexContextValue,
+    }).reduce(
       (res, val) => res[addRefinementKey](attribute, val),
       finalSearchParameters,
     );
@@ -243,10 +305,13 @@ export default createConnector({
 
   getMetadata(props, searchState) {
     const id = getId(props);
-    const { context } = this;
+    const context = {
+      ais: props.contextValue,
+      multiIndexContext: props.indexContextValue,
+    };
     return {
       id,
-      index: getIndexId(this.context),
+      index: getIndexId(context),
       items:
         getCurrentRefinement(props, searchState, context).length > 0
           ? [
@@ -261,7 +326,7 @@ export default createConnector({
               value: (nextState) => refine(props, nextState, [], context),
               items: getCurrentRefinement(props, searchState, context).map(
                 (item) => ({
-                  label: `${item}`,
+                  label: unescapeFacetValue(`${item}`),
                   value: (nextState) => {
                     const nextSelectedItems = getCurrentRefinement(
                       props,

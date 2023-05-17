@@ -69,10 +69,6 @@
           }
         }
       });
-
-      if ($('#alshaya-algolia-search').length > 0) {
-        Drupal.algoliaReact.facetEffects();
-      }
     }
   };
 
@@ -264,6 +260,21 @@
       });
     }
   };
+
+  /**
+   * Attach event handlers to filters.
+   *
+   * @param {string} pageType
+   *   Page type = search/listing.
+   */
+  Drupal.algoliaReact.processFacets = function processFacets(pageType) {
+    if (pageType === 'search') {
+      Drupal.algoliaReact.facetEffects('#alshaya-algolia-search');
+    }
+    else if (typeof Drupal.algoliaReactPLP !== 'undefined') {
+      Drupal.algoliaReactPLP.facetEffects('#alshaya-algolia-plp');
+    }
+  }
 
   Drupal.behaviors.searchSizeGroupFilter = {
     // Opens the selected grand parent filter value using
