@@ -42,7 +42,6 @@ export const Swatch = ({
         color: swatch.display_label,
         child_id: swatch.child_id,
       };
-
       handleSwatchSelect(selectedProductData);
       return;
     }
