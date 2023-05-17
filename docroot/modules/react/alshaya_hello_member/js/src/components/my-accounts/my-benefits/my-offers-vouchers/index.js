@@ -80,9 +80,12 @@ class MyOffersAndVouchers extends React.Component {
               <div className="info">
                 {data.description}
               </div>
-              <div className="expiry">
-                {getStringMessage('benefit_expire', { '@expire_date': formatDate(new Date(data.expiry_date || data.end_date)) })}
-              </div>
+              {(!hasValue(data.tag) || (data.tag !== 'I'))
+                && (
+                <div className="expiry">
+                  {getStringMessage('benefit_expire', { '@expire_date': formatDate(new Date(data.expiry_date || data.end_date)) })}
+                </div>
+                )}
             </div>
           </a>
         ))}
