@@ -542,7 +542,7 @@ function _alshaya_vs_transac_save_metatag_translations() {
 function alshaya_vs_transac_update_dependencies() {
   return [
     'alshaya_vs_transac' => [
-      '9406' => [
+      '9405' => [
         'alshaya_algolia_react' => '9408',
       ],
     ],
