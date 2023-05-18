@@ -113,7 +113,6 @@
         "drupal/sharethis": "^2.0@beta",
         "drupal/shield": "^1.0.0",
         "drupal/simple_sitemap": "^3.2",
-        "drupal/sms": "^2.1",
         "drupal/social_api": "^3.0",
         "drupal/social_auth": "^3.0",
         "drupal/social_auth_facebook": "^3.0",
