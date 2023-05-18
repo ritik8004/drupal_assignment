@@ -166,13 +166,7 @@ class AlshayaBazaarVoiceCommands extends DrushCommands {
           // Use the entity:node/{nid}:{lang} pattern by default.
           $objectIDs = array_map(fn($nid) => "entity:node/{$nid}:{$language->getId()}", $nids);
           if ($index_sku_as_objectid) {
-            $objectIDs = [];
-            foreach ($nids as $nid) {
-              $node = $node_manager->load($nid);
-              if ($node) {
-                $objectIDs[] = $node->get('field_skus')->getString();
-              }
-            }
+            $objectIDs = $skus;
           }
           try {
             $objects = $index->getObjects($objectIDs);
