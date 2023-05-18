@@ -166,15 +166,16 @@ class AlshayaSpcPaymentCallbackController extends ControllerBase {
     // Check if we need to validate cart and order status in case of
     // payment failure or not.
     if ($validate_order) {
-      $consumer_secret = $this->config('alshaya_api.settings')->get('consumer_secret');
       $encrypted_quote_id = $request->query->get('encrypted_quote_id');
 
       // Decrypt quote id.
       if ($encrypted_quote_id) {
-        $this->logger->info('Validating Quote Id and Order status for the encrypted quote id: @quote_id.', [
+        $this->logger->info('Validating Quote Id and Order status for the encrypted Quote id: @quote_id, Payment Method: @payment_method.', [
           '@quote_id' => $encrypted_quote_id,
+          '@payment_method' => $method,
         ]);
 
+        $consumer_secret = $this->config('alshaya_api.settings')->get('consumer_secret');
         $quote_id = SecureText::decrypt(
           $encrypted_quote_id,
           $consumer_secret,
@@ -187,8 +188,9 @@ class AlshayaSpcPaymentCallbackController extends ControllerBase {
 
           // If cart is not available check if order is available in Magento.
           if ($cart === 'false') {
-            $this->logger->warning('Cart not found for the Cart id: @quote_id. Checking if order is placed successfully.', [
+            $this->logger->warning('Cart not found for the Cart id: @quote_id, Payment Method: @payment_method. Checking if order is placed successfully.', [
               '@quote_id' => $quote_id,
+              '@payment_method' => $method,
             ]);
 
             // Check and get order details from MDC using quote id.
@@ -197,6 +199,11 @@ class AlshayaSpcPaymentCallbackController extends ControllerBase {
             // placed successfully so log the message for successful order
             // placement and redirect the user to order confirmation page.
             if ($order) {
+              $this->logger->info('Order found for the Cart id: @quote_id, Order Id: @order_id, Payment Method: @payment_method. Processing successful order.', [
+                '@quote_id' => $quote_id,
+                '@order_id' => $order['order_id'],
+                '@payment_method' => $method,
+              ]);
               return $this->processSuccessfulOrder($order, $response);
             }
           }
