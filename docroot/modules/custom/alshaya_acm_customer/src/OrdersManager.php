@@ -558,4 +558,34 @@ class OrdersManager {
     return $result['total_count'] ?? 0;
   }
 
+  /**
+   * Helper function to get specific order by quote id.
+   *
+   * @param string $quote_id
+   *   Quote ID to get order for.
+   *
+   * @return array
+   *   Order array if found.
+   */
+  public function getOrderByQuoteId(string $quote_id) {
+    $query = $this->getOrdersQuery('quote_id', $quote_id);
+
+    $request_options = [
+      'timeout' => $this->apiWrapper->getMagentoApiHelper()->getPhpTimeout('order_search'),
+    ];
+
+    $response = $this->apiWrapper->invokeApi('orders', $query, 'GET', FALSE, $request_options);
+    if (empty($response)) {
+      return NULL;
+    }
+    $result = json_decode($response, TRUE);
+    $count = $result['total_count'] ?? 0;
+    if (empty($count)) {
+      return NULL;
+    }
+
+    $order = !empty($result['items']) ? reset($result['items']) : [];
+    return $this->cleanupOrder($order);
+  }
+
 }

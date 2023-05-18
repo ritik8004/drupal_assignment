@@ -14,6 +14,7 @@ use Drupal\user\UserInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
+use Drupal\alshaya_api\AlshayaApiWrapper;
 
 /**
  * Controller for the callbacks for UPAPI Payments.
@@ -52,6 +53,13 @@ class AlshayaSpcPaymentCallbackController extends ControllerBase {
   protected $configFactory;
 
   /**
+   * AlshayaApiWrapper service object.
+   *
+   * @var \Drupal\alshaya_api\AlshayaApiWrapper
+   */
+  protected $apiWrapper;
+
+  /**
    * AlshayaSpcUpapiPaymentController constructor.
    *
    * @param \Drupal\alshaya_acm_customer\OrdersManager $orders_manager
@@ -60,13 +68,17 @@ class AlshayaSpcPaymentCallbackController extends ControllerBase {
    *   Logger.
    * @param \Drupal\Core\Config\ConfigFactoryInterface $config_factory
    *   Config Factory.
+   * @param \Drupal\alshaya_api\AlshayaApiWrapper $api_wrapper
+   *   AlshayaApiWrapper service object.
    */
   public function __construct(OrdersManager $orders_manager,
                               LoggerChannelInterface $logger,
-                              ConfigFactoryInterface $config_factory) {
+                              ConfigFactoryInterface $config_factory,
+                              AlshayaApiWrapper $api_wrapper) {
     $this->ordersManager = $orders_manager;
     $this->logger = $logger;
     $this->configFactory = $config_factory;
+    $this->apiWrapper = $api_wrapper;
   }
 
   /**
@@ -76,7 +88,8 @@ class AlshayaSpcPaymentCallbackController extends ControllerBase {
     return new static(
       $container->get('alshaya_acm_customer.orders_manager'),
       $container->get('logger.factory')->get('AlshayaSpcUpapiPaymentController'),
-      $container->get('config.factory')
+      $container->get('config.factory'),
+      $container->get('alshaya_api.api')
     );
   }
 
@@ -129,57 +142,7 @@ class AlshayaSpcPaymentCallbackController extends ControllerBase {
       return $redirect;
     }
 
-    $payment_method = $order['payment']['method'];
-
-    // If Payment-method is not selected by user.
-    if (!$payment_method) {
-      $this->logger->error('User trying to access success url directly. Payment method is not set on cart. OrderId: @order_id, Order: @order.', [
-        '@order_id' => $order_id,
-        '@order' => json_encode($order),
-      ]);
-
-      return $redirect;
-    }
-
-    // If payment is done by saved cards.
-    if ($payment_method === 'checkout_com_upapi'
-      && !empty($order['payment']['extension_attributes'])
-      && !empty($order['payment']['extension_attributes']['vault_payment_token'])) {
-      $payment_method = self::CHECKOUT_COM_UPAPI_VAULT_METHOD;
-    }
-
-    // Load the email address to use for encryption from Order data.
-    $email = trim(strtolower($order['email']));
-
-    try {
-      $this->processPostPlaceOrder($order, $payment_method);
-
-      $order['secure_order_id'] = SecureText::encrypt(
-        json_encode(['order_id' => $order_id, 'email' => $email]),
-        $consumer_secret
-      );
-
-      // Redirect user to confirmation page.
-      $redirect->setTargetUrl(
-        Url::fromRoute(
-          'alshaya_spc.checkout.confirmation',
-          [],
-          ['query' => ['id' => $order['secure_order_id']]]
-        )->toString()
-      );
-
-      $redirect->headers->setCookie(CookieHelper::create('middleware_order_placed', 1, strtotime('+1 year')));
-    }
-    catch (\Exception) {
-      // If any error/exception encountered while order was placed from
-      // magento side, we redirect to cart page.
-      $this->logger->error('Error while order post processing. Payment Method: @payment_method OrderId: @order_id', [
-        '@payment_method' => $payment_method,
-        '@order_id' => $order_id,
-      ]);
-    }
-
-    return $redirect;
+    return $this->processSuccessfulOrder($order, $redirect);
   }
 
   /**
@@ -194,14 +157,65 @@ class AlshayaSpcPaymentCallbackController extends ControllerBase {
    *   Response to redirect to cart or confirmation page.
    */
   public function error(Request $request, string $method) {
+    // In case of error, we redirect to cart/checkout page.
+    $response = new RedirectResponse(Url::fromRoute('alshaya_spc.checkout')->toString(), 302);
+    $response->setMaxAge(0);
+    $response->headers->set('cache-control', 'must-revalidate, no-cache, no-store, private');
+
+    $validate_order = $this->config('alshaya_spc.settings')->get('validate_order_on_payment_failure');
+    // Check if we need to validate cart and order status in case of
+    // payment failure or not.
+    if ($validate_order) {
+      $encrypted_quote_id = $request->query->get('encrypted_quote_id');
+
+      // Decrypt quote id.
+      if ($encrypted_quote_id) {
+        $this->logger->notice('Validating Quote Id and Order status for the encrypted Quote id: @quote_id, Payment Method: @payment_method.', [
+          '@quote_id' => $encrypted_quote_id,
+          '@payment_method' => $method,
+        ]);
+
+        $consumer_secret = $this->config('alshaya_api.settings')->get('consumer_secret');
+        $quote_id = SecureText::decrypt(
+          $encrypted_quote_id,
+          $consumer_secret,
+        );
+
+        // If valid quote id is available in request.
+        if (!empty($quote_id)) {
+          // Check if cart is available for the quote id or not.
+          $cart = $this->apiWrapper->getCart($quote_id);
+
+          // If cart is not available check if order is available in Magento.
+          if (empty($cart) || $cart === 'false') {
+            $this->logger->notice('Cart not found for the Cart id: @quote_id, Payment Method: @payment_method. Checking if order is placed successfully.', [
+              '@quote_id' => $quote_id,
+              '@payment_method' => $method,
+            ]);
+
+            // Check and get order details from MDC using quote id.
+            $order = $this->ordersManager->getOrderByQuoteId($quote_id);
+            // If order is available in magento that means the order is
+            // placed successfully so log the message for successful order
+            // placement and redirect the user to order confirmation page.
+            if ($order) {
+              $this->logger->warning('Order found for the Cart id: @quote_id, Order Id: @order_id, Reserved Order Id: @increment_id, Payment Method: @payment_method. Processing successful order.', [
+                '@quote_id' => $quote_id,
+                '@order_id' => $order['order_id'],
+                '@increment_id' => $order['increment_id'],
+                '@payment_method' => $method,
+              ]);
+              return $this->processSuccessfulOrder($order, $response);
+            }
+          }
+        }
+      }
+    }
+
     $this->logger->warning('UPAPI Payment failed for Payment Method: @payment_method, Type: @type.', [
       '@payment_method' => $method,
       '@type' => $request->query->get('type'),
     ]);
-
-    $response = new RedirectResponse(Url::fromRoute('alshaya_spc.checkout')->toString(), 302);
-    $response->setMaxAge(0);
-    $response->headers->set('cache-control', 'must-revalidate, no-cache, no-store, private');
 
     $payment_data = [
       'status' => $request->query->get('status') ?? self::PAYMENT_DECLINED_VALUE,
@@ -285,6 +299,72 @@ class AlshayaSpcPaymentCallbackController extends ControllerBase {
 
     // Reset stock cache and Drupal cache of products in last order.
     $this->ordersManager->clearLastOrderRelatedProductsCache($order);
+  }
+
+  /**
+   * Process successful order.
+   *
+   * @param array $order
+   *   Order array.
+   * @param \Symfony\Component\HttpFoundation\RedirectResponse $redirect
+   *   Response to redirect to cart or confirmation page.
+   *
+   * @return \Symfony\Component\HttpFoundation\RedirectResponse
+   *   Response to redirect to cart or confirmation page.
+   */
+  protected function processSuccessfulOrder(array $order, RedirectResponse $redirect) {
+    $payment_method = $order['payment']['method'];
+
+    // If Payment-method is not selected by user.
+    if (!$payment_method) {
+      $this->logger->error('User trying to access success url directly. Payment method is not set on cart. OrderId: @order_id, Order: @order.', [
+        '@order_id' => $order['order_id'],
+        '@order' => json_encode($order),
+      ]);
+
+      return $redirect;
+    }
+
+    // If payment is done by saved cards.
+    if ($payment_method === 'checkout_com_upapi'
+    && !empty($order['payment']['extension_attributes'])
+    && !empty($order['payment']['extension_attributes']['vault_payment_token'])) {
+      $payment_method = self::CHECKOUT_COM_UPAPI_VAULT_METHOD;
+    }
+
+    // Load the email address to use for encryption from Order data.
+    $email = trim(strtolower($order['email']));
+    $consumer_secret = $this->config('alshaya_api.settings')->get('consumer_secret');
+
+    try {
+      $this->processPostPlaceOrder($order, $payment_method);
+
+      $order['secure_order_id'] = SecureText::encrypt(
+        json_encode(['order_id' => $order['order_id'], 'email' => $email]),
+        $consumer_secret
+      );
+
+      // Redirect user to confirmation page.
+      $redirect->setTargetUrl(
+        Url::fromRoute(
+          'alshaya_spc.checkout.confirmation',
+          [],
+          ['query' => ['id' => $order['secure_order_id']]]
+        )->toString()
+      );
+
+      $redirect->headers->setCookie(CookieHelper::create('middleware_order_placed', 1, strtotime('+1 year')));
+    }
+    catch (\Exception) {
+      // If any error/exception encountered while order was placed from
+      // magento side, we redirect to cart page.
+      $this->logger->error('Error while order post processing. Payment Method: @payment_method OrderId: @order_id', [
+        '@payment_method' => $payment_method,
+        '@order_id' => $order['order_id'],
+      ]);
+    }
+
+    return $redirect;
   }
 
 }
