@@ -170,7 +170,7 @@ class AlshayaSpcPaymentCallbackController extends ControllerBase {
 
       // Decrypt quote id.
       if ($encrypted_quote_id) {
-        $this->logger->info('Validating Quote Id and Order status for the encrypted Quote id: @quote_id, Payment Method: @payment_method.', [
+        $this->logger->notice('Validating Quote Id and Order status for the encrypted Quote id: @quote_id, Payment Method: @payment_method.', [
           '@quote_id' => $encrypted_quote_id,
           '@payment_method' => $method,
         ]);
@@ -187,8 +187,8 @@ class AlshayaSpcPaymentCallbackController extends ControllerBase {
           $cart = $this->apiWrapper->getCart($quote_id);
 
           // If cart is not available check if order is available in Magento.
-          if ($cart === 'false') {
-            $this->logger->warning('Cart not found for the Cart id: @quote_id, Payment Method: @payment_method. Checking if order is placed successfully.', [
+          if (empty($cart) || $cart === 'false') {
+            $this->logger->notice('Cart not found for the Cart id: @quote_id, Payment Method: @payment_method. Checking if order is placed successfully.', [
               '@quote_id' => $quote_id,
               '@payment_method' => $method,
             ]);
@@ -199,9 +199,10 @@ class AlshayaSpcPaymentCallbackController extends ControllerBase {
             // placed successfully so log the message for successful order
             // placement and redirect the user to order confirmation page.
             if ($order) {
-              $this->logger->info('Order found for the Cart id: @quote_id, Order Id: @order_id, Payment Method: @payment_method. Processing successful order.', [
+              $this->logger->warning('Order found for the Cart id: @quote_id, Order Id: @order_id, Reserved Order Id: @increment_id, Payment Method: @payment_method. Processing successful order.', [
                 '@quote_id' => $quote_id,
                 '@order_id' => $order['order_id'],
+                '@increment_id' => $order['increment_id'],
                 '@payment_method' => $method,
               ]);
               return $this->processSuccessfulOrder($order, $response);
