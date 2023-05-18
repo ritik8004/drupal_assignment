@@ -157,7 +157,7 @@ class AlshayaSpcPaymentCallbackController extends ControllerBase {
    *   Response to redirect to cart or confirmation page.
    */
   public function error(Request $request, string $method) {
-    // In case of error, we redirect to cart page.
+    // In case of error, we redirect to cart/checkout page.
     $response = new RedirectResponse(Url::fromRoute('alshaya_spc.checkout')->toString(), 302);
     $response->setMaxAge(0);
     $response->headers->set('cache-control', 'must-revalidate, no-cache, no-store, private');
@@ -171,6 +171,10 @@ class AlshayaSpcPaymentCallbackController extends ControllerBase {
 
       // Decrypt quote id.
       if ($encrypted_quote_id) {
+        $this->logger->info('Validating Quote Id and Order status for the encrypted quote id: @quote_id.', [
+          '@quote_id' => $encrypted_quote_id,
+        ]);
+
         $quote_id = SecureText::decrypt(
           $encrypted_quote_id,
           $consumer_secret,
@@ -183,6 +187,10 @@ class AlshayaSpcPaymentCallbackController extends ControllerBase {
 
           // If cart is not available check if order is available in Magento.
           if ($cart === 'false') {
+            $this->logger->warning('Cart not found for the Cart id: @quote_id. Checking if order is placed successfully.', [
+              '@quote_id' => $quote_id,
+            ]);
+
             // Check and get order details from MDC using quote id.
             $order = $this->ordersManager->getOrderByQuoteId($quote_id);
             // If order is available in magento that means the order is
