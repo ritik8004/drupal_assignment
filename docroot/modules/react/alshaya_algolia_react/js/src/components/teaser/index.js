@@ -42,6 +42,7 @@ const Teaser = ({
   const [slider, setSlider] = useState(false);
   const [sku, setSkuCode] = useState(hit.sku);
   const [media, setSkuMedia] = useState(hit.media);
+  const [mediaPdp] = useState(hit.media_pdp);
   const [updatedAttribute, setSwatchAttributeData] = useState({
     title: null,
     url: null,
@@ -280,6 +281,7 @@ const Teaser = ({
           >
             <Gallery
               media={media}
+              mediaPdp={mediaPdp}
               title={title}
               labels={labels}
               sku={sku}
