@@ -42,7 +42,10 @@ const Teaser = ({
   const [slider, setSlider] = useState(false);
   const [sku, setSkuCode] = useState(hit.sku);
   const [media, setSkuMedia] = useState(hit.media);
-  const [childId, setChildId] = useState(hit.swatches[0].child_id);
+  const defaultChildId = hasValue(hit.swatches)
+    ? hit.swatches[0].child_id
+    : null;
+  const [childId, setChildId] = useState(defaultChildId);
   const [updatedAttribute, setSwatchAttributeData] = useState({
     title: null,
     url: null,

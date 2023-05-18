@@ -1,5 +1,6 @@
 import React from 'react';
 import ImageElement from '../gallery/imageHelper/ImageElement';
+import { hasValue } from '../../../../../js/utilities/conditionsUtility';
 
 export const Swatch = ({
   swatch, url, title, handleSwatchSelect, childId,
@@ -11,7 +12,7 @@ export const Swatch = ({
 
   // Show swatch as highlighted if it matches the selected child id.
   const swatchClasses = ['swatch-block', 'swatch-image'];
-  if (childId === swatch.child_id) {
+  if (hasValue(childId) && childId === swatch.child_id) {
     swatchClasses.push('swatch-highlighted');
   }
 
