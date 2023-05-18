@@ -9,12 +9,11 @@ use Drupal\search_api\Entity\Index;
 use Drupal\alshaya_config\AlshayaConfigManager;
 
 /**
- * Implements hook_update_N().
- *
  * Added new key index_sku_as_object_id in the config.
+ *
  * To flag if we should add SKU for objectID for alshaya_algolia_index.
  */
-function alshaya_search_algolia_update_9401() {
+function alshaya_search_algolia_update_9501() {
   $manager = \Drupal::service('alshaya_config.manager');
   // Adding fields in search_api index.
   $manager->updateConfigs(
