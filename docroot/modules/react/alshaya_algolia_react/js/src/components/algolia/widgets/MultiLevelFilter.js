@@ -95,7 +95,7 @@ const MultiLevelFilter = ({
                     refine(item.value);
                   }}
                 >
-                  <span className="facet-item__value" data-drupal-facet-item-value={item.value}>
+                  <span className="facet-item__value" data-drupal-facet-item-value={item.label}>
                     <span className="facet-item__label">{item.label.split(props.seprator)[1]}</span>
                     <span className="facet-item__count">
                       (
