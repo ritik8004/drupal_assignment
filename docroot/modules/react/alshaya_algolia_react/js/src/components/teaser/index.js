@@ -43,6 +43,10 @@ const Teaser = ({
   const [sku, setSkuCode] = useState(hit.sku);
   const [media, setSkuMedia] = useState(hit.media);
   const [mediaPdp] = useState(hit.media_pdp);
+  const defaultChildId = hasValue(hit.swatches)
+    ? hit.swatches[0].child_id
+    : null;
+  const [childId, setChildId] = useState(defaultChildId);
   const [updatedAttribute, setSwatchAttributeData] = useState({
     title: null,
     url: null,
@@ -85,6 +89,7 @@ const Teaser = ({
   const handleSwatchSelect = (productData) => {
     setSkuCode(productData.sku);
     setSkuMedia(productData.media);
+    setChildId(productData.child_id);
     const renderSkuPrice = hasValue(productData.priceData)
       ? (
         <Price
@@ -407,6 +412,7 @@ const Teaser = ({
                 url={url}
                 title={title}
                 handleSwatchSelect={handleSwatchSelect}
+                childId={childId}
               />
             ) : null}
             {showSliderSwatch ? (
@@ -415,6 +421,7 @@ const Teaser = ({
                 url={url}
                 title={title}
                 handleSwatchSelect={handleSwatchSelect}
+                childId={childId}
               />
             ) : null}
             {/* Render color swatches based on article/sku id */}
