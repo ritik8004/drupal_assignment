@@ -28,12 +28,18 @@ const AllFilters = ({
       }
 
       if (typeof children !== 'undefined') {
-        const selectedFilters = children.querySelectorAll('li.is-active');
+        const selectedFilters = children.querySelectorAll('li.is-active:not(.level-two)');
         // get all selected items for current filters.
         const currentSelection = [];
         [].forEach.call(selectedFilters, (item) => {
-          // Replace count in parentesis with empty string.
-          currentSelection.push(item.textContent.replace(/ *\([^)]*\) */g, ''));
+          // Adding extra condition for multilevel widget.
+          if (item.querySelectorAll('span.facet-item__value')[0]) {
+            const label = item.querySelectorAll('span.facet-item__value')[0].getAttribute('data-drupal-facet-item-value') !== null
+              ? item.querySelectorAll('span.facet-item__value')[0].getAttribute('data-drupal-facet-item-value')
+              : item.textContent.replace(/ *\([^)]*\) */g, '');
+            // Replace count in parentesis with empty string.
+            currentSelection.push(label);
+          }
         });
 
         // Get the currrent filter's title.
@@ -42,7 +48,6 @@ const AllFilters = ({
           : element.getElementsByTagName('h3')[0].querySelector('span').innerHTML;
 
         const selectedElm = element;
-
         // Prepares html content to display texts for only 2 items, and rest
         // Will be displayed as a count ((+5) selected.) in brackets. (i.e black, white (+2))
         if (currentSelection.length > 0) {
