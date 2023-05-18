@@ -26,7 +26,7 @@
   .c-products__item .swatches.swatch-slider {
     @include swatchSliderMaxWidth($swatch_width: rem(36));
 
-    margin: rem(18) auto rem(12);
+    margin: rem(14) auto rem(12);
   }
 }
 
