@@ -24,13 +24,17 @@ exports.render = function render(
     hierarchy_list.push(entity.gtm_name);
     context_list.push(formatCleanRuleContext(entity.gtm_name));
     contexts.push(context_list.join('__'));
+
+    // Add prefix "web" to every context value.
+    const webContexts = contexts.map((context) => `web__${context}`);
+
     // Combine all the items.
     hierarchy_list = hierarchy_list.join(' > ');
     // Add required data as data-attributes.
     innerHtmlObj.attr({
       'data-hierarchy': hierarchy_list,
       'data-level': contexts.length - 1,
-      'data-rule-context': contexts.reverse(),
+      'data-rule-context': contexts.reverse().concat(webContexts),
       'data-category-field': 'field_category_name.lvl' + (contexts.length - 1),
     });
   }
@@ -49,7 +53,7 @@ exports.render = function render(
 const formatCleanRuleContext = function (context) {
   context = context.trim().toLowerCase();
   // Remove special characters.
-  context = context.replace("/[^a-zA-Z0-9\s]/", "");
+  context = context.replace(/[^a-zA-Z0-9\s]/, '');
   // Ensure duplicate spaces are replaced with single space.
   // H & M would have become H  M after preg_replace.
   context = context.replace('  ', ' ');

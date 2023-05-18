@@ -1,5 +1,6 @@
 import { hasCategoryFilter } from './FilterUtils';
 import { getSearchQuery, getLangRedirect } from './localStorage';
+import { isConfigurableFiltersEnabled } from '../../../../js/utilities/helper';
 
 const contentDiv = document.querySelector('.page-standard main');
 const body = document.querySelector('body');
@@ -7,7 +8,7 @@ const body = document.querySelector('body');
 const pageStandard = document.querySelector('.page-standard');
 const defaultClasses = pageStandard.className;
 let searchClasses = 'page-standard c-plp c-plp-only ';
-searchClasses += hasCategoryFilter() ? 'l-two--sf l-container' : 'l-one--w lhn-without-sidebar l-container';
+searchClasses += hasCategoryFilter() || isConfigurableFiltersEnabled() ? 'l-two--sf l-container' : 'l-one--w lhn-without-sidebar l-container';
 
 // Create Search result div wrapper to render results.
 function createSearchResultDiv() {

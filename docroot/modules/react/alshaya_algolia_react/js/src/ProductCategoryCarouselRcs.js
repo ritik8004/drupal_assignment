@@ -67,10 +67,14 @@ const ProductCategoryCarouselWrapper = ({ slug }) => {
       // Process the current category name also.
       prepareData(response.name);
 
+      // Merge the rule contexts with webContexts.
+      const ruleContexts = contexts.reverse();
+      const webContexts = ruleContexts.map((context) => `web__${context}`);
+
       data = {
         hierarchy: hierarchyList.join(' > '),
         level: contexts.length,
-        ruleContext: contexts.reverse(),
+        ruleContext: ruleContexts.concat(webContexts),
         categoryField: `field_category_name.lvl${contexts.length - 1}`,
         categoryId,
         sectionTitle: carousel[slug],

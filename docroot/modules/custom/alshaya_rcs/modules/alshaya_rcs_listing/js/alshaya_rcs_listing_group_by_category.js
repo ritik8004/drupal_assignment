@@ -70,12 +70,17 @@ let prepareSubCategoryData = function (data, languageCheck = true) {
       context_list.push(formatCleanRuleContext(item));
       contexts.push(context_list.join('__'));
     });
+    // Merge rule contexts and web rule contexts.
+    let ruleContexts = contexts.reverse();
+    var webRuleContexts = ruleContexts.map(function iterateRuleContexts(ruleContext) {
+      return 'web__'.concat(ruleContext);
+    });
     // Category hierarchy data.
     subCategoryData[singleCategory.id].category = {
       category_field: 'field_category_name.' + data.filter_field,
       level: data.level,
       hierarchy: hierarchy,
-      ruleContext: contexts.reverse(),
+      ruleContext: ruleContexts.concat(webRuleContexts),
     };
   });
   // For Arabic, category hierarchy data is needed in EN only.
