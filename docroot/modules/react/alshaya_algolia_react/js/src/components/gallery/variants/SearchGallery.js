@@ -108,7 +108,8 @@ class SearchGallery extends React.PureComponent {
     const mainImageUrl = hasValue(mainImage.url) ? mainImage.url : '';
     let thumbnails = [];
 
-    // Check Swipe image feature is enable.
+    // This is to show the PDP images on the listing
+    // pages which comes in swipe image feature.
     if (showPdpImagesOnListingPages) {
       media = mediaPdp;
     }

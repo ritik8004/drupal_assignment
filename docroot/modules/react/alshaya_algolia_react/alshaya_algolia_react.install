@@ -13,9 +13,6 @@ use Drupal\alshaya_config\AlshayaConfigManager;
  * Reindex the product.
  */
 function alshaya_algolia_react_update_9412() {
-  // Re-index items.
-  \Drupal::service('alshaya_acm_product.product_queue_utility')->queueAllProducts();
-
   /** @var \Drupal\alshaya_config\AlshayaConfigManager $manager */
   $manager = \Drupal::service('alshaya_config.manager');
   // Add show_pdp_images_on_listing_pages new config.
@@ -27,6 +24,8 @@ function alshaya_algolia_react_update_9412() {
     'install',
     AlshayaConfigManager::MODE_ADD_MISSING
   );
+  // Re-index items.
+  \Drupal::service('alshaya_acm_product.product_queue_utility')->queueAllProducts();
 }
 
 /**
