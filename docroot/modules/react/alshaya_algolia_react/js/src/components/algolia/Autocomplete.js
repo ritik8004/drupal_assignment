@@ -8,6 +8,8 @@ import {
   isMobile,
   removeLangRedirect,
   getLangRedirect,
+  openPredictiveSearch,
+  closePredictiveSearch,
 } from '../../utils';
 import Portal from '../portal';
 
@@ -21,7 +23,7 @@ const InputButtons = React.memo((props) => (
       <Portal
         key="no-result"
         className="predictive-search__msg-no-result"
-        innerHTML={`${Drupal.t('Nothing found for')} <span class="bold">${props.value}</span>`}
+        innerHTML={`<p>${Drupal.t('Nothing found for')} <span class="bold">"${props.value}".</span></p>`}
       />
     ) : null}
     <Portal
@@ -129,11 +131,7 @@ class Autocomplete extends React.Component {
     this.reactSearchBlock[0].classList.add('focused');
     // Toggle clear-icon & show-algolia-search-bar(mobile) class on enter and not on change event.
     this.showMobileElements(value);
-    const searchComponent = document.getElementsByClassName('predictive-search');
-    if (searchComponent.length !== 0) {
-      searchComponent[0].classList.add('predictive-search--open');
-      document.body.classList.add('show-predictive-search');
-    }
+    openPredictiveSearch();
   };
 
   onSuggestionsFetchRequested = ({ value }) => {
@@ -224,12 +222,7 @@ class Autocomplete extends React.Component {
       const { onChange } = this.props;
       const inputTag = this.autosuggest.current.input;
       onChange(value, inputTag);
-      // Remove class for closing overlay on form submit.
-      const predictiveSearchComponent = document.getElementsByClassName('predictive-search');
-      if (predictiveSearchComponent.length !== 0
-        && predictiveSearchComponent[0].classList.contains('predictive-search--open')) {
-        predictiveSearchComponent[0].classList.remove('predictive-search--open');
-      }
+      closePredictiveSearch();
     }
     return false;
   }
@@ -262,15 +255,6 @@ class Autocomplete extends React.Component {
     // Set query to empty to hide the search results and update the browser hash.
     onChange('');
     this.reactSearchBlock[0].classList.remove('focused');
-  };
-
-  // Removing "predictive-search--open" on click of close button only for predictive search.
-  closePredictiveSearchEvent = () => {
-    const predictiveSearchComponent = document.getElementsByClassName('predictive-search');
-    if (predictiveSearchComponent.length !== 0) {
-      predictiveSearchComponent[0].classList.remove('predictive-search--open');
-      document.body.classList.remove('show-predictive-search');
-    }
   };
 
   renderSuggestionsContainer = ({ containerProps, children }) => (
@@ -312,7 +296,7 @@ class Autocomplete extends React.Component {
         <InputButtons
           backCallback={this.backIconClickEvent}
           clearCallback={this.clearSearchFieldInput}
-          closeCallback={this.closePredictiveSearchEvent}
+          closeCallback={closePredictiveSearch}
           hits={hits}
           value={value}
         />

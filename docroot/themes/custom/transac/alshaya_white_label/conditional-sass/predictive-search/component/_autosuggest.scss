@@ -1,10 +1,41 @@
-@include breakpoint($tablet) {
-  // Existing search styles reset.
-  .block-alshaya-algolia-react-autocomplete {
-    #alshaya-algolia-autocomplete {
-      .predictive-search--open {
-        .react-autosuggest__suggestions-container {
-          position: unset;
+.predictive-search {
+  &__msg-no-result {
+    font-size: rem(13);
+
+    @include breakpoint($only-mobile) {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      height: rem(48);
+      width: 100%;
+      border-top: rem(1) solid $algolia-dropdown-border;
+    }
+
+    @include breakpoint($tablet) {
+      margin: rem(8) auto;
+    }
+  }
+}
+
+// Existing selectors override / styles reset.
+.block-alshaya-algolia-react-autocomplete {
+  #alshaya-algolia-autocomplete {
+    .predictive-search--open {
+      .react-autosuggest {
+        @include breakpoint($only-mobile) {
+          &__container--open {
+            background: $predictive-search-tinted-bg;
+          }
+        }
+
+        @include breakpoint($tablet) {
+          &__suggestions-container {
+            position: unset;
+
+            &--open {
+              box-shadow: none;
+            }
+          }
         }
       }
     }
