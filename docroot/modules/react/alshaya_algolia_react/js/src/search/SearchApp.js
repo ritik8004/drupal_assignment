@@ -120,21 +120,23 @@ class SearchApp extends React.PureComponent {
 
     return (
       <div className={predictiveSearchEnabled ? 'predictive-search' : null}>
-        <InstantSearch indexName={`${indexName}_query`} searchClient={algoliaSearchClient}>
-          <Configure
-            {...(enableHitsPerPage && { hitsPerPage: drupalSettings.autocomplete.hits })}
-            userToken={Drupal.getAlgoliaUserToken()}
-          />
-          <AutoComplete
-            onSuggestionSelected={this.onSuggestionSelected}
-            onSuggestionCleared={this.onSuggestionCleared}
-            onChange={this.onChange}
-            inputSearchValue={this.inputSearchValue}
-          />
-          <QueryRuleCustomData transformItems={(items) => customQueryRedirect(items)}>
-            {() => null}
-          </QueryRuleCustomData>
-        </InstantSearch>
+        <div className="ais-InstantSearch__root">
+          <InstantSearch indexName={`${indexName}_query`} searchClient={algoliaSearchClient}>
+            <Configure
+              {...(enableHitsPerPage && { hitsPerPage: drupalSettings.autocomplete.hits })}
+              userToken={Drupal.getAlgoliaUserToken()}
+            />
+            <AutoComplete
+              onSuggestionSelected={this.onSuggestionSelected}
+              onSuggestionCleared={this.onSuggestionCleared}
+              onChange={this.onChange}
+              inputSearchValue={this.inputSearchValue}
+            />
+            <QueryRuleCustomData transformItems={(items) => customQueryRedirect(items)}>
+              {() => null}
+            </QueryRuleCustomData>
+          </InstantSearch>
+        </div>
         { (isMobile() || predictiveSearchEnabled) && (
           <Portal id="top-results" conditional query={input}>
             <span className="top-suggestions-title">{Drupal.t('top suggestions')}</span>
