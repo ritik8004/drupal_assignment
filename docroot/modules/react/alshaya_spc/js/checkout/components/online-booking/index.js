@@ -119,29 +119,38 @@ export default class OnlineBooking extends React.Component {
     // Get all available slots for booking.
     const availableSlots = await getAvailableBookingSlots();
     if (hasValue(availableSlots.status)) {
-      const [availableSlot] = availableSlots.hfd_time_slots_details;
-      const [firstSlot] = availableSlot.appointment_slots;
-      if (hasValue(firstSlot)) {
-        const params = {
-          resource_external_id: firstSlot.resource_external_id,
-          appointment_slot_time: firstSlot.appointment_slot_time,
-          appointment_length_time: firstSlot.appointment_length_time,
-        };
-        // Hold the first slot for user for first time.
-        result = await holdBookingSlot(params);
-        if (hasValue(result.status)) {
-          result = {
-            status: true,
-            hfd_appointment_details: {
-              ...firstSlot,
-              hold_confirmation_number: result.hfd_appointment_details.hold_confirmation_number,
-              appointment_date: availableSlot.appointment_date,
-            },
+      const allAvailableSlots = availableSlots.hfd_time_slots_details;
+      if (!hasValue(allAvailableSlots[0])) {
+        return result;
+      }
+
+      // Loop through all the available slots until we find the suitable slot.
+      for (let i = 0; i < allAvailableSlots.length; i++) {
+        const [firstSlot] = allAvailableSlots[i].appointment_slots;
+        if (hasValue(firstSlot)) {
+          const params = {
+            resource_external_id: firstSlot.resource_external_id,
+            appointment_slot_time: firstSlot.appointment_slot_time,
+            appointment_length_time: firstSlot.appointment_length_time,
           };
-          const { cart, refreshCart } = this.props;
-          cart.cart.hfd_hold_confirmation_number = result
-            .hfd_appointment_details.hold_confirmation_number;
-          refreshCart(cart);
+          // Hold the first slot for user for first time.
+          /* eslint-disable no-await-in-loop */
+          result = await holdBookingSlot(params);
+          if (hasValue(result.status)) {
+            result = {
+              status: true,
+              hfd_appointment_details: {
+                ...firstSlot,
+                hold_confirmation_number: result.hfd_appointment_details.hold_confirmation_number,
+                appointment_date: allAvailableSlots[i].appointment_date,
+              },
+            };
+            const { cart, refreshCart } = this.props;
+            cart.cart.hfd_hold_confirmation_number = result
+              .hfd_appointment_details.hold_confirmation_number;
+            refreshCart(cart);
+            return result;
+          }
         }
       }
     }
