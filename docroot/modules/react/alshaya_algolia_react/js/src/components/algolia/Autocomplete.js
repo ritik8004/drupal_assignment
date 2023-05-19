@@ -91,7 +91,8 @@ class Autocomplete extends React.Component {
   shouldRenderSuggestions = (value) => (
     // Display trending searches for desktop on when searchbox is empty.
     // otherwise show it only for mobile always.
-    (value.trim() === '') || (window.innerWidth < 768)
+    // Or Show it when predictive search is enabled.
+    (value.trim() === '') || (window.innerWidth < 768) || predictiveSearchEnabled
   );
 
   blurORFocus() {
@@ -154,7 +155,8 @@ class Autocomplete extends React.Component {
 
     if (valueToCheck !== '') {
       this.reactSearchBlock[0].classList.add('clear-icon');
-      if (isMobile()) {
+      // Add class for mobile or when predictive search is enabled.
+      if (isMobile() || predictiveSearchEnabled) {
         this.reactSearchBlock[0].classList.add('show-algolia-search-bar');
       }
     } else if (valueToCheck === '') {
@@ -171,7 +173,10 @@ class Autocomplete extends React.Component {
 
   // On change send value to parent component to update search results.
   onChange = (event, { newValue }) => {
-    const { onSuggestionCleared, refine, onChange } = this.props;
+    // Store input value for predictiveSearch.
+    const {
+      onSuggestionCleared, refine, onChange, inputSearchValue,
+    } = this.props;
     if (!newValue) {
       onSuggestionCleared();
     }
@@ -184,8 +189,8 @@ class Autocomplete extends React.Component {
     this.timerId = setTimeout(() => {
       // Trending searches only appear on Web desktop when the input is focused.
       // We do not need to request the query-index on desktop web when value is changed.
-      // Change should request query-index only for web on mobile.
-      if (window.innerWidth < 768) {
+      // Change should request query-index only for web on mobile and for predictive search.
+      if (window.innerWidth < 768 || predictiveSearchEnabled) {
         refine(newValue);
       }
       // Search results to be shown on formSubmit in case on predictiveSearch.
@@ -197,6 +202,8 @@ class Autocomplete extends React.Component {
     this.setState({
       value: newValue,
     });
+    // In predictive search, query is updated only on form submit. So, we need to store keyword.
+    inputSearchValue(newValue);
     this.showMobileElements(newValue);
   };
 
@@ -209,6 +216,12 @@ class Autocomplete extends React.Component {
       const { onChange } = this.props;
       const inputTag = this.autosuggest.current.input;
       onChange(value, inputTag);
+      // Remove class for closing overlay on form submit.
+      const predictiveSearchComponent = document.getElementsByClassName('predictive-search');
+      if (predictiveSearchComponent.length !== 0
+        && predictiveSearchComponent[0].classList.contains('predictive-search--open')) {
+        predictiveSearchComponent[0].classList.remove('predictive-search--open');
+      }
     }
     return false;
   }
