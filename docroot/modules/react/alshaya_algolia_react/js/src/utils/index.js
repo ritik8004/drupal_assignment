@@ -50,3 +50,8 @@ export {
   getSuperCategory,
   getSuperCategoryOptionalFilter,
 } from './SuperCategoryUtility';
+
+export {
+  openPredictiveSearch,
+  closePredictiveSearch,
+} from './predictiveSearchUtils';

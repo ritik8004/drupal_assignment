@@ -1,5 +1,5 @@
-// Existing search styles reset.
 @include breakpoint($only-mobile) {
+  // Existing selectors override / styles reset.
   .algolia-search-cleartext-icon {
     color: transparent;
 
@@ -11,7 +11,7 @@
 }
 
 @include breakpoint($tablet) {
-  // Existing search styles reset.
+  // Existing selectors override / styles reset.
   .block-alshaya-algolia-react-autocomplete {
     #alshaya-algolia-autocomplete {
       .predictive-search--open {
@@ -36,6 +36,7 @@
             background: unset;
             padding-#{$left}: rem(32) !important;
             width: 92%;
+            margin-bottom: rem(26);
           }
         }
       }
@@ -61,7 +62,6 @@
     }
   }
 
-  // New predictive search styles.
   .predictive-search {
     &__btn-clear {
       font-size: 0;
@@ -77,7 +77,7 @@
       .predictive-search {
         &__btn-clear {
           text-decoration: underline;
-          font-size: rem(14);
+          font-size: rem(13);
           line-height: rem(20);
         }
 
