@@ -1,9 +1,20 @@
 @include breakpoint($tablet) {
+  .path--store-finder {
+    .current-location {
+      text-align: center;
+    }
+  }
+
   html[lang="ar"] {
     .path--store-finder {
       .label--location {
         width: 30%;
         margin-right: rem(18);
+      }
+
+      .current-location {
+        text-indent: 0;
+        padding-right: 0;
       }
     }
   }
