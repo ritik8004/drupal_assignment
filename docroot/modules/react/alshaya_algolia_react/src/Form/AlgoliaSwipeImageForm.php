@@ -37,11 +37,18 @@ class AlgoliaSwipeImageForm extends ConfigFormBase {
       '#tree' => FALSE,
       '#open' => TRUE,
     ];
+
     $form['swipe_image_config']['enable_swipe_image_mobile'] = [
       '#type' => 'checkbox',
-      '#title' => $this->t('Enable / Disable Swipe Image on Mobile view'),
+      '#title' => $this->t('Enable Swipe Image on Mobile view'),
       '#default_value' => $config->get('enable_swipe_image_mobile'),
-      '#description' => $this->t('Enable / Disable Swipe Image only for Mobile View'),
+      '#description' => $this->t('Enable Swipe Image only for Mobile View'),
+    ];
+    $form['swipe_image_config']['show_pdp_images_on_listing_pages'] = [
+      '#type' => 'checkbox',
+      '#title' => $this->t('Enable PDP images on listing pages'),
+      '#default_value' => $config->get('show_pdp_images_on_listing_pages'),
+      '#description' => $this->t('This will enable the showing of images of PDP on all listing pages.'),
     ];
     $form['swipe_image_config']['no_of_image_scroll'] = [
       '#type' => 'number',
@@ -76,6 +83,7 @@ class AlgoliaSwipeImageForm extends ConfigFormBase {
   public function submitForm(array &$form, FormStateInterface $form_state) {
     $this->configFactory->getEditable('alshaya_algolia_react.swipe_image')
       ->set('enable_swipe_image_mobile', $form_state->getValue('enable_swipe_image_mobile'))
+      ->set('show_pdp_images_on_listing_pages', $form_state->getValue('show_pdp_images_on_listing_pages'))
       ->set('no_of_image_scroll', (int) $form_state->getValue('no_of_image_scroll'))
       ->set('slide_effect', $form_state->getValue('slide_effect'))
       ->set('image_slide_timing', $form_state->getValue('image_slide_timing'))
