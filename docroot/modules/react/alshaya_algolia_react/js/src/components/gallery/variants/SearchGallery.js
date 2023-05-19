@@ -104,14 +104,14 @@ class SearchGallery extends React.PureComponent {
     const mainImage = media.length ? media[0] : {};
     const mainImageUrl = hasValue(mainImage.url) ? mainImage.url : '';
     let thumbnails = [];
-    let mediaList = [];
+    let mediaList = media;
 
     // This is to show the PDP images on the listing
     // pages which comes in swipe image feature.
-    mediaList = media;
     if (showPdpImagesOnListingPages) {
       mediaList = mediaPdp;
     }
+
     mediaList.forEach((element) => {
       thumbnails.push((
         <SliderElement
