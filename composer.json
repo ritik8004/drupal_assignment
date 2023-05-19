@@ -335,9 +335,7 @@
                 "Large number of entries for warning related to replicate ui task": "https://www.drupal.org/files/issues/2021-02-24/3174826-replicate_ui-3.patch"
             },
             "drupal/search_api_algolia": {
-                "CORE-27152: Mimic facets behavior": "patches/search_api_algolia/CORE-27152-mimic-facets-behavior.patch",
-                "CORE-53039: Using SKU as objectID https://www.drupal.org/project/search_api_algolia/issues/3353201": "https://www.drupal.org/files/issues/2023-04-10/use-sku-as-objectid-search-index.patch"
-
+                "CORE-27152: Mimic facets behavior": "patches/search_api_algolia/CORE-27152-mimic-facets-behavior.patch"
             },
             "drupal/lightning_media": {
                 "Create alshaya_media dependent install config directory in lightning_media": "patches/lightning_media/lightning_media_config_changes.patch"
