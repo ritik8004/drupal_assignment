@@ -99,22 +99,21 @@ class SearchGallery extends React.PureComponent {
       noOfImageScroll, showPdpImagesOnListingPages,
     } = drupalSettings.reactTeaserView.swipeImage;
     const {
-      mediaPdp, title, labels, sku, initSlider,
-    } = this.props;
-    let {
-      media,
+      media, mediaPdp, title, labels, sku, initSlider,
     } = this.props;
     const mainImage = media.length ? media[0] : {};
     const mainImageUrl = hasValue(mainImage.url) ? mainImage.url : '';
     let thumbnails = [];
+    let mediaList = [];
 
     // This is to show the PDP images on the listing
     // pages which comes in swipe image feature.
     if (showPdpImagesOnListingPages) {
-      media = mediaPdp;
+      mediaList = mediaPdp;
+    } else {
+      mediaList = media;
     }
-
-    media.forEach((element) => {
+    mediaList.forEach((element) => {
       thumbnails.push((
         <SliderElement
           key={element.url}
