@@ -1,26 +1,15 @@
 #alshaya-algolia-plp {
   #plp-hits {
     .alshaya_search_gallery {
-      @include breakpoint($tablet) {
-        height: rem(304);
-      }
+      height: auto;
+      aspect-ratio: 1/1.28204;
 
       @include breakpoint($desktop) {
-        height: rem(330);
-      }
-
-      @include breakpoint($desktop-wide-1680) {
-        height: rem(361);
+        aspect-ratio: 1/1.28404;
       }
 
       .alshaya_search_mainimage {
-        @include breakpoint($only-mobile) {
-          height: rem(217);
-        }
-
-        @include breakpoint($only-tablet) {
-          height: auto;
-        }
+        height: 100%;
       }
     }
   }
