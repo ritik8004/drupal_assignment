@@ -33,6 +33,7 @@ export {
   hasSuperCategoryFilter,
   facetFieldAlias,
   customQueryRedirect,
+  isFacetsOnlyHasSingleValue,
 } from './FilterUtils';
 
 export {
