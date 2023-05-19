@@ -1,6 +1,6 @@
 import React from 'react';
 import connectWithPriceFilter from '../connectors/connectWithPriceFilter';
-import { getPriceRangeLabel, hasSingleValue } from '../../../utils';
+import { getPriceRangeLabel, isFacetsOnlyHasSingleValue } from '../../../utils';
 
 const PriceFilter = (props) => {
   const {
@@ -22,7 +22,7 @@ const PriceFilter = (props) => {
   }
   // Do not show facets that have a single value if the render_single_result_facets is false.
   // hide facet if has single value.
-  const singleValue = hasSingleValue(attribute, items);
+  const singleValue = isFacetsOnlyHasSingleValue(attribute, items);
   if (singleValue === true) {
     return null;
   }

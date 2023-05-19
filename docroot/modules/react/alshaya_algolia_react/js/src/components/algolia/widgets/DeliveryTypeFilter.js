@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import connectRefinementList from '../connectors/connectRefinementList';
 import { hasValue } from '../../../../../../js/utilities/conditionsUtility';
 import { checkExpressDeliveryStatus, checkSameDayDeliveryStatus } from '../../../../../../js/utilities/expressDeliveryHelper';
-import { hasSingleValue } from '../../../utils';
+import { isFacetsOnlyHasSingleValue } from '../../../utils';
 
 const DeliveryTypeFilter = ({
   items, itemCount, refine, searchForItems, isFromSearch, attribute, ...props
@@ -63,7 +63,14 @@ const DeliveryTypeFilter = ({
   }
   // Do not show facets that have a single value if the render_single_result_facets is false.
   // hide facet if has single value.
-  const singleValue = hasSingleValue(attribute, items);
+  const options = [];
+  if (checkSameDayDeliveryStatus()) {
+    options.push('same_day_delivery_available');
+  }
+  if (checkExpressDeliveryStatus()) {
+    options.push('express_day_delivery_available');
+  }
+  const singleValue = isFacetsOnlyHasSingleValue(attribute, options);
   if (singleValue === true) {
     return null;
   }

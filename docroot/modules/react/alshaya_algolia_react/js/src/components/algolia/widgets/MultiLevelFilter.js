@@ -1,6 +1,6 @@
 import React from 'react';
 import connectRefinementList from '../connectors/connectRefinementList';
-import { hasSingleValue } from '../../../utils';
+import { isFacetsOnlyHasSingleValue } from '../../../utils';
 
 // Seprate a string by space to get the attributes that were grouped.
 // eg: we have brasize(32 A) = Bandsize(32), Cupsize(A) seprated by space.
@@ -24,7 +24,7 @@ const MultiLevelFilter = ({
 
   // Do not show facets that have a single value if the render_single_result_facets is false.
   // hide facet if has single value.
-  const singleValue = hasSingleValue(attribute, items);
+  const singleValue = isFacetsOnlyHasSingleValue(attribute, items);
   if (singleValue === true) {
     return null;
   }

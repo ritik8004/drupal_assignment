@@ -189,7 +189,7 @@ const getMaxValuesFromFacets = () => {
  * Check if the facet has single value
  * hide the facet if single value.
  */
-const hasSingleValue = (attribute, items) => {
+const isFacetsOnlyHasSingleValue = (attribute, items) => {
   // Do not show facets that have a single value if the render_single_result_facets is false.
   if (!drupalSettings.algoliaSearch.renderSingleResultFacets) {
     const exclude = drupalSettings.algoliaSearch.excludeRenderSingleResultFacets
@@ -217,5 +217,5 @@ export {
   facetFieldAlias,
   customQueryRedirect,
   getMaxValuesFromFacets,
-  hasSingleValue,
+  isFacetsOnlyHasSingleValue,
 };

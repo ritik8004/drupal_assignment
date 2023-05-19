@@ -1,6 +1,6 @@
 import React, { useEffect } from 'react';
 import connectRefinementList from '../connectors/connectRefinementList';
-import { hasSingleValue } from '../../../utils';
+import { isFacetsOnlyHasSingleValue } from '../../../utils';
 
 // RefinementList used commonly for most of filters.
 const CommonRefinement = (props) => {
@@ -29,7 +29,7 @@ const CommonRefinement = (props) => {
   });
   // Do not show facets that have a single value if the render_single_result_facets is false.
   // hide facet if has single value.
-  const singleValue = hasSingleValue(attribute, items);
+  const singleValue = isFacetsOnlyHasSingleValue(attribute, items);
   if (singleValue === true) {
     return null;
   }

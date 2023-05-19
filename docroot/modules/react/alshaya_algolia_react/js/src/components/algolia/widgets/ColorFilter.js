@@ -1,7 +1,7 @@
 import React from 'react';
 import connectRefinementList from '../connectors/connectRefinementList';
 import SwatchList from './SwatchList';
-import { hasSingleValue } from '../../../utils';
+import { isFacetsOnlyHasSingleValue } from '../../../utils';
 
 // Seprate a string by comma to get the label and color code/image/text.
 const ColorFilter = ({
@@ -36,7 +36,7 @@ const ColorFilter = ({
   const { facetValues } = props;
   // Do not show facets that have a single value if the render_single_result_facets is false.
   // hide facet if has single value.
-  const singleValue = hasSingleValue(attribute, items);
+  const singleValue = isFacetsOnlyHasSingleValue(attribute, items);
   if (singleValue === true) {
     return null;
   }
