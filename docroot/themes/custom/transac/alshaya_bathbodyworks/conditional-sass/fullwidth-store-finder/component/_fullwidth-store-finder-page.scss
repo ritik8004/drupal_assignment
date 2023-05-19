@@ -1,7 +1,9 @@
 @include breakpoint($tablet) {
   .path--store-finder {
     .current-location {
-      text-align: center;
+      display: flex;
+      justify-content: center;
+      align-items: center;
     }
   }
 
@@ -23,6 +25,15 @@
     .path--store-finder {
       .label--location {
         padding-left: rem(24);
+      }
+
+      .current-location {
+        padding-top: rem(8);
+
+        &::before {
+          position: relative;
+          top: rem(-2);
+        }
       }
     }
   }
