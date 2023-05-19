@@ -136,6 +136,8 @@ export default class OnlineBooking extends React.Component {
           // Hold the first slot for user for first time.
           /* eslint-disable no-await-in-loop */
           result = await holdBookingSlot(params);
+          // If the slot is available for booking, then proceed. Else, loop
+          // again to check for next available slot from the list.
           if (hasValue(result.status)) {
             result = {
               status: true,
