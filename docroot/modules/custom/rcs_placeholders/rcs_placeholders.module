@@ -387,7 +387,7 @@ function _rcs_placeholders_enrichment_form_alter(array &$form, FormStateInterfac
     $form[$title_field]['widget'][0]['value']['#default_value'] = _rcs_placeholders_get_safe_value($q[$title_field]);
   }
   if (isset($q['slug'])) {
-    $form[$slug_field]['widget'][0]['value']['#default_value'] = _rcs_placeholders_get_safe_value($q['slug']);
+    $form[$slug_field]['widget'][0]['value']['#default_value'] = trim(_rcs_placeholders_get_safe_value($q['slug']), '/');
   }
 }
 
