@@ -11,25 +11,21 @@
 @include breakpoint($tablet) {
   .show-predictive-search {
     overflow: hidden;
+
+    .block-alshaya-algolia-react-autocomplete {
+      @include fullscreenOverlay($zIndex: 4, $dimensions: true);
+
+      background: $predictive-search-overlay;
+    }
   }
 
   .predictive-search {
-    .ais-InstantSearch__root {
-      position: unset;
-    }
-
     &--open {
       @include fullscreenOverlay($zIndex: 4, $positions: true);
 
-      background: $predictive-search-overlay;
-
-      .ais-InstantSearch__root {
-        @include fullscreenOverlay($zIndex: 4, $positions: true);
-
-        bottom: unset;
-        min-height: rem(262);
-        background: $predictive-search-default-bg;
-      }
+      bottom: unset;
+      min-height: rem(262);
+      background: $predictive-search-default-bg;
     }
   }
 }
