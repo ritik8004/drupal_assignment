@@ -34,6 +34,8 @@ class RcsOnlineReturnsHelper extends OnlineReturnsHelper {
           $products[$key]['qty_ordered'] * $products[$key]['price_incl_tax'],
         );
       }
+      // Check if it is big ticket item or not.
+      $products[$key]['is_big_ticket'] = $this->isBigTicketItem($item);
     }
     return $products;
   }
