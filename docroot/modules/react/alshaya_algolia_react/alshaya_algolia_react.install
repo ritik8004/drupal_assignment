@@ -10,6 +10,26 @@ use Drupal\alshaya_config\AlshayaConfigManager;
 /**
  * Implements hook_update_N().
  *
+ * Adding new config to decide whether to show the PDP images
+ * on listing page or not for swipe image.
+ */
+function alshaya_algolia_react_update_9412() {
+  /** @var \Drupal\alshaya_config\AlshayaConfigManager $manager */
+  $manager = \Drupal::service('alshaya_config.manager');
+  // Add show_pdp_images_on_listing_pages new config.
+  $manager->updateConfigs(
+    [
+      'alshaya_algolia_react.swipe_image',
+    ],
+    'alshaya_algolia_react',
+    'install',
+    AlshayaConfigManager::MODE_ADD_MISSING
+  );
+}
+
+/**
+ * Implements hook_update_N().
+ *
  * Adding arabic translations for - predictive search messages.
  */
 function alshaya_algolia_react_update_9411() {

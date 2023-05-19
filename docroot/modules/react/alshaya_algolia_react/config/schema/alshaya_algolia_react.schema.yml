@@ -110,6 +110,9 @@ alshaya_algolia_react.swipe_image:
     image_slide_timing:
       type: float
       label: 'Auto scroll timer for auto scrolling the product images on listing pages.'
+    show_pdp_images_on_listing_pages:
+      type: boolean
+      label: 'Show the PDP images on listing page or not.'
 
 alshaya_algolia_react.predictive_search:
   type: config_object
