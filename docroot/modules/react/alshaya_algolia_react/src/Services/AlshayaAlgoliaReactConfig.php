@@ -229,7 +229,6 @@ class AlshayaAlgoliaReactConfig implements AlshayaAlgoliaReactConfigInterface {
       'renderSingleResultFacets' => $alshaya_algolia_react_setting_values->get('render_single_result_facets'),
       'excludeRenderSingleResultFacets' => $alshaya_algolia_react_setting_values->get('exclude_render_single_result_facets'),
       'plpTeaserAttributes' => $alshaya_algolia_react_setting_values->get('product_teaser_attributes'),
-      'facetListExpiry' => $alshaya_algolia_react_setting_values->get('algolia_facets_local_storage_expiry'),
       'enableConfigurableFilters' => $alshaya_algolia_react_setting_values->get('algolia_enable_configurable_filter'),
       'maxValuesPerFacets' => $alshaya_algolia_react_setting_values->get('algolia_max_values_per_facets'),
     ];
