@@ -3,7 +3,6 @@ import { getSearchQuery, getLangRedirect } from './localStorage';
 import { isConfigurableFiltersEnabled } from '../../../../js/utilities/helper';
 import { hasValue } from '../../../../js/utilities/conditionsUtility';
 
-
 const contentDiv = document.querySelector('.page-standard main');
 const body = document.querySelector('body');
 
