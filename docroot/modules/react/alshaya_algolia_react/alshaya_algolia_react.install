@@ -13,7 +13,7 @@ use Drupal\alshaya_config\AlshayaConfigManager;
  * Adding new field `product_teaser_attributes`, config to enable or disable
  * configurable filter and config for max values per facets.
  */
-function alshaya_algolia_react_update_9410() {
+function alshaya_algolia_react_update_9409() {
   /** @var \Drupal\alshaya_config\AlshayaConfigManager $manager */
   $manager = \Drupal::service('alshaya_config.manager');
   $manager->updateConfigs(
