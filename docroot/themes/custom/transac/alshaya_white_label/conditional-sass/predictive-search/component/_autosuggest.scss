@@ -1,18 +1,25 @@
-.predictive-search {
-  &__msg-no-result {
-    font-size: rem(13);
+.predictive-search__msg-no-result {
+  display: none;
+}
 
-    @include breakpoint($only-mobile) {
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      height: rem(48);
-      width: 100%;
-      border-top: rem(1) solid $algolia-dropdown-border;
-    }
+.predictive-search--open {
+  .predictive-search {
+    &__msg-no-result {
+      display: block;
+      font-size: rem(13);
 
-    @include breakpoint($tablet) {
-      margin: rem(8) auto;
+      @include breakpoint($only-mobile) {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        height: rem(48);
+        width: 100%;
+        border-top: rem(1) solid $algolia-dropdown-border;
+      }
+
+      @include breakpoint($tablet) {
+        margin: rem(8) auto;
+      }
     }
   }
 }
