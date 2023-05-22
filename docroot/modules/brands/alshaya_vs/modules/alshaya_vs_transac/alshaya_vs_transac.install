@@ -14,7 +14,8 @@ use Drupal\Component\Utility\Unicode;
  */
 function alshaya_vs_transac_update_9406() {
   // Adding Translation.
-  module_load_include('inc', 'alshaya_vs_transac', 'alshaya_vs_transac.translations');
+  \Drupal::moduleHandler()
+    ->loadInclude('alshaya_vs_transac', 'inc', 'alshaya_vs_transac.translations');
   $translations = _alshaya_vs_transac_get_translations('v2');
   if (!empty($translations)) {
     alshaya_i18n_save_translations($translations);
@@ -467,7 +468,8 @@ function alshaya_vs_transac_install() {
     \Drupal::languageManager()->getLanguageConfigOverride('ar', 'webform.webform.alshaya_bv_write_review')->set('elements', $config['ar'])->save();
   }
   // Saving Transaltions.
-  module_load_include('inc', 'alshaya_vs_transac', 'alshaya_vs_transac.translations');
+  \Drupal::moduleHandler()
+    ->loadInclude('alshaya_vs_transac', 'inc', 'alshaya_vs_transac.translations');
   $translations = _alshaya_vs_transac_get_translations('v1');
   if (!empty($translations)) {
     alshaya_i18n_save_translations($translations);
