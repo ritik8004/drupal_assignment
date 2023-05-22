@@ -83,7 +83,8 @@ function alshaya_rcs_seo_page_attachments_alter(&$attachments) {
           )->toString();
 
           // Add the URL as is, RCS expects the URL to be same in all languages.
-          $url .= RcsPhPathProcessor::getFullPath();
+          // Keep only the trailing slash to point to the canonical URLs.
+          $url .= ltrim(RcsPhPathProcessor::getFullPath(FALSE), '/');
 
           // Unset "html_head_link" structure coming from 'content_translation'.
           foreach ($attachments['#attached']['html_head_link'] as $key => $element) {
@@ -196,4 +197,71 @@ function alshaya_rcs_seo_rcs_placeholders_graphql_query_alter(&$query_fields) {
     ]);
     $query_fields['single_product_by_color_sku']['query']['query($sku: String)']['products(filter: {sku: {eq: $sku}})']['items'] = $items;
   }
+}
+
+/**
+ * Implements hook_metatags_attachments_alter().
+ */
+function alshaya_rcs_seo_metatags_attachments_alter(array &$attachments) {
+  /** @var \Drupal\alshaya_rcs_seo\Services\AlshayaRcsMetatagSsrHelper $rcs_metatag_ssr_helper */
+  $rcs_metatag_ssr_helper = \Drupal::service('alshaya_rcs_seo.metatag_ssr_helper');
+  // Check SSR enabled.
+  if (!$rcs_metatag_ssr_helper->getMetatagSsrEnabled()) {
+    return;
+  }
+  $rcs_metatag_ssr_helper->processMetatagAttachments($attachments);
+}
+
+/**
+ * Implements hook_preprocess_page().
+ */
+function alshaya_rcs_seo_preprocess_page(&$variables) {
+  /** @var \Drupal\alshaya_rcs_seo\Services\AlshayaRcsMetatagSsrHelper $rcs_metatag_ssr_helper */
+  $rcs_metatag_ssr_helper = \Drupal::service('alshaya_rcs_seo.metatag_ssr_helper');
+  // Check SSR enabled.
+  if (!$rcs_metatag_ssr_helper->getMetatagSsrEnabled()) {
+    return;
+  }
+  // Replace the category name and description for PLP pages for SEO.
+  // @see: AlshayaRcsMetatagSsrHelper::processMetatagAttachments
+  $rcs_metatag_ssr_helper->preProcessMetatagForPage($variables);
+}
+
+/**
+ * Implements hook_preprocess_block().
+ */
+function alshaya_rcs_seo_preprocess_block(&$variables) {
+  /** @var \Drupal\alshaya_rcs_seo\Services\AlshayaRcsMetatagSsrHelper $rcs_metatag_ssr_helper */
+  $rcs_metatag_ssr_helper = \Drupal::service('alshaya_rcs_seo.metatag_ssr_helper');
+  // Check SSR enabled.
+  if (!$rcs_metatag_ssr_helper->getMetatagSsrEnabled()) {
+    return;
+  }
+  // Replace the category, promotion
+  // title and description for PLP and promo pages.
+  // @see: AlshayaRcsMetatagSsrHelper::processMetatagAttachments
+  $block_plugins = [
+    'rcs_term_description',
+    'page_title_block',
+    'alshaya_rcs_promotion_description',
+  ];
+  if (isset($variables['plugin_id'])
+    && in_array($variables['plugin_id'], $block_plugins)) {
+    $rcs_metatag_ssr_helper->preProcessMetatagForBlock($variables);
+  }
+}
+
+/**
+ * Implements hook_preprocess_block__BLOCK_ID().
+ */
+function alshaya_rcs_seo_preprocess_block__system_branding__home_block(&$variables) {
+  /** @var \Drupal\alshaya_rcs_seo\Services\AlshayaRcsMetatagSsrHelper $rcs_metatag_ssr_helper */
+  $rcs_metatag_ssr_helper = \Drupal::service('alshaya_rcs_seo.metatag_ssr_helper');
+  // Check SSR enabled.
+  if (!$rcs_metatag_ssr_helper->getMetatagSsrEnabled()) {
+    return;
+  }
+  // Replace the brand block title.
+  // @see: AlshayaRcsMetatagSsrHelper::processMetatagAttachments
+  $rcs_metatag_ssr_helper->preProcessMetatagForBlock($variables);
 }

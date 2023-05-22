@@ -4,6 +4,7 @@ import { hasValue } from '../../../../../js/utilities/conditionsUtility';
 import { isMobile } from '../../../../../js/utilities/display';
 import getSingleProductByColorSku from '../../utils/articleSwatchUtil';
 import { getFormattedPrice } from '../../../../../js/utilities/price';
+import ImageElement from '../gallery/imageHelper/ImageElement';
 
 const ArticleSwatches = ({
   sku, articleSwatches, url, handleSwatchSelect,
@@ -100,6 +101,19 @@ const ArticleSwatches = ({
     }
   };
 
+  // Article swatch swipe event handler.
+  const onSwipe = (e) => {
+    // Prepare data for GTM.
+    const gtmData = {
+      event: 'swatches_colourswipe',
+      eventCategory: 'swatches_colourswipe',
+      eventAction: 'swatches_colourswipe',
+      eventLabel: hasValue(e) ? e : '',
+    };
+    // Push article swatch swipe data in GTM.
+    window.dataLayer.push(gtmData);
+  };
+
   const renderArticleSwatches = articleSwatches.slice(0, swatchesLimit).map(
     (swatch) => (
       <ArticleSwatch
@@ -116,7 +130,11 @@ const ArticleSwatches = ({
     <div className="article-swatch-wrapper">
       { showColorSwatchSlider
         ? (
-          <Slider {...sliderSettings} className={`swatches swatch-slider ${swatchTypeClass} swatch-limit-${Math.floor(sliderSettings.slidesToShow)}`}>
+          <Slider
+            {...sliderSettings}
+            className={`swatches swatch-slider ${swatchTypeClass} swatch-limit-${Math.floor(sliderSettings.slidesToShow)}`}
+            onSwipe={onSwipe}
+          >
             { renderArticleSwatches }
           </Slider>
         )
@@ -136,6 +154,22 @@ const ArticleSwatch = ({
   disabled,
   showSelectedSwatchProduct,
 }) => {
+  // Render Image swatches when swatch_type is image.
+  if (hasValue(swatch.swatch_type) && swatch.swatch_type === 'image') {
+    return (
+      <a href="#" onClick={(e) => showSelectedSwatchProduct(e, swatch)}>
+        <span
+          className={selectedSwatch === swatch.article_sku_code ? 'image-swatch active' : 'image-swatch'}
+        >
+          <ImageElement
+            src={swatch.swatch_image}
+            loading="lazy"
+          />
+        </span>
+      </a>
+    );
+  }
+
   const colors = swatch.rgb_color.split('|');
   if (colors.length > 1) {
     return (

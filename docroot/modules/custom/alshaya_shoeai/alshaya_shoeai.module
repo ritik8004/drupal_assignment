@@ -13,8 +13,11 @@ use Drupal\Core\Entity\EntityInterface;
  */
 function alshaya_shoeai_node_view(array &$build, EntityInterface $entity, EntityViewDisplayInterface $display, $view_mode) {
   $bundle = ['acq_product', 'rcs_product'];
-  if (in_array($entity->bundle(), $bundle) && $view_mode == 'full') {
-    \Drupal::service('alshaya_shoeai.helper')->attachShoeAiLibrary($build);
+  $shoe_ai_helper = \Drupal::service('alshaya_shoeai.helper');
+  // Attaching shoeai library if current node is shoeai landing page or product.
+  if ((in_array($entity->bundle(), $bundle) && $view_mode == 'full') ||
+    $shoe_ai_helper->isShoeAiLandingPage()) {
+    $shoe_ai_helper->attachShoeAiLibrary($build);
   }
 }
 

@@ -180,13 +180,14 @@ export const getHelloMemberCustomerData = async () => {
 
   return callHelloMemberApi('helloMemberGetCustomerData', 'GET', params)
     .then((response) => {
+      const errorCode = hasValue(response.data.error_code) ? response.data.error_code : 500;
       if (hasValue(response.data.error)) {
         const message = hasValue(response.data.error_message) ? response.data.error_message : '';
         logger.error('Error while trying to fetch hello member customer information for user with customer id @customerId. Message: @message', {
           '@customerId': customerId,
           '@message': message,
         });
-        return getErrorResponse(message, 500);
+        return getErrorResponse(message, errorCode);
       }
       return response;
     });
@@ -345,4 +346,54 @@ export const getBenefitTag = (responseData) => {
     return responseData.tag;
   }
   return null;
+};
+
+/**
+ * Helper function to return button name for external benefits.
+ *
+ *  @param {boolean} returnTranslatable
+ *  returns benefitText Translatable
+ */
+export const getExternalBenefitText = (responseData, returnTranslatable) => {
+  let benefitText = null;
+  if (hasValue(responseData) && hasValue(responseData.tag)) {
+    switch (responseData.tag) {
+      case 'ER':
+        benefitText = 'Redeem Now';
+        if (returnTranslatable) {
+          benefitText = Drupal.t('Redeem Now', {}, { context: 'hello_member' });
+        }
+        break;
+      case 'ES':
+        benefitText = 'Shop Now';
+        if (returnTranslatable) {
+          benefitText = Drupal.t('Shop Now', {}, { context: 'hello_member' });
+        }
+        break;
+      case 'EB':
+        benefitText = 'Book Now';
+        if (returnTranslatable) {
+          benefitText = Drupal.t('Book Now', {}, { context: 'hello_member' });
+        }
+        break;
+      default:
+        break;
+    }
+  }
+  return benefitText;
+};
+
+/**
+ * Helper function to return benefitList based on benefit Tag 'I'.
+ *
+ *  @param {array} benefitList
+ *  @returns {array} sorted benefitList.
+ */
+export const sortBenefits = (benefitList) => {
+  for (let index = 0; index < benefitList.length; index++) {
+    if (benefitList[index].tag === 'I') {
+      benefitList.push(benefitList.splice(benefitList.indexOf(benefitList[index]), 1)[0]);
+    }
+  }
+  return benefitList;
 };

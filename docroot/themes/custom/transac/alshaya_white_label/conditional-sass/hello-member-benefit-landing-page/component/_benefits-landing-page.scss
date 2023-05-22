@@ -10,6 +10,29 @@
   }
 }
 
+.external-btn {
+  border-width: rem(1) !important;
+  display: flex;
+  justify-content: center;
+
+  &::before {
+    content: "";
+    display: inline-block;
+    background: url("#{$base_theme_img_directory_path}/icons/external-link.svg") no-repeat;
+    height: rem(22);
+    width: rem(22);
+    margin-#{$right}: rem(11);
+  }
+}
+
+.learn-more {
+  &:hover,
+  &:active,
+  &:focus {
+    color: $primary_btn_text;
+  }
+}
+
 .my-benefit-page-wrapper {
   .image-container {
     img {

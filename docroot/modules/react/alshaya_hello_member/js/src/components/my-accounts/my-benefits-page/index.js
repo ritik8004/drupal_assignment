@@ -5,6 +5,7 @@ import {
   callHelloMemberApi,
   getHelloMemberCustomerInfo,
   getBenefitTag,
+  getExternalBenefitText,
 } from '../../../../../../js/utilities/helloMemberHelper';
 import logger from '../../../../../../js/utilities/logger';
 import QrCodeDisplay from '../my-membership/qr-code-display';
@@ -75,6 +76,13 @@ class MyBenefitsPage extends React.Component {
     }
   }
 
+  // function to pass benefit name and button name to GTM method.
+  handleClick = (myBenefit, buttonName) => {
+    if (hasValue(myBenefit)) {
+      Drupal.alshayaSeoGtmPushBenefitButton({ buttonName, myBenefit });
+    }
+  };
+
   render() {
     const {
       wait, myBenefit, codeId, couponId, offerType, promotionType,
@@ -97,13 +105,26 @@ class MyBenefitsPage extends React.Component {
       qrCodeTitle = getStringMessage('benefit_id_title');
     }
 
+    let userEmail = '';
+
+    if (hasValue(drupalSettings.userDetails)
+      && hasValue(drupalSettings.userDetails.userEmailID)) {
+      userEmail = `?email="${drupalSettings.userDetails.userEmailID}"`;
+    }
+
     const benefitTag = getBenefitTag(myBenefit);
+    // Variable to catch the buttonText with translation based on the tag from myBenefit.
+    const externalBenefitText = getExternalBenefitText(myBenefit, true);
+    // Variable to catch the buttonText without translation based on the tag from myBenefit.
+    const externalBenefitGtmText = getExternalBenefitText(myBenefit, false);
     // Show QRCodeButton, either if response has no benefit tag or has a value '0' or 'S'.
     const showQRButton = !!(!hasValue(benefitTag)
     || (hasValue(benefitTag) && (benefitTag === 'O' || benefitTag === 'S')));
     // Show CartButton, either if response has no benefit tag or has a value '0' or 'E'.
     const showCartButton = !!(!hasValue(benefitTag)
     || (hasValue(benefitTag) && (benefitTag === 'O' || benefitTag === 'E')));
+    // show learnMore CTA and hide expiry date if benefitTag is 'I'.
+    const showLearnMore = hasValue(benefitTag) && benefitTag === 'I';
 
     return (
       <div className="my-benefit-page-wrapper">
@@ -120,9 +141,12 @@ class MyBenefitsPage extends React.Component {
           <div className="info">
             {myBenefit.description}
           </div>
-          <div className="expiry">
-            {getStringMessage('benefit_expire', { '@expire_date': formatDate(new Date(myBenefit.expiry_date || myBenefit.end_date)) })}
-          </div>
+          {!showLearnMore
+            && (
+              <div className="expiry">
+                {getStringMessage('benefit_expire', { '@expire_date': formatDate(new Date(myBenefit.expiry_date || myBenefit.end_date)) })}
+              </div>
+            )}
         </div>
         <div className="btn-wrapper">
           {showQRButton
@@ -145,6 +169,25 @@ class MyBenefitsPage extends React.Component {
                 offerType={offerType}
                 promotionType={promotionType}
               />
+            )}
+          {showLearnMore && hasValue(myBenefit.benefit_url)
+          && (
+            <a className="button-wide learn-more" href={myBenefit.benefit_url} onClick={() => this.handleClick(myBenefit, 'Learn more')}>
+              {Drupal.t('Learn more', {}, { context: 'aura' })}
+            </a>
+          )}
+          {/* CTA for competition benefits. */}
+          {hasValue(myBenefit.benefit_url) && hasValue(benefitTag) && benefitTag === 'C'
+            && (
+              <a target="_blank" rel="noopener noreferrer" className="qr-code-button external-btn" href={myBenefit.benefit_url + userEmail} onClick={() => this.handleClick(myBenefit, 'Enter now')}>
+                {Drupal.t('Enter now', {}, { context: 'hello_member' })}
+              </a>
+            )}
+          {hasValue(myBenefit.benefit_url) && hasValue(benefitTag) && hasValue(externalBenefitText)
+            && (
+              <a target="_blank" rel="noopener noreferrer" className="qr-code-button external-btn" href={myBenefit.benefit_url} onClick={() => this.handleClick(myBenefit, externalBenefitGtmText)}>
+                { externalBenefitText }
+              </a>
             )}
         </div>
         <div className="benefit-description">

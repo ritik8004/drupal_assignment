@@ -2,6 +2,8 @@
 
   // The threshold for how far you should reach before loading related products.
   var scrollThreshold = 200;
+  // Set the flag to false on initial page load until we use the selected param.
+  var selectedParameterProcessed = false;
 
   /**
    * Checks if the PDP is RCS PDP or not.
@@ -344,6 +346,9 @@
 
         var skuBaseFormLoadedEvent = new CustomEvent('onSkuBaseFormLoad', { bubbles: true, detail: { data: data }});
         document.dispatchEvent(skuBaseFormLoadedEvent);
+
+        // Set the flag to true once the page is fully loaded.
+        selectedParameterProcessed = true;
       });
 
       // Show images for oos product on PDP.
@@ -702,9 +707,10 @@
     if (productInfo.swatch_param !== undefined) {
       selectedSku = Drupal.getSelectedSkuFromPdpPrettyPath(productInfo);
     }
-    // Use selected from query parameter only for main product.
+    // Use selected from query parameter only for main product on initial
+    // page load.
     var variants = productInfo['variants'];
-    var selected = (viewMode === 'full')
+    var selected = ((viewMode === 'full') && !selectedParameterProcessed)
       ? parseInt(Drupal.getQueryVariable('selected'))
       : 0;
 

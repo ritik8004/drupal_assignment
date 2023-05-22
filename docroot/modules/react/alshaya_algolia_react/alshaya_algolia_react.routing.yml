@@ -32,3 +32,22 @@ alshaya_algolia_react.color_swatches:
     _title: 'SRP/PLP Color Swatches Configuration'
   requirements:
     _permission: 'administer site configuration'
+
+   # SRP/PLP Swipe Image config form
+alshaya_algolia_react.swipe_image:
+  path: '/admin/config/alshaya/algolia-swipe-image'
+  defaults:
+    _form: '\Drupal\alshaya_algolia_react\Form\AlgoliaSwipeImageForm'
+    _title: 'SRP/PLP Swipe Image Configuration'
+  requirements:
+    _permission: 'administer site configuration'
+
+
+   # Predictive search config form
+alshaya_algolia_react.predictive_search:
+  path: '/admin/config/alshaya/predictive-search'
+  defaults:
+    _form: '\Drupal\alshaya_algolia_react\Form\AlgoliaPredictiveSearchForm'
+    _title: 'Algolia Predictive Search Configuration'
+  requirements:
+    _permission: 'administer site configuration'

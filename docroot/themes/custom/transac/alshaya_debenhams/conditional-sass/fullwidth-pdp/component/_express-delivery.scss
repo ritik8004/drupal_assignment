@@ -1,0 +1,26 @@
+.acq-content-product {
+  .express-delivery {
+    display: flex;
+    flex-wrap: wrap;
+    gap: rem(8) rem(16);
+  }
+
+  .express-delivery-text {
+    &:nth-child(2) {
+      margin-top: 0;
+    }
+
+    span {
+      white-space: nowrap;
+    }
+
+    body.nodetype--acq_product:not(.magazine-layout-v2) & {
+      margin: 0;
+    }
+
+    @include breakpoint($tablet) {
+      max-width: rem(300);
+      flex-grow: 1;
+    }
+  }
+}

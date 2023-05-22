@@ -1,7 +1,7 @@
 #backtotop {
   font-size: 0;
-  height: 2.3125rem;
-  width: 2.3125rem;
+  height: rem(30);
+  width: rem(30);
   bottom: 1.5rem;
   line-height: normal;
   #{$right}: 0.875rem;
@@ -16,7 +16,8 @@
 
   &::after {
     content: "";
-    background: url("../imgs/icons/back-to-top.svg") no-repeat;
+    background: url("#{$brand_theme_img_directory_path}/icons/back-to-top.svg?v1") no-repeat;
+    background-position: center;
     background-size: contain;
     border-radius: 0;
     top: 0;
@@ -26,7 +27,13 @@
 
   &:hover {
     &::after {
-      background: url("../imgs/icons/back-to-top-hover.svg") no-repeat;
+      background-image: url("#{$brand_theme_img_directory_path}/icons/back-to-top-hover.svg?v1");
     }
+  }
+
+  &.sprinklr-enabled {
+    // unset row-gap if font-size is 0.
+    row-gap: unset;
+    height: rem(30);
   }
 }

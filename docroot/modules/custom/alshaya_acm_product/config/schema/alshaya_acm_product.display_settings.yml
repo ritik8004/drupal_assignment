@@ -5,9 +5,6 @@ alshaya_acm_product.display_settings:
     image_thumb_gallery:
       type: boolean
       label: 'Display image thumb gallery on product node'
-    image_slide_timing:
-      type: float
-      label: 'Auto scroll timer for auto scrolling the product images on listing pages.'
     color_swatches:
       type: boolean
       label: 'Display color swatches on product node'

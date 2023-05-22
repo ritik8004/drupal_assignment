@@ -10,6 +10,32 @@ use Drupal\Core\Site\Settings;
 use Drupal\Component\Utility\Unicode;
 
 /**
+ * Update algolia react with default value for render_single_result_facets.
+ *
+ * And also for exclude_render_single_result_facets.
+ * Disabling swatches display on PLP/Search pages.
+ * Index products with new swatches field for Mobile App usage only.
+ */
+function alshaya_vs_transac_update_9405() {
+  $manager = \Drupal::service('alshaya_config.manager');
+  $manager->updateConfigs(
+    [
+      'alshaya_acm_product.display_settings',
+    ],
+    'alshaya_acm_product'
+  );
+  // Queue all products which index a new field swatches.
+  \Drupal::service('alshaya_acm_product.product_queue_utility')->queueAllProducts();
+
+  $config = \Drupal::configFactory()->getEditable('alshaya_algolia_react.settings');
+  if ($config) {
+    $config->set('render_single_result_facets', FALSE);
+    $config->set('exclude_render_single_result_facets', 'final_price,attr_bv_rating,field_acq_promotion_label,attr_product_collection');
+    $config->save();
+  }
+}
+
+/**
  * Implements hook_update_N().
  *
  * Adds 'bra_type' field in the sku base field existing config.
@@ -508,4 +534,17 @@ function _alshaya_vs_transac_save_metatag_translations() {
   ];
 
   alshaya_i18n_save_translations($strings);
+}
+
+/**
+ * Implements hook_update_dependencies().
+ */
+function alshaya_vs_transac_update_dependencies() {
+  return [
+    'alshaya_vs_transac' => [
+      '9405' => [
+        'alshaya_algolia_react' => '9408',
+      ],
+    ],
+  ];
 }

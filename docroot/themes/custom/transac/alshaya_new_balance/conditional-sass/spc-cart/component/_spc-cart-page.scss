@@ -25,9 +25,15 @@
 @include breakpoint($only-mobile) {
   #spc-cart {
     padding-top: 0;
+
+    .spc-pre-content-sticky {
+      margin-bottom: 0;
+    }
   }
 
   .spc-mobile-cart-preview {
+    padding-top: 0;
+
     &.sticky {
       z-index: 2;
     }

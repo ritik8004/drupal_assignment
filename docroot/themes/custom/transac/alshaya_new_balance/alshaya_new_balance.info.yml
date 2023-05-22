@@ -181,3 +181,18 @@ libraries-override:
     css:
       theme:
         css/conditional-sass/fullwidth-listing-page/fullwidth-listing-page.ltr.css: css/conditional-sass/fullwidth-listing-page/fullwidth-listing-page.ltr.css
+
+  alshaya_white_label/fullwidth-store-finder:
+    css:
+      theme:
+        css/conditional-sass/fullwidth-store-finder/fullwidth-store-finder.ltr.css: css/conditional-sass/fullwidth-store-finder/fullwidth-store-finder.ltr.css
+
+  alshaya_white_label/fullwidth-spc:
+      css:
+        theme:
+          css/conditional-sass/fullwidth-spc/fullwidth-spc.ltr.css: css/conditional-sass/fullwidth-spc/fullwidth-spc.ltr.css
+
+  alshaya_white_label/fullwidth-pdp:
+    css:
+      theme:
+        css/conditional-sass/fullwidth-pdp/fullwidth-pdp.ltr.css: css/conditional-sass/fullwidth-pdp/fullwidth-pdp.ltr.css

@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import Parser from 'html-react-parser';
 import Gallery from '../gallery';
 import Price from '../price';
@@ -48,8 +48,9 @@ const Teaser = ({
   });
   const isDesktop = window.innerWidth > 1024;
   const { currentLanguage } = drupalSettings.path;
-  const { showBrandName } = drupalSettings.reactTeaserView;
+  const { showBrandName, swipeImage } = drupalSettings.reactTeaserView;
   const activateShoeAI = getShoeAiStatus();
+
   if (drupalSettings.plp_attributes
     && drupalSettings.plp_attributes.length > 0
     && hasValue(hit.collection_labels)
@@ -82,12 +83,14 @@ const Teaser = ({
   const handleSwatchSelect = (productData) => {
     setSkuCode(productData.sku);
     setSkuMedia(productData.media);
-    const renderSkuPrice = (
-      <Price
-        price={productData.priceData.price}
-        finalPrice={productData.priceData.finalPrice}
-      />
-    );
+    const renderSkuPrice = hasValue(productData.priceData)
+      ? (
+        <Price
+          price={productData.priceData.price}
+          finalPrice={productData.priceData.finalPrice}
+        />
+      )
+      : null;
     setSwatchAttributeData({
       ...updatedAttribute,
       title: productData.name,
@@ -219,6 +222,15 @@ const Teaser = ({
   if (pageType === 'search') {
     dataVmode = { 'data-vmode': 'search_result' };
   }
+
+  // Initialize slick carousel for touch devices.
+  useEffect(() => {
+    // Check if touch device, swipe Image is enabled, and Slick is initialized.
+    if (!isDesktop && swipeImage.enableSwipeImageMobile && !initSlider) {
+      setInitiateSlider(true);
+    }
+  }, []);
+
   return (
     <div className={teaserClass}>
       <article
@@ -280,7 +292,7 @@ const Teaser = ({
               sku={sku}
               title={title && Parser(title)}
               format="icon"
-              setWishListButtonRef={ref}
+              setWishListButtonRef={ref.current}
             />
           </ConditionalView>
           {pageType === 'plp' && activateShoeAI === true ? (
@@ -370,11 +382,13 @@ const Teaser = ({
             <ConditionalView condition={!isPromotionFrameEnabled()}>
               <Promotions promotions={attribute.promotions} />
             </ConditionalView>
-            {showSwatches ? (
+            {/* Render the Article color swatches when showColorSwatchSlider is TRUE */}
+            {showSwatches && !showColorSwatchSlider ? (
               <Swatches
                 swatches={attribute.swatches}
                 url={url}
                 title={title}
+                handleSwatchSelect={handleSwatchSelect}
               />
             ) : null}
             {showSliderSwatch ? (
@@ -382,6 +396,7 @@ const Teaser = ({
                 swatches={attribute.swatches}
                 url={url}
                 title={title}
+                handleSwatchSelect={handleSwatchSelect}
               />
             ) : null}
             {/* Render color swatches based on article/sku id */}

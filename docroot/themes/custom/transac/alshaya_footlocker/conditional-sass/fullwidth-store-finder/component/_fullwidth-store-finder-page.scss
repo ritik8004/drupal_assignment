@@ -1,0 +1,49 @@
+@include breakpoint($desktop) {
+  .path--store-finder {
+    .label--location {
+      width: auto !important;
+      text-indent: 0;
+      padding-#{$left}: rem(32);
+      margin-#{$right}: rem(12);
+
+      html[lang="ar"] & {
+        width: auto !important;
+      }
+    }
+
+    .current-location {
+      text-align: center;
+    }
+
+    .input--wrapper {
+      width: auto !important;
+      position: relative;
+      #{$left}: unset;
+    }
+
+    .store-finder--wrapper {
+      .block-store-finder-form__input__wrapper {
+        .form-item-geolocation-geocoder-google-places-api {
+          width: 100% !important;
+
+          html[lang="ar"] & {
+            width: 100% !important;
+          }
+        }
+      }
+    }
+  }
+}
+
+@include breakpoint($only-tablet) {
+  .path--store-finder {
+    #edit-field-latitude-longitude-boundary-geolocation-geocoder-google-places-api,
+    .form-item-geolocation-geocoder-google-places-api {
+      [id^="edit-geolocation-geocoder-google-places-api"] {
+        html[lang="en"] & {
+          max-width: 89%;
+        }
+      }
+    }
+  }
+}

@@ -10,6 +10,21 @@ use Drupal\facets\Entity\Facet;
 /**
  * Implements hook_update_N().
  *
+ * Save translations for Cart.
+ */
+function alshaya_nb_transac_update_9408() {
+  // Add translations.
+  \Drupal::moduleHandler()
+    ->loadInclude('alshaya_nb_transac', 'inc', 'alshaya_nb_transac.translation');
+  $translations = _alshaya_nb_transac_get_translations('v6');
+  if ($translations) {
+    alshaya_i18n_save_translations($translations);
+  }
+}
+
+/**
+ * Implements hook_update_N().
+ *
  * Provides default setting for `show_full_width` for theme.
  */
 function alshaya_nb_transac_update_9407() {
