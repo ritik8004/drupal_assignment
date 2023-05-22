@@ -135,11 +135,8 @@ class AlshayGraphqlApiWrapper {
 
       $result = json_decode($result, TRUE);
       if (isset($result['errors'])) {
-        $message = is_array($result['errors'][0]) && isset($result['errors'][0]['message'])
-          ? $result['errors'][0]['message']
-          : 'Some unexpected error occurred.';
         $this->logger->error('Error occurred while invoking GraphQL API @api with following response: @errors', [
-          '@errors' => $message,
+          '@errors' => is_array($result['errors']) ? json_encode($result['errors']) : 'Some unexpected error occurred.',
           '@api' => $request_url,
         ]);
       }
