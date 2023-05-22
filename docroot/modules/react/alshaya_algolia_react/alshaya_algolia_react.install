@@ -10,23 +10,8 @@ use Drupal\alshaya_config\AlshayaConfigManager;
 /**
  * Implements hook_update_N().
  *
- * Adds config for expiry time in seconds for facet list in local storage.
- */
-function alshaya_algolia_react_update_9410() {
-  /** @var \Drupal\alshaya_config\AlshayaConfigManager $manager */
-  $manager = \Drupal::service('alshaya_config.manager');
-  $manager->updateConfigs(
-    ['alshaya_algolia_react.settings'],
-    'alshaya_algolia_react',
-    'install',
-    AlshayaConfigManager::MODE_ADD_MISSING
-  );
-}
-
-/**
- * Implements hook_update_N().
- *
- * Adding new field `product_teaser_attributes`.
+ * Adding new field `product_teaser_attributes`, config to enable or disable
+ * configurable filter and config for max values per facets.
  */
 function alshaya_algolia_react_update_9409() {
   /** @var \Drupal\alshaya_config\AlshayaConfigManager $manager */
