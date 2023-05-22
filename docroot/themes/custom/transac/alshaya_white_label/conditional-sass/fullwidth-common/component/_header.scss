@@ -58,10 +58,11 @@ header {
 
 @include breakpoint($desktop) {
   #block-cartminiblock,
-  .block-alshaya-react-mini-cart,
-  .static-minicart-wrapper {
-    .cart-link::before {
-      #{$right}: 0;
+  .block-alshaya-react-mini-cart {
+    .static-minicart-wrapper & {
+      .cart-link::before {
+        #{$right}: 0;
+      }
     }
 
     .quantity {
