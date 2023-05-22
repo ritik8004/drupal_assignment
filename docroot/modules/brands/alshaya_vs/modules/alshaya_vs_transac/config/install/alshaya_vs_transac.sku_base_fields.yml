@@ -29,4 +29,33 @@ fields:
     swatch: 1
 
   product_category:
+    label: 'Style'
+    type: 'string'
+    cardinality: 1
+    description: 'Product Category.'
+    index: 1
+    facet: 1
+  
+  product_search_category:
     label: 'Product Category'
+    type: 'string'
+    description: 'Product Search Category.'
+    cardinality: 1
+    index: 1
+    facet: 1
+
+  support:
+    label: 'Structure'
+    type: 'string'
+    description: 'Support.'
+    cardinality: 1
+    index: 1
+    facet: 1
+  
+  panty_waist_type:
+    label: 'Panty Waist Type'
+    type: 'string'
+    description: 'Panty Waist Type.'
+    cardinality: 1
+    index: 1
+    facet: 1

@@ -7,12 +7,15 @@ fields:
     configurable: 1
     index: 1
   padding:
-    label: 'Padding'
+    label: 'Lining Level'
+    description: 'Padding'
     index: 1
+    facet: 1
   bra_coverage:
     label: 'Bra Coverage'
     description: 'Bra Coverage.'
     index: 1
+    facet: 1
   labels:
     index: 1
   band_size:
@@ -43,3 +46,15 @@ fields:
     index: 1
     widget:
       type: multi_level_widget
+  product_search_category:
+    index: 1
+    facet: 1
+  product_category:
+    index: 1
+    facet: 1
+  support:
+    index: 1 
+    facet: 1
+  panty_waist_type:
+    index: 1 
+    facet: 1

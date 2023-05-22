@@ -10,6 +10,60 @@ use Drupal\Core\Site\Settings;
 use Drupal\Component\Utility\Unicode;
 
 /**
+ * Add new facets in the sku base field existing config.
+ *
+ * Facets - Product Category, Style
+ * Lining level, Bra Coverage, Structure.
+ */
+function alshaya_vs_transac_update_9501() {
+  // Adding Translation.
+  \Drupal::moduleHandler()
+    ->loadInclude('alshaya_vs_transac', 'inc', 'alshaya_vs_transac.translations');
+  $translations = _alshaya_vs_transac_get_translations('v2');
+  if (!empty($translations)) {
+    alshaya_i18n_save_translations($translations);
+  }
+  $manager = \Drupal::service('alshaya_config.manager');
+  $manager->updateConfigs(
+    [
+      'alshaya_acm_product.sku_base_fields',
+    ],
+    'alshaya_acm_product'
+  );
+  $manager->updateConfigs(
+    ['alshaya_vs_transac.sku_base_fields'],
+    'alshaya_vs_transac',
+    'install',
+    AlshayaConfigManager::MODE_MERGE
+  );
+  $fieldsManager = \Drupal::service('acq_sku.fields_manager');
+  $fieldsManager->addFields();
+
+  $fieldsManager->updateFieldMetaInfo('bra_coverage', [
+    'index' => 1,
+    'facet' => 1,
+  ]);
+
+  $fieldsManager->updateFieldMetaInfo('padding', [
+    'index' => 1,
+    'facet' => 1,
+  ]);
+
+  $fieldsManager->updateFieldMetaInfo('product_category', [
+    'index' => 1,
+    'facet' => 1,
+  ]);
+
+  $fieldsManager->resetBaseFields();
+
+  // Re-save index configs to ensure overrides are taken into consideration.
+  alshaya_config_install_configs(['search_api.index.product'], 'alshaya_product');
+  alshaya_config_install_configs(['search_api.index.acquia_search_index'], 'alshaya_search', 'optional');
+
+  \Drupal::service('alshaya_acm_product.product_queue_utility')->queueAllProducts();
+}
+
+/**
  * Adds 'bra_size' field in the sku base field existing config.
  */
 function alshaya_vs_transac_update_9406() {
