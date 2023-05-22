@@ -108,7 +108,7 @@ class SearchGallery extends React.PureComponent {
 
     // This is to show the PDP images on the listing
     // pages which comes in swipe image feature.
-    if (showPdpImagesOnListingPages) {
+    if (showPdpImagesOnListingPages && hasValue(mediaPdp)) {
       mediaList = mediaPdp;
     }
 
