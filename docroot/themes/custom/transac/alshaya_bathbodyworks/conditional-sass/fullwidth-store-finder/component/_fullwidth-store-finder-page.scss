@@ -1,3 +1,17 @@
+@include breakpoint($only-tablet) {
+  .path--store-finder .form--inline .current-location {
+    padding-#{$left}: 0 !important;
+
+    &::before {
+      #{$left}: 0;
+
+      html[lang="ar"] & {
+        position: static;
+      }
+    }
+  }
+}
+
 @include breakpoint($tablet) {
   .path--store-finder {
     .current-location {
@@ -16,7 +30,7 @@
 
       .current-location {
         text-indent: 0;
-        padding-right: 0;
+        padding: 0;
       }
     }
   }
@@ -28,7 +42,8 @@
       }
 
       .current-location {
-        padding-top: rem(8);
+        padding-top: rem(4);
+        padding-bottom : 0;
 
         &::before {
           position: relative;
