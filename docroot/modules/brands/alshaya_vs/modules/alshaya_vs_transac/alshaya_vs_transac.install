@@ -28,7 +28,6 @@ function alshaya_vs_transac_update_9406() {
   $manager->updateConfigs(
     [
       'alshaya_acm_product.sku_base_fields',
-      'alshaya_acm_product.display_settings',
     ],
     'alshaya_acm_product'
   );
