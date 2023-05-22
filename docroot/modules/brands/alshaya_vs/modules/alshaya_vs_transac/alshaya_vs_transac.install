@@ -10,20 +10,22 @@ use Drupal\Core\Site\Settings;
 use Drupal\Component\Utility\Unicode;
 
 /**
- * Adds 'bra_size' field in the sku base field existing config.
+ * Implements hook_update_N().
  *
- * Disabling swatches display on PLP/Search pages.
+ * Add translations.
+ */
+function alshaya_vs_transac_update_9407() {
+  module_load_include('inc', 'alshaya_vs_transac', 'alshaya_vs_transac.translations');
+  $translations = _alshaya_vs_transac_get_translations('v1');
+  if (!empty($translations)) {
+    alshaya_i18n_save_translations($translations);
+  }
+}
+
+/**
+ * Adds 'bra_size' field in the sku base field existing config.
  */
 function alshaya_vs_transac_update_9406() {
-  // Add string translations.
-  $strings = [
-    'Bra Size' => [
-      'en' => 'Bra Size',
-      'ar' => 'مقاس حمالة الصدر',
-    ],
-  ];
-  alshaya_i18n_save_translations($strings);
-
   $manager = \Drupal::service('alshaya_config.manager');
   $manager->updateConfigs(
     [
