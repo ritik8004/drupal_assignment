@@ -43,7 +43,7 @@ const Teaser = ({
   const [sku, setSkuCode] = useState(hit.sku);
   const [media, setSkuMedia] = useState(hit.media);
   const [mediaPdp] = useState(hit.media_pdp);
-  const defaultChildId = hasValue(hit.swatches)
+  const defaultChildId = (hasValue(hit.swatches) && hasValue(hit.swatches[0].child_id))
     ? hit.swatches[0].child_id
     : null;
   const [childId, setChildId] = useState(defaultChildId);
