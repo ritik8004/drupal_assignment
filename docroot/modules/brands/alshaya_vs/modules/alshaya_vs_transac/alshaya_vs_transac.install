@@ -10,22 +10,15 @@ use Drupal\Core\Site\Settings;
 use Drupal\Component\Utility\Unicode;
 
 /**
- * Implements hook_update_N().
- *
- * Add translations.
+ * Adds 'bra_size' field in the sku base field existing config.
  */
-function alshaya_vs_transac_update_9407() {
+function alshaya_vs_transac_update_9406() {
+  // Adding Translation.
   module_load_include('inc', 'alshaya_vs_transac', 'alshaya_vs_transac.translations');
   $translations = _alshaya_vs_transac_get_translations('v2');
   if (!empty($translations)) {
     alshaya_i18n_save_translations($translations);
   }
-}
-
-/**
- * Adds 'bra_size' field in the sku base field existing config.
- */
-function alshaya_vs_transac_update_9406() {
   $manager = \Drupal::service('alshaya_config.manager');
   $manager->updateConfigs(
     [
