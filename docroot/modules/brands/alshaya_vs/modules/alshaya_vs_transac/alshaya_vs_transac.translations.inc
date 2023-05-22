@@ -11,6 +11,32 @@
 function _alshaya_vs_transac_translations() {
   return [
     'v1' => [
+      'Corporate Info' => [
+        'ar' => ' تعرفي إلينا ',
+      ],
+      'Customer care' => [
+        'ar' => ' خدمة الزبائن ',
+      ],
+      'Connect with us' => [
+        'ar' => ' تواصلي معنا ',
+      ],
+      'Store Includes' => [
+        'ar' => 'المحل يشمل',
+      ],
+      'I would like to receive exclusive deals from Victoria\'s Secret' => [
+        'ar' => 'أرغب في استلام عروض حصرية من فيكتورياز سيكريت',
+      ],
+      'seo_brand_name' => [
+        'ar' => 'فيكتوريا سيكريت',
+      ],
+      'Fragrance' => [
+        'ar' => 'العطر',
+      ],
+      'Bra Size' => [
+        'ar' => 'مقاس حمالة الصدر',
+      ],
+    ],
+    'v2' => [
       'Bra Size' => [
         'ar' => 'مقاس حمالة الصدر',
       ],
