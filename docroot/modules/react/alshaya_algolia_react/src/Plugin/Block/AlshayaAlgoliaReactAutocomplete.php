@@ -97,7 +97,6 @@ class AlshayaAlgoliaReactAutocomplete extends AlshayaAlgoliaReactBlockBase {
   public function build() {
     // Get common configuration for Algolia pages.
     $common_config = $this->alshayaAlgoliaReactConfig->getAlgoliaReactCommonConfig(self::PAGE_TYPE, self::PAGE_TYPE);
-
     // Get algola settings for lhn menu.
     $config = $this->configFactory->get('alshaya_search_algolia.settings');
     $show_terms_in_lhn = $config->get('show_terms_in_lhn');
@@ -115,6 +114,11 @@ class AlshayaAlgoliaReactAutocomplete extends AlshayaAlgoliaReactBlockBase {
       'alshaya_white_label/algolia_search',
       'alshaya_white_label/slick_css',
     ];
+
+    // Attach multi-widget-library if present in common config.
+    if (in_array('alshaya_white_label/multi-level-widget', $common_config['otherRequiredValues']['libraries'])) {
+      $libraries[] = 'alshaya_white_label/multi-level-widget';
+    }
 
     if ($common_config['commonAlgoliaSearch']['productFrameEnabled'] || $common_config['commonAlgoliaSearch']['promotionFrameEnabled'] || $common_config['commonAlgoliaSearch']['productTitleTrimEnabled']) {
       $libraries[] = 'alshaya_white_label/plp-frame-options';
@@ -155,6 +159,11 @@ class AlshayaAlgoliaReactAutocomplete extends AlshayaAlgoliaReactBlockBase {
       ];
 
       $libraries[] = 'alshaya_white_label/sameday-express-delivery';
+    }
+    $algoliaSearch['predictiveSearchEnabled'] = $this->configFactory->get('alshaya_algolia_react.predictive_search')
+      ->get('enable_predictive_search') === TRUE ?: FALSE;
+    if ($algoliaSearch['predictiveSearchEnabled']) {
+      $libraries[] = 'alshaya_white_label/predictive-search';
     }
 
     return [

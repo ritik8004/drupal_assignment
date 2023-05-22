@@ -1,0 +1,96 @@
+// Existing search styles reset.
+@include breakpoint($only-mobile) {
+  .algolia-search-cleartext-icon {
+    color: transparent;
+
+    &::after {
+      position: absolute;
+      top: 0;
+    }
+  }
+}
+
+@include breakpoint($tablet) {
+  // Existing search styles reset.
+  .block-alshaya-algolia-react-autocomplete {
+    #alshaya-algolia-autocomplete {
+      .predictive-search--open {
+        .react-autosuggest__container {
+          max-width: unset;
+
+          &::after {
+            transform: unset;
+            #{$right}: unset;
+            #{$left}: 0;
+            top: rem(8);
+            width: rem(20);
+            height: rem(20);
+            font-size: rem(20);
+
+            html[lang="ar"] & {
+              transform: unset;
+            }
+          }
+
+          .react-autosuggest__input {
+            background: unset;
+            padding-#{$left}: rem(32) !important;
+            width: 92%;
+          }
+        }
+      }
+    }
+
+    .predictive-search--open {
+      .algolia-search-back-icon {
+        display: none;
+      }
+
+      .algolia-search-cleartext-icon {
+        width: unset;
+        height: unset;
+        transition: unset;
+        transform: unset;
+        top: rem(8);
+        #{$right}: 8%;
+
+        &::after {
+          content: none;
+        }
+      }
+    }
+  }
+
+  // New predictive search styles.
+  .predictive-search {
+    &__btn-clear {
+      font-size: 0;
+    }
+
+    &--open {
+      form {
+        width: 75%;
+        max-width: rem(896);
+        margin: rem(70) auto rem(40);
+      }
+
+      .predictive-search {
+        &__btn-clear {
+          text-decoration: underline;
+          font-size: rem(14);
+          line-height: rem(20);
+        }
+
+        &__btn-close {
+          position: absolute;
+          top: rem(12);
+          #{$right}: 0;
+          width: rem(20);
+          height: rem(20);
+          background: url("#{$base_theme_img_directory_path}/icons/cross-black.svg") no-repeat;
+          cursor: pointer;
+        }
+      }
+    }
+  }
+}

@@ -74,36 +74,35 @@ function processCheckoutCart(data) {
             stateValues = {
               ...getAuraDetailsDefaultState(),
             };
-
             dispatchCustomEvent('loyaltyCardRemovedFromCart', { stateValues });
             removeFullScreenLoader();
             return;
           }
+        }
 
-          // For add action.
-          stateValues = {
-            loyaltyStatus: result.data.data.apc_link || 0,
-            points: result.data.data.apc_points || 0,
-            cardNumber: result.data.data.apc_identifier_number || '',
-            tier: result.data.data.tier_code || '',
-            email: result.data.data.email || '',
-            isFullyEnrolled: result.data.data.is_fully_enrolled || false,
-          };
+        // For add action.
+        stateValues = {
+          loyaltyStatus: result.data.data.apc_link || 0,
+          points: result.data.data.apc_points || 0,
+          cardNumber: result.data.data.apc_identifier_number || '',
+          tier: result.data.data.tier_code || '',
+          email: result.data.data.email || '',
+          isFullyEnrolled: result.data.data.is_fully_enrolled || false,
+        };
 
-          if (data.type === 'phone') {
-            stateValues.mobile = data.value;
-            stateValues.userCountryCode = data.countryCode;
-          }
+        if (data.type === 'phone') {
+          stateValues.mobile = data.value;
+          stateValues.userCountryCode = data.countryCode;
+        }
 
-          if (hasValue(data.gtmLinkCardOption)) {
-            // Update localstorage with the latest aura details before pushing success event.
-            Drupal.alshayaSeoGtmPushAuraCommonData(stateValues, stateValues.loyaltyStatus, false);
-            // Push success event.
-            Drupal.alshayaSeoGtmPushAuraEventData({
-              action: actionType,
-              label: 'success',
-            });
-          }
+        if (hasValue(data.gtmLinkCardOption)) {
+          // Update localstorage with the latest aura details before pushing success event.
+          Drupal.alshayaSeoGtmPushAuraCommonData(stateValues, stateValues.loyaltyStatus, false);
+          // Push success event.
+          Drupal.alshayaSeoGtmPushAuraEventData({
+            action: actionType,
+            label: 'success',
+          });
         }
       } else {
         if (hasValue(data.gtmLinkCardOption)) {

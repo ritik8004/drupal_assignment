@@ -10,23 +10,37 @@ use Drupal\Core\Site\Settings;
 use Drupal\Component\Utility\Unicode;
 
 /**
- * Update algolia react with default value for render_single_result_facets.
- *
- * And also for exclude_render_single_result_facets.
- * Disabling swatches display on PLP/Search pages.
- * Index products with new swatches field for Mobile App usage only.
+ * Adds 'bra_size' field in the sku base field existing config.
  */
-function alshaya_vs_transac_update_9405() {
+function alshaya_vs_transac_update_9406() {
+  // Adding Translation.
+  \Drupal::moduleHandler()
+    ->loadInclude('alshaya_vs_transac', 'inc', 'alshaya_vs_transac.translations');
+  $translations = _alshaya_vs_transac_get_translations('v2');
+  if (!empty($translations)) {
+    alshaya_i18n_save_translations($translations);
+  }
   $manager = \Drupal::service('alshaya_config.manager');
   $manager->updateConfigs(
     [
-      'alshaya_acm_product.display_settings',
+      'alshaya_acm_product.sku_base_fields',
     ],
     'alshaya_acm_product'
   );
-  // Queue all products which index a new field swatches.
-  \Drupal::service('alshaya_acm_product.product_queue_utility')->queueAllProducts();
+  $fieldsManager = \Drupal::service('acq_sku.fields_manager');
+  $fieldsManager->addFields();
 
+  // Re-save index configs to ensure overrides are taken into consideration.
+  alshaya_config_install_configs(['search_api.index.product'], 'alshaya_product');
+  alshaya_config_install_configs(['search_api.index.acquia_search_index'], 'alshaya_search', 'optional');
+
+  \Drupal::service('alshaya_acm_product.product_queue_utility')->queueAllProducts();
+}
+
+/**
+ * Update algolia react with default value for render_single_result_facets.
+ */
+function alshaya_vs_transac_update_9405() {
   $config = \Drupal::configFactory()->getEditable('alshaya_algolia_react.settings');
   if ($config) {
     $config->set('render_single_result_facets', FALSE);
@@ -413,35 +427,6 @@ function alshaya_vs_transac_install() {
     ->set('magento_lang_prefix', Settings::get('magento_lang_prefix')['ar'])
     ->save();
 
-  // Add string translations.
-  $strings = [
-    'Corporate Info' => [
-      'ar' => ' تعرفي إلينا ',
-    ],
-    'Customer care' => [
-      'ar' => ' خدمة الزبائن ',
-    ],
-    'Connect with us' => [
-      'ar' => ' تواصلي معنا ',
-    ],
-    'Store Includes' => [
-      'ar' => 'المحل يشمل',
-    ],
-    'I would like to receive exclusive deals from Victoria\'s Secret' => [
-      'ar' => 'أرغب في استلام عروض حصرية من فيكتورياز سيكريت',
-    ],
-    'seo_brand_name' => [
-      'en' => "Victoria's Secret",
-      'ar' => 'فيكتوريا سيكريت',
-    ],
-    'Fragrance' => [
-      'en' => 'Fragrance',
-      'ar' => 'العطر',
-    ],
-
-  ];
-  alshaya_i18n_save_translations($strings);
-
   \Drupal::languageManager()->getLanguageConfigOverride('ar', 'alshaya_stores_finder.settings')
     ->set('marker.label_position', alshaya_stores_finder_marker_label_position_ar())
     ->save();
@@ -481,6 +466,13 @@ function alshaya_vs_transac_install() {
     \Drupal::configFactory()->getEditable('webform.webform.alshaya_bv_write_review')->set('elements', $config['en'])->save();
     // Set arabic config.
     \Drupal::languageManager()->getLanguageConfigOverride('ar', 'webform.webform.alshaya_bv_write_review')->set('elements', $config['ar'])->save();
+  }
+  // Saving Transaltions.
+  \Drupal::moduleHandler()
+    ->loadInclude('alshaya_vs_transac', 'inc', 'alshaya_vs_transac.translations');
+  $translations = _alshaya_vs_transac_get_translations('v1');
+  if (!empty($translations)) {
+    alshaya_i18n_save_translations($translations);
   }
 }
 

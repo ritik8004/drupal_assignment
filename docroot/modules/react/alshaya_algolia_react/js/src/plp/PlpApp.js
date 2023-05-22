@@ -23,11 +23,16 @@ import PLPNoResults from '../components/algolia/PLPNoResults';
 import SubCategoryContent from '../components/subcategory';
 import ConditionalView from '../../common/components/conditional-view';
 import isHelloMemberEnabled from '../../../../js/utilities/helloMemberHelper';
-import { isUserAuthenticated } from '../../../../js/utilities/helper';
+import {
+  isConfigurableFiltersEnabled,
+  isUserAuthenticated,
+} from '../../../../js/utilities/helper';
 import BecomeHelloMember from '../../../../js/utilities/components/become-hello-member';
 import { getExpressDeliveryStatus } from '../../../../js/utilities/expressDeliveryHelper';
 import { hasValue } from '../../../../js/utilities/conditionsUtility';
 import { isMobile } from '../../../../js/utilities/display';
+import DynamicWidgets from '../components/algolia/widgets/DynamicWidgets';
+import { getMaxValuesFromFacets } from '../utils/FilterUtils';
 
 if (window.NodeList && !NodeList.prototype.forEach) {
   NodeList.prototype.forEach = Array.prototype.forEach;
@@ -179,6 +184,11 @@ const PlpApp = ({
 
   finalFilter = `${finalFilter}(${filters.join(filterOperator)})`;
 
+  const MobileFilterWrapper = isConfigurableFiltersEnabled()
+    ? DynamicWidgets : React.Fragment;
+
+  const maxValuesPerFacets = getMaxValuesFromFacets();
+
   return (
     <InstantSearch
       searchClient={algoliaSearchClient}
@@ -216,18 +226,23 @@ const PlpApp = ({
               limit={drupalSettings.algoliaSearch.topFacetsLimit}
               pageType="listing"
               callback={(callerProps) => callback(callerProps)}
+              ruleContexts={context}
             />
 
             <ConditionalView condition={categoryFieldAttributes.length > 0}>
               <div className="c-facet c-accordion block-facet-blockcategory-facet-plp algolia-plp-category-facet">
                 <h3 className="c-facet__title c-accordion__title c-collapse__title plp-category-facet-title">{drupalSettings.algoliaSearch.category_facet_label}</h3>
-                <PLPHierarchicalMenu
-                  attributes={categoryFieldAttributes}
-                  rootPath={lhnCategoryFilter}
-                  facetLevel={1}
-                  ref={plpCategoryRef}
-                  showParentLevel={false}
-                />
+                <MobileFilterWrapper
+                  {...(isConfigurableFiltersEnabled() ? maxValuesPerFacets : {})}
+                >
+                  <PLPHierarchicalMenu
+                    attributes={categoryFieldAttributes}
+                    rootPath={lhnCategoryFilter}
+                    facetLevel={1}
+                    ref={plpCategoryRef}
+                    showParentLevel={false}
+                  />
+                </MobileFilterWrapper>
               </div>
             </ConditionalView>
 
@@ -248,6 +263,7 @@ const PlpApp = ({
             indexName={indexName}
             pageType="listing"
             callback={(callerProps) => callback(callerProps)}
+            ruleContexts={context}
           />
         )}
       </AllFilters>

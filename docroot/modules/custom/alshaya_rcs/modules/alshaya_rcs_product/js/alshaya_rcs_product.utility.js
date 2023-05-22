@@ -1411,5 +1411,16 @@ window.commerceBackend.getSortedAttributeValues = function getSortedAttributeVal
     }
 
     product.promotions = promotionVal;
+
+    // Attributes to be shown near title on PDP.
+    if (Drupal.hasValue(drupalSettings.alshayaRcs.pdpTitleAttributes)) {
+      product.titleAttributes = [];
+      drupalSettings.alshayaRcs.pdpTitleAttributes.forEach(function processTitleAttribute(titleAttribute) {
+        product.titleAttributes.push({
+          attr : window.commerceBackend.getAttributeValueLabel(titleAttribute, product[titleAttribute]),
+        });
+      });
+    }
+
   });
 })(Drupal, drupalSettings, jQuery);

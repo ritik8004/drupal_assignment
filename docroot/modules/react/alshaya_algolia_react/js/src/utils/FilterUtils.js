@@ -1,4 +1,5 @@
 import { hasValue } from '../../../../js/utilities/conditionsUtility';
+import { isConfigurableFiltersEnabled } from '../../../../js/utilities/helper';
 
 const _ = require('lodash');
 
@@ -85,7 +86,7 @@ function sortItemsByMegaMenu(items, selector, label) {
 }
 
 function getSortedItems(items, element) {
-  if (items === null || items.length === 0) {
+  if (items === null || items.length === 0 || isConfigurableFiltersEnabled()) {
     return items;
   }
 
@@ -173,6 +174,17 @@ const customQueryRedirect = (items) => {
   return [];
 };
 
+/**
+ * Get Max values per facets from settings.
+ *
+ * @returns {number|*}
+ *   Max values per facets.
+ */
+const getMaxValuesFromFacets = () => {
+  const { maxValuesPerFacets } = drupalSettings.algoliaSearch;
+  return maxValuesPerFacets || 1000;
+};
+
 export {
   getFilters,
   hasCategoryFilter,
@@ -180,4 +192,5 @@ export {
   hasSuperCategoryFilter,
   facetFieldAlias,
   customQueryRedirect,
+  getMaxValuesFromFacets,
 };

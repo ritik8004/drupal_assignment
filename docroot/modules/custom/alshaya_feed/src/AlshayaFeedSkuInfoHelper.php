@@ -248,6 +248,7 @@ class AlshayaFeedSkuInfoHelper {
       $parentProduct = [
         'group_id' => $sku->getSku(),
         'name' => $node->label(),
+        'sku_title' => $sku->label(),
         'product_type' => $sku->bundle(),
         'status' => (bool) $node->isPublished(),
         'url' => $this->skuInfoHelper->getEntityUrl($node),
@@ -308,6 +309,7 @@ class AlshayaFeedSkuInfoHelper {
 
           $variant = [
             'sku' => $child->getSku(),
+            'sku_title' => $child->label(),
             'sanitized_sku' => $this->skuManager->getSanitizedSku($child->getSku()),
             'product_type' => $child->bundle(),
             'configurable_attributes' => $this->getConfigurableValues($child, $combination),

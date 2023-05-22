@@ -48,6 +48,12 @@
         }
       }
 
+      .image-swatch img {
+        height: 100%;
+        width: 100%;
+        object-fit: cover;
+      }
+
       &.dual-color-tone {
         @include dual-tone-color-swatch;
       }

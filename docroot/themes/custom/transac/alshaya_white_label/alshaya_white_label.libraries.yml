@@ -976,6 +976,11 @@ article-swatch-slider:
     theme:
       css/conditional-sass/article-swatch-slider/article-swatch-slider.ltr.css: {}
 
+multi-level-widget:
+  css:
+    theme:
+      css/conditional-sass/multi-level-widget/multi-level-widget.ltr.css: {}
+
 alshaya-accordion:
   js:
     js/alshaya-accordion.js: {}
@@ -983,3 +988,10 @@ alshaya-accordion:
     - core/jquery
     - core/jquery.once
     - core/drupal
+
+predictive-search:
+  css:
+    theme:
+      css/conditional-sass/predictive-search/predictive-search.ltr.css: {}
+  dependencies:
+    - alshaya_white_label/algolia_search

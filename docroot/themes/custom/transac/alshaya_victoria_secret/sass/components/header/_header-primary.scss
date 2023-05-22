@@ -527,6 +527,19 @@ header {
         vertical-align: middle;
         width: 33.33%;
         text-align: $left;
+
+        &:first-child:nth-last-child(2),
+        :first-child:nth-last-child(2) ~ li {
+          width: 25%;
+        }
+
+        &:first-child:nth-last-child(2) ~ li a {
+          float: #{$left};
+        }
+
+        &:first-child:nth-last-child(3) ~ li {
+          width: 33.33%;
+        }
       }
     }
   }

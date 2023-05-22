@@ -11,6 +11,19 @@ use Drupal\Core\Field\BaseFieldDefinition;
 /**
  * Implements hook_update_N().
  *
+ * Uninstall sms_textanywhere and sms module.
+ */
+function alshaya_kz_transac_lite_update_9501() {
+  \Drupal::service('module_installer')->uninstall([
+    'sms_textanywhere',
+    'sms',
+    'dynamic_entity_reference',
+  ]);
+}
+
+/**
+ * Implements hook_update_N().
+ *
  * Remove order_total field was created as integer.
  * Recreate order_total as type string.
  * Migrate existing date into new field.

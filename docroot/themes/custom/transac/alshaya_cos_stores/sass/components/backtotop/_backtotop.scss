@@ -13,10 +13,15 @@
 
   #{$right}: 0.0625rem;
   bottom: 5.625rem;
-  height: 2.625rem;
-  width: 2.625rem;
-  border: 1px solid $btt_border;
-  background: $btt_bg;
+
+  &:not(.sprinklr-enabled),
+  &.sprinklr-enabled::after {
+    @include backToTopFontIconTheme($width: rem(42), $height: rem(42));
+  }
+
+  &.sprinklr-enabled::after {
+    border-radius: unset;
+  }
 
   @include breakpoint($only-mobile) {
     bottom: 7.625rem;

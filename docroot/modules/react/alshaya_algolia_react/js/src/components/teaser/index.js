@@ -27,6 +27,7 @@ import { isAddToBagHoverEnabled } from '../../../../../js/utilities/addToBagHelp
 import ArticleSwatches from '../article_swatch';
 import SliderSwatch from '../slider-swatch';
 import { getShoeAiStatus } from '../../../../../js/utilities/util';
+import ProductTeaserAttributes from '../product-teaser-attributes';
 
 const Teaser = ({
   hit, gtmContainer = null, pageType, extraInfo, indexName,
@@ -35,7 +36,7 @@ const Teaser = ({
 }) => {
   const { showSwatches, showSliderSwatch } = drupalSettings.reactTeaserView.swatches;
   const { showColorSwatchSlider } = drupalSettings.reactTeaserView.swatches;
-  const { showReviewsRating } = drupalSettings.algoliaSearch;
+  const { showReviewsRating, plpTeaserAttributes } = drupalSettings.algoliaSearch;
   const collectionLabel = [];
   const [initSlider, setInitiateSlider] = useState(false);
   const [slider, setSlider] = useState(false);
@@ -223,6 +224,15 @@ const Teaser = ({
     dataVmode = { 'data-vmode': 'search_result' };
   }
 
+  // Show attributes on PLP product teaser.
+  const plpProductCategoryAttributes = {};
+  if (hasValue(plpTeaserAttributes)) {
+    const attributeArr = plpTeaserAttributes.split(',');
+    attributeArr.forEach((attr) => {
+      plpProductCategoryAttributes[attr] = hit[attr];
+    });
+  }
+
   // Initialize slick carousel for touch devices.
   useEffect(() => {
     // Check if touch device, swipe Image is enabled, and Slick is initialized.
@@ -376,6 +386,12 @@ const Teaser = ({
             {/* Render price based on range/single price conditionals */}
             {hasValue(updatedAttribute.renderProductPrice)
               ? updatedAttribute.renderProductPrice : renderPrice}
+            {/* Render attributes on PLP product teaser. */}
+            {hasValue(plpProductCategoryAttributes) ? (
+              <ProductTeaserAttributes
+                plpProductCategoryAttributes={plpProductCategoryAttributes}
+              />
+            ) : null}
             <ConditionalView condition={isPromotionFrameEnabled()}>
               <PromotionsFrame promotions={attribute.promotions} />
             </ConditionalView>

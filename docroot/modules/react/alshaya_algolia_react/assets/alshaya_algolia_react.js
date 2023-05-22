@@ -69,10 +69,6 @@
           }
         }
       });
-
-      if ($('#alshaya-algolia-search').length > 0) {
-        Drupal.algoliaReact.facetEffects();
-      }
     }
   };
 
@@ -109,7 +105,7 @@
     // that facet blocks can be closed.
     $('.all-filters-algolia .back-facet-list', context).once('algolia-search').on('click', function() {
       var all_filters = $(this).parents('.all-filters-algolia');
-      $('.c-collapse-item', all_filters).find('ul').hide();
+      $('.c-collapse-item', all_filters).children('ul').hide();
       $(this).hide();
       $('.filter-sort-title', all_filters).html(Drupal.t('filter & sort'));
       $('.c-collapse-item', all_filters).removeClass('show-facet');
@@ -264,6 +260,21 @@
       });
     }
   };
+
+  /**
+   * Attach event handlers to filters.
+   *
+   * @param {string} pageType
+   *   Page type = search/listing.
+   */
+  Drupal.algoliaReact.processFacets = function processFacets(pageType) {
+    if (pageType === 'search') {
+      Drupal.algoliaReact.facetEffects('#alshaya-algolia-search');
+    }
+    else if (typeof Drupal.algoliaReactPLP !== 'undefined') {
+      Drupal.algoliaReactPLP.facetEffects('#alshaya-algolia-plp');
+    }
+  }
 
   Drupal.behaviors.searchSizeGroupFilter = {
     // Opens the selected grand parent filter value using

@@ -60,6 +60,12 @@ class SearchApp extends React.PureComponent {
 
   onSuggestionSelected = (event, { suggestion }) => {
     this.setQueryValue(suggestion.query);
+    // Remove class for closing overlay on form submit.
+    const predictiveSearchComponent = document.getElementsByClassName('predictive-search');
+    if (predictiveSearchComponent.length !== 0
+      && predictiveSearchComponent[0].classList.contains('predictive-search--open')) {
+      predictiveSearchComponent[0].classList.remove('predictive-search--open');
+    }
   };
 
   onSuggestionCleared = () => {
@@ -90,8 +96,14 @@ class SearchApp extends React.PureComponent {
     }
   };
 
+  inputSearchValue = (newValue) => {
+    this.setState({ input: newValue });
+  };
+
   render() {
-    const { query } = this.state;
+    // Predictive search updates state on enter hence reading html value.
+    const { query, input } = this.state;
+
     // Display search results when wrapper is present on page.
     const searchWrapper = document.getElementById('alshaya-algolia-search');
     const searchResultsDiv = (typeof searchWrapper !== 'undefined' && searchWrapper != null)
@@ -103,24 +115,30 @@ class SearchApp extends React.PureComponent {
     // For enabling/disabling hitsPerPage key in algolia calls.
     const enableHitsPerPage = drupalSettings.algoliaSearch.hitsPerPage;
 
+    // For checking state of predictiveSearch.
+    const { predictiveSearchEnabled } = drupalSettings.algoliaSearch;
+
     return (
-      <div>
-        <InstantSearch indexName={`${indexName}_query`} searchClient={algoliaSearchClient}>
-          <Configure
-            {...(enableHitsPerPage && { hitsPerPage: drupalSettings.autocomplete.hits })}
-            userToken={Drupal.getAlgoliaUserToken()}
-          />
-          <AutoComplete
-            onSuggestionSelected={this.onSuggestionSelected}
-            onSuggestionCleared={this.onSuggestionCleared}
-            onChange={this.onChange}
-          />
-          <QueryRuleCustomData transformItems={(items) => customQueryRedirect(items)}>
-            {() => null}
-          </QueryRuleCustomData>
-        </InstantSearch>
-        {isMobile() && (
-          <Portal id="top-results" conditional query={query}>
+      <div className={predictiveSearchEnabled ? 'predictive-search' : null}>
+        <div className="ais-InstantSearch__root">
+          <InstantSearch indexName={`${indexName}_query`} searchClient={algoliaSearchClient}>
+            <Configure
+              {...(enableHitsPerPage && { hitsPerPage: drupalSettings.autocomplete.hits })}
+              userToken={Drupal.getAlgoliaUserToken()}
+            />
+            <AutoComplete
+              onSuggestionSelected={this.onSuggestionSelected}
+              onSuggestionCleared={this.onSuggestionCleared}
+              onChange={this.onChange}
+              inputSearchValue={this.inputSearchValue}
+            />
+            <QueryRuleCustomData transformItems={(items) => customQueryRedirect(items)}>
+              {() => null}
+            </QueryRuleCustomData>
+          </InstantSearch>
+        </div>
+        { (isMobile() || predictiveSearchEnabled) && (
+          <Portal id="top-results" conditional query={input}>
             <span className="top-suggestions-title">{Drupal.t('top suggestions')}</span>
             <InstantSearch
               indexName={indexName}
@@ -135,7 +153,7 @@ class SearchApp extends React.PureComponent {
               <Configure
                 {...(enableHitsPerPage && { hitsPerPage: drupalSettings.autocomplete.hits })}
                 userToken={Drupal.getAlgoliaUserToken()}
-                query={query}
+                query={input}
               />
               <Hits hitComponent={Teaser} />
             </InstantSearch>

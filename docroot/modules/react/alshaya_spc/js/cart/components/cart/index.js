@@ -185,7 +185,7 @@ export default class Cart extends React.Component {
           context: {
             type: 'CART',
             data: Object.keys(items),
-            lng: drupalSettings.alshaya_spc.lng,
+            lng: drupalSettings.dynamicYield.lng,
           },
           countAsPageview: false,
         });

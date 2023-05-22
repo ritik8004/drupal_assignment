@@ -11,15 +11,23 @@
     font-weight: bold;
   }
 
-  #{$right}: 0;
-  height: 2.6875rem;
-  width: 3.375rem;
-  border: 1px solid $btt_border;
-  background: $btt_bg;
+  &:not(.sprinklr-enabled) {
+    #{$right}: 0;
+
+    @include backToTopFontIconTheme($width: rem(54), $height: rem(44));
+  }
 
   .path--cart & {
     @include breakpoint($only-mobile) {
       bottom: 3.5rem;
+    }
+  }
+
+  &.sprinklr-enabled {
+    &::after {
+      line-height: rem(40);
+
+      @include backToTopFontIconTheme($width: rem(54), $height: rem(44));
     }
   }
 }

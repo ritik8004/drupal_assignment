@@ -28,7 +28,8 @@
   };
 
   // Show all filters blocks.
-  Drupal.algoliaReactPLP.facetEffects = function (context) {
+  Drupal.algoliaReactPLP.facetEffects = function () {
+    var context = $('#alshaya-algolia-plp');
     // On clicking facet block title, update the title of block and hide
     // other facets.
     $('.all-filters-plp-algolia .c-collapse-item', context).once('algolia-plp').on('click', function() {
@@ -52,7 +53,7 @@
     // that facet blocks can be closed.
     $('.all-filters-plp-algolia .back-facet-list', context).once('algolia-plp').on('click', function() {
       var all_filters = $(this).parents('.all-filters-plp-algolia');
-      $('.c-collapse-item', all_filters).find('ul').hide();
+      $('.c-collapse-item', all_filters).children('ul').hide();
       $(this).hide();
       $('.filter-sort-title', all_filters).html(Drupal.t('filter & sort'));
       $('.c-collapse-item', all_filters).removeClass('show-facet');

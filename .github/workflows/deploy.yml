@@ -8,7 +8,7 @@ on:
       - master
       - develop-adyen
       - develop-egift-return
-      - develop-freegift-v3
+      - develop-algolia-configurable
   create:
 
 concurrency: deploy-${{ github.ref }}
@@ -110,7 +110,7 @@ jobs:
 
       - name: Run Composer install
         run: |
-          composer self-update 2.4.4
+          composer self-update --2
           composer validate --no-check-all --ansi
           composer install --no-interaction || composer install --no-interaction || composer install --no-interaction
 
