@@ -61,6 +61,21 @@ function alshaya_vs_transac_update_9501() {
   alshaya_config_install_configs(['search_api.index.acquia_search_index'], 'alshaya_search', 'optional');
 
   \Drupal::service('alshaya_acm_product.product_queue_utility')->queueAllProducts();
+
+  // Hide product_search_category facet on listing pages.
+  \Drupal::configFactory()->getEditable('block.block.productsearchcategory')
+    ->merge([
+      'visibility' => [
+        'alshaya_listing_page_types' => [
+          'id' => 'alshaya_listing_page_types',
+          'page_types' => [
+            'plp' => 1,
+            'promotion' => 1,
+          ],
+        ],
+      ],
+    ])
+    ->save();
 }
 
 /**
