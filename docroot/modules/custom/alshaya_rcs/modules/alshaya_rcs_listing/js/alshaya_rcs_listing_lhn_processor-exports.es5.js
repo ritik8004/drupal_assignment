@@ -53,6 +53,16 @@ function processLhnMenu(item, settings, enrichmentData) {
 }
 
 /**
+ * Trim slashes from the beginning and ending of the string.
+ *
+ * @param {String} str
+ *   String to trim.
+ */
+function trimSlashes(str) {
+  return str.replace(/\/$/, '').replace(/^\//, '');
+}
+
+/**
  * Prepares Lhn menu.
  *
  * @param {object} settings
@@ -69,7 +79,7 @@ exports.prepareData = function prepareData(settings, inputs) {
   let menuItems = [];
   if (firstLevelTermUrl) {
     let catItems = inputs.filter(function filterCat(input) {
-      return input.url_key === firstLevelTermUrl;
+      return trimSlashes(input.url_key) === trimSlashes(firstLevelTermUrl);
     });
     if (catItems.length > 0 && !!catItems[0].children) {
       // Get the enrichment data.
