@@ -2,10 +2,6 @@
   @include u-visibility(none);
 }
 
-.upcase {
-  text-transform: uppercase;
-}
-
 .mobile-only-hide {
   @include breakpoint($mobile) {
     @include u-visibility(none);
@@ -36,4 +32,24 @@
 
 .bold {
   font-family: $alshaya-bold;
+}
+
+.upcase {
+  text-transform: uppercase;
+
+  &-tablet {
+    @include breakpoint($tablet) {
+      text-transform: uppercase;
+    }
+  }
+}
+
+.capitalize {
+  text-transform: capitalize;
+
+  &-mobile {
+    @include breakpoint($only-mobile) {
+      text-transform: capitalize;
+    }
+  }
 }
