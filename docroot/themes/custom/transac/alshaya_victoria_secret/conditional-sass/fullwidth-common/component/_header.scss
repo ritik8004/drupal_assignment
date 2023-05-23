@@ -7,6 +7,10 @@
 
 @include breakpoint($only-tablet) {
   .static-minicart-wrapper {
+    .cart-link-total {
+      margin-top: rem(10);
+    }
+
     .cart-link {
       // Vertically aligning the cart icon with the other items in sticky header.
       margin-top: rem(6);
@@ -40,6 +44,12 @@
           #{$right}: rem(19);
         }
       }
+    }
+  }
+
+  .static-minicart-wrapper {
+    .cart-link-total {
+      margin-top: rem(4);
     }
   }
 }
