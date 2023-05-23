@@ -34,6 +34,10 @@ header {
   @include breakpoint($tablet) {
     .cart-link-total {
       margin-top: rem(16);
+
+      html[lang="ar"] & {
+        margin-top: rem(16);
+      }
     }
 
     .cart-link {
@@ -45,6 +49,10 @@ header {
   @include breakpoint($desktop) {
     .cart-link-total {
       margin-top: rem(10);
+
+      html[lang="ar"] & {
+        margin-top: rem(10);
+      }
     }
 
     .cart-link {
