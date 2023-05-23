@@ -31,13 +31,23 @@ header {
 }
 
 .static-minicart-wrapper {
-  .cart-link {
-    @include breakpoint($tablet) {
+  @include breakpoint($tablet) {
+    .cart-link-total {
+      margin-top: rem(16);
+    }
+
+    .cart-link {
       margin-#{$right}: rem(20);
       margin-top: rem(10);
     }
+  }
 
-    @include breakpoint($desktop) {
+  @include breakpoint($desktop) {
+    .cart-link-total {
+      margin-top: rem(10);
+    }
+
+    .cart-link {
       margin-#{$right}: rem(19);
       margin-top: rem(4);
     }
