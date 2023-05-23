@@ -556,7 +556,10 @@ class AlshayaRcsMetatagSsrHelper {
     $page_type = $this->rcsPathProcessor->getRcsPageType();
     if (!empty($page_type)) {
       $rcs_result = $this->getSsrGraphqlResultForPageType($page_type);
-      if (!empty($rcs_result)) {
+      // Check if the catalog restructuring enabled
+      // and have styled_products graphQL request in browser.
+      $styled_products = $this->rcsPlaceholderHelper->getRcsPlaceholderGraphqlQueryForType('styled_products');
+      if (!empty($rcs_result) && !empty($styled_products)) {
         $attachments['#attached']['drupalSettings']['rcs']['ssr_result'][$page_type] = $rcs_result;
       }
     }
