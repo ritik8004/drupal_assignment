@@ -118,26 +118,50 @@
     width: 100%;
   }
 
-  ul.slick-dots {
-    position: relative;
+  .slick-dots__container {
     order: 3;
+    max-width: calc(100% - #{rem(99)});
+    width: 100%;
+    overflow: hidden;
+    display: block;
+    padding: 0;
+    margin: rem(10) auto;
+    height: rem(14);
+    position: relative;
+    bottom: rem(-10);
+  }
+
+  ul.slick-dots {
+    padding: 0;
+    display: flex;
+    transition: all 0.25s;
+    position: relative;
+    margin: 0;
+    list-style: none;
+    transform: translateX(0);
+    align-items: center;
+    bottom: unset;
+    height: 100%;
     #{$left}: 0;
-    line-height: 0.3125rem;
-    bottom: -0.6rem;
-    transform: none;
-    margin: 0 0.9375rem;
-    max-width: calc(100% - 3.875rem);
 
     li {
-      width: 0.3125rem;
-      height: 0.3125rem;
-      margin: 0.3125rem;
+      width: rem(5);
+      height: rem(5);
+      margin: rem(5);
       border: none;
+      padding: rem(2.5);
       border-radius: 50%;
       background-color: $instagram_dots_default !important;
 
       &.slick-active {
         background-color: $hp_slider_dots !important;
+        transform-origin: center;
+      }
+
+      button {
+        &::before {
+          display: none;
+        }
       }
     }
   }
