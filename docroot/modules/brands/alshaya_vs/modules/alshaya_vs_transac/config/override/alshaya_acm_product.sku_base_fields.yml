@@ -46,15 +46,24 @@ fields:
     index: 1
     widget:
       type: multi_level_widget
-  product_search_category:
-    index: 1
-    facet: 1
   product_category:
+    facet: 1
+    index: 1
+  product_search_category:
+    label: 'Product Category'
+    type: 'attribute'
+    description: 'Product Search Category.'
     index: 1
     facet: 1
   support:
-    index: 1 
+    label: 'Structure'
+    type: 'attribute'
+    description: 'Support.'
+    index: 1
     facet: 1
   panty_waist_type:
-    index: 1 
+    label: 'Panty Waist Type'
+    type: 'attribute'
+    description: 'Panty Waist Type.'
+    index: 1
     facet: 1

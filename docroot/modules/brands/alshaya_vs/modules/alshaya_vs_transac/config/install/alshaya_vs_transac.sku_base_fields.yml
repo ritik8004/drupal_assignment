@@ -34,24 +34,3 @@ fields:
     description: 'Product Category.'
     index: 1
     facet: 1
-  
-  product_search_category:
-    label: 'Product Category'
-    type: 'attribute'
-    description: 'Product Search Category.'
-    index: 1
-    facet: 1
-
-  support:
-    label: 'Structure'
-    type: 'attribute'
-    description: 'Support.'
-    index: 1
-    facet: 1
-  
-  panty_waist_type:
-    label: 'Panty Waist Type'
-    type: 'attribute'
-    description: 'Panty Waist Type.'
-    index: 1
-    facet: 1
