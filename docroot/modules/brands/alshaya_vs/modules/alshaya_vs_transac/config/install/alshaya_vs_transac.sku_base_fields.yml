@@ -30,32 +30,28 @@ fields:
 
   product_category:
     label: 'Style'
-    type: 'string'
-    cardinality: 1
+    type: 'attribute'
     description: 'Product Category.'
     index: 1
     facet: 1
   
   product_search_category:
     label: 'Product Category'
-    type: 'string'
+    type: 'attribute'
     description: 'Product Search Category.'
-    cardinality: 1
     index: 1
     facet: 1
 
   support:
     label: 'Structure'
-    type: 'string'
+    type: 'attribute'
     description: 'Support.'
-    cardinality: 1
     index: 1
     facet: 1
   
   panty_waist_type:
     label: 'Panty Waist Type'
-    type: 'string'
+    type: 'attribute'
     description: 'Panty Waist Type.'
-    cardinality: 1
     index: 1
     facet: 1
