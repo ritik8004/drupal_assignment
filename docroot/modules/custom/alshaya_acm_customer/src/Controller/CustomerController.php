@@ -307,6 +307,10 @@ class CustomerController extends ControllerBase {
       exit;
     }
 
+    if ($order["customer_id"] != $user->get('acq_customer_id')->getString()) {
+      throw new NotFoundHttpException('Order not found');
+    }
+
     $build = alshaya_acm_customer_build_order_detail($order);
     $build['order'] = $order;
 
