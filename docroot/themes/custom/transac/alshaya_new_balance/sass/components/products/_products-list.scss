@@ -261,6 +261,12 @@
           object-fit: contain;
           border: rem(1) solid $plp-swatch-border;
         }
+
+        &.swatch-highlighted {
+          img {
+            border-color: $plp-swatch-active-border;
+          }
+        }
       }
 
       html[lang="ar"] & {
