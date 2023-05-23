@@ -640,6 +640,7 @@ class AlshayaSpcController extends ControllerBase {
           'cnc_stores_limit' => $spc_cnc_config->get('cnc_stores_limit'),
           'cncStoreInfoCacheTime' => $checkout_settings->get('cnc_store_info_cache_time'),
           'cnc_collection_points_enabled' => $collection_points_config->get('click_collect_collection_points_enabled'),
+          'address_storage_expiration' => $checkout_settings->get('address_storage_expiration') ?? 1440,
         ],
       ],
       '#cache' => [

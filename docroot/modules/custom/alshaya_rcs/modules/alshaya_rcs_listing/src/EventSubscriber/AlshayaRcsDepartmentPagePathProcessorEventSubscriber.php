@@ -137,7 +137,7 @@ class AlshayaRcsDepartmentPagePathProcessorEventSubscriber extends RcsPhPathProc
       'entityPath' => '/' . $category_slug,
       'entityPathPrefix' => $category_prefix,
       'entityFullPath' => $category_slug,
-      'processedPaths' => '/' . $category_slug,
+      'processedPaths' => '/' . $category->toUrl()->getInternalPath(),
       'entityData' => $entityData,
     ]);
 

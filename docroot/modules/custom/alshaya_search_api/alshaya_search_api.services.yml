@@ -9,6 +9,7 @@ services:
       - '@plugin.manager.facets.facet_source'
       - '@plugin.manager.facets.processor'
       - '@entity_type.manager'
+      - '@current_route_match'
 
   alshaya_search_api.facets_manager:
     class: Drupal\alshaya_search_api\AlshayaSearchApiFacetsManager

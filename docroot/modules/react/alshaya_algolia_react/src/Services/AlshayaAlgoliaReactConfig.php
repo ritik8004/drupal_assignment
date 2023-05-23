@@ -308,6 +308,7 @@ class AlshayaAlgoliaReactConfig implements AlshayaAlgoliaReactConfigInterface {
         'noOfImageScroll' => $algolia_swipe_image_settings->get('no_of_image_scroll'),
         'slideEffect' => $algolia_swipe_image_settings->get('slide_effect'),
         'imageSlideTiming' => $algolia_swipe_image_settings->get('image_slide_timing'),
+        'showPdpImagesOnListingPages' => $algolia_swipe_image_settings->get('show_pdp_images_on_listing_pages'),
       ],
     ];
     // Allow other modules to alter or add extra configs

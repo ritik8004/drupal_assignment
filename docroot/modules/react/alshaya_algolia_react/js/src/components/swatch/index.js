@@ -1,12 +1,19 @@
 import React from 'react';
 import ImageElement from '../gallery/imageHelper/ImageElement';
+import { hasValue } from '../../../../../js/utilities/conditionsUtility';
 
 export const Swatch = ({
-  swatch, url, title, handleSwatchSelect,
+  swatch, url, title, handleSwatchSelect, childId,
 }) => {
   let selectedImage = `${url}?selected=${swatch.child_id}`;
   if (swatch.url !== undefined) {
     selectedImage = swatch.url;
+  }
+
+  // Show swatch as highlighted if it matches the selected child id.
+  const swatchClasses = ['swatch-block', 'swatch-image'];
+  if (hasValue(childId) && childId === swatch.child_id) {
+    swatchClasses.push('swatch-highlighted');
   }
 
   /**
@@ -34,6 +41,7 @@ export const Swatch = ({
         name: title,
         gtm_name: title,
         color: swatch.display_label,
+        child_id: swatch.child_id,
       };
       handleSwatchSelect(selectedProductData);
       return;
@@ -43,7 +51,7 @@ export const Swatch = ({
 
   return (
     <a href="#" onClick={(e) => handleSwatchClick(e)}>
-      <span className="swatch-block swatch-image">
+      <span className={swatchClasses.join(' ')}>
         {swatch.product_image_url
           ? <ImageElement data-sku-image={swatch.product_image_url} src={swatch.image_url} loading="lazy" />
           : <ImageElement src={swatch.image_url} loading="lazy" />}
@@ -53,7 +61,7 @@ export const Swatch = ({
 };
 
 const Swatches = ({
-  swatches, url, title, handleSwatchSelect,
+  swatches, url, title, handleSwatchSelect, childId,
 }) => {
   if (typeof swatches === 'undefined') {
     return null;
@@ -94,6 +102,7 @@ const Swatches = ({
               url={url}
               title={title}
               handleSwatchSelect={handleSwatchSelect}
+              childId={childId}
             />
           ),
         )}

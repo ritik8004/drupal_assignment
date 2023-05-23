@@ -129,7 +129,7 @@ function alshaya_algolia_react_alshaya_graphql_query() {
     ],
     'variables' => [
       'sku' => NULL,
-      'type' => "plp,plp_hover",
+      'type' => "pdp",
     ],
   ];
   return $query_fields;
