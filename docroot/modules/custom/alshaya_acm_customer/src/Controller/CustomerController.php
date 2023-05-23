@@ -301,14 +301,10 @@ class CustomerController extends ControllerBase {
     $this->moduleHandler()->loadInclude('alshaya_acm_customer', 'inc', 'alshaya_acm_customer.orders');
 
     $order = $this->ordersManager->getOrderByIncrementId($order_id);
-    if (empty($order)) {
+    if (empty($order) || ($order["customer_id"] != $user->get('acq_customer_id')->getString())) {
       $response = new RedirectResponse(Url::fromRoute('entity.user.canonical', ['user' => $user->id()])->toString());
       $response->send();
       exit;
-    }
-
-    if ($order["customer_id"] != $user->get('acq_customer_id')->getString()) {
-      throw new NotFoundHttpException('Order not found');
     }
 
     $build = alshaya_acm_customer_build_order_detail($order);
