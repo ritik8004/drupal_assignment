@@ -68,8 +68,6 @@ function alshaya_vs_transac_update_9501() {
     alshaya_i18n_save_translations($translations);
   }
 
-  \Drupal::service('alshaya_acm_product.product_queue_utility')->queueAllProducts();
-
   // Hide product_search_category facet on listing pages.
   \Drupal::configFactory()->getEditable('block.block.productsearchcategory')
     ->merge([
