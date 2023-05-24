@@ -1,0 +1,41 @@
+// Existing selectors override / styles reset.
+.block-alshaya-algolia-react-autocomplete {
+  &.clear-icon {
+    #alshaya-algolia-autocomplete {
+      .predictive-search--open {
+        .react-autosuggest {
+          &__suggestions-list {
+            @include breakpoint($only-mobile) {
+              padding: rem(8) 0;
+            }
+
+            @include breakpoint($tablet) {
+              margin-top: rem(-8);
+            }
+          }
+
+          &__suggestion {
+            &:hover {
+              background-color: $predictive-search-highlight;
+            }
+
+            @include breakpoint($tablet) {
+              margin-#{$left}: rem(-8);
+            }
+
+            @include icon(search, before) {
+              margin-#{$left}: rem(2);
+              margin-#{$right}: rem(16);
+              line-height: rem(20);
+              font-weight: bold;
+
+              @include breakpoint($only-mobile) {
+                margin-#{$left}: rem(8);
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}
