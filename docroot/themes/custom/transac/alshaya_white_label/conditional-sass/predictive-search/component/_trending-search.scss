@@ -12,9 +12,7 @@
 
           &__suggestion {
             padding: rem(10);
-            background: $predictive-search-trending;
-            display: flex;
-            align-items: center;
+            background: $predictive-search-highlight;
 
             &::before {
               content: '';
@@ -27,18 +25,8 @@
             }
           }
 
-          &__container {
-            .react-autosuggest__suggestions-list {
-              .react-autosuggest__suggestion {
-                .aa-suggestion {
-                  .suggested-text {
-                    padding: 0;
-                    line-height: rem(20);
-                    white-space: nowrap;
-                  }
-                }
-              }
-            }
+          &__suggestions-container {
+            display: block;
           }
         }
 

@@ -29,9 +29,33 @@
   #alshaya-algolia-autocomplete {
     .predictive-search--open {
       .react-autosuggest {
-        @include breakpoint($only-mobile) {
-          &__container--open {
-            background: $predictive-search-tinted-bg;
+        &__suggestion {
+          padding: rem(8);
+          display: flex;
+          align-items: center;
+        }
+
+        &__container {
+          .react-autosuggest__suggestions-list {
+            .react-autosuggest__suggestion {
+              .aa-suggestion {
+                .suggested-text {
+                  padding: 0;
+                  line-height: rem(20);
+                  white-space: nowrap;
+                }
+
+                &:hover {
+                  background-color: unset;
+                }
+              }
+            }
+          }
+
+          &--open {
+            @include breakpoint($only-mobile) {
+              background: $predictive-search-tinted-bg;
+            }
           }
         }
 
@@ -44,6 +68,14 @@
             }
           }
         }
+      }
+    }
+
+    // Avoid flickering between trending search and search suggestions,
+    // due to fast react DOM renders.
+    .react-autosuggest__input[value=""] {
+      & + .react-autosuggest__suggestions-container {
+        display: none;
       }
     }
   }
