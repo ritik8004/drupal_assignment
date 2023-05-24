@@ -60,6 +60,14 @@ function alshaya_vs_transac_update_9501() {
   alshaya_config_install_configs(['search_api.index.product'], 'alshaya_product');
   alshaya_config_install_configs(['search_api.index.acquia_search_index'], 'alshaya_search', 'optional');
 
+  // Adding Translation.
+  \Drupal::moduleHandler()
+    ->loadInclude('alshaya_vs_transac', 'inc', 'alshaya_vs_transac.translations');
+  $translations = _alshaya_vs_transac_get_translations('v3');
+  if (!empty($translations)) {
+    alshaya_i18n_save_translations($translations);
+  }
+
   \Drupal::service('alshaya_acm_product.product_queue_utility')->queueAllProducts();
 
   // Hide product_search_category facet on listing pages.

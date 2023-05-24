@@ -35,10 +35,48 @@ function _alshaya_vs_transac_translations() {
       'Bra Size' => [
         'ar' => 'مقاس حمالة الصدر',
       ],
+      'Product Category' => [
+        'ar' => 'نوع المنتج',
+      ],
+      'Lining Level' => [
+        'ar' => 'مستوى البطانة',
+      ],
+      'Style' => [
+        'ar' => 'التصميم',
+      ],
+      'Bra Coverage' => [
+        'ar' => '',
+      ],
+      'Structure' => [
+        'ar' => 'الدعم',
+      ],
+      'Panty Waist Type' => [
+        'ar' => 'خصر السروال',
+      ],
     ],
     'v2' => [
       'Bra Size' => [
         'ar' => 'مقاس حمالة الصدر',
+      ],
+    ],
+    'v3' => [
+      'Product Category' => [
+        'ar' => 'نوع المنتج',
+      ],
+      'Lining Level' => [
+        'ar' => 'مستوى البطانة',
+      ],
+      'Style' => [
+        'ar' => 'التصميم',
+      ],
+      'Bra Coverage' => [
+        'ar' => '',
+      ],
+      'Structure' => [
+        'ar' => 'الدعم',
+      ],
+      'Panty Waist Type' => [
+        'ar' => 'خصر السروال',
       ],
     ],
   ];
