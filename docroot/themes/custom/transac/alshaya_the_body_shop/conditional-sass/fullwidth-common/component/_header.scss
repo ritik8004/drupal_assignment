@@ -16,7 +16,7 @@ header {
 
     .cart-link {
       @include breakpoint($only-mobile) {
-        margin-#{$right}: 0;
+        margin-#{$right}: rem(12);
       }
 
       @include breakpoint($tablet) {
@@ -30,11 +30,43 @@ header {
   }
 }
 
+.static-minicart-wrapper {
+  @include breakpoint($tablet) {
+    .cart-link-total {
+      margin-top: rem(16);
+
+      html[lang="ar"] & {
+        margin-top: rem(16);
+      }
+    }
+
+    .cart-link {
+      margin-#{$right}: rem(20);
+      margin-top: rem(10);
+    }
+  }
+
+  @include breakpoint($desktop) {
+    .cart-link-total {
+      margin-top: rem(10);
+
+      html[lang="ar"] & {
+        margin-top: rem(10);
+      }
+    }
+
+    .cart-link {
+      margin-#{$right}: rem(19);
+      margin-top: rem(4);
+    }
+  }
+}
+
 body.wishlist-enabled {
   #wishlist-header-wrapper {
     .wishlist-header {
       @include breakpoint($only-mobile) {
-        padding-#{$right}: 0;
+        padding-#{$right}: rem(16);
       }
 
       @include breakpoint($only-tablet) {
