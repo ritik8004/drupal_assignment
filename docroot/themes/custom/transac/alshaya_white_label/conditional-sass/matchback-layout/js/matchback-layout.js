@@ -69,7 +69,7 @@
       totalDots = $dots.length;
 
       // Add a wrapper around the slick dots to manage the scrolling of slick dots.
-      $dotsWrapper.once().wrap("<div class='slick-dots__container'></div>");
+      $dotsWrapper.once('matchback-dots-group').wrap("<div class='slick-dots__container'></div>");
 
       if (totalDots === 0) return;
 
