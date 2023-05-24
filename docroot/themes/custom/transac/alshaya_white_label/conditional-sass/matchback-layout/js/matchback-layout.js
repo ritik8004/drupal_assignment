@@ -100,6 +100,9 @@
                 var nextSlidePlusOne = nextSlide + 1;
                 $(this).find('.slick-dots .dot-index-' + nextSlidePlusOne).addClass('n-small-1');
                 $(this).find('.slick-dots').css('transform', 'translateX(' + transformCount + 'px)');
+                if (isRTL()) {
+                  $(this).find('.slick-dots').css('transform', 'translateX(' + Math.abs(transformCount) + 'px)');
+                }
 
                 var pPointer = nextSlide - (visibleItemsToShow - 1);
                 var pPointerMinusOne = pPointer - 1;
@@ -117,6 +120,9 @@
                 var nextSlidePlusOne = nextSlide - 1;
                 $(this).find('.slick-dots .dot-index-' + nextSlidePlusOne).addClass('p-small-1');
                 $(this).find('.slick-dots').css('transform', 'translateX(' + transformCount + 'px)');
+                if (isRTL()) {
+                  $(this).find('.slick-dots').css('transform', 'translateX(' + Math.abs(transformCount) + 'px)');
+                }
 
                 var nPointer = currentSlide + (visibleItemsToShow - 1);
                 var nPointerMinusOne = nPointer - 1;
