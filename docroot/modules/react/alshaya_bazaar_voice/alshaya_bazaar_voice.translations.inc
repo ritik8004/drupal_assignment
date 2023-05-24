@@ -180,6 +180,9 @@ function _alshaya_bazaar_voice_translations() {
     'Please complete your review in the same language as your selected view to proceed.' => [
       'ar' => 'يرجى استكمال التقييم باللغة المختارة عند التصفح.',
     ],
+    'Top Rated' => [
+      'ar' => 'أعلى التقييمات',
+    ],
   ];
 
   return $strings;
