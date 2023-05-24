@@ -121,11 +121,11 @@
   .slick-dots__container {
     order: 3;
     max-width: calc(100% - #{rem(99)});
-    width: 100%;
+    width: auto;
     overflow: hidden;
     display: block;
     padding: 0;
-    margin: rem(10) auto;
+    margin: 0 auto;
     height: rem(14);
     position: relative;
     bottom: rem(-10);
