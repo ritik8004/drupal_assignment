@@ -366,7 +366,10 @@ function alshaya_vs_transac_alshaya_search_algolia_object_alter(array &$object) 
     $object['attr_fragrance'] = $attr_fragrance;
   }
 
-  $object['swatches'] = [];
+  // Set empty array if not set for swatches.
+  if (!isset($object['swatches'])) {
+    $object['swatches'] = [];
+  }
   if (Settings::get('alshaya_vs_transac_enabled_swatches', FALSE)) {
     // Process child skus swatches field to index.
     $children = \Drupal::service('alshaya_acm_product.skumanager')->getAvailableChildren($sku);
