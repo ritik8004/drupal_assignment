@@ -1364,12 +1364,12 @@ $conductors = [
     'hmac_secret' => 'MWU1OGFkODktNDY1Mi00',
     'site_id' => 580,
   ],
-  'muqa_qa' => [
+  'mubh_qa' => [
     'hmac_id' => 'cf00dfc95ea94d7487647e10699548c5',
     'hmac_secret' => 'MWUwOGEwYjMtYTQyNy00',
     'site_id' => 581,
   ],
-  'mubh_qa' => [
+  'muqa_qa' => [
     'hmac_id' => 'f24020c52b2a4f30bfb835d367781680',
     'hmac_secret' => 'ODdlZTc5YzItYTBmNC00',
     'site_id' => 582,
