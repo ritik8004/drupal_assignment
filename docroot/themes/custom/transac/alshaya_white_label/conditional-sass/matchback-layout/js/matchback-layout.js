@@ -56,16 +56,16 @@
 
     }
 
-    let $slickSlider = $('.machbackSlider');
-    let transformXIntervalNext = -15;
-    let transformXIntervalPrev = 15;
-    let totalDots, visibleWidth, dotWidth, visibleItemsToShow, maxDots;
+    var $slickSlider = $('.machbackSlider');
+    var transformXIntervalNext = -15;
+    var transformXIntervalPrev = 15;
+    var totalDots, visibleWidth, dotWidth, visibleItemsToShow, maxDots;
 
     // Limit the number of dots for each slider.
     $slickSlider.each(function () {
-      let $this = $(this);
-      let $dotsWrapper = $this.find('.slick-dots');
-      let $dots = $dotsWrapper.find('li');
+      var $this = $(this);
+      var $dotsWrapper = $this.find('.slick-dots');
+      var $dots = $dotsWrapper.find('li');
       totalDots = $dots.length;
 
       // Add a wrapper around the slick dots to manage the scrolling of slick dots.
@@ -79,7 +79,7 @@
       visibleItemsToShow = Math.floor(visibleWidth / dotWidth);
       maxDots = visibleItemsToShow;
 
-      let transformCount = 0;
+      var transformCount = 0;
 
       $dots.each(function (index) {
         $(this).addClass('dot-index-' + index);
@@ -92,8 +92,8 @@
       }
 
       $this.on('beforeChange', function (event, slick, currentSlide, nextSlide) {
-        let totalCount = $dots.length;
-        let $nextSlideElement = $dotsWrapper.find('.dot-index-' + nextSlide);
+        var totalCount = $dots.length;
+        var $nextSlideElement = $dotsWrapper.find('.dot-index-' + nextSlide);
 
         if (totalCount > maxDots) {
           if (nextSlide > currentSlide) {
@@ -102,15 +102,15 @@
                 transformCount = transformCount + transformXIntervalNext;
                 $nextSlideElement.removeClass('n-small-1');
 
-                let nextSlidePlusOne = nextSlide + 1;
+                var nextSlidePlusOne = nextSlide + 1;
                 $dotsWrapper.find('.dot-index-' + nextSlidePlusOne).addClass('n-small-1');
                 $dotsWrapper.css('transform', 'translateX(' + transformCount + 'px)');
                 if (isRTL()) {
                   $dotsWrapper.css('transform', 'translateX(' + Math.abs(transformCount) + 'px)');
                 }
 
-                let pPointer = nextSlide - (visibleItemsToShow - 1);
-                let pPointerMinusOne = pPointer - 1;
+                var pPointer = nextSlide - (visibleItemsToShow - 1);
+                var pPointerMinusOne = pPointer - 1;
                 $dots.eq(pPointerMinusOne).removeClass('p-small-1');
                 $dots.eq(pPointer).addClass('p-small-1');
               }
@@ -122,15 +122,15 @@
                 transformCount = transformCount + transformXIntervalPrev;
                 $nextSlideElement.removeClass('p-small-1');
 
-                let nextSlidePlusOne = nextSlide - 1;
+                var nextSlidePlusOne = nextSlide - 1;
                 $dotsWrapper.find('.dot-index-' + nextSlidePlusOne).addClass('p-small-1');
                 $dotsWrapper.css('transform', 'translateX(' + transformCount + 'px)');
                 if (isRTL()) {
                   $dotsWrapper.css('transform', 'translateX(' + Math.abs(transformCount) + 'px)');
                 }
 
-                let nPointer = currentSlide + (visibleItemsToShow - 1);
-                let nPointerMinusOne = nPointer - 1;
+                var nPointer = currentSlide + (visibleItemsToShow - 1);
+                var nPointerMinusOne = nPointer - 1;
                 $dots.eq(nPointer).removeClass('n-small-1');
                 $dots.eq(nPointerMinusOne).addClass('n-small-1');
               }
