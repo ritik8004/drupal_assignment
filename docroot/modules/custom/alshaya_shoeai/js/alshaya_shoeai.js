@@ -3,7 +3,7 @@
  * Contains Alshaya ShoeAI functionality.
  */
 
-(function (Drupal, drupalSettings) {  
+(function ($, Drupal, drupalSettings) {  
   var shoeAi = drupalSettings.shoeai;
   if (shoeAiStatus(shoeAi)) {
     var language = drupalSettings.path.currentLanguage;
@@ -34,8 +34,20 @@
     if (confirmationPage.length > 0 && Drupal.hasValue(drupalSettings.order_details)) {
       addShoeSizePurchaseConfirmationScript(Drupal, drupalSettings);
     }
+    // Trigger ShoeAI loader function every-time the result set on PLP/SRP gets updated.
+    $('#alshaya-algolia-plp').once('searchResponseDynamicFiltering').on('plp-results-updated', function () {
+      // Dynamic Filtering & Pagination.
+      try {
+        if (ShoeSizeMe_loader != 'undefined' && typeof ShoeSizeMe_loader === 'object') {
+          ShoeSizeMe_loader.loadMultipleButtons();
+        }
+      }
+      catch (e) {
+        // Do nothing as ShoeSizeMe_loader object is not available on initial page load.
+      }
+    });
   }
-})(Drupal, drupalSettings);
+})(jQuery, Drupal, drupalSettings);
 
 /**
  * Helper function for returning
