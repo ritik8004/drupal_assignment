@@ -3,6 +3,7 @@
 namespace Drupal\alshaya_search_api\FacetManager;
 
 use Drupal\Core\Entity\EntityTypeManagerInterface;
+use Drupal\Core\Routing\CurrentRouteMatch;
 use Drupal\facets\FacetManager\DefaultFacetManager;
 use Drupal\facets\FacetSource\FacetSourcePluginManager;
 use Drupal\facets\Processor\ProcessorPluginManager;
@@ -29,11 +30,14 @@ class AlshayaSearchApiFacetsManager extends DefaultFacetManager {
   /**
    * {@inheritdoc}
    */
-  public function __construct(QueryTypePluginManager $query_type_plugin_manager,
-                              FacetSourcePluginManager $facet_source_manager,
-                              ProcessorPluginManager $processor_plugin_manager,
-                              EntityTypeManagerInterface $entity_type_manager) {
-    parent::__construct($query_type_plugin_manager, $facet_source_manager, $processor_plugin_manager, $entity_type_manager);
+  public function __construct(
+    QueryTypePluginManager $query_type_plugin_manager,
+    FacetSourcePluginManager $facet_source_manager,
+    ProcessorPluginManager $processor_plugin_manager,
+    EntityTypeManagerInterface $entity_type_manager,
+    CurrentRouteMatch $route_match
+  ) {
+    parent::__construct($query_type_plugin_manager, $facet_source_manager, $processor_plugin_manager, $entity_type_manager, $route_match);
     $this->entityTypeManager = $entity_type_manager;
   }
 

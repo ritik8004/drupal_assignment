@@ -33,6 +33,7 @@ export {
   hasSuperCategoryFilter,
   facetFieldAlias,
   customQueryRedirect,
+  isFacetsOnlyHasSingleValue,
 } from './FilterUtils';
 
 export {
@@ -49,3 +50,8 @@ export {
   getSuperCategory,
   getSuperCategoryOptionalFilter,
 } from './SuperCategoryUtility';
+
+export {
+  openPredictiveSearch,
+  closePredictiveSearch,
+} from './predictiveSearchUtils';

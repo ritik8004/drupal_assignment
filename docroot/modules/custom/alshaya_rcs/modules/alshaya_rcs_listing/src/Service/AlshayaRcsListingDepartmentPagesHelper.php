@@ -118,7 +118,7 @@ class AlshayaRcsListingDepartmentPagesHelper extends AlshayaDepartmentPageHelper
       $node = $this->entityTypeManager->getStorage('node')->load($nid);
       if ($node instanceof NodeInterface && $node->isPublished()) {
         $data[$filtered_path] = $nid;
-        $this->cache->set($cid, $data, Cache::PERMANENT, ['node_type:advanced_page']);
+        $this->cache->set($cid, $data, Cache::PERMANENT, ['node_list:advanced_page']);
         return $nid;
       }
     }

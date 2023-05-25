@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import connectRefinementList from '../connectors/connectRefinementList';
 import { hasValue } from '../../../../../../js/utilities/conditionsUtility';
 import { checkExpressDeliveryStatus, checkSameDayDeliveryStatus } from '../../../../../../js/utilities/expressDeliveryHelper';
+import { isFacetsOnlyHasSingleValue } from '../../../utils';
 
 const DeliveryTypeFilter = ({
   items, itemCount, refine, searchForItems, isFromSearch, attribute, ...props
@@ -61,21 +62,17 @@ const DeliveryTypeFilter = ({
     return <ul />;
   }
   // Do not show facets that have a single value if the render_single_result_facets is false.
-  if (!drupalSettings.algoliaSearch.renderSingleResultFacets) {
-    const exclude = drupalSettings.algoliaSearch.excludeRenderSingleResultFacets
-      ? drupalSettings.algoliaSearch.excludeRenderSingleResultFacets.trim().split(',')
-      : '';
-    const show = checkSameDayDeliveryStatus() && checkExpressDeliveryStatus() ? 1 : 0;
-    if (exclude.length > 0) {
-      // If delivery attribute is part of the excluded list then always show.
-      // Split attribute because attribute contain language suffix on PLP.
-      if ((!exclude.includes(attribute.split('.')[0]) && !show)) {
-        return null;
-      }
-    } else if (!show) {
-      // Hide Delivery filter if 1 type of delivery is enabled and attr not part of exclude list.
-      return null;
-    }
+  // hide facet if has single value.
+  const options = [];
+  if (checkSameDayDeliveryStatus()) {
+    options.push('same_day_delivery_available');
+  }
+  if (checkExpressDeliveryStatus()) {
+    options.push('express_day_delivery_available');
+  }
+  const singleValue = isFacetsOnlyHasSingleValue(attribute, options);
+  if (singleValue === true) {
+    return null;
   }
 
   return (

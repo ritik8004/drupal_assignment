@@ -185,6 +185,30 @@ const getMaxValuesFromFacets = () => {
   return maxValuesPerFacets || 1000;
 };
 
+/**
+ * Check if the facet has single value
+ * hide the facet if single value.
+ */
+const isFacetsOnlyHasSingleValue = (attribute, items) => {
+  // Do not show facets that have a single value if the render_single_result_facets is false.
+  if (!drupalSettings.algoliaSearch.renderSingleResultFacets) {
+    const exclude = drupalSettings.algoliaSearch.excludeRenderSingleResultFacets
+      ? drupalSettings.algoliaSearch.excludeRenderSingleResultFacets.trim().split(',')
+      : '';
+    // Certain factes should always be rendered irrespective of render_single_result_facets.
+    // So we only consider the attributes not part of the exclude_render_single_result_facets.
+    if (exclude.length > 0) {
+      // Split attribute because attribute contain language suffix on PLP.
+      if ((!exclude.includes(attribute.split('.')[0]) && items.length <= 1)) {
+        return true;
+      }
+    } else if (items.length <= 1) {
+      return true;
+    }
+  }
+  return false;
+};
+
 export {
   getFilters,
   hasCategoryFilter,
@@ -193,4 +217,5 @@ export {
   facetFieldAlias,
   customQueryRedirect,
   getMaxValuesFromFacets,
+  isFacetsOnlyHasSingleValue,
 };

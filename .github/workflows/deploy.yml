@@ -8,8 +8,7 @@ on:
       - master
       - develop-adyen
       - develop-egift-return
-      - develop-use-sku-objectid-for-search-index
-      - develop-algolia-configurable
+      - develop-contrib-modules-upgrade
   create:
 
 concurrency: deploy-${{ github.ref }}

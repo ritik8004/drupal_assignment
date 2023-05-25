@@ -55,6 +55,93 @@
       ocObject.once('product-matchback-carousel').slick(options);
 
     }
+
+    var $slickSlider = $('.machbackSlider');
+    var transformXIntervalNext = -15;
+    var transformXIntervalPrev = 15;
+    var totalDots, visibleWidth, dotWidth, visibleItemsToShow, maxDots;
+
+    // Limit the number of dots for each slider.
+    $slickSlider.each(function () {
+      var $this = $(this);
+      var $dotsWrapper = $this.find('.slick-dots');
+      var $dots = $dotsWrapper.find('li');
+      totalDots = $dots.length;
+
+      // Add a wrapper around the slick dots to manage the scrolling of slick dots.
+      $dotsWrapper.once('matchback-dots-group').wrap("<div class='slick-dots__container'></div>");
+
+      if (totalDots === 0) return;
+
+      // Calculate the number of dots to be shown based on the width.
+      visibleWidth = $(".slick-dots__container .slick-dots").width();
+      dotWidth = $($dots[0]).outerWidth() + 10;
+      visibleItemsToShow = Math.floor(visibleWidth / dotWidth);
+      maxDots = visibleItemsToShow;
+
+      var transformCount = 0;
+
+      $dots.each(function (index) {
+        $(this).addClass('dot-index-' + index);
+      });
+
+      function setBoundries(slick, state) {
+        if (state === 'default') {
+          slick.find('.slick-dots li').eq(visibleItemsToShow).addClass('n-small-1');
+        }
+      }
+
+      $this.on('beforeChange', function (event, slick, currentSlide, nextSlide) {
+        var totalCount = $dots.length;
+        var $nextSlideElement = $dotsWrapper.find('.dot-index-' + nextSlide);
+
+        if (totalCount > maxDots) {
+          if (nextSlide > currentSlide) {
+            if ($nextSlideElement.hasClass('n-small-1')) {
+              if (!$dotsWrapper.find('li:last-child').hasClass('n-small-1')) {
+                transformCount = transformCount + transformXIntervalNext;
+                $nextSlideElement.removeClass('n-small-1');
+
+                var nextSlidePlusOne = nextSlide + 1;
+                $dotsWrapper.find('.dot-index-' + nextSlidePlusOne).addClass('n-small-1');
+                $dotsWrapper.css('transform', 'translateX(' + transformCount + 'px)');
+                if (isRTL()) {
+                  $dotsWrapper.css('transform', 'translateX(' + Math.abs(transformCount) + 'px)');
+                }
+
+                var pPointer = nextSlide - (visibleItemsToShow - 1);
+                var pPointerMinusOne = pPointer - 1;
+                $dots.eq(pPointerMinusOne).removeClass('p-small-1');
+                $dots.eq(pPointer).addClass('p-small-1');
+              }
+            }
+          }
+          else {
+            if ($nextSlideElement.hasClass('p-small-1')) {
+              if (!$dotsWrapper.find('li:first-child').hasClass('p-small-1')) {
+                transformCount = transformCount + transformXIntervalPrev;
+                $nextSlideElement.removeClass('p-small-1');
+
+                var nextSlidePlusOne = nextSlide - 1;
+                $dotsWrapper.find('.dot-index-' + nextSlidePlusOne).addClass('p-small-1');
+                $dotsWrapper.css('transform', 'translateX(' + transformCount + 'px)');
+                if (isRTL()) {
+                  $dotsWrapper.css('transform', 'translateX(' + Math.abs(transformCount) + 'px)');
+                }
+
+                var nPointer = currentSlide + (visibleItemsToShow - 1);
+                var nPointerMinusOne = nPointer - 1;
+                $dots.eq(nPointer).removeClass('n-small-1');
+                $dots.eq(nPointerMinusOne).addClass('n-small-1');
+              }
+            }
+          }
+        }
+      });
+
+      $dotsWrapper.css('transform', 'translateX(0)');
+      setBoundries($this,'default');
+    });
   }
 
   // Call matchbackSlider() to apply slick and instagram dots.

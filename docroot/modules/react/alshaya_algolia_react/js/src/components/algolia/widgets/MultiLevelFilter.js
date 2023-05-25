@@ -1,5 +1,6 @@
 import React from 'react';
 import connectRefinementList from '../connectors/connectRefinementList';
+import { isFacetsOnlyHasSingleValue } from '../../../utils';
 
 // Seprate a string by space to get the attributes that were grouped.
 // eg: we have brasize(32 A) = Bandsize(32), Cupsize(A) seprated by space.
@@ -22,20 +23,10 @@ const MultiLevelFilter = ({
   }
 
   // Do not show facets that have a single value if the render_single_result_facets is false.
-  if (!drupalSettings.algoliaSearch.renderSingleResultFacets) {
-    const exclude = drupalSettings.algoliaSearch.excludeRenderSingleResultFacets
-      ? drupalSettings.algoliaSearch.excludeRenderSingleResultFacets.trim().split(',')
-      : '';
-    // Hide the filter if only one filter value available and not part of excluded list.
-    if (exclude.length > 0) {
-      if ((!exclude.includes(attribute.split('.')[0]) && items.length <= 1)) {
-        return null;
-      }
-    } else if (items.length <= 1) {
-      // Always hide the filter if attribute has single value
-      // and exclude field doesn't have val.
-      return null;
-    }
+  // hide facet if has single value.
+  const singleValue = isFacetsOnlyHasSingleValue(attribute, items);
+  if (singleValue === true) {
+    return null;
   }
   // Create a multilevel array for grouping attr2 by attr1.
   // Eg: Cupsizes grouped by Bandsize.
@@ -95,7 +86,7 @@ const MultiLevelFilter = ({
                     refine(item.value);
                   }}
                 >
-                  <span className="facet-item__value" data-drupal-facet-item-value={item.value}>
+                  <span className="facet-item__value" data-drupal-facet-item-value={item.label}>
                     <span className="facet-item__label">{item.label.split(props.seprator)[1]}</span>
                     <span className="facet-item__count">
                       (

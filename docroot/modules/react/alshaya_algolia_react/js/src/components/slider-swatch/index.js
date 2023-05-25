@@ -9,6 +9,7 @@ const SliderSwatch = ({
   url,
   title,
   handleSwatchSelect,
+  childId,
 }) => {
   if (!hasValue(swatches)) {
     return null;
@@ -47,6 +48,7 @@ const SliderSwatch = ({
           url={url}
           title={title}
           handleSwatchSelect={handleSwatchSelect}
+          childId={childId}
         />
       ),
     );

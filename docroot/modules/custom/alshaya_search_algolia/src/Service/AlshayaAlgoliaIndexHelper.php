@@ -429,6 +429,9 @@ class AlshayaAlgoliaIndexHelper {
     // Product Images.
     $object['media'] = $this->getMediaItems($sku, $product_color);
 
+    // Get the PDP images of a product.
+    $object['media_pdp'] = $this->getMediaItems($sku, $product_color, 'pdp');
+
     // Product Swatches.
     $swatches = $this->getAlgoliaSwatchData($sku);
     if (isset($swatches['swatches'])) {
@@ -604,18 +607,20 @@ class AlshayaAlgoliaIndexHelper {
    *
    * @param \Drupal\acq_sku\Entity\SKU $sku
    *   SKU entity.
-   * @param string|null $product_color
+   * @param string $product_color
    *   Color value.
+   * @param string $page_type
+   *   Value is search and pdp.
    *
    * @return array
    *   Return array of images with url and image_type.
    *
    * @throws \Exception
    */
-  public function getMediaItems(SKU $sku, $product_color = NULL): array {
+  public function getMediaItems(SKU $sku, $product_color = NULL, $page_type = 'search'): array {
     $sku_for_gallery = $this->skuImagesManager->getSkuForGalleryWithColor($sku, $product_color) ?? $sku;
     // @see \Drupal\alshaya_acm_product\SkuImagesManager::getGallery.
-    $media = $this->skuImagesManager->getProductMedia($sku_for_gallery, 'search', FALSE);
+    $media = $this->skuImagesManager->getProductMedia($sku_for_gallery, $page_type, FALSE);
     $images = [];
     foreach ($media['media_items']['images'] ?? [] as $media_item) {
       $images[] = [

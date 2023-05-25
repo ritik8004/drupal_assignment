@@ -608,3 +608,13 @@ body {
     }
   }
 }
+
+@include breakpoint($only-mobile) {
+  .menu--three__list-item {
+    > .menu-two__link-wrapper {
+      .menu--three__link {
+        padding-#{$left}: rem(16);
+      }
+    }
+  }
+}
