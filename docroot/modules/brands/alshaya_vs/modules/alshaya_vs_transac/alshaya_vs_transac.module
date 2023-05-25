@@ -11,7 +11,6 @@ use Drupal\block\Entity\Block;
 use Drupal\Core\Entity\Display\EntityViewDisplayInterface;
 use Drupal\Core\Entity\EntityInterface;
 use Drupal\Core\Form\FormStateInterface;
-use Drupal\Core\Site\Settings;
 use Drupal\Core\Url;
 use Drupal\taxonomy\TermInterface;
 use Drupal\alshaya_product_options\SwatchesHelper;
@@ -398,38 +397,37 @@ function alshaya_vs_transac_alshaya_search_algolia_object_alter(array &$object) 
     $object['attr_fragrance'] = $attr_fragrance;
   }
 
-  if (Settings::get('alshaya_vs_transac_enabled_swatches', FALSE)) {
-    // Process child skus swatches field to index.
-    $children = \Drupal::service('alshaya_acm_product.skumanager')->getAvailableChildren($sku);
-    $object['swatches'] = [];
-    foreach ($children as $child_sku => $child) {
-      $attribute_id = $child->get('attr_actual_color_label_code')->getString();
-      if (empty($attribute_id)) {
-        continue;
-      }
-      $term = \Drupal::service('acq_sku.product_options_manager')->loadProductOptionByOptionId(
-        'actual_color_label_code',
-        $attribute_id,
-        $object['search_api_language']
-      );
-      if ($term instanceof TermInterface) {
-        // Set swatch data based on swatch type.
-        switch ($term->get('field_attribute_swatch_type')->getString()) {
-          case SwatchesHelper::SWATCH_TYPE_VISUAL_COLOR:
-            $object['swatches'][] = [
-              'child_sku_code' => $child_sku,
-              'rgb_color' => $term->get('field_attribute_swatch_value')->getString(),
-            ];
-            break;
+  // Process child skus swatches field to index.
+  // Field color_swatch_list is used to swatches in PLP/SRP page in MCOM APP.
+  $children = \Drupal::service('alshaya_acm_product.skumanager')->getAvailableChildren($sku);
+  $object['color_swatch_list'] = [];
+  foreach ($children as $child_sku => $child) {
+    $attribute_id = $child->get('attr_actual_color_label_code')->getString();
+    if (empty($attribute_id)) {
+      continue;
+    }
+    $term = \Drupal::service('acq_sku.product_options_manager')->loadProductOptionByOptionId(
+      'actual_color_label_code',
+      $attribute_id,
+      $object['search_api_language']
+    );
+    if ($term instanceof TermInterface) {
+      // Set swatch data based on swatch type.
+      switch ($term->get('field_attribute_swatch_type')->getString()) {
+        case SwatchesHelper::SWATCH_TYPE_VISUAL_COLOR:
+          $object['color_swatch_list'][] = [
+            'child_sku_code' => $child_sku,
+            'rgb_color' => $term->get('field_attribute_swatch_value')->getString(),
+          ];
+          break;
 
-          case SwatchesHelper::SWATCH_TYPE_VISUAL_IMAGE:
-            $object['swatches'][] = [
-              'child_sku_code' => $child_sku,
-              'swatch_image' => $term->get('field_attribute_swatch_value')->getString(),
-            ];
-            break;
+        case SwatchesHelper::SWATCH_TYPE_VISUAL_IMAGE:
+          $object['color_swatch_list'][] = [
+            'child_sku_code' => $child_sku,
+            'swatch_image' => $term->get('field_attribute_swatch_value')->getString(),
+          ];
+          break;
 
-        }
       }
     }
   }
