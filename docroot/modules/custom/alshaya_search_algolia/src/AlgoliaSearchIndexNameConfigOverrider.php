@@ -87,7 +87,9 @@ class AlgoliaSearchIndexNameConfigOverrider implements ConfigFactoryOverrideInte
 
     $overrides['search_api.index.alshaya_algolia_product_list_index']['options']['algolia_index_batch_deletion'] = TRUE;
     $overrides['search_api.index.alshaya_algolia_product_list_index']['options']['object_id_field'] = 'field_skus';
-
+    if ($this->alshayaAlgoliaConfig->get('index_sku_as_object_id')) {
+      $overrides['search_api.index.alshaya_algolia_index']['options']['object_id_field'] = 'field_skus';
+    }
     // Get index prefix for current environment.
     $index_prefix = $this->alshayaAlgoliaConfig->get('index_prefix');
     // Ensure we never connect to Index of another ENV.

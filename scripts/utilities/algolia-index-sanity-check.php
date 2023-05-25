@@ -27,6 +27,8 @@ $logger = \Drupal::logger('algolia-index-sanity-check');
 
 $algolia_server_config = \Drupal::config('search_api.server.algolia')->get('backend_config');
 $algolia_index_config = \Drupal::config('search_api.index.alshaya_algolia_index')->get('options');
+// Use SKU as objectID if the configuration is enabled for Search Index.
+$index_sku_as_object_id = \Drupal::config('alshaya_search_algolia.settings')->get('index_sku_as_object_id');
 
 $app_id = $algolia_server_config['application_id'];
 $app_secret = $algolia_server_config['api_key'];
@@ -75,7 +77,8 @@ foreach ($indexes as $type => $index_name) {
 
   $data_in_algolia = [];
   foreach ($results as $row) {
-    $data_in_algolia[$row['objectID']] = $type === 'product_list'
+    // If index_sku_as_object_id is enabled use SKU for search index.
+    $data_in_algolia[$row['objectID']] = $type === 'product_list' || $index_sku_as_object_id
       ? $row['sku']
       : $row['nid'];
   }
@@ -93,7 +96,7 @@ foreach ($indexes as $type => $index_name) {
   // Verify skus do not exist in Drupal.
   $query = \Drupal::database()->select('node__field_skus', 'nfs');
 
-  if ($type === 'product_list') {
+  if ($type === 'product_list' || $index_sku_as_object_id) {
     $query->condition('field_skus_value', $data_in_algolia, 'IN');
     $query->addField('nfs', 'field_skus_value', 'sku');
   }

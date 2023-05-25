@@ -14,3 +14,6 @@ alshaya_search_algolia.settings:
       type: string
       label: 'Algolia Index Prefix'
       description: 'Store index prefix for Drupal or MDC indexes'
+    index_sku_as_object_id:
+      type: boolean
+      label: 'Flag to determine if we use SKU as objectID for search indexes'
