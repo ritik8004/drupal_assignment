@@ -66,6 +66,9 @@ window.commerceBackend.getOrderDetails = window.commerceBackend.getOrderDetails 
             orderProduct.attributes = window.commerceBackend.getProductOptions(product, currentVariant);
             orderProduct.is_returnable = window.commerceBackend.isProductReturnable(product, orderProduct.sku);
             // @todo Populate this value when working on big ticket items.
+            // Now, we do receive big ticket item info in orders API itself
+            // so we might consider removing this code in future when
+            // big ticket items are enabled for v3 brands.
             orderProduct.is_big_ticket = null;
           });
         });

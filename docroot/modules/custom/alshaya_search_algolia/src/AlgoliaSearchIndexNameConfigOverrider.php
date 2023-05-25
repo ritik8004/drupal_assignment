@@ -69,6 +69,11 @@ class AlgoliaSearchIndexNameConfigOverrider implements ConfigFactoryOverrideInte
       return $overrides;
     }
 
+    // Disable Database Index.
+    // We still need to work on cleanup and for fresh install to keep working
+    // it is still required.
+    $overrides['search_api.index.product']['status'] = FALSE;
+
     // Default overrides for acquia_search_index.
     $overrides['search_api.index.acquia_search_index']['read_only'] = TRUE;
     $overrides['search_api.index.acquia_search_index']['status'] = TRUE;

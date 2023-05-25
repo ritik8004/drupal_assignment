@@ -4,3 +4,4 @@ slide_effect: 'slide'
 # Auto scroll timer(in sec) for auto scrolling the product images
 # on listing pages.
 image_slide_timing: 2
+show_pdp_images_on_listing_pages: false

@@ -6,7 +6,6 @@ dependencies:
     - field.field.node.static_html.body
     - field.field.node.static_html.field_css
     - field.field.node.static_html.field_javascript
-    - field.field.node.static_html.field_version
     - node.type.static_html
   module:
     - text
@@ -33,5 +32,4 @@ content:
 hidden:
   field_css: true
   field_javascript: true
-  field_version: true
   langcode: true

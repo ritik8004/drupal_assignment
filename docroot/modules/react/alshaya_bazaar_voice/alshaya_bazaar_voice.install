@@ -15,6 +15,45 @@ use Drupal\block\BlockInterface;
  *
  * Add translations.
  */
+function alshaya_bazaar_voice_update_9501() {
+  // Update srp sorting config translation.
+  $search_settings_en = \Drupal::configFactory()->getEditable('alshaya_search.settings');
+  $sort_options_labels_en = $search_settings_en->get('sort_options_labels');
+  $search_settings_ar = \Drupal::languageManager()->getLanguageConfigOverride('ar', 'alshaya_search.settings');
+  $sort_options_labels_ar = $search_settings_ar->get('sort_options_labels');
+  foreach ($sort_options_labels_en as $key => $value) {
+    if ($value['label'] == 'Top Rated') {
+      $sort_options_labels_ar[$key]['label'] = 'أعلى التقييمات';
+    }
+  }
+  $search_settings_ar->set('sort_options_labels', $sort_options_labels_ar);
+  $search_settings_ar->save();
+
+  // Update plp sorting config translation.
+  $plp_settings_en = \Drupal::configFactory()->getEditable('alshaya_acm_product_position.settings');
+  $sort_options_labels_en = $plp_settings_en->get('sort_options_labels');
+  $plp_settings_ar = \Drupal::languageManager()->getLanguageConfigOverride('ar', 'alshaya_acm_product_position.settings');
+  $sort_options_labels_ar = $plp_settings_ar->get('sort_options_labels');
+  foreach ($sort_options_labels_en as $key => $value) {
+    if ($value['label'] == 'Top Rated') {
+      $sort_options_labels_ar[$key]['label'] = 'أعلى التقييمات';
+    }
+  }
+  $plp_settings_ar->set('sort_options_labels', $sort_options_labels_ar);
+  $plp_settings_ar->save();
+
+  module_load_include('inc', 'alshaya_bazaar_voice', 'alshaya_bazaar_voice.translations');
+  $translations = _alshaya_bazaar_voice_get_translations('v2');
+  if (!empty($translations)) {
+    alshaya_i18n_save_translations($translations);
+  }
+}
+
+/**
+ * Implements hook_update_N().
+ *
+ * Add translations.
+ */
 function alshaya_bazaar_voice_update_8006() {
   module_load_include('inc', 'alshaya_bazaar_voice', 'alshaya_bazaar_voice.translations');
   $translations = _alshaya_bazaar_voice_get_translations('v2');

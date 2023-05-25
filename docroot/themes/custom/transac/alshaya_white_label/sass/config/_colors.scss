@@ -2461,5 +2461,7 @@ $multilevel-filter-band-txt: $black-two;
 $multilevel-level-open-accordion-border: $solitude;
 $multilevel-level-selected-collapsed-title-bg: $white-four;
 // Predictive Search
-$predictive-search-panel-bg: $white-five;
+$predictive-search-default-bg: $white-five;
 $predictive-search-overlay: rgba(34, 34, 34, 0.75);
+$predictive-search-tinted-bg: $primary_bg;
+$predictive-search-highlight: $white-four;

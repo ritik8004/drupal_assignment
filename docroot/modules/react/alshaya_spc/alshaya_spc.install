@@ -11,6 +11,23 @@ use Drupal\alshaya_config\AlshayaConfigManager;
 /**
  * Implements hook_update_N().
  *
+ * Add config for successful order check on payment error during
+ * order placement.
+ */
+function alshaya_spc_update_9409() {
+  /** @var \Drupal\alshaya_config\AlshayaConfigManager $manager */
+  $manager = \Drupal::service('alshaya_config.manager');
+  $manager->updateConfigs(
+    ['alshaya_spc.settings'],
+    'alshaya_spc',
+    'install',
+    AlshayaConfigManager::MODE_ADD_MISSING
+  );
+}
+
+/**
+ * Implements hook_update_N().
+ *
  * Add translations for Secure Payment Methods.
  */
 function alshaya_spc_update_9408() {

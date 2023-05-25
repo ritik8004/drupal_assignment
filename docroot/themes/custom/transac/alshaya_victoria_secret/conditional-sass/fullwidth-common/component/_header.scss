@@ -1,3 +1,23 @@
+.static-minicart-wrapper {
+  .cart-link {
+    margin-#{$right}: rem(6);
+    background-position: top $left;
+  }
+}
+
+@include breakpoint($only-tablet) {
+  .static-minicart-wrapper {
+    .cart-link-total {
+      margin-top: rem(10);
+    }
+
+    .cart-link {
+      // Vertically aligning the cart icon with the other items in sticky header.
+      margin-top: rem(6);
+    }
+  }
+}
+
 @include breakpoint($desktop) {
   .c-menu-secondary {
     .region__menu-secondary {
@@ -24,6 +44,12 @@
           #{$right}: rem(19);
         }
       }
+    }
+  }
+
+  .static-minicart-wrapper {
+    .cart-link-total {
+      margin-top: rem(4);
     }
   }
 }

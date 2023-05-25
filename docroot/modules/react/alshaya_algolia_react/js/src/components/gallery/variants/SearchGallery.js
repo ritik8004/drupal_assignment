@@ -94,16 +94,25 @@ class SearchGallery extends React.PureComponent {
   }
 
   render() {
-    // Get no Of Slides To Show in Desktop view.
-    const noOfSlidesToShowDesktop = drupalSettings.reactTeaserView.swipeImage.noOfImageScroll;
+    // Get swipe image config value.
     const {
-      media, title, labels, sku, initSlider,
+      noOfImageScroll, showPdpImagesOnListingPages,
+    } = drupalSettings.reactTeaserView.swipeImage;
+    const {
+      media, mediaPdp, title, labels, sku, initSlider,
     } = this.props;
     const mainImage = media.length ? media[0] : {};
     const mainImageUrl = hasValue(mainImage.url) ? mainImage.url : '';
     let thumbnails = [];
+    let mediaList = media;
 
-    media.forEach((element) => {
+    // This is to show the PDP images on the listing
+    // pages which comes in swipe image feature.
+    if (showPdpImagesOnListingPages && hasValue(mediaPdp)) {
+      mediaList = mediaPdp;
+    }
+
+    mediaList.forEach((element) => {
       thumbnails.push((
         <SliderElement
           key={element.url}
@@ -113,9 +122,9 @@ class SearchGallery extends React.PureComponent {
       ));
     });
 
-    // Set no Of Slides in thumbnails object.
+    // Set number Of Slides in thumbnails object.
     if (isDesktop()) {
-      thumbnails = thumbnails.slice(0, noOfSlidesToShowDesktop);
+      thumbnails = thumbnails.slice(0, noOfImageScroll);
     }
     const sliderStatus = thumbnails.length > sliderSettings.slidesToShow;
     let classWrapper = 'img-wrapper';

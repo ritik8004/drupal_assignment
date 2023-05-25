@@ -229,7 +229,6 @@ class AlshayaAlgoliaReactConfig implements AlshayaAlgoliaReactConfigInterface {
       'renderSingleResultFacets' => $alshaya_algolia_react_setting_values->get('render_single_result_facets'),
       'excludeRenderSingleResultFacets' => $alshaya_algolia_react_setting_values->get('exclude_render_single_result_facets'),
       'plpTeaserAttributes' => $alshaya_algolia_react_setting_values->get('product_teaser_attributes'),
-      'facetListExpiry' => $alshaya_algolia_react_setting_values->get('algolia_facets_local_storage_expiry'),
       'enableConfigurableFilters' => $alshaya_algolia_react_setting_values->get('algolia_enable_configurable_filter'),
       'maxValuesPerFacets' => $alshaya_algolia_react_setting_values->get('algolia_max_values_per_facets'),
     ];
@@ -309,6 +308,7 @@ class AlshayaAlgoliaReactConfig implements AlshayaAlgoliaReactConfigInterface {
         'noOfImageScroll' => $algolia_swipe_image_settings->get('no_of_image_scroll'),
         'slideEffect' => $algolia_swipe_image_settings->get('slide_effect'),
         'imageSlideTiming' => $algolia_swipe_image_settings->get('image_slide_timing'),
+        'showPdpImagesOnListingPages' => $algolia_swipe_image_settings->get('show_pdp_images_on_listing_pages'),
       ],
     ];
     // Allow other modules to alter or add extra configs

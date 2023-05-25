@@ -1,11 +1,81 @@
-@include breakpoint($tablet) {
-  // Existing search styles reset.
-  .block-alshaya-algolia-react-autocomplete {
-    #alshaya-algolia-autocomplete {
-      .predictive-search--open {
-        .react-autosuggest__suggestions-container {
-          position: unset;
+.predictive-search__msg-no-result {
+  display: none;
+}
+
+.predictive-search--open {
+  .predictive-search {
+    &__msg-no-result {
+      display: block;
+      font-size: rem(13);
+
+      @include breakpoint($only-mobile) {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        height: rem(48);
+        width: 100%;
+        border-top: rem(1) solid $algolia-dropdown-border;
+      }
+
+      @include breakpoint($tablet) {
+        margin: rem(8) auto;
+      }
+    }
+  }
+}
+
+// Existing selectors override / styles reset.
+.block-alshaya-algolia-react-autocomplete {
+  #alshaya-algolia-autocomplete {
+    .predictive-search--open {
+      .react-autosuggest {
+        &__suggestion {
+          padding: rem(8);
+          display: flex;
+          align-items: center;
         }
+
+        &__container {
+          .react-autosuggest__suggestions-list {
+            .react-autosuggest__suggestion {
+              .aa-suggestion {
+                .suggested-text {
+                  padding: 0;
+                  line-height: rem(20);
+                  white-space: nowrap;
+                }
+
+                &:hover {
+                  background-color: unset;
+                }
+              }
+            }
+          }
+
+          &--open {
+            @include breakpoint($only-mobile) {
+              background: $predictive-search-tinted-bg;
+            }
+          }
+        }
+
+        @include breakpoint($tablet) {
+          &__suggestions-container {
+            position: unset;
+
+            &--open {
+              box-shadow: none;
+            }
+          }
+        }
+      }
+    }
+
+    // Avoid flickering between trending search and search suggestions,
+    // due to fast react DOM renders.
+    .react-autosuggest__input[value=""] {
+      & + .react-autosuggest__suggestions-container {
+        display: none;
       }
     }
   }

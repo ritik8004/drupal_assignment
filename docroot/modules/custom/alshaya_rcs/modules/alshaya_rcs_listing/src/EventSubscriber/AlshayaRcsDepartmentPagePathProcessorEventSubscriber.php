@@ -114,6 +114,10 @@ class AlshayaRcsDepartmentPagePathProcessorEventSubscriber extends RcsPhPathProc
     // page node.
     /** @var \Drupal\node\NodeInterface $department_node */
     $department_node = $this->entityTypeManager->getStorage('node')->load($department_nid);
+    if (empty($department_node)) {
+      return;
+    }
+
     $category_slug = $department_node->get('field_category_slug')->getString();
     if (empty($category_slug)) {
       return;
@@ -137,7 +141,7 @@ class AlshayaRcsDepartmentPagePathProcessorEventSubscriber extends RcsPhPathProc
       'entityPath' => '/' . $category_slug,
       'entityPathPrefix' => $category_prefix,
       'entityFullPath' => $category_slug,
-      'processedPaths' => '/' . $category_slug,
+      'processedPaths' => '/' . $category->toUrl()->getInternalPath(),
       'entityData' => $entityData,
     ]);
 

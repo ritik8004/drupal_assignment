@@ -27,6 +27,9 @@ alshaya_spc.settings:
         desktop:
           type: integer
           label: 'Desktop configuration'
+    validate_order_on_payment_failure:
+      type: boolean
+      label: 'To determine if we need to validate order on payment failure.'
 
 alshaya_spc.click_n_collect:
   type: config_object

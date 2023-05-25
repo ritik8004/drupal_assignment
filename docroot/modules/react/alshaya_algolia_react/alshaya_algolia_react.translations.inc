@@ -40,11 +40,11 @@ function _alshaya_algolia_react_translations() {
       'Nothing found for' => [
         'ar' => 'وجدت شيئا ل',
       ],
-      'No result found for' => [
-        'ar' => 'لم يتم العثور على نتيجة ل',
+      'no results found for' => [
+        'ar' => 'لا يوجد نتائج ل',
       ],
-      'Search results for' => [
-        'ar' => 'نتائج البحث عن',
+      'showing results for' => [
+        'ar' => 'عرض النتائج ل',
       ],
       'Unfortunately, nothing matches your search. Please try another search term, or browse by category below.' => [
         'ar' => 'لسوء الحظ ، لا شيء يطابق بحثك. يرجى محاولة مصطلح بحث آخر ، أو تصفح حسب الفئة أدناه.',

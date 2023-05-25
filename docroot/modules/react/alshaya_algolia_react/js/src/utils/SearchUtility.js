@@ -3,7 +3,6 @@ import { getSearchQuery, getLangRedirect } from './localStorage';
 import { isConfigurableFiltersEnabled } from '../../../../js/utilities/helper';
 import { hasValue } from '../../../../js/utilities/conditionsUtility';
 
-
 const contentDiv = document.querySelector('.page-standard main');
 const body = document.querySelector('body');
 
@@ -128,24 +127,29 @@ function removeLoader() {
 function updatePredictiveSearchContainer(action, query = null) {
   const searchWrapper = document.getElementById('alshaya-algolia-search');
   const gridCountBlockWrapper = searchWrapper.querySelector('.block-alshaya-grid-count-block');
-  let pageTitle = Drupal.t('Search results');
+
   if (hasValue(searchWrapper)) {
+    let pageTitle = Drupal.t('Search results');
     if (action === 'hide') {
       // Hide result cound and grid switcher block.
       if (hasValue(gridCountBlockWrapper)) {
         gridCountBlockWrapper.classList.add('hide-grid-count-block');
       }
       // Change the page title when search results are empty.
-      pageTitle = `${Drupal.t('No result found for')} <span class="keyword">"${query}"</span>`;
+      pageTitle = `
+        <span class="capitalize-mobile upcase-tablet">${Drupal.t('no results found for')}</span>
+        <span class="keyword">"${query}"</span>
+      `;
     } else {
       const searchQuery = getSearchQuery();
       if (hasValue(gridCountBlockWrapper)) {
         gridCountBlockWrapper.classList.remove('hide-grid-count-block');
       }
       if (hasValue(searchQuery)) {
-        pageTitle = `${Drupal.t('Search results for')} <span class="keyword">"${searchQuery}"</span>`;
-      } else {
-        pageTitle = Drupal.t('Search results');
+        pageTitle = `
+          <span class="capitalize-mobile upcase-tablet">${Drupal.t('showing results for')}</span>
+          <span class="keyword">"${searchQuery}"</span>
+        `;
       }
     }
     searchWrapper.querySelector('.block-page-title-block .c-page-title').innerHTML = pageTitle;

@@ -1,0 +1,13 @@
+// Existing selectors override / styles reset.
+.block-alshaya-algolia-react-autocomplete {
+  &:not(.clear-icon) {
+    #alshaya-algolia-autocomplete {
+      .predictive-search--open {
+        .trending-title {
+          font-weight: unset;
+          font-family: $hnm-demibold;
+        }
+      }
+    }
+  }
+}
