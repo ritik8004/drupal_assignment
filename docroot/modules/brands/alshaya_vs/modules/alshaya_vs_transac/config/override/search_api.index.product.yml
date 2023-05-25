@@ -39,3 +39,63 @@ field_settings:
         - field.storage.node.field_skus
       module:
         - acq_sku
+  attr_product_search_category:
+    label: 'Product Category'
+    datasource_id: 'entity:node'
+    property_path: 'field_skus:entity:attr_product_search_category'
+    type: string
+    dependencies:
+      config:
+        - field.storage.node.field_skus
+      module:
+        - acq_sku
+  attr_product_category:
+    label: 'Style'
+    datasource_id: 'entity:node'
+    property_path: 'field_skus:entity:attr_product_category'
+    type: string
+    dependencies:
+      config:
+        - field.storage.node.field_skus
+      module:
+        - acq_sku
+  attr_support:
+    label: 'Structure'
+    datasource_id: 'entity:node'
+    property_path: 'field_skus:entity:attr_support'
+    type: string
+    dependencies:
+      config:
+        - field.storage.node.field_skus
+      module:
+        - acq_sku
+  attr_padding:
+    label: 'Lining Level'
+    datasource_id: 'entity:node'
+    property_path: 'field_skus:entity:attr_padding'
+    type: string
+    dependencies:
+      config:
+        - field.storage.node.field_skus
+      module:
+        - acq_sku
+  attr_bra_coverage:
+    label: 'Bra Coverage'
+    datasource_id: 'entity:node'
+    property_path: 'field_skus:entity:attr_bra_coverage'
+    type: string
+    dependencies:
+      config:
+        - field.storage.node.field_skus
+      module:
+        - acq_sku
+  panty_waist_type:
+    label: 'Panty Waist Type'
+    datasource_id: 'entity:node'
+    property_path: 'field_skus:entity:panty_waist_type'
+    type: string
+    dependencies:
+      config:
+        - field.storage.node.field_skus
+      module:
+        - acq_sku
