@@ -19,7 +19,7 @@ function alshaya_vs_transac_update_9501() {
   // Adding Translation.
   \Drupal::moduleHandler()
     ->loadInclude('alshaya_vs_transac', 'inc', 'alshaya_vs_transac.translations');
-  $translations = _alshaya_vs_transac_get_translations('v2');
+  $translations = _alshaya_vs_transac_get_translations('v3');
   if (!empty($translations)) {
     alshaya_i18n_save_translations($translations);
   }
@@ -59,14 +59,6 @@ function alshaya_vs_transac_update_9501() {
   // Re-save index configs to ensure overrides are taken into consideration.
   alshaya_config_install_configs(['search_api.index.product'], 'alshaya_product');
   alshaya_config_install_configs(['search_api.index.acquia_search_index'], 'alshaya_search', 'optional');
-
-  // Adding Translation.
-  \Drupal::moduleHandler()
-    ->loadInclude('alshaya_vs_transac', 'inc', 'alshaya_vs_transac.translations');
-  $translations = _alshaya_vs_transac_get_translations('v3');
-  if (!empty($translations)) {
-    alshaya_i18n_save_translations($translations);
-  }
 
   // Hide product_search_category facet on listing pages.
   \Drupal::configFactory()->getEditable('block.block.productsearchcategory')
@@ -545,7 +537,7 @@ function alshaya_vs_transac_install() {
   // Saving Transaltions.
   \Drupal::moduleHandler()
     ->loadInclude('alshaya_vs_transac', 'inc', 'alshaya_vs_transac.translations');
-  $translations = _alshaya_vs_transac_get_translations('v1');
+  $translations = _alshaya_vs_transac_get_translations();
   if (!empty($translations)) {
     alshaya_i18n_save_translations($translations);
   }
