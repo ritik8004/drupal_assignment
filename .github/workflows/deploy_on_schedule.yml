@@ -30,6 +30,7 @@ jobs:
       matrix:
         branch:
           - develop
+          - develop-adyen
 
     steps:
       # Make sure we have some code to diff.

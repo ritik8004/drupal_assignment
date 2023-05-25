@@ -6,9 +6,6 @@ on:
       - qa
       - uat
       - master
-      - develop-adyen
-      - develop-egift-return
-      - develop-contrib-modules-upgrade
   create:
 
 concurrency: deploy-${{ github.ref }}
