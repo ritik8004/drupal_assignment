@@ -519,6 +519,7 @@
             "cd docroot && patch -p1 <../patches/htaccess-remove-html-kwt-url.patch",
             "cd docroot && patch -p1 <../patches/htaccess-maintenance.patch",
             "cd docroot && patch -p1 <../patches/htaccess-increase-static-cachetime.patch",
+            "cd docroot && patch -p1 <../patches/htaccess-deny-publicly-served-files.patch",
             "cd docroot && rm robots.txt",
             "cd docroot && patch -p1 <../patches/development-services-twig.patch"
         ],

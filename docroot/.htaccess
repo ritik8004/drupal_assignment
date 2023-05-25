@@ -207,6 +207,12 @@ AddOutputFilterByType DEFLATE application/x-font-ttf
   # Specifically, disallow autoload.php from being served directly.
   RewriteRule "^(.+/.*|autoload)\.php($|/)" - [F]
 
+  # Deny access to unnecessary publicily served files for better security.
+  RewriteRule ^(modules|profiles|sites)/.*\.txt$ - [F,L,NC]
+  RewriteRule ^(README.md|example.gitignore)$ - [F,L,NC]
+  RewriteRule ^core/.*(editorconfig|eslintignore|gitattributes|htaccess|drupal)$ - [F,L,NC]
+  RewriteRule ^core/.*\.(txt|gitignore|md|map|xml|html|gz|zip|dist|data|script|phar|lock|json|tmpl)$ - [F,L,NC]
+
   # Rules to correctly serve gzip compressed CSS and JS files.
   # Requires both mod_rewrite and mod_headers to be enabled.
   <IfModule mod_headers.c>
